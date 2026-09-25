@@ -76,6 +76,7 @@ dev = [
   "pytest-cov>=5",
   "ruff>=0.6",
   "mypy>=1.10",
+  "typesafe-sdk>=0.7",
   "mkdocs-material>=9.5",
   "mkdocstrings[python]>=0.26",
 ]

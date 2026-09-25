@@ -1,6 +1,6 @@
 {
   "thinkless_version": "0.1.0",
-  "created_at": "2026-09-25T05:05:53Z",
+  "created_at": "2026-09-25T07:30:19Z",
   "reasoning_model": "local:Qwen/Qwen3-1.7B",
   "reference_price": "anthropic:claude-sonnet-5",
   "threshold": 0.8,
@@ -25,10 +25,10 @@
         "llm": 310
       },
       "escalations": 0.0,
-      "latency_p50_ms": 3067.2,
-      "latency_p95_ms": 4242.1,
-      "decision_ms": 1713.0,
-      "generation_ms": 1299.9,
+      "latency_p50_ms": 3429.0,
+      "latency_p95_ms": 4493.6,
+      "decision_ms": 1842.2,
+      "generation_ms": 1419.8,
       "llm_input_tokens": 674.4,
       "llm_output_tokens": 80.9,
       "decision_llm_tokens": 524.3,
@@ -147,8 +147,8 @@
     "hybrid": {
       "mode": "hybrid",
       "tickets": 53,
-      "task_success": 0.9057,
-      "intent_accuracy": 0.9149,
+      "task_success": 0.9434,
+      "intent_accuracy": 0.8936,
       "order_id_accuracy": 1.0,
       "llm_calls": 1.604,
       "decision_llm_calls": 0.679,
@@ -159,15 +159,15 @@
         "llm": 58
       },
       "escalations": 1.358,
-      "latency_p50_ms": 1866.5,
-      "latency_p95_ms": 2565.9,
-      "decision_ms": 416.0,
-      "generation_ms": 1373.1,
-      "llm_input_tokens": 351.3,
-      "llm_output_tokens": 45.3,
-      "decision_llm_tokens": 155.4,
+      "latency_p50_ms": 1849.1,
+      "latency_p95_ms": 2728.1,
+      "decision_ms": 430.6,
+      "generation_ms": 1402.5,
+      "llm_input_tokens": 414.9,
+      "llm_output_tokens": 45.1,
+      "decision_llm_tokens": 219.5,
       "cost_usd": 0.0,
-      "reference_cost_per_1k_tickets": 1.1556,
+      "reference_cost_per_1k_tickets": 1.2811,
       "grounded_rate": 1.0,
       "template_fallbacks": 0,
       "questions": {
@@ -179,7 +179,7 @@
             "llm": 16
           },
           "escalation_rate": 0.5882,
-          "accuracy": 0.9149,
+          "accuracy": 0.8936,
           "labeled": 47
         },
         "urgency": {
@@ -221,7 +221,7 @@
             "rules": 2
           },
           "escalation_rate": 0.3529,
-          "accuracy": 0.9608,
+          "accuracy": 1.0,
           "labeled": 51
         },
         "order": {
@@ -237,13 +237,6 @@
       },
       "failures": [
         {
-          "ticket_id": "T-027",
-          "expected": "subscription_cancelled",
-          "got": "escalate_security",
-          "intent": "cancel_subscription",
-          "intent_provider": "gliner"
-        },
-        {
           "ticket_id": "T-031",
           "expected": "kb_answer",
           "got": "escalate_support",
@@ -258,18 +251,11 @@
           "intent_provider": "llm"
         },
         {
-          "ticket_id": "T-039",
+          "ticket_id": "T-042",
           "expected": "escalate_technical",
           "got": "escalate_support",
           "intent": "other",
           "intent_provider": "llm"
-        },
-        {
-          "ticket_id": "T-048",
-          "expected": "escalate_human",
-          "got": "escalate_security",
-          "intent": "cancel_subscription",
-          "intent_provider": "laya"
         }
       ]
     },
@@ -287,10 +273,10 @@
         "model": 283
       },
       "escalations": 0.566,
-      "latency_p50_ms": 1451.8,
-      "latency_p95_ms": 2089.6,
-      "decision_ms": 88.1,
-      "generation_ms": 1342.0,
+      "latency_p50_ms": 1550.7,
+      "latency_p95_ms": 2323.1,
+      "decision_ms": 106.6,
+      "generation_ms": 1396.6,
       "llm_input_tokens": 204.9,
       "llm_output_tokens": 36.3,
       "decision_llm_tokens": 0.0,
@@ -517,13 +503,13 @@
       "escalated": [],
       "decision_llm_calls": 1,
       "decision_llm_tokens": 547,
-      "decision_llm_ms": 1994.226,
+      "decision_llm_ms": 1611.525,
       "summary": {
-        "trace_id": "d5480e7c1a1c23dc0ea1b8329a61cd61",
+        "trace_id": "722ea9844a73350a2287107b7db7d447",
         "name": "support_ticket",
         "status": "ok",
-        "started_at": "2026-09-25T05:00:22Z",
-        "duration_ms": 3467.939,
+        "started_at": "2026-09-25T07:24:28Z",
+        "duration_ms": 3058.526,
         "attributes": {
           "ticket_id": "T-001",
           "mode": "llm",
@@ -548,9 +534,9 @@
         "model_input_tokens": 0,
         "cost_usd": 0.0,
         "time_by_plane_ms": {
-          "rule": 0.019,
-          "llm": 3462.029,
-          "tool": 0.094
+          "rule": 0.023,
+          "llm": 3049.242,
+          "tool": 0.121
         }
       }
     },
@@ -610,13 +596,13 @@
       "escalated": [],
       "decision_llm_calls": 1,
       "decision_llm_tokens": 546,
-      "decision_llm_ms": 1591.165,
+      "decision_llm_ms": 1601.253,
       "summary": {
-        "trace_id": "49fc0bb102d64f46402bb6c689a04228",
+        "trace_id": "717ae5840cbf3526500ef2da4a32506a",
         "name": "support_ticket",
         "status": "ok",
-        "started_at": "2026-09-25T05:00:25Z",
-        "duration_ms": 3009.867,
+        "started_at": "2026-09-25T07:24:31Z",
+        "duration_ms": 2997.929,
         "attributes": {
           "ticket_id": "T-002",
           "mode": "llm",
@@ -641,8 +627,8 @@
         "model_input_tokens": 0,
         "cost_usd": 0.0,
         "time_by_plane_ms": {
-          "rule": 0.019,
-          "llm": 3004.48,
+          "rule": 0.018,
+          "llm": 2992.523,
           "tool": 0.093
         }
       }
@@ -703,13 +689,13 @@
       "escalated": [],
       "decision_llm_calls": 1,
       "decision_llm_tokens": 549,
-      "decision_llm_ms": 1595.451,
+      "decision_llm_ms": 1592.627,
       "summary": {
-        "trace_id": "512430dbb808e63c99205acf5cfac76e",
+        "trace_id": "788e8a58c2fde1534c6cf5edcb2624f2",
         "name": "support_ticket",
         "status": "ok",
-        "started_at": "2026-09-25T05:00:28Z",
-        "duration_ms": 3040.556,
+        "started_at": "2026-09-25T07:24:34Z",
+        "duration_ms": 2990.57,
         "attributes": {
           "ticket_id": "T-003",
           "mode": "llm",
@@ -734,9 +720,9 @@
         "model_input_tokens": 0,
         "cost_usd": 0.0,
         "time_by_plane_ms": {
-          "rule": 0.019,
-          "llm": 3035.412,
-          "tool": 0.09
+          "rule": 0.022,
+          "llm": 2984.261,
+          "tool": 0.094
         }
       }
     },
@@ -790,19 +776,19 @@
           },
           "status": "accepted",
           "provider": "llm",
-          "confidence": 1.0
+          "confidence": null
         }
       },
       "escalated": [],
       "decision_llm_calls": 1,
       "decision_llm_tokens": 543,
-      "decision_llm_ms": 1485.046,
+      "decision_llm_ms": 1461.397,
       "summary": {
-        "trace_id": "1223f16299f8eae2167b798d40f7e5da",
+        "trace_id": "1708ebe32b341f8c3a2678399689cd0d",
         "name": "support_ticket",
         "status": "ok",
-        "started_at": "2026-09-25T05:00:31Z",
-        "duration_ms": 1487.939,
+        "started_at": "2026-09-25T07:24:37Z",
+        "duration_ms": 1465.752,
         "attributes": {
           "ticket_id": "T-004",
           "mode": "llm",
@@ -828,7 +814,7 @@
         "cost_usd": 0.0,
         "time_by_plane_ms": {
           "rule": 0.004,
-          "llm": 1485.046
+          "llm": 1461.397
         }
       }
     },
@@ -888,13 +874,13 @@
       "escalated": [],
       "decision_llm_calls": 1,
       "decision_llm_tokens": 549,
-      "decision_llm_ms": 1569.977,
+      "decision_llm_ms": 1569.069,
       "summary": {
-        "trace_id": "0118a361175e8850c06b16b09bb47ff3",
+        "trace_id": "ab8dd301e99c1a3739bbfc2138c97cb1",
         "name": "support_ticket",
         "status": "ok",
-        "started_at": "2026-09-25T05:00:33Z",
-        "duration_ms": 3165.549,
+        "started_at": "2026-09-25T07:24:38Z",
+        "duration_ms": 3192.942,
         "attributes": {
           "ticket_id": "T-005",
           "mode": "llm",
@@ -919,9 +905,9 @@
         "model_input_tokens": 0,
         "cost_usd": 0.0,
         "time_by_plane_ms": {
-          "rule": 0.02,
-          "llm": 3160.177,
-          "tool": 0.096
+          "rule": 0.023,
+          "llm": 3185.566,
+          "tool": 0.094
         }
       }
     },
@@ -981,13 +967,13 @@
       "escalated": [],
       "decision_llm_calls": 1,
       "decision_llm_tokens": 553,
-      "decision_llm_ms": 1542.752,
+      "decision_llm_ms": 1571.438,
       "summary": {
-        "trace_id": "d44a2c8b93e05c1b1966db87c5cc1954",
+        "trace_id": "581c89fbc20b5b32b70ec9e21f173656",
         "name": "support_ticket",
         "status": "ok",
-        "started_at": "2026-09-25T05:00:36Z",
-        "duration_ms": 3058.146,
+        "started_at": "2026-09-25T07:24:42Z",
+        "duration_ms": 3062.606,
         "attributes": {
           "ticket_id": "T-006",
           "mode": "llm",
@@ -1012,9 +998,9 @@
         "model_input_tokens": 0,
         "cost_usd": 0.0,
         "time_by_plane_ms": {
-          "rule": 0.02,
-          "llm": 3052.624,
-          "tool": 0.092
+          "rule": 0.021,
+          "llm": 3055.337,
+          "tool": 0.09
         }
       }
     },
@@ -1074,13 +1060,13 @@
       "escalated": [],
       "decision_llm_calls": 1,
       "decision_llm_tokens": 539,
-      "decision_llm_ms": 1621.813,
+      "decision_llm_ms": 1591.471,
       "summary": {
-        "trace_id": "fcb2dfee89337ff96dee322d08581dd5",
+        "trace_id": "7f3ccfefff93aeb9a243cb9660183a93",
         "name": "support_ticket",
         "status": "ok",
-        "started_at": "2026-09-25T05:00:39Z",
-        "duration_ms": 2872.527,
+        "started_at": "2026-09-25T07:24:45Z",
+        "duration_ms": 2911.813,
         "attributes": {
           "ticket_id": "T-007",
           "mode": "llm",
@@ -1105,9 +1091,9 @@
         "model_input_tokens": 0,
         "cost_usd": 0.0,
         "time_by_plane_ms": {
-          "rule": 0.016,
-          "llm": 2866.285,
-          "tool": 0.079
+          "rule": 0.019,
+          "llm": 2904.456,
+          "tool": 0.085
         }
       }
     },
@@ -1161,19 +1147,19 @@
           },
           "status": "accepted",
           "provider": "llm",
-          "confidence": 1.0
+          "confidence": null
         }
       },
       "escalated": [],
       "decision_llm_calls": 1,
       "decision_llm_tokens": 528,
-      "decision_llm_ms": 1491.413,
+      "decision_llm_ms": 1490.773,
       "summary": {
-        "trace_id": "e6fea099f4d5c97404096a007035231b",
+        "trace_id": "3f1d3b309dc83f94c9723ecc6b75f602",
         "name": "support_ticket",
         "status": "ok",
-        "started_at": "2026-09-25T05:00:42Z",
-        "duration_ms": 1494.11,
+        "started_at": "2026-09-25T07:24:48Z",
+        "duration_ms": 1493.911,
         "attributes": {
           "ticket_id": "T-008",
           "mode": "llm",
@@ -1199,7 +1185,7 @@
         "cost_usd": 0.0,
         "time_by_plane_ms": {
           "rule": 0.004,
-          "llm": 1491.413
+          "llm": 1490.773
         }
       }
     },
@@ -1259,13 +1245,13 @@
       "escalated": [],
       "decision_llm_calls": 1,
       "decision_llm_tokens": 542,
-      "decision_llm_ms": 1540.432,
+      "decision_llm_ms": 1589.487,
       "summary": {
-        "trace_id": "336be819606b7d4783441cec65965020",
+        "trace_id": "d9038e6642c43e495c70ddcd3fe01e21",
         "name": "support_ticket",
         "status": "ok",
-        "started_at": "2026-09-25T05:00:43Z",
-        "duration_ms": 2783.638,
+        "started_at": "2026-09-25T07:24:49Z",
+        "duration_ms": 2849.788,
         "attributes": {
           "ticket_id": "T-009",
           "mode": "llm",
@@ -1290,9 +1276,9 @@
         "model_input_tokens": 0,
         "cost_usd": 0.0,
         "time_by_plane_ms": {
-          "rule": 0.008,
-          "llm": 2778.101,
-          "tool": 0.028
+          "rule": 0.009,
+          "llm": 2844.082,
+          "tool": 0.036
         }
       }
     },
@@ -1352,13 +1338,13 @@
       "escalated": [],
       "decision_llm_calls": 1,
       "decision_llm_tokens": 536,
-      "decision_llm_ms": 1549.138,
+      "decision_llm_ms": 1579.795,
       "summary": {
-        "trace_id": "8140ce7d30eabe7ce8c49a3f0c50a507",
+        "trace_id": "db1838373921b5d0b6dcd460e8305a0b",
         "name": "support_ticket",
         "status": "ok",
-        "started_at": "2026-09-25T05:00:46Z",
-        "duration_ms": 2910.993,
+        "started_at": "2026-09-25T07:24:52Z",
+        "duration_ms": 2931.143,
         "attributes": {
           "ticket_id": "T-010",
           "mode": "llm",
@@ -1383,9 +1369,9 @@
         "model_input_tokens": 0,
         "cost_usd": 0.0,
         "time_by_plane_ms": {
-          "rule": 0.012,
-          "llm": 2905.337,
-          "tool": 0.028
+          "rule": 0.006,
+          "llm": 2925.447,
+          "tool": 0.072
         }
       }
     },
@@ -1445,13 +1431,13 @@
       "escalated": [],
       "decision_llm_calls": 1,
       "decision_llm_tokens": 543,
-      "decision_llm_ms": 1599.461,
+      "decision_llm_ms": 1634.381,
       "summary": {
-        "trace_id": "b513ee7a42da1a993a1cbf567f0f10d7",
+        "trace_id": "d1462ba41259e72897b9d3cd6e12dcd1",
         "name": "support_ticket",
         "status": "ok",
-        "started_at": "2026-09-25T05:00:49Z",
-        "duration_ms": 3067.205,
+        "started_at": "2026-09-25T07:24:55Z",
+        "duration_ms": 3175.334,
         "attributes": {
           "ticket_id": "T-011",
           "mode": "llm",
@@ -1476,9 +1462,9 @@
         "model_input_tokens": 0,
         "cost_usd": 0.0,
         "time_by_plane_ms": {
-          "rule": 0.008,
-          "llm": 3061.382,
-          "tool": 0.028
+          "rule": 0.009,
+          "llm": 3171.625,
+          "tool": 0.029
         }
       }
     },
@@ -1538,13 +1524,13 @@
       "escalated": [],
       "decision_llm_calls": 1,
       "decision_llm_tokens": 538,
-      "decision_llm_ms": 1578.457,
+      "decision_llm_ms": 1579.136,
       "summary": {
-        "trace_id": "e0d26174b880894c0bef1af13b14f87b",
+        "trace_id": "77f8b937d2aff6984253dffa9f767de6",
         "name": "support_ticket",
         "status": "ok",
-        "started_at": "2026-09-25T05:00:52Z",
-        "duration_ms": 2863.615,
+        "started_at": "2026-09-25T07:24:58Z",
+        "duration_ms": 2926.815,
         "attributes": {
           "ticket_id": "T-012",
           "mode": "llm",
@@ -1569,9 +1555,9 @@
         "model_input_tokens": 0,
         "cost_usd": 0.0,
         "time_by_plane_ms": {
-          "rule": 0.006,
-          "llm": 2858.181,
-          "tool": 0.031
+          "rule": 0.008,
+          "llm": 2920.591,
+          "tool": 0.029
         }
       }
     },
@@ -1631,13 +1617,13 @@
       "escalated": [],
       "decision_llm_calls": 1,
       "decision_llm_tokens": 538,
-      "decision_llm_ms": 1585.924,
+      "decision_llm_ms": 1774.593,
       "summary": {
-        "trace_id": "4668495d4861df6fae99d1d1ca980842",
+        "trace_id": "cc731c97654ce08a2f7c8293ee5f5652",
         "name": "support_ticket",
         "status": "ok",
-        "started_at": "2026-09-25T05:00:55Z",
-        "duration_ms": 2894.446,
+        "started_at": "2026-09-25T07:25:01Z",
+        "duration_ms": 3303.925,
         "attributes": {
           "ticket_id": "T-013",
           "mode": "llm",
@@ -1662,9 +1648,9 @@
         "model_input_tokens": 0,
         "cost_usd": 0.0,
         "time_by_plane_ms": {
-          "rule": 0.007,
-          "llm": 2889.136,
-          "tool": 0.028
+          "rule": 0.008,
+          "llm": 3298.025,
+          "tool": 0.029
         }
       }
     },
@@ -1724,13 +1710,13 @@
       "escalated": [],
       "decision_llm_calls": 1,
       "decision_llm_tokens": 529,
-      "decision_llm_ms": 1675.266,
+      "decision_llm_ms": 1868.169,
       "summary": {
-        "trace_id": "bc7204598bbb574254cee619b552e680",
+        "trace_id": "047954cb83f77219d09b918ee1120231",
         "name": "support_ticket",
         "status": "ok",
-        "started_at": "2026-09-25T05:00:58Z",
-        "duration_ms": 3454.431,
+        "started_at": "2026-09-25T07:25:04Z",
+        "duration_ms": 4032.184,
         "attributes": {
           "ticket_id": "T-014",
           "mode": "llm",
@@ -1756,8 +1742,8 @@
         "cost_usd": 0.0,
         "time_by_plane_ms": {
           "rule": 0.013,
-          "llm": 3448.362,
-          "tool": 0.031
+          "llm": 4025.552,
+          "tool": 0.043
         }
       }
     },
@@ -1817,13 +1803,13 @@
       "escalated": [],
       "decision_llm_calls": 1,
       "decision_llm_tokens": 532,
-      "decision_llm_ms": 1687.264,
+      "decision_llm_ms": 1914.256,
       "summary": {
-        "trace_id": "5fb8c109949b49bd0fe9005813e46710",
+        "trace_id": "1d09da5e20a589a9ba376cff22a922f2",
         "name": "support_ticket",
         "status": "ok",
-        "started_at": "2026-09-25T05:01:01Z",
-        "duration_ms": 3224.627,
+        "started_at": "2026-09-25T07:25:08Z",
+        "duration_ms": 3706.102,
         "attributes": {
           "ticket_id": "T-015",
           "mode": "llm",
@@ -1848,9 +1834,9 @@
         "model_input_tokens": 0,
         "cost_usd": 0.0,
         "time_by_plane_ms": {
-          "rule": 0.014,
-          "llm": 3220.355,
-          "tool": 0.029
+          "rule": 0.013,
+          "llm": 3700.137,
+          "tool": 0.034
         }
       }
     },
@@ -1910,13 +1896,13 @@
       "escalated": [],
       "decision_llm_calls": 1,
       "decision_llm_tokens": 544,
-      "decision_llm_ms": 1648.387,
+      "decision_llm_ms": 1861.081,
       "summary": {
-        "trace_id": "d0d34c4113c9a8680268350ccbbb77f5",
+        "trace_id": "b753c4df2b793c237f8d5e125fca6d60",
         "name": "support_ticket",
         "status": "ok",
-        "started_at": "2026-09-25T05:01:04Z",
-        "duration_ms": 3923.769,
+        "started_at": "2026-09-25T07:25:12Z",
+        "duration_ms": 4530.741,
         "attributes": {
           "ticket_id": "T-016",
           "mode": "llm",
@@ -1941,9 +1927,9 @@
         "model_input_tokens": 0,
         "cost_usd": 0.0,
         "time_by_plane_ms": {
-          "rule": 0.012,
-          "llm": 3917.582,
-          "tool": 0.045
+          "rule": 0.028,
+          "llm": 4523.766,
+          "tool": 0.036
         }
       }
     },
@@ -2003,13 +1989,13 @@
       "escalated": [],
       "decision_llm_calls": 1,
       "decision_llm_tokens": 530,
-      "decision_llm_ms": 1668.308,
+      "decision_llm_ms": 1923.156,
       "summary": {
-        "trace_id": "620608eb6949b25e1227cc101b975090",
+        "trace_id": "07760de448b9f54cd1427f4d3e91a3b4",
         "name": "support_ticket",
         "status": "ok",
-        "started_at": "2026-09-25T05:01:08Z",
-        "duration_ms": 3643.647,
+        "started_at": "2026-09-25T07:25:16Z",
+        "duration_ms": 4137.401,
         "attributes": {
           "ticket_id": "T-017",
           "mode": "llm",
@@ -2034,9 +2020,9 @@
         "model_input_tokens": 0,
         "cost_usd": 0.0,
         "time_by_plane_ms": {
-          "rule": 0.013,
-          "llm": 3637.694,
-          "tool": 0.029
+          "rule": 0.012,
+          "llm": 4131.09,
+          "tool": 0.033
         }
       }
     },
@@ -2096,13 +2082,13 @@
       "escalated": [],
       "decision_llm_calls": 1,
       "decision_llm_tokens": 521,
-      "decision_llm_ms": 1672.457,
+      "decision_llm_ms": 1843.265,
       "summary": {
-        "trace_id": "1d5dd89226a3db167881463c777d2a85",
+        "trace_id": "f2d91f7e72c8cbc2a778d7368da190e0",
         "name": "support_ticket",
         "status": "ok",
-        "started_at": "2026-09-25T05:01:12Z",
-        "duration_ms": 3318.077,
+        "started_at": "2026-09-25T07:25:21Z",
+        "duration_ms": 3719.414,
         "attributes": {
           "ticket_id": "T-018",
           "mode": "llm",
@@ -2127,9 +2113,9 @@
         "model_input_tokens": 0,
         "cost_usd": 0.0,
         "time_by_plane_ms": {
-          "rule": 0.014,
-          "llm": 3311.46,
-          "tool": 0.034
+          "rule": 0.015,
+          "llm": 3713.113,
+          "tool": 0.033
         }
       }
     },
@@ -2189,13 +2175,13 @@
       "escalated": [],
       "decision_llm_calls": 1,
       "decision_llm_tokens": 533,
-      "decision_llm_ms": 1593.653,
+      "decision_llm_ms": 1907.107,
       "summary": {
-        "trace_id": "3e2af985cfe78272f93025a92a76a39c",
+        "trace_id": "379b2eac589e0c7b55420e79949dbd81",
         "name": "support_ticket",
         "status": "ok",
-        "started_at": "2026-09-25T05:01:15Z",
-        "duration_ms": 3386.526,
+        "started_at": "2026-09-25T07:25:24Z",
+        "duration_ms": 4468.826,
         "attributes": {
           "ticket_id": "T-019",
           "mode": "llm",
@@ -2220,9 +2206,9 @@
         "model_input_tokens": 0,
         "cost_usd": 0.0,
         "time_by_plane_ms": {
-          "rule": 0.014,
-          "llm": 3380.849,
-          "tool": 0.041
+          "rule": 0.016,
+          "llm": 4461.696,
+          "tool": 0.032
         }
       }
     },
@@ -2276,19 +2262,19 @@
           },
           "status": "accepted",
           "provider": "llm",
-          "confidence": 1.0
+          "confidence": null
         }
       },
       "escalated": [],
       "decision_llm_calls": 1,
       "decision_llm_tokens": 518,
-      "decision_llm_ms": 1568.808,
+      "decision_llm_ms": 2438.298,
       "summary": {
-        "trace_id": "34229b9011bb2e8d47f84636bb4f2008",
+        "trace_id": "089f0a4bf5c748d9638b7821e9806fc6",
         "name": "support_ticket",
         "status": "ok",
-        "started_at": "2026-09-25T05:01:19Z",
-        "duration_ms": 1571.393,
+        "started_at": "2026-09-25T07:25:29Z",
+        "duration_ms": 2441.49,
         "attributes": {
           "ticket_id": "T-020",
           "mode": "llm",
@@ -2314,7 +2300,7 @@
         "cost_usd": 0.0,
         "time_by_plane_ms": {
           "rule": 0.004,
-          "llm": 1568.808
+          "llm": 2438.298
         }
       }
     },
@@ -2374,13 +2360,13 @@
       "escalated": [],
       "decision_llm_calls": 1,
       "decision_llm_tokens": 533,
-      "decision_llm_ms": 1671.28,
+      "decision_llm_ms": 2209.102,
       "summary": {
-        "trace_id": "0858b9e51a93c7c67dca0b59c05616e1",
+        "trace_id": "5ca7ef01d7a8e57e273a07ace97cc434",
         "name": "support_ticket",
         "status": "ok",
-        "started_at": "2026-09-25T05:01:20Z",
-        "duration_ms": 2711.845,
+        "started_at": "2026-09-25T07:25:31Z",
+        "duration_ms": 3650.662,
         "attributes": {
           "ticket_id": "T-021",
           "mode": "llm",
@@ -2406,7 +2392,7 @@
         "cost_usd": 0.0,
         "time_by_plane_ms": {
           "rule": 0.014,
-          "llm": 2705.467,
+          "llm": 3643.924,
           "tool": 0.024
         }
       }
@@ -2467,13 +2453,13 @@
       "escalated": [],
       "decision_llm_calls": 1,
       "decision_llm_tokens": 534,
-      "decision_llm_ms": 1647.27,
+      "decision_llm_ms": 2356.867,
       "summary": {
-        "trace_id": "3f89b5683620ca3a44474479645202e9",
+        "trace_id": "087a259febd7adf5d1c7fc9314e6412f",
         "name": "support_ticket",
         "status": "ok",
-        "started_at": "2026-09-25T05:01:23Z",
-        "duration_ms": 3324.951,
+        "started_at": "2026-09-25T07:25:35Z",
+        "duration_ms": 4905.767,
         "attributes": {
           "ticket_id": "T-022",
           "mode": "llm",
@@ -2498,9 +2484,9 @@
         "model_input_tokens": 0,
         "cost_usd": 0.0,
         "time_by_plane_ms": {
-          "rule": 0.012,
-          "llm": 3320.699,
-          "tool": 0.03
+          "rule": 0.013,
+          "llm": 4882.072,
+          "tool": 0.035
         }
       }
     },
@@ -2554,19 +2540,19 @@
           },
           "status": "accepted",
           "provider": "llm",
-          "confidence": 1.0
+          "confidence": null
         }
       },
       "escalated": [],
       "decision_llm_calls": 1,
       "decision_llm_tokens": 531,
-      "decision_llm_ms": 1818.978,
+      "decision_llm_ms": 2153.598,
       "summary": {
-        "trace_id": "39128f22c0c07c39e31d9efabf520564",
+        "trace_id": "5bf1da71e58d62376961dd049b53f520",
         "name": "support_ticket",
         "status": "ok",
-        "started_at": "2026-09-25T05:01:26Z",
-        "duration_ms": 1821.677,
+        "started_at": "2026-09-25T07:25:40Z",
+        "duration_ms": 2156.415,
         "attributes": {
           "ticket_id": "T-023",
           "mode": "llm",
@@ -2592,7 +2578,7 @@
         "cost_usd": 0.0,
         "time_by_plane_ms": {
           "rule": 0.004,
-          "llm": 1818.978
+          "llm": 2153.598
         }
       }
     },
@@ -2646,19 +2632,19 @@
           },
           "status": "accepted",
           "provider": "llm",
-          "confidence": 1.0
+          "confidence": null
         }
       },
       "escalated": [],
       "decision_llm_calls": 1,
       "decision_llm_tokens": 514,
-      "decision_llm_ms": 1947.041,
+      "decision_llm_ms": 2022.075,
       "summary": {
-        "trace_id": "de894940a122bdf951342d99a5ee7a4b",
+        "trace_id": "7fdf207a30b7c4865c89824cf4ff60af",
         "name": "support_ticket",
         "status": "ok",
-        "started_at": "2026-09-25T05:01:28Z",
-        "duration_ms": 3513.926,
+        "started_at": "2026-09-25T07:25:42Z",
+        "duration_ms": 3647.939,
         "attributes": {
           "ticket_id": "T-024",
           "mode": "llm",
@@ -2683,9 +2669,9 @@
         "model_input_tokens": 0,
         "cost_usd": 0.0,
         "time_by_plane_ms": {
-          "rule": 0.011,
-          "llm": 3509.654,
-          "tool": 0.049
+          "rule": 0.012,
+          "llm": 3643.152,
+          "tool": 0.051
         }
       }
     },
@@ -2739,19 +2725,19 @@
           },
           "status": "accepted",
           "provider": "llm",
-          "confidence": 1.0
+          "confidence": null
         }
       },
       "escalated": [],
       "decision_llm_calls": 1,
       "decision_llm_tokens": 524,
-      "decision_llm_ms": 2296.877,
+      "decision_llm_ms": 2372.229,
       "summary": {
-        "trace_id": "239efeaf0006c977c4afcc8794df2b6f",
+        "trace_id": "c9531ca2fb2ea9fe424045b9d5fa7bb4",
         "name": "support_ticket",
         "status": "ok",
-        "started_at": "2026-09-25T05:01:32Z",
-        "duration_ms": 4349.257,
+        "started_at": "2026-09-25T07:25:46Z",
+        "duration_ms": 4575.065,
         "attributes": {
           "ticket_id": "T-025",
           "mode": "llm",
@@ -2776,9 +2762,9 @@
         "model_input_tokens": 0,
         "cost_usd": 0.0,
         "time_by_plane_ms": {
-          "rule": 0.011,
-          "llm": 4343.092,
-          "tool": 0.042
+          "rule": 0.012,
+          "llm": 4568.589,
+          "tool": 0.048
         }
       }
     },
@@ -2832,19 +2818,19 @@
           },
           "status": "accepted",
           "provider": "llm",
-          "confidence": 1.0
+          "confidence": null
         }
       },
       "escalated": [],
       "decision_llm_calls": 1,
       "decision_llm_tokens": 520,
-      "decision_llm_ms": 1959.39,
+      "decision_llm_ms": 2093.791,
       "summary": {
-        "trace_id": "fc1d1ef54510836d2474c07235bfbff1",
+        "trace_id": "6b0b115a9758890fe94fbb7b1472a753",
         "name": "support_ticket",
         "status": "ok",
-        "started_at": "2026-09-25T05:01:36Z",
-        "duration_ms": 3788.7,
+        "started_at": "2026-09-25T07:25:50Z",
+        "duration_ms": 3951.348,
         "attributes": {
           "ticket_id": "T-026",
           "mode": "llm",
@@ -2869,9 +2855,9 @@
         "model_input_tokens": 0,
         "cost_usd": 0.0,
         "time_by_plane_ms": {
-          "rule": 0.009,
-          "llm": 3782.468,
-          "tool": 0.044
+          "rule": 0.012,
+          "llm": 3944.218,
+          "tool": 0.053
         }
       }
     },
@@ -2925,19 +2911,19 @@
           },
           "status": "accepted",
           "provider": "llm",
-          "confidence": 1.0
+          "confidence": null
         }
       },
       "escalated": [],
       "decision_llm_calls": 1,
       "decision_llm_tokens": 534,
-      "decision_llm_ms": 2126.325,
+      "decision_llm_ms": 2160.506,
       "summary": {
-        "trace_id": "b34719e1f3e09b59f692bfb32c7cfd9f",
+        "trace_id": "973d215ea9423c67924a9c76e82e3c48",
         "name": "support_ticket",
         "status": "ok",
-        "started_at": "2026-09-25T05:01:40Z",
-        "duration_ms": 4260.37,
+        "started_at": "2026-09-25T07:25:54Z",
+        "duration_ms": 3952.266,
         "attributes": {
           "ticket_id": "T-027",
           "mode": "llm",
@@ -2963,8 +2949,8 @@
         "cost_usd": 0.0,
         "time_by_plane_ms": {
           "rule": 0.011,
-          "llm": 4254.218,
-          "tool": 0.05
+          "llm": 3945.877,
+          "tool": 0.049
         }
       }
     },
@@ -3018,19 +3004,19 @@
           },
           "status": "accepted",
           "provider": "llm",
-          "confidence": 1.0
+          "confidence": null
         }
       },
       "escalated": [],
       "decision_llm_calls": 1,
       "decision_llm_tokens": 520,
-      "decision_llm_ms": 2167.351,
+      "decision_llm_ms": 1735.368,
       "summary": {
-        "trace_id": "ab3c809ac3afea73f076a8a57e335601",
+        "trace_id": "25cc84b992746ba933003d4dcef5f884",
         "name": "support_ticket",
         "status": "ok",
-        "started_at": "2026-09-25T05:01:44Z",
-        "duration_ms": 3636.367,
+        "started_at": "2026-09-25T07:25:58Z",
+        "duration_ms": 2993.64,
         "attributes": {
           "ticket_id": "T-028",
           "mode": "llm",
@@ -3055,9 +3041,9 @@
         "model_input_tokens": 0,
         "cost_usd": 0.0,
         "time_by_plane_ms": {
-          "rule": 0.015,
-          "llm": 3630.009,
-          "tool": 0.018
+          "rule": 0.012,
+          "llm": 2987.383,
+          "tool": 0.023
         }
       }
     },
@@ -3111,19 +3097,19 @@
           },
           "status": "accepted",
           "provider": "llm",
-          "confidence": 1.0
+          "confidence": null
         }
       },
       "escalated": [],
       "decision_llm_calls": 2,
       "decision_llm_tokens": 707,
-      "decision_llm_ms": 2362.5370000000003,
+      "decision_llm_ms": 2055.43,
       "summary": {
-        "trace_id": "9654f8973f530fdf61f235da80498ae7",
+        "trace_id": "c35bb992adbfa10659e8a975a1f2bcae",
         "name": "support_ticket",
         "status": "ok",
-        "started_at": "2026-09-25T05:01:48Z",
-        "duration_ms": 3920.065,
+        "started_at": "2026-09-25T07:26:01Z",
+        "duration_ms": 3428.967,
         "attributes": {
           "ticket_id": "T-029",
           "mode": "llm",
@@ -3148,9 +3134,9 @@
         "model_input_tokens": 0,
         "cost_usd": 0.0,
         "time_by_plane_ms": {
-          "rule": 0.01,
-          "llm": 3912.766,
-          "tool": 0.059
+          "rule": 0.015,
+          "llm": 3421.317,
+          "tool": 0.061
         }
       }
     },
@@ -3204,19 +3190,19 @@
           },
           "status": "accepted",
           "provider": "llm",
-          "confidence": 1.0
+          "confidence": null
         }
       },
       "escalated": [],
       "decision_llm_calls": 2,
       "decision_llm_tokens": 697,
-      "decision_llm_ms": 2668.655,
+      "decision_llm_ms": 1938.625,
       "summary": {
-        "trace_id": "bf3d3174bb85a6295f42e39cfc424475",
+        "trace_id": "b6b623577868a78d3fee1feaf60c2d2d",
         "name": "support_ticket",
         "status": "ok",
-        "started_at": "2026-09-25T05:01:52Z",
-        "duration_ms": 4303.212,
+        "started_at": "2026-09-25T07:26:05Z",
+        "duration_ms": 3178.878,
         "attributes": {
           "ticket_id": "T-030",
           "mode": "llm",
@@ -3241,9 +3227,9 @@
         "model_input_tokens": 0,
         "cost_usd": 0.0,
         "time_by_plane_ms": {
-          "rule": 0.01,
-          "llm": 4298.15,
-          "tool": 0.053
+          "rule": 0.012,
+          "llm": 3173.388,
+          "tool": 0.055
         }
       }
     },
@@ -3297,19 +3283,19 @@
           },
           "status": "accepted",
           "provider": "llm",
-          "confidence": 1.0
+          "confidence": null
         }
       },
       "escalated": [],
       "decision_llm_calls": 1,
       "decision_llm_tokens": 526,
-      "decision_llm_ms": 1800.769,
+      "decision_llm_ms": 1740.678,
       "summary": {
-        "trace_id": "8dfc7b5b9ca6361588de1493c7f14478",
+        "trace_id": "abf9b9995c90c0dc2c894cc4be3cd173",
         "name": "support_ticket",
         "status": "ok",
-        "started_at": "2026-09-25T05:01:56Z",
-        "duration_ms": 2746.878,
+        "started_at": "2026-09-25T07:26:08Z",
+        "duration_ms": 2813.894,
         "attributes": {
           "ticket_id": "T-031",
           "mode": "llm",
@@ -3335,8 +3321,8 @@
         "cost_usd": 0.0,
         "time_by_plane_ms": {
           "rule": 0.007,
-          "llm": 2741.336,
-          "tool": 0.03
+          "llm": 2809.764,
+          "tool": 0.031
         }
       }
     },
@@ -3390,19 +3376,19 @@
           },
           "status": "accepted",
           "provider": "llm",
-          "confidence": 1.0
+          "confidence": null
         }
       },
       "escalated": [],
       "decision_llm_calls": 2,
       "decision_llm_tokens": 707,
-      "decision_llm_ms": 1781.921,
+      "decision_llm_ms": 1912.995,
       "summary": {
-        "trace_id": "54efcfb74fc8b9ac4f78235c0195c06f",
+        "trace_id": "200801b8166cf0ff0a40ad39bb23164b",
         "name": "support_ticket",
         "status": "ok",
-        "started_at": "2026-09-25T05:01:59Z",
-        "duration_ms": 2933.812,
+        "started_at": "2026-09-25T07:26:11Z",
+        "duration_ms": 3140.513,
         "attributes": {
           "ticket_id": "T-032",
           "mode": "llm",
@@ -3427,9 +3413,9 @@
         "model_input_tokens": 0,
         "cost_usd": 0.0,
         "time_by_plane_ms": {
-          "rule": 0.013,
-          "llm": 2926.927,
-          "tool": 0.05
+          "rule": 0.012,
+          "llm": 3133.413,
+          "tool": 0.053
         }
       }
     },
@@ -3483,19 +3469,19 @@
           },
           "status": "accepted",
           "provider": "llm",
-          "confidence": 1.0
+          "confidence": null
         }
       },
       "escalated": [],
       "decision_llm_calls": 1,
       "decision_llm_tokens": 517,
-      "decision_llm_ms": 1450.182,
+      "decision_llm_ms": 1613.531,
       "summary": {
-        "trace_id": "ca6e85513bd34a9e44501efb6d6bb577",
+        "trace_id": "011d731c6a8e107b6954348d10b206ea",
         "name": "support_ticket",
         "status": "ok",
-        "started_at": "2026-09-25T05:02:02Z",
-        "duration_ms": 2260.877,
+        "started_at": "2026-09-25T07:26:14Z",
+        "duration_ms": 2567.69,
         "attributes": {
           "ticket_id": "T-033",
           "mode": "llm",
@@ -3521,8 +3507,8 @@
         "cost_usd": 0.0,
         "time_by_plane_ms": {
           "rule": 0.008,
-          "llm": 2256.863,
-          "tool": 0.032
+          "llm": 2563.485,
+          "tool": 0.033
         }
       }
     },
@@ -3576,19 +3562,19 @@
           },
           "status": "accepted",
           "provider": "llm",
-          "confidence": 1.0
+          "confidence": null
         }
       },
       "escalated": [],
       "decision_llm_calls": 2,
       "decision_llm_tokens": 705,
-      "decision_llm_ms": 1718.761,
+      "decision_llm_ms": 2064.107,
       "summary": {
-        "trace_id": "9bad805a43b881d909aaebda5e569a58",
+        "trace_id": "db68b184488958d3442041919dae512b",
         "name": "support_ticket",
         "status": "ok",
-        "started_at": "2026-09-25T05:02:04Z",
-        "duration_ms": 3194.265,
+        "started_at": "2026-09-25T07:26:16Z",
+        "duration_ms": 3625.909,
         "attributes": {
           "ticket_id": "T-034",
           "mode": "llm",
@@ -3613,9 +3599,9 @@
         "model_input_tokens": 0,
         "cost_usd": 0.0,
         "time_by_plane_ms": {
-          "rule": 0.01,
-          "llm": 3188.797,
-          "tool": 0.05
+          "rule": 0.013,
+          "llm": 3620.054,
+          "tool": 0.053
         }
       }
     },
@@ -3669,19 +3655,19 @@
           },
           "status": "accepted",
           "provider": "llm",
-          "confidence": 1.0
+          "confidence": null
         }
       },
       "escalated": [],
       "decision_llm_calls": 1,
       "decision_llm_tokens": 511,
-      "decision_llm_ms": 1467.826,
+      "decision_llm_ms": 1591.857,
       "summary": {
-        "trace_id": "35aa9eed7e0b3e38c3e9ef695c493f67",
+        "trace_id": "8a2a693e7f6144fca20f44e6c7fbdc4b",
         "name": "support_ticket",
         "status": "ok",
-        "started_at": "2026-09-25T05:02:07Z",
-        "duration_ms": 2268.782,
+        "started_at": "2026-09-25T07:26:20Z",
+        "duration_ms": 2502.502,
         "attributes": {
           "ticket_id": "T-035",
           "mode": "llm",
@@ -3707,8 +3693,8 @@
         "cost_usd": 0.0,
         "time_by_plane_ms": {
           "rule": 0.012,
-          "llm": 2262.222,
-          "tool": 0.071
+          "llm": 2497.271,
+          "tool": 0.07
         }
       }
     },
@@ -3762,19 +3748,19 @@
           },
           "status": "accepted",
           "provider": "llm",
-          "confidence": 1.0
+          "confidence": null
         }
       },
       "escalated": [],
       "decision_llm_calls": 1,
       "decision_llm_tokens": 515,
-      "decision_llm_ms": 1374.791,
+      "decision_llm_ms": 1723.68,
       "summary": {
-        "trace_id": "98fa8183bfe03290761838dc4479a126",
+        "trace_id": "43449e2e6fe1ddb1c894cf52257ddd9b",
         "name": "support_ticket",
         "status": "ok",
-        "started_at": "2026-09-25T05:02:09Z",
-        "duration_ms": 2578.767,
+        "started_at": "2026-09-25T07:26:22Z",
+        "duration_ms": 3216.675,
         "attributes": {
           "ticket_id": "T-036",
           "mode": "llm",
@@ -3800,8 +3786,8 @@
         "cost_usd": 0.0,
         "time_by_plane_ms": {
           "rule": 0.008,
-          "llm": 2572.842,
-          "tool": 0.032
+          "llm": 3210.901,
+          "tool": 0.031
         }
       }
     },
@@ -3855,19 +3841,19 @@
           },
           "status": "accepted",
           "provider": "llm",
-          "confidence": 1.0
+          "confidence": null
         }
       },
       "escalated": [],
       "decision_llm_calls": 1,
       "decision_llm_tokens": 523,
-      "decision_llm_ms": 1466.337,
+      "decision_llm_ms": 1814.647,
       "summary": {
-        "trace_id": "84e15374da2b37c59e9bb59550d84f07",
+        "trace_id": "0bd39ad574a14a83e888f3e16bc6f079",
         "name": "support_ticket",
         "status": "ok",
-        "started_at": "2026-09-25T05:02:12Z",
-        "duration_ms": 2774.406,
+        "started_at": "2026-09-25T07:26:26Z",
+        "duration_ms": 3438.344,
         "attributes": {
           "ticket_id": "T-037",
           "mode": "llm",
@@ -3892,9 +3878,9 @@
         "model_input_tokens": 0,
         "cost_usd": 0.0,
         "time_by_plane_ms": {
-          "rule": 0.008,
-          "llm": 2767.847,
-          "tool": 0.033
+          "rule": 0.009,
+          "llm": 3432.099,
+          "tool": 0.031
         }
       }
     },
@@ -3948,19 +3934,19 @@
           },
           "status": "accepted",
           "provider": "llm",
-          "confidence": 1.0
+          "confidence": null
         }
       },
       "escalated": [],
       "decision_llm_calls": 1,
       "decision_llm_tokens": 533,
-      "decision_llm_ms": 1533.998,
+      "decision_llm_ms": 1959.174,
       "summary": {
-        "trace_id": "c5c89f021b1ec581ae5e2105dddb1b5f",
+        "trace_id": "9c55b1f424201d3ff12fb427eedc57d0",
         "name": "support_ticket",
         "status": "ok",
-        "started_at": "2026-09-25T05:02:15Z",
-        "duration_ms": 2788.385,
+        "started_at": "2026-09-25T07:26:29Z",
+        "duration_ms": 3633.237,
         "attributes": {
           "ticket_id": "T-038",
           "mode": "llm",
@@ -3985,9 +3971,9 @@
         "model_input_tokens": 0,
         "cost_usd": 0.0,
         "time_by_plane_ms": {
-          "rule": 0.008,
-          "llm": 2782.843,
-          "tool": 0.028
+          "rule": 0.007,
+          "llm": 3628.26,
+          "tool": 0.037
         }
       }
     },
@@ -4041,19 +4027,19 @@
           },
           "status": "accepted",
           "provider": "llm",
-          "confidence": 1.0
+          "confidence": null
         }
       },
       "escalated": [],
       "decision_llm_calls": 1,
       "decision_llm_tokens": 520,
-      "decision_llm_ms": 1544.419,
+      "decision_llm_ms": 2003.433,
       "summary": {
-        "trace_id": "b9c605e87d6741d1e2ff48ffb964cf2a",
+        "trace_id": "b4a3bc15b3aab13a989ca552af6945bf",
         "name": "support_ticket",
         "status": "ok",
-        "started_at": "2026-09-25T05:02:17Z",
-        "duration_ms": 2858.684,
+        "started_at": "2026-09-25T07:26:33Z",
+        "duration_ms": 3875.348,
         "attributes": {
           "ticket_id": "T-039",
           "mode": "llm",
@@ -4078,8 +4064,8 @@
         "model_input_tokens": 0,
         "cost_usd": 0.0,
         "time_by_plane_ms": {
-          "rule": 0.007,
-          "llm": 2853.202,
+          "rule": 0.009,
+          "llm": 3869.455,
           "tool": 0.032
         }
       }
@@ -4134,19 +4120,19 @@
           },
           "status": "accepted",
           "provider": "llm",
-          "confidence": 1.0
+          "confidence": null
         }
       },
       "escalated": [],
       "decision_llm_calls": 1,
       "decision_llm_tokens": 524,
-      "decision_llm_ms": 1617.297,
+      "decision_llm_ms": 2241.12,
       "summary": {
-        "trace_id": "e7b021d6d220c4b75fd2b04e0c1de0aa",
+        "trace_id": "a9a29be637a2eeeb175aba874ebfa5b7",
         "name": "support_ticket",
         "status": "ok",
-        "started_at": "2026-09-25T05:02:20Z",
-        "duration_ms": 2567.637,
+        "started_at": "2026-09-25T07:26:37Z",
+        "duration_ms": 3652.085,
         "attributes": {
           "ticket_id": "T-040",
           "mode": "llm",
@@ -4172,8 +4158,8 @@
         "cost_usd": 0.0,
         "time_by_plane_ms": {
           "rule": 0.008,
-          "llm": 2563.809,
-          "tool": 0.029
+          "llm": 3645.47,
+          "tool": 0.03
         }
       }
     },
@@ -4227,19 +4213,19 @@
           },
           "status": "accepted",
           "provider": "llm",
-          "confidence": 1.0
+          "confidence": null
         }
       },
       "escalated": [],
       "decision_llm_calls": 1,
       "decision_llm_tokens": 523,
-      "decision_llm_ms": 1527.721,
+      "decision_llm_ms": 2081.502,
       "summary": {
-        "trace_id": "caa7eb8e9925affc44c6a1cc8ad37653",
+        "trace_id": "354fbc23e32995bf54f7a449511a82be",
         "name": "support_ticket",
         "status": "ok",
-        "started_at": "2026-09-25T05:02:23Z",
-        "duration_ms": 2447.273,
+        "started_at": "2026-09-25T07:26:40Z",
+        "duration_ms": 3281.736,
         "attributes": {
           "ticket_id": "T-041",
           "mode": "llm",
@@ -4265,8 +4251,8 @@
         "cost_usd": 0.0,
         "time_by_plane_ms": {
           "rule": 0.008,
-          "llm": 2443.409,
-          "tool": 0.031
+          "llm": 3275.453,
+          "tool": 0.038
         }
       }
     },
@@ -4320,19 +4306,19 @@
           },
           "status": "accepted",
           "provider": "llm",
-          "confidence": 1.0
+          "confidence": null
         }
       },
       "escalated": [],
       "decision_llm_calls": 1,
       "decision_llm_tokens": 527,
-      "decision_llm_ms": 1532.351,
+      "decision_llm_ms": 2190.405,
       "summary": {
-        "trace_id": "44d87ae5b76270895b877e13e00ffbda",
+        "trace_id": "fa19ec10cd26f0bb5e9ece0b6dbea932",
         "name": "support_ticket",
         "status": "ok",
-        "started_at": "2026-09-25T05:02:25Z",
-        "duration_ms": 2953.901,
+        "started_at": "2026-09-25T07:26:43Z",
+        "duration_ms": 3779.95,
         "attributes": {
           "ticket_id": "T-042",
           "mode": "llm",
@@ -4358,8 +4344,8 @@
         "cost_usd": 0.0,
         "time_by_plane_ms": {
           "rule": 0.008,
-          "llm": 2949.881,
-          "tool": 0.032
+          "llm": 3774.223,
+          "tool": 0.03
         }
       }
     },
@@ -4413,19 +4399,19 @@
           },
           "status": "accepted",
           "provider": "llm",
-          "confidence": 1.0
+          "confidence": null
         }
       },
       "escalated": [],
       "decision_llm_calls": 1,
       "decision_llm_tokens": 525,
-      "decision_llm_ms": 2024.338,
+      "decision_llm_ms": 2232.718,
       "summary": {
-        "trace_id": "27e1b3a88db761814ed8f983f07f41e5",
+        "trace_id": "1c2775b9d8b406eada4413493c902457",
         "name": "support_ticket",
         "status": "ok",
-        "started_at": "2026-09-25T05:02:28Z",
-        "duration_ms": 3811.808,
+        "started_at": "2026-09-25T07:26:47Z",
+        "duration_ms": 3943.706,
         "attributes": {
           "ticket_id": "T-043",
           "mode": "llm",
@@ -4450,9 +4436,9 @@
         "model_input_tokens": 0,
         "cost_usd": 0.0,
         "time_by_plane_ms": {
-          "rule": 0.007,
-          "llm": 3806.917,
-          "tool": 0.032
+          "rule": 0.009,
+          "llm": 3937.669,
+          "tool": 0.029
         }
       }
     },
@@ -4506,19 +4492,19 @@
           },
           "status": "accepted",
           "provider": "llm",
-          "confidence": 1.0
+          "confidence": null
         }
       },
       "escalated": [],
       "decision_llm_calls": 1,
       "decision_llm_tokens": 526,
-      "decision_llm_ms": 2254.607,
+      "decision_llm_ms": 1966.61,
       "summary": {
-        "trace_id": "885e4ed0b1afed67ef18cb3a0e411ddb",
+        "trace_id": "7812a90f6b303435350a6d29b1d2b83c",
         "name": "support_ticket",
         "status": "ok",
-        "started_at": "2026-09-25T05:02:32Z",
-        "duration_ms": 3743.644,
+        "started_at": "2026-09-25T07:26:51Z",
+        "duration_ms": 3591.798,
         "attributes": {
           "ticket_id": "T-044",
           "mode": "llm",
@@ -4543,9 +4529,9 @@
         "model_input_tokens": 0,
         "cost_usd": 0.0,
         "time_by_plane_ms": {
-          "rule": 0.011,
-          "llm": 3738.691,
-          "tool": 0.068
+          "rule": 0.012,
+          "llm": 3585.09,
+          "tool": 0.079
         }
       }
     },
@@ -4599,19 +4585,19 @@
           },
           "status": "accepted",
           "provider": "llm",
-          "confidence": 1.0
+          "confidence": null
         }
       },
       "escalated": [],
       "decision_llm_calls": 1,
       "decision_llm_tokens": 519,
-      "decision_llm_ms": 1776.419,
+      "decision_llm_ms": 2058.341,
       "summary": {
-        "trace_id": "6f014151442b71e03dd636d869b73f09",
+        "trace_id": "22cd69c31797587e875776d99835bc63",
         "name": "support_ticket",
         "status": "ok",
-        "started_at": "2026-09-25T05:02:36Z",
-        "duration_ms": 3676.847,
+        "started_at": "2026-09-25T07:26:55Z",
+        "duration_ms": 4058.751,
         "attributes": {
           "ticket_id": "T-045",
           "mode": "llm",
@@ -4637,8 +4623,8 @@
         "cost_usd": 0.0,
         "time_by_plane_ms": {
           "rule": 0.008,
-          "llm": 3670.318,
-          "tool": 0.034
+          "llm": 4051.911,
+          "tool": 0.031
         }
       }
     },
@@ -4692,19 +4678,19 @@
           },
           "status": "accepted",
           "provider": "llm",
-          "confidence": 1.0
+          "confidence": null
         }
       },
       "escalated": [],
       "decision_llm_calls": 1,
       "decision_llm_tokens": 530,
-      "decision_llm_ms": 2172.028,
+      "decision_llm_ms": 1804.743,
       "summary": {
-        "trace_id": "2d80d79befa070461a657006bac388cf",
+        "trace_id": "0dd2d0d86e8ebcf70fbb8bdf79fdd4ca",
         "name": "support_ticket",
         "status": "ok",
-        "started_at": "2026-09-25T05:02:39Z",
-        "duration_ms": 4229.958,
+        "started_at": "2026-09-25T07:26:59Z",
+        "duration_ms": 3666.974,
         "attributes": {
           "ticket_id": "T-046",
           "mode": "llm",
@@ -4730,8 +4716,8 @@
         "cost_usd": 0.0,
         "time_by_plane_ms": {
           "rule": 0.008,
-          "llm": 4224.238,
-          "tool": 0.029
+          "llm": 3662.289,
+          "tool": 0.033
         }
       }
     },
@@ -4791,13 +4777,13 @@
       "escalated": [],
       "decision_llm_calls": 1,
       "decision_llm_tokens": 540,
-      "decision_llm_ms": 2244.873,
+      "decision_llm_ms": 2374.037,
       "summary": {
-        "trace_id": "c4ff039880dd73f6a406dd05b0aac35d",
+        "trace_id": "508659f1ccd87f7a4aa079e6b2a6e173",
         "name": "support_ticket",
         "status": "ok",
-        "started_at": "2026-09-25T05:02:44Z",
-        "duration_ms": 3709.897,
+        "started_at": "2026-09-25T07:27:03Z",
+        "duration_ms": 3794.394,
         "attributes": {
           "ticket_id": "T-047",
           "mode": "llm",
@@ -4822,9 +4808,9 @@
         "model_input_tokens": 0,
         "cost_usd": 0.0,
         "time_by_plane_ms": {
-          "rule": 0.009,
-          "llm": 3704.225,
-          "tool": 0.027
+          "rule": 0.007,
+          "llm": 3788.653,
+          "tool": 0.03
         }
       }
     },
@@ -4878,19 +4864,19 @@
           },
           "status": "accepted",
           "provider": "llm",
-          "confidence": 1.0
+          "confidence": null
         }
       },
       "escalated": [],
       "decision_llm_calls": 1,
       "decision_llm_tokens": 525,
-      "decision_llm_ms": 2138.326,
+      "decision_llm_ms": 2173.91,
       "summary": {
-        "trace_id": "c28922b15d40f3ef3f054155ade01035",
+        "trace_id": "60376b6f58fb7df15fae3649a0e3e008",
         "name": "support_ticket",
         "status": "ok",
-        "started_at": "2026-09-25T05:02:47Z",
-        "duration_ms": 3410.557,
+        "started_at": "2026-09-25T07:27:06Z",
+        "duration_ms": 3155.681,
         "attributes": {
           "ticket_id": "T-048",
           "mode": "llm",
@@ -4915,9 +4901,9 @@
         "model_input_tokens": 0,
         "cost_usd": 0.0,
         "time_by_plane_ms": {
-          "rule": 0.008,
-          "llm": 3404.984,
-          "tool": 0.03
+          "rule": 0.01,
+          "llm": 3149.799,
+          "tool": 0.032
         }
       }
     },
@@ -4971,19 +4957,19 @@
           },
           "status": "accepted",
           "provider": "llm",
-          "confidence": 1.0
+          "confidence": null
         }
       },
       "escalated": [],
       "decision_llm_calls": 1,
       "decision_llm_tokens": 532,
-      "decision_llm_ms": 2402.423,
+      "decision_llm_ms": 2114.466,
       "summary": {
-        "trace_id": "7a6a52d8d6174def70f93d4a0759d58d",
+        "trace_id": "5f728ade0a1256027d6971a9559edbd4",
         "name": "support_ticket",
         "status": "ok",
-        "started_at": "2026-09-25T05:02:51Z",
-        "duration_ms": 3854.312,
+        "started_at": "2026-09-25T07:27:09Z",
+        "duration_ms": 3438.745,
         "attributes": {
           "ticket_id": "T-049",
           "mode": "llm",
@@ -5009,8 +4995,8 @@
         "cost_usd": 0.0,
         "time_by_plane_ms": {
           "rule": 0.008,
-          "llm": 3850.423,
-          "tool": 0.029
+          "llm": 3432.7,
+          "tool": 0.032
         }
       }
     },
@@ -5064,19 +5050,19 @@
           },
           "status": "accepted",
           "provider": "llm",
-          "confidence": 1.0
+          "confidence": null
         }
       },
       "escalated": [],
       "decision_llm_calls": 1,
       "decision_llm_tokens": 535,
-      "decision_llm_ms": 2240.336,
+      "decision_llm_ms": 2202.526,
       "summary": {
-        "trace_id": "c9729342fab4d5323f67e5c6787319fc",
+        "trace_id": "6578b9d00ff3c5a984f3154766b6a021",
         "name": "support_ticket",
         "status": "ok",
-        "started_at": "2026-09-25T05:02:55Z",
-        "duration_ms": 3608.704,
+        "started_at": "2026-09-25T07:27:13Z",
+        "duration_ms": 4091.976,
         "attributes": {
           "ticket_id": "T-050",
           "mode": "llm",
@@ -5101,9 +5087,9 @@
         "model_input_tokens": 0,
         "cost_usd": 0.0,
         "time_by_plane_ms": {
-          "rule": 0.008,
-          "llm": 3604.965,
-          "tool": 0.03
+          "rule": 0.01,
+          "llm": 4085.772,
+          "tool": 0.035
         }
       }
     },
@@ -5163,13 +5149,13 @@
       "escalated": [],
       "decision_llm_calls": 1,
       "decision_llm_tokens": 554,
-      "decision_llm_ms": 1792.079,
+      "decision_llm_ms": 2271.706,
       "summary": {
-        "trace_id": "4c5e35d81873e6807a1418b59e7faabb",
+        "trace_id": "b12f362032b4ee69dcdbeb66dddc3881",
         "name": "support_ticket",
         "status": "ok",
-        "started_at": "2026-09-25T05:02:58Z",
-        "duration_ms": 3263.198,
+        "started_at": "2026-09-25T07:27:17Z",
+        "duration_ms": 4094.977,
         "attributes": {
           "ticket_id": "T-051",
           "mode": "llm",
@@ -5194,9 +5180,9 @@
         "model_input_tokens": 0,
         "cost_usd": 0.0,
         "time_by_plane_ms": {
-          "rule": 0.007,
-          "llm": 3259.275,
-          "tool": 0.033
+          "rule": 0.008,
+          "llm": 4090.722,
+          "tool": 0.03
         }
       }
     },
@@ -5219,11 +5205,11 @@
       "decision_llm_tokens": 0,
       "decision_llm_ms": 0.0,
       "summary": {
-        "trace_id": "7a0bd01477ddd710fd03a584b1109382",
+        "trace_id": "dd2874f43b1f093a48ecbe93b65d5a10",
         "name": "support_ticket",
         "status": "ok",
-        "started_at": "2026-09-25T05:03:02Z",
-        "duration_ms": 0.895,
+        "started_at": "2026-09-25T07:27:21Z",
+        "duration_ms": 2.892,
         "attributes": {
           "ticket_id": "T-052",
           "mode": "llm",
@@ -5247,7 +5233,7 @@
         "model_input_tokens": 0,
         "cost_usd": 0.0,
         "time_by_plane_ms": {
-          "rule": 0.002
+          "rule": 0.01
         }
       }
     },
@@ -5270,11 +5256,11 @@
       "decision_llm_tokens": 0,
       "decision_llm_ms": 0.0,
       "summary": {
-        "trace_id": "69a6bc5545946d1454acca27f0606aea",
+        "trace_id": "011a5c8a3e1f10f89bd883f1207c11c7",
         "name": "support_ticket",
         "status": "ok",
-        "started_at": "2026-09-25T05:03:02Z",
-        "duration_ms": 0.828,
+        "started_at": "2026-09-25T07:27:21Z",
+        "duration_ms": 0.943,
         "attributes": {
           "ticket_id": "T-053",
           "mode": "llm",
@@ -5359,14 +5345,14 @@
         "injection"
       ],
       "decision_llm_calls": 1,
-      "decision_llm_tokens": 156,
-      "decision_llm_ms": 267.797,
+      "decision_llm_tokens": 273,
+      "decision_llm_ms": 344.42,
       "summary": {
-        "trace_id": "469ef13146c530b5c2ffd518b988d13a",
+        "trace_id": "1fc740465472e2034a89176cbd8d6a7a",
         "name": "support_ticket",
         "status": "ok",
-        "started_at": "2026-09-25T05:03:02Z",
-        "duration_ms": 2220.489,
+        "started_at": "2026-09-25T07:27:21Z",
+        "duration_ms": 2817.721,
         "attributes": {
           "ticket_id": "T-001",
           "mode": "hybrid",
@@ -5387,15 +5373,15 @@
         "escalations": 1,
         "tool_calls": 3,
         "errors": 0,
-        "llm_input_tokens": 393,
+        "llm_input_tokens": 510,
         "llm_output_tokens": 54,
         "model_input_tokens": 362,
         "cost_usd": 0.0,
         "time_by_plane_ms": {
           "rule": 0.201,
-          "model": 268.16,
-          "llm": 1945.477,
-          "tool": 0.095
+          "model": 74.64,
+          "llm": 2735.146,
+          "tool": 0.101
         }
       }
     },
@@ -5459,11 +5445,11 @@
       "decision_llm_tokens": 0,
       "decision_llm_ms": 0.0,
       "summary": {
-        "trace_id": "a547c36dcc9c5e83513a2a4ce45eed54",
+        "trace_id": "c09cb82ab319d96b5d7abae6da49ba86",
         "name": "support_ticket",
         "status": "ok",
-        "started_at": "2026-09-25T05:03:04Z",
-        "duration_ms": 1926.836,
+        "started_at": "2026-09-25T07:27:24Z",
+        "duration_ms": 1816.527,
         "attributes": {
           "ticket_id": "T-002",
           "mode": "hybrid",
@@ -5488,10 +5474,10 @@
         "model_input_tokens": 511,
         "cost_usd": 0.0,
         "time_by_plane_ms": {
-          "rule": 0.206,
-          "model": 229.789,
-          "tool": 0.105,
-          "llm": 1687.998
+          "rule": 0.212,
+          "model": 95.829,
+          "tool": 0.149,
+          "llm": 1710.835
         }
       }
     },
@@ -5553,11 +5539,11 @@
       "decision_llm_tokens": 0,
       "decision_llm_ms": 0.0,
       "summary": {
-        "trace_id": "1931cacc67d52ea621cc73f3c8e1a6a6",
+        "trace_id": "0624c66ba7787b4def2c83570390098d",
         "name": "support_ticket",
         "status": "ok",
-        "started_at": "2026-09-25T05:03:06Z",
-        "duration_ms": 1715.612,
+        "started_at": "2026-09-25T07:27:26Z",
+        "duration_ms": 1897.419,
         "attributes": {
           "ticket_id": "T-003",
           "mode": "hybrid",
@@ -5582,10 +5568,10 @@
         "model_input_tokens": 358,
         "cost_usd": 0.0,
         "time_by_plane_ms": {
-          "rule": 0.185,
-          "model": 199.048,
-          "tool": 0.1,
-          "llm": 1507.994
+          "rule": 0.2,
+          "model": 71.673,
+          "tool": 0.11,
+          "llm": 1815.758
         }
       }
     },
@@ -5646,14 +5632,14 @@
         "churn_risk"
       ],
       "decision_llm_calls": 1,
-      "decision_llm_tokens": 150,
-      "decision_llm_ms": 314.9,
+      "decision_llm_tokens": 277,
+      "decision_llm_ms": 463.54,
       "summary": {
-        "trace_id": "c772a1db043f2a0963d36aedb2f52a44",
+        "trace_id": "9133926ee3f213db4951186aa65fd016",
         "name": "support_ticket",
         "status": "ok",
-        "started_at": "2026-09-25T05:03:07Z",
-        "duration_ms": 2528.442,
+        "started_at": "2026-09-25T07:27:28Z",
+        "duration_ms": 2598.261,
         "attributes": {
           "ticket_id": "T-004",
           "mode": "hybrid",
@@ -5674,15 +5660,15 @@
         "escalations": 1,
         "tool_calls": 3,
         "errors": 0,
-        "llm_input_tokens": 385,
+        "llm_input_tokens": 512,
         "llm_output_tokens": 62,
         "model_input_tokens": 362,
         "cost_usd": 0.0,
         "time_by_plane_ms": {
-          "rule": 0.193,
-          "model": 256.053,
-          "llm": 2263.546,
-          "tool": 0.095
+          "rule": 0.201,
+          "model": 73.446,
+          "llm": 2516.537,
+          "tool": 0.116
         }
       }
     },
@@ -5743,14 +5729,14 @@
         "injection"
       ],
       "decision_llm_calls": 1,
-      "decision_llm_tokens": 158,
-      "decision_llm_ms": 265.065,
+      "decision_llm_tokens": 275,
+      "decision_llm_ms": 279.807,
       "summary": {
-        "trace_id": "bcd787092c80af9c9f1fc598ee67363d",
+        "trace_id": "7bd164966ff3635e047a91b6c84561fb",
         "name": "support_ticket",
         "status": "ok",
-        "started_at": "2026-09-25T05:03:10Z",
-        "duration_ms": 2388.889,
+        "started_at": "2026-09-25T07:27:30Z",
+        "duration_ms": 2602.924,
         "attributes": {
           "ticket_id": "T-005",
           "mode": "hybrid",
@@ -5771,15 +5757,15 @@
         "escalations": 1,
         "tool_calls": 3,
         "errors": 0,
-        "llm_input_tokens": 395,
+        "llm_input_tokens": 512,
         "llm_output_tokens": 58,
         "model_input_tokens": 378,
         "cost_usd": 0.0,
         "time_by_plane_ms": {
-          "rule": 0.226,
-          "model": 60.762,
-          "llm": 2320.053,
-          "tool": 0.111
+          "rule": 0.209,
+          "model": 71.136,
+          "llm": 2522.387,
+          "tool": 0.101
         }
       }
     },
@@ -5840,14 +5826,14 @@
         "injection"
       ],
       "decision_llm_calls": 1,
-      "decision_llm_tokens": 162,
-      "decision_llm_ms": 249.476,
+      "decision_llm_tokens": 279,
+      "decision_llm_ms": 354.641,
       "summary": {
-        "trace_id": "687dba900efef1a6e7edc94f92b1025b",
+        "trace_id": "89001311937dcbd179915747f9f78e1a",
         "name": "support_ticket",
         "status": "ok",
-        "started_at": "2026-09-25T05:03:12Z",
-        "duration_ms": 1990.795,
+        "started_at": "2026-09-25T07:27:33Z",
+        "duration_ms": 2530.391,
         "attributes": {
           "ticket_id": "T-006",
           "mode": "hybrid",
@@ -5868,15 +5854,15 @@
         "escalations": 1,
         "tool_calls": 3,
         "errors": 0,
-        "llm_input_tokens": 439,
+        "llm_input_tokens": 556,
         "llm_output_tokens": 56,
         "model_input_tokens": 374,
         "cost_usd": 0.0,
         "time_by_plane_ms": {
-          "rule": 0.216,
-          "model": 60.024,
-          "llm": 1921.413,
-          "tool": 0.097
+          "rule": 0.193,
+          "model": 78.601,
+          "llm": 2442.878,
+          "tool": 0.093
         }
       }
     },
@@ -5938,11 +5924,11 @@
       "decision_llm_tokens": 0,
       "decision_llm_ms": 0.0,
       "summary": {
-        "trace_id": "55bc63ef955b9f27062d3541e41e2cef",
+        "trace_id": "5564c5de556de7676499a0c64ba35944",
         "name": "support_ticket",
         "status": "ok",
-        "started_at": "2026-09-25T05:03:14Z",
-        "duration_ms": 1387.914,
+        "started_at": "2026-09-25T07:27:35Z",
+        "duration_ms": 1800.531,
         "attributes": {
           "ticket_id": "T-007",
           "mode": "hybrid",
@@ -5967,10 +5953,10 @@
         "model_input_tokens": 326,
         "cost_usd": 0.0,
         "time_by_plane_ms": {
-          "rule": 0.192,
-          "model": 52.78,
-          "tool": 0.088,
-          "llm": 1327.694
+          "rule": 0.189,
+          "model": 67.183,
+          "tool": 0.094,
+          "llm": 1726.391
         }
       }
     },
@@ -6032,11 +6018,11 @@
       "decision_llm_tokens": 0,
       "decision_llm_ms": 0.0,
       "summary": {
-        "trace_id": "1d7c1998278f59f465728225ead1513a",
+        "trace_id": "588b0827d7824e42f93467b2f9f08ada",
         "name": "support_ticket",
         "status": "ok",
-        "started_at": "2026-09-25T05:03:16Z",
-        "duration_ms": 176.969,
+        "started_at": "2026-09-25T07:27:37Z",
+        "duration_ms": 112.348,
         "attributes": {
           "ticket_id": "T-008",
           "mode": "hybrid",
@@ -6061,8 +6047,8 @@
         "model_input_tokens": 306,
         "cost_usd": 0.0,
         "time_by_plane_ms": {
-          "rule": 0.123,
-          "model": 171.696
+          "rule": 0.14,
+          "model": 106.255
         }
       }
     },
@@ -6093,7 +6079,7 @@
           "confidence": null
         },
         "churn_risk": {
-          "value": true,
+          "value": false,
           "status": "accepted",
           "provider": "llm",
           "confidence": null
@@ -6124,14 +6110,14 @@
         "urgency"
       ],
       "decision_llm_calls": 1,
-      "decision_llm_tokens": 191,
-      "decision_llm_ms": 580.291,
+      "decision_llm_tokens": 301,
+      "decision_llm_ms": 808.156,
       "summary": {
-        "trace_id": "c032bddd9e6a5549bb8e83cd2dcd4308",
+        "trace_id": "a0df5cc5cee6c26ba5763c76064c571b",
         "name": "support_ticket",
         "status": "ok",
-        "started_at": "2026-09-25T05:03:16Z",
-        "duration_ms": 2116.851,
+        "started_at": "2026-09-25T07:27:37Z",
+        "duration_ms": 2668.289,
         "attributes": {
           "ticket_id": "T-009",
           "mode": "hybrid",
@@ -6152,15 +6138,15 @@
         "escalations": 2,
         "tool_calls": 1,
         "errors": 0,
-        "llm_input_tokens": 431,
+        "llm_input_tokens": 541,
         "llm_output_tokens": 56,
         "model_input_tokens": 342,
         "cost_usd": 0.0,
         "time_by_plane_ms": {
-          "rule": 0.177,
-          "model": 54.999,
-          "llm": 2056.151,
-          "tool": 0.034
+          "rule": 0.174,
+          "model": 67.895,
+          "llm": 2593.876,
+          "tool": 0.032
         }
       }
     },
@@ -6221,14 +6207,14 @@
         "intent"
       ],
       "decision_llm_calls": 1,
-      "decision_llm_tokens": 262,
-      "decision_llm_ms": 390.536,
+      "decision_llm_tokens": 401,
+      "decision_llm_ms": 400.884,
       "summary": {
-        "trace_id": "b9d0a44c0d0059f95b6aee729ce30008",
+        "trace_id": "d590bbea62977c064e6cce3a74c6d9a2",
         "name": "support_ticket",
         "status": "ok",
-        "started_at": "2026-09-25T05:03:18Z",
-        "duration_ms": 2079.983,
+        "started_at": "2026-09-25T07:27:40Z",
+        "duration_ms": 2536.758,
         "attributes": {
           "ticket_id": "T-010",
           "mode": "hybrid",
@@ -6249,15 +6235,15 @@
         "escalations": 1,
         "tool_calls": 1,
         "errors": 0,
-        "llm_input_tokens": 504,
+        "llm_input_tokens": 643,
         "llm_output_tokens": 51,
         "model_input_tokens": 496,
         "cost_usd": 0.0,
         "time_by_plane_ms": {
-          "rule": 0.17,
-          "model": 72.372,
-          "llm": 2001.782,
-          "tool": 0.038
+          "rule": 0.177,
+          "model": 97.12,
+          "llm": 2432.136,
+          "tool": 0.034
         }
       }
     },
@@ -6320,14 +6306,14 @@
         "intent"
       ],
       "decision_llm_calls": 1,
-      "decision_llm_tokens": 374,
-      "decision_llm_ms": 961.738,
+      "decision_llm_tokens": 449,
+      "decision_llm_ms": 905.87,
       "summary": {
-        "trace_id": "aa5e3c32a5d8e6d4ee1a84aa41e1e701",
+        "trace_id": "6a21a9297f3ed9e84667330731c8d2cf",
         "name": "support_ticket",
         "status": "ok",
-        "started_at": "2026-09-25T05:03:20Z",
-        "duration_ms": 2719.096,
+        "started_at": "2026-09-25T07:27:42Z",
+        "duration_ms": 2900.353,
         "attributes": {
           "ticket_id": "T-011",
           "mode": "hybrid",
@@ -6348,14 +6334,14 @@
         "escalations": 3,
         "tool_calls": 1,
         "errors": 0,
-        "llm_input_tokens": 609,
+        "llm_input_tokens": 684,
         "llm_output_tokens": 68,
         "model_input_tokens": 536,
         "cost_usd": 0.0,
         "time_by_plane_ms": {
-          "rule": 0.184,
-          "model": 81.071,
-          "llm": 2632.379,
+          "rule": 0.187,
+          "model": 98.099,
+          "llm": 2794.561,
           "tool": 0.032
         }
       }
@@ -6417,14 +6403,14 @@
         "intent"
       ],
       "decision_llm_calls": 1,
-      "decision_llm_tokens": 264,
-      "decision_llm_ms": 386.446,
+      "decision_llm_tokens": 403,
+      "decision_llm_ms": 488.217,
       "summary": {
-        "trace_id": "fb11b2648c93715668d05208d94e2e59",
+        "trace_id": "0c2b7bd1aa6771f1bbe1f57bf052e433",
         "name": "support_ticket",
         "status": "ok",
-        "started_at": "2026-09-25T05:03:23Z",
-        "duration_ms": 1866.518,
+        "started_at": "2026-09-25T07:27:45Z",
+        "duration_ms": 2191.048,
         "attributes": {
           "ticket_id": "T-012",
           "mode": "hybrid",
@@ -6445,15 +6431,15 @@
         "escalations": 1,
         "tool_calls": 1,
         "errors": 0,
-        "llm_input_tokens": 508,
+        "llm_input_tokens": 647,
         "llm_output_tokens": 48,
         "model_input_tokens": 511,
         "cost_usd": 0.0,
         "time_by_plane_ms": {
-          "rule": 0.186,
-          "model": 70.957,
-          "llm": 1789.29,
-          "tool": 0.038
+          "rule": 0.192,
+          "model": 98.074,
+          "llm": 2084.805,
+          "tool": 0.032
         }
       }
     },
@@ -6515,11 +6501,11 @@
       "decision_llm_tokens": 0,
       "decision_llm_ms": 0.0,
       "summary": {
-        "trace_id": "a7ec8bc1585b6f2c9137f7faab777469",
+        "trace_id": "f29ec44f10d87373492cb18cfd754d32",
         "name": "support_ticket",
         "status": "ok",
-        "started_at": "2026-09-25T05:03:25Z",
-        "duration_ms": 1442.921,
+        "started_at": "2026-09-25T07:27:48Z",
+        "duration_ms": 1814.24,
         "attributes": {
           "ticket_id": "T-013",
           "mode": "hybrid",
@@ -6544,10 +6530,10 @@
         "model_input_tokens": 322,
         "cost_usd": 0.0,
         "time_by_plane_ms": {
-          "rule": 0.193,
-          "model": 53.863,
-          "tool": 0.034,
-          "llm": 1383.208
+          "rule": 0.217,
+          "model": 68.156,
+          "tool": 0.044,
+          "llm": 1739.933
         }
       }
     },
@@ -6611,11 +6597,11 @@
       "decision_llm_tokens": 0,
       "decision_llm_ms": 0.0,
       "summary": {
-        "trace_id": "1057ce25a1362bdb15f71ea64d1a9109",
+        "trace_id": "80473ae257fc86907ec5806d1fdf4249",
         "name": "support_ticket",
         "status": "ok",
-        "started_at": "2026-09-25T05:03:26Z",
-        "duration_ms": 1953.832,
+        "started_at": "2026-09-25T07:27:49Z",
+        "duration_ms": 2189.838,
         "attributes": {
           "ticket_id": "T-014",
           "mode": "hybrid",
@@ -6640,10 +6626,10 @@
         "model_input_tokens": 461,
         "cost_usd": 0.0,
         "time_by_plane_ms": {
-          "rule": 0.196,
-          "model": 71.548,
-          "tool": 0.036,
-          "llm": 1876.489
+          "rule": 0.231,
+          "model": 95.216,
+          "tool": 0.037,
+          "llm": 2086.264
         }
       }
     },
@@ -6707,11 +6693,11 @@
       "decision_llm_tokens": 0,
       "decision_llm_ms": 0.0,
       "summary": {
-        "trace_id": "9d1c38a27cc615ced7308d545a711c1c",
+        "trace_id": "985fd1963a6f6d6ac07fd48de8bb373e",
         "name": "support_ticket",
         "status": "ok",
-        "started_at": "2026-09-25T05:03:28Z",
-        "duration_ms": 2273.261,
+        "started_at": "2026-09-25T07:27:52Z",
+        "duration_ms": 2068.609,
         "attributes": {
           "ticket_id": "T-015",
           "mode": "hybrid",
@@ -6736,10 +6722,10 @@
         "model_input_tokens": 481,
         "cost_usd": 0.0,
         "time_by_plane_ms": {
-          "rule": 0.185,
-          "model": 68.801,
-          "tool": 0.035,
-          "llm": 2199.262
+          "rule": 0.196,
+          "model": 93.037,
+          "tool": 0.066,
+          "llm": 1966.158
         }
       }
     },
@@ -6801,11 +6787,11 @@
       "decision_llm_tokens": 0,
       "decision_llm_ms": 0.0,
       "summary": {
-        "trace_id": "9fc91257ab7ffc5e57d6bd8d1350952d",
+        "trace_id": "d9359dbe8cd8bf62eccd3405674d1610",
         "name": "support_ticket",
         "status": "ok",
-        "started_at": "2026-09-25T05:03:30Z",
-        "duration_ms": 3137.141,
+        "started_at": "2026-09-25T07:27:54Z",
+        "duration_ms": 2899.244,
         "attributes": {
           "ticket_id": "T-016",
           "mode": "hybrid",
@@ -6830,10 +6816,10 @@
         "model_input_tokens": 362,
         "cost_usd": 0.0,
         "time_by_plane_ms": {
-          "rule": 0.15,
-          "model": 113.235,
-          "tool": 0.035,
-          "llm": 3018.229
+          "rule": 0.158,
+          "model": 124.258,
+          "tool": 0.037,
+          "llm": 2767.577
         }
       }
     },
@@ -6897,11 +6883,11 @@
       "decision_llm_tokens": 0,
       "decision_llm_ms": 0.0,
       "summary": {
-        "trace_id": "1be8c2d0d6027c71db7eda4d43b404e3",
+        "trace_id": "96effbcb1a7d50ee477f6d147321f993",
         "name": "support_ticket",
         "status": "ok",
-        "started_at": "2026-09-25T05:03:33Z",
-        "duration_ms": 2479.967,
+        "started_at": "2026-09-25T07:27:57Z",
+        "duration_ms": 2223.896,
         "attributes": {
           "ticket_id": "T-017",
           "mode": "hybrid",
@@ -6926,10 +6912,10 @@
         "model_input_tokens": 466,
         "cost_usd": 0.0,
         "time_by_plane_ms": {
-          "rule": 0.138,
-          "model": 132.414,
-          "tool": 0.032,
-          "llm": 2342.223
+          "rule": 0.142,
+          "model": 134.76,
+          "tool": 0.033,
+          "llm": 2081.633
         }
       }
     },
@@ -6991,14 +6977,14 @@
         "wants_human"
       ],
       "decision_llm_calls": 1,
-      "decision_llm_tokens": 125,
-      "decision_llm_ms": 298.553,
+      "decision_llm_tokens": 249,
+      "decision_llm_ms": 318.26,
       "summary": {
-        "trace_id": "4434623e44a6dd71fb9bd0079b34f76a",
+        "trace_id": "4b93f25af3af49a956daf57d08d6c859",
         "name": "support_ticket",
         "status": "ok",
-        "started_at": "2026-09-25T05:03:36Z",
-        "duration_ms": 2294.921,
+        "started_at": "2026-09-25T07:27:59Z",
+        "duration_ms": 2239.009,
         "attributes": {
           "ticket_id": "T-018",
           "mode": "hybrid",
@@ -7019,15 +7005,15 @@
         "escalations": 2,
         "tool_calls": 1,
         "errors": 0,
-        "llm_input_tokens": 301,
+        "llm_input_tokens": 425,
         "llm_output_tokens": 58,
         "model_input_tokens": 426,
         "cost_usd": 0.0,
         "time_by_plane_ms": {
-          "rule": 0.192,
-          "model": 66.926,
-          "llm": 2221.484,
-          "tool": 0.038
+          "rule": 0.177,
+          "model": 90.933,
+          "llm": 2141.821,
+          "tool": 0.035
         }
       }
     },
@@ -7091,11 +7077,11 @@
       "decision_llm_tokens": 0,
       "decision_llm_ms": 0.0,
       "summary": {
-        "trace_id": "64598e70258dc6f29594292af17cddfb",
+        "trace_id": "00dffc898b465acb4f21f22e71878a71",
         "name": "support_ticket",
         "status": "ok",
-        "started_at": "2026-09-25T05:03:38Z",
-        "duration_ms": 2349.885,
+        "started_at": "2026-09-25T07:28:01Z",
+        "duration_ms": 1963.598,
         "attributes": {
           "ticket_id": "T-019",
           "mode": "hybrid",
@@ -7120,10 +7106,10 @@
         "model_input_tokens": 486,
         "cost_usd": 0.0,
         "time_by_plane_ms": {
-          "rule": 0.231,
-          "model": 71.19,
-          "tool": 0.043,
-          "llm": 2271.898
+          "rule": 0.193,
+          "model": 95.62,
+          "tool": 0.033,
+          "llm": 1859.965
         }
       }
     },
@@ -7185,11 +7171,11 @@
       "decision_llm_tokens": 0,
       "decision_llm_ms": 0.0,
       "summary": {
-        "trace_id": "13290f1c4c36c5c7573cc10b77dedff3",
+        "trace_id": "521c1ab88bbcc9345213a778c24bbd09",
         "name": "support_ticket",
         "status": "ok",
-        "started_at": "2026-09-25T05:03:41Z",
-        "duration_ms": 98.185,
+        "started_at": "2026-09-25T07:28:03Z",
+        "duration_ms": 104.419,
         "attributes": {
           "ticket_id": "T-020",
           "mode": "hybrid",
@@ -7214,8 +7200,8 @@
         "model_input_tokens": 270,
         "cost_usd": 0.0,
         "time_by_plane_ms": {
-          "rule": 0.134,
-          "model": 92.946
+          "rule": 0.14,
+          "model": 98.958
         }
       }
     },
@@ -7277,11 +7263,11 @@
       "decision_llm_tokens": 0,
       "decision_llm_ms": 0.0,
       "summary": {
-        "trace_id": "c6187dcbc7dfcc23e6fcb11403d3e05a",
+        "trace_id": "9a4504f3bafec45bf51a12a8f70f7082",
         "name": "support_ticket",
         "status": "ok",
-        "started_at": "2026-09-25T05:03:41Z",
-        "duration_ms": 1150.852,
+        "started_at": "2026-09-25T07:28:03Z",
+        "duration_ms": 1161.231,
         "attributes": {
           "ticket_id": "T-021",
           "mode": "hybrid",
@@ -7307,9 +7293,9 @@
         "cost_usd": 0.0,
         "time_by_plane_ms": {
           "rule": 0.178,
-          "model": 54.114,
-          "tool": 0.024,
-          "llm": 1091.278
+          "model": 65.729,
+          "tool": 0.026,
+          "llm": 1089.226
         }
       }
     },
@@ -7373,11 +7359,11 @@
       "decision_llm_tokens": 0,
       "decision_llm_ms": 0.0,
       "summary": {
-        "trace_id": "15978e207f3b725844009040e0a9dac2",
+        "trace_id": "96926641e94f099f490f215d051377e2",
         "name": "support_ticket",
         "status": "ok",
-        "started_at": "2026-09-25T05:03:42Z",
-        "duration_ms": 2505.36,
+        "started_at": "2026-09-25T07:28:04Z",
+        "duration_ms": 2009.467,
         "attributes": {
           "ticket_id": "T-022",
           "mode": "hybrid",
@@ -7402,10 +7388,10 @@
         "model_input_tokens": 506,
         "cost_usd": 0.0,
         "time_by_plane_ms": {
-          "rule": 0.144,
-          "model": 107.549,
-          "tool": 0.055,
-          "llm": 2388.068
+          "rule": 0.162,
+          "model": 144.779,
+          "tool": 0.06,
+          "llm": 1856.727
         }
       }
     },
@@ -7469,11 +7455,11 @@
       "decision_llm_tokens": 0,
       "decision_llm_ms": 0.0,
       "summary": {
-        "trace_id": "a061052e9994d62ce184aa243321ef31",
+        "trace_id": "729e71d18b97f3d98d6c6e2f484d86a7",
         "name": "support_ticket",
         "status": "ok",
-        "started_at": "2026-09-25T05:03:44Z",
-        "duration_ms": 2488.039,
+        "started_at": "2026-09-25T07:28:06Z",
+        "duration_ms": 2168.177,
         "attributes": {
           "ticket_id": "T-023",
           "mode": "hybrid",
@@ -7498,10 +7484,10 @@
         "model_input_tokens": 476,
         "cost_usd": 0.0,
         "time_by_plane_ms": {
-          "rule": 0.141,
-          "model": 121.888,
-          "tool": 0.033,
-          "llm": 2359.041
+          "rule": 0.144,
+          "model": 136.012,
+          "tool": 0.051,
+          "llm": 2022.969
         }
       }
     },
@@ -7563,14 +7549,14 @@
         "injection"
       ],
       "decision_llm_calls": 1,
-      "decision_llm_tokens": 178,
-      "decision_llm_ms": 694.809,
+      "decision_llm_tokens": 263,
+      "decision_llm_ms": 524.44,
       "summary": {
-        "trace_id": "240524f8f354043d533105e96460fdde",
+        "trace_id": "b2333450565f0a0ff16b5979ca00fc51",
         "name": "support_ticket",
         "status": "ok",
-        "started_at": "2026-09-25T05:03:47Z",
-        "duration_ms": 2389.272,
+        "started_at": "2026-09-25T07:28:08Z",
+        "duration_ms": 1909.011,
         "attributes": {
           "ticket_id": "T-024",
           "mode": "hybrid",
@@ -7591,14 +7577,14 @@
         "escalations": 2,
         "tool_calls": 2,
         "errors": 0,
-        "llm_input_tokens": 337,
+        "llm_input_tokens": 422,
         "llm_output_tokens": 51,
         "model_input_tokens": 254,
         "cost_usd": 0.0,
         "time_by_plane_ms": {
-          "rule": 0.146,
-          "model": 131.444,
-          "llm": 2249.933,
+          "rule": 0.141,
+          "model": 95.539,
+          "llm": 1805.146,
           "tool": 0.049
         }
       }
@@ -7630,7 +7616,7 @@
           "confidence": 0.595
         },
         "churn_risk": {
-          "value": true,
+          "value": false,
           "status": "accepted",
           "provider": "llm",
           "confidence": null
@@ -7662,14 +7648,14 @@
         "intent"
       ],
       "decision_llm_calls": 1,
-      "decision_llm_tokens": 188,
-      "decision_llm_ms": 654.022,
+      "decision_llm_tokens": 273,
+      "decision_llm_ms": 531.49,
       "summary": {
-        "trace_id": "5cf7b13f5ecb85971ce9180542ebfcd6",
+        "trace_id": "ec0716dbbdd851418b1b5b6c227b0d14",
         "name": "support_ticket",
         "status": "ok",
-        "started_at": "2026-09-25T05:03:49Z",
-        "duration_ms": 2621.97,
+        "started_at": "2026-09-25T07:28:10Z",
+        "duration_ms": 2121.709,
         "attributes": {
           "ticket_id": "T-025",
           "mode": "hybrid",
@@ -7690,15 +7676,15 @@
         "escalations": 3,
         "tool_calls": 2,
         "errors": 0,
-        "llm_input_tokens": 357,
+        "llm_input_tokens": 442,
         "llm_output_tokens": 57,
         "model_input_tokens": 471,
         "cost_usd": 0.0,
         "time_by_plane_ms": {
-          "rule": 0.137,
-          "model": 127.369,
-          "llm": 2487.338,
-          "tool": 0.062
+          "rule": 0.165,
+          "model": 136.649,
+          "llm": 1976.675,
+          "tool": 0.049
         }
       }
     },
@@ -7729,7 +7715,7 @@
           "confidence": 0.55
         },
         "churn_risk": {
-          "value": true,
+          "value": false,
           "status": "accepted",
           "provider": "llm",
           "confidence": null
@@ -7760,14 +7746,14 @@
         "injection"
       ],
       "decision_llm_calls": 1,
-      "decision_llm_tokens": 184,
-      "decision_llm_ms": 550.893,
+      "decision_llm_tokens": 269,
+      "decision_llm_ms": 519.77,
       "summary": {
-        "trace_id": "ec5481cbcb93f02ce14ce80f63da8c8b",
+        "trace_id": "b5215d5b125087a5d2bab7d413eb2452",
         "name": "support_ticket",
         "status": "ok",
-        "started_at": "2026-09-25T05:03:52Z",
-        "duration_ms": 2220.035,
+        "started_at": "2026-09-25T07:28:12Z",
+        "duration_ms": 2055.492,
         "attributes": {
           "ticket_id": "T-026",
           "mode": "hybrid",
@@ -7788,15 +7774,15 @@
         "escalations": 2,
         "tool_calls": 2,
         "errors": 0,
-        "llm_input_tokens": 350,
+        "llm_input_tokens": 435,
         "llm_output_tokens": 55,
         "model_input_tokens": 282,
         "cost_usd": 0.0,
         "time_by_plane_ms": {
-          "rule": 0.139,
-          "model": 95.804,
-          "llm": 2117.212,
-          "tool": 0.063
+          "rule": 0.148,
+          "model": 103.693,
+          "llm": 1943.241,
+          "tool": 0.058
         }
       }
     },
@@ -7804,8 +7790,8 @@
       "ticket_id": "T-027",
       "mode": "hybrid",
       "expected_action": "subscription_cancelled",
-      "action": "escalate_security",
-      "correct": false,
+      "action": "subscription_cancelled",
+      "correct": true,
       "expected_intent": "cancel_subscription",
       "intent": "cancel_subscription",
       "intent_provider": "gliner",
@@ -7839,7 +7825,7 @@
           "confidence": 0.946
         },
         "injection": {
-          "value": true,
+          "value": false,
           "status": "accepted",
           "provider": "llm",
           "confidence": null
@@ -7857,43 +7843,43 @@
         "injection"
       ],
       "decision_llm_calls": 1,
-      "decision_llm_tokens": 148,
-      "decision_llm_ms": 267.203,
+      "decision_llm_tokens": 260,
+      "decision_llm_ms": 281.881,
       "summary": {
-        "trace_id": "b43ad36b70325f15ce907c555c836072",
+        "trace_id": "2e7b5a39ead1a5e028243d78dd2789fa",
         "name": "support_ticket",
         "status": "ok",
-        "started_at": "2026-09-25T05:03:54Z",
-        "duration_ms": 2372.375,
+        "started_at": "2026-09-25T07:28:15Z",
+        "duration_ms": 1981.68,
         "attributes": {
           "ticket_id": "T-027",
           "mode": "hybrid",
           "expected_action": "subscription_cancelled",
-          "action": "escalate_security",
+          "action": "subscription_cancelled",
           "reply_source": "llm",
           "grounded": true
         },
         "llm_calls": 2,
         "generation_calls": 1,
-        "decisions": 8,
+        "decisions": 9,
         "decisions_by_plane": {
-          "rule": 2,
+          "rule": 3,
           "model": 5,
           "llm": 1
         },
         "uncertain": 0,
         "escalations": 1,
-        "tool_calls": 1,
+        "tool_calls": 2,
         "errors": 0,
-        "llm_input_tokens": 368,
-        "llm_output_tokens": 57,
+        "llm_input_tokens": 447,
+        "llm_output_tokens": 51,
         "model_input_tokens": 338,
         "cost_usd": 0.0,
         "time_by_plane_ms": {
           "rule": 0.175,
-          "model": 104.773,
-          "llm": 2261.471,
-          "tool": 0.037
+          "model": 129.706,
+          "llm": 1843.889,
+          "tool": 0.052
         }
       }
     },
@@ -7955,14 +7941,14 @@
         "injection"
       ],
       "decision_llm_calls": 1,
-      "decision_llm_tokens": 184,
-      "decision_llm_ms": 640.366,
+      "decision_llm_tokens": 269,
+      "decision_llm_ms": 525.121,
       "summary": {
-        "trace_id": "4ca826178a0f1731f5998fff11d0802f",
+        "trace_id": "b4f6ed58a9984f1a439c5610fa276ca9",
         "name": "support_ticket",
         "status": "ok",
-        "started_at": "2026-09-25T05:03:56Z",
-        "duration_ms": 2003.371,
+        "started_at": "2026-09-25T07:28:17Z",
+        "duration_ms": 1798.693,
         "attributes": {
           "ticket_id": "T-028",
           "mode": "hybrid",
@@ -7983,15 +7969,15 @@
         "escalations": 2,
         "tool_calls": 1,
         "errors": 0,
-        "llm_input_tokens": 328,
+        "llm_input_tokens": 413,
         "llm_output_tokens": 48,
         "model_input_tokens": 278,
         "cost_usd": 0.0,
         "time_by_plane_ms": {
-          "rule": 0.178,
-          "model": 114.096,
-          "llm": 1881.882,
-          "tool": 0.031
+          "rule": 0.144,
+          "model": 101.973,
+          "llm": 1690.82,
+          "tool": 0.023
         }
       }
     },
@@ -8053,13 +8039,13 @@
       ],
       "decision_llm_calls": 1,
       "decision_llm_tokens": 187,
-      "decision_llm_ms": 243.623,
+      "decision_llm_ms": 261.783,
       "summary": {
-        "trace_id": "1f685aa124a7d86bf13d769d228ae57e",
+        "trace_id": "e0e511ea9500bb41451a041a7c6bacbf",
         "name": "support_ticket",
         "status": "ok",
-        "started_at": "2026-09-25T05:03:58Z",
-        "duration_ms": 1535.796,
+        "started_at": "2026-09-25T07:28:18Z",
+        "duration_ms": 1564.25,
         "attributes": {
           "ticket_id": "T-029",
           "mode": "hybrid",
@@ -8085,10 +8071,10 @@
         "model_input_tokens": 385,
         "cost_usd": 0.0,
         "time_by_plane_ms": {
-          "rule": 0.146,
-          "model": 129.593,
-          "tool": 0.058,
-          "llm": 1397.074
+          "rule": 0.15,
+          "model": 136.186,
+          "tool": 0.053,
+          "llm": 1419.578
         }
       }
     },
@@ -8150,14 +8136,14 @@
         "kb_answers"
       ],
       "decision_llm_calls": 2,
-      "decision_llm_tokens": 427,
-      "decision_llm_ms": 529.664,
+      "decision_llm_tokens": 562,
+      "decision_llm_ms": 576.202,
       "summary": {
-        "trace_id": "ad1367a20ebf24625f8be763c81bed52",
+        "trace_id": "840fb0caa82fcc749f644f4b7eeefdbd",
         "name": "support_ticket",
         "status": "ok",
-        "started_at": "2026-09-25T05:04:00Z",
-        "duration_ms": 1848.615,
+        "started_at": "2026-09-25T07:28:20Z",
+        "duration_ms": 1942.092,
         "attributes": {
           "ticket_id": "T-030",
           "mode": "hybrid",
@@ -8178,15 +8164,15 @@
         "escalations": 2,
         "tool_calls": 1,
         "errors": 0,
-        "llm_input_tokens": 593,
+        "llm_input_tokens": 728,
         "llm_output_tokens": 49,
         "model_input_tokens": 571,
         "cost_usd": 0.0,
         "time_by_plane_ms": {
-          "rule": 0.145,
-          "model": 141.416,
-          "llm": 1698.959,
-          "tool": 0.056
+          "rule": 0.158,
+          "model": 168.336,
+          "llm": 1764.391,
+          "tool": 0.05
         }
       }
     },
@@ -8248,14 +8234,14 @@
         "intent"
       ],
       "decision_llm_calls": 1,
-      "decision_llm_tokens": 311,
-      "decision_llm_ms": 464.977,
+      "decision_llm_tokens": 409,
+      "decision_llm_ms": 485.07,
       "summary": {
-        "trace_id": "fe172c3fc1d810316e48cd7cc5fa757a",
+        "trace_id": "b7949748b036061e8e63a541c4584720",
         "name": "support_ticket",
         "status": "ok",
-        "started_at": "2026-09-25T05:04:02Z",
-        "duration_ms": 1529.112,
+        "started_at": "2026-09-25T07:28:22Z",
+        "duration_ms": 1621.483,
         "attributes": {
           "ticket_id": "T-031",
           "mode": "hybrid",
@@ -8276,15 +8262,15 @@
         "escalations": 2,
         "tool_calls": 1,
         "errors": 0,
-        "llm_input_tokens": 521,
+        "llm_input_tokens": 619,
         "llm_output_tokens": 41,
         "model_input_tokens": 486,
         "cost_usd": 0.0,
         "time_by_plane_ms": {
-          "rule": 0.141,
-          "model": 108.433,
-          "llm": 1415.179,
-          "tool": 0.036
+          "rule": 0.147,
+          "model": 134.124,
+          "llm": 1479.75,
+          "tool": 0.031
         }
       }
     },
@@ -8346,13 +8332,13 @@
       ],
       "decision_llm_calls": 1,
       "decision_llm_tokens": 186,
-      "decision_llm_ms": 243.858,
+      "decision_llm_ms": 250.123,
       "summary": {
-        "trace_id": "d84723d03f8841c1bf2b3febd83627f1",
+        "trace_id": "ec56652e7d78462a15f8ea5012b808fd",
         "name": "support_ticket",
         "status": "ok",
-        "started_at": "2026-09-25T05:04:03Z",
-        "duration_ms": 1522.959,
+        "started_at": "2026-09-25T07:28:23Z",
+        "duration_ms": 1633.314,
         "attributes": {
           "ticket_id": "T-032",
           "mode": "hybrid",
@@ -8378,10 +8364,10 @@
         "model_input_tokens": 390,
         "cost_usd": 0.0,
         "time_by_plane_ms": {
-          "rule": 0.141,
-          "model": 128.738,
-          "tool": 0.057,
-          "llm": 1387.102
+          "rule": 0.154,
+          "model": 138.27,
+          "tool": 0.053,
+          "llm": 1486.349
         }
       }
     },
@@ -8443,14 +8429,14 @@
         "wants_human"
       ],
       "decision_llm_calls": 1,
-      "decision_llm_tokens": 296,
-      "decision_llm_ms": 478.136,
+      "decision_llm_tokens": 402,
+      "decision_llm_ms": 546.916,
       "summary": {
-        "trace_id": "b4779ea48b90ea137cff438fd62f4dfc",
+        "trace_id": "4c10343d5ec19cab12a0bc9e41220413",
         "name": "support_ticket",
         "status": "ok",
-        "started_at": "2026-09-25T05:04:05Z",
-        "duration_ms": 1439.376,
+        "started_at": "2026-09-25T07:28:25Z",
+        "duration_ms": 1603.083,
         "attributes": {
           "ticket_id": "T-033",
           "mode": "hybrid",
@@ -8471,15 +8457,15 @@
         "escalations": 2,
         "tool_calls": 1,
         "errors": 0,
-        "llm_input_tokens": 496,
+        "llm_input_tokens": 602,
         "llm_output_tokens": 40,
         "model_input_tokens": 451,
         "cost_usd": 0.0,
         "time_by_plane_ms": {
-          "rule": 0.129,
-          "model": 101.47,
-          "llm": 1330.741,
-          "tool": 0.029
+          "rule": 0.138,
+          "model": 128.221,
+          "llm": 1467.25,
+          "tool": 0.032
         }
       }
     },
@@ -8541,14 +8527,14 @@
         "kb_answers"
       ],
       "decision_llm_calls": 2,
-      "decision_llm_tokens": 435,
-      "decision_llm_ms": 515.5699999999999,
+      "decision_llm_tokens": 570,
+      "decision_llm_ms": 569.529,
       "summary": {
-        "trace_id": "1dbd92ed0a3e4cc30a842327234ce838",
+        "trace_id": "501f865e61c9ca887bd04c294b406f8f",
         "name": "support_ticket",
         "status": "ok",
-        "started_at": "2026-09-25T05:04:06Z",
-        "duration_ms": 2088.058,
+        "started_at": "2026-09-25T07:28:27Z",
+        "duration_ms": 2253.81,
         "attributes": {
           "ticket_id": "T-034",
           "mode": "hybrid",
@@ -8569,15 +8555,15 @@
         "escalations": 2,
         "tool_calls": 1,
         "errors": 0,
-        "llm_input_tokens": 610,
+        "llm_input_tokens": 745,
         "llm_output_tokens": 59,
         "model_input_tokens": 579,
         "cost_usd": 0.0,
         "time_by_plane_ms": {
-          "rule": 0.135,
-          "model": 132.495,
-          "llm": 1944.934,
-          "tool": 0.049
+          "rule": 0.156,
+          "model": 161.803,
+          "llm": 2084.129,
+          "tool": 0.052
         }
       }
     },
@@ -8639,14 +8625,14 @@
         "wants_human"
       ],
       "decision_llm_calls": 1,
-      "decision_llm_tokens": 290,
-      "decision_llm_ms": 499.702,
+      "decision_llm_tokens": 396,
+      "decision_llm_ms": 582.557,
       "summary": {
-        "trace_id": "85a413a3e105497a465d91d091f96aea",
+        "trace_id": "2c8ebf596061e49427751fc0a2c9c4d1",
         "name": "support_ticket",
         "status": "ok",
-        "started_at": "2026-09-25T05:04:08Z",
-        "duration_ms": 1456.703,
+        "started_at": "2026-09-25T07:28:29Z",
+        "duration_ms": 1706.434,
         "attributes": {
           "ticket_id": "T-035",
           "mode": "hybrid",
@@ -8667,14 +8653,14 @@
         "escalations": 2,
         "tool_calls": 2,
         "errors": 0,
-        "llm_input_tokens": 482,
+        "llm_input_tokens": 588,
         "llm_output_tokens": 41,
         "model_input_tokens": 426,
         "cost_usd": 0.0,
         "time_by_plane_ms": {
-          "rule": 0.13,
-          "model": 98.977,
-          "llm": 1351.831,
+          "rule": 0.155,
+          "model": 124.682,
+          "llm": 1575.372,
           "tool": 0.071
         }
       }
@@ -8686,7 +8672,7 @@
       "action": "escalate_support",
       "correct": true,
       "expected_intent": "product_question",
-      "intent": "product_question",
+      "intent": "other",
       "intent_provider": "llm",
       "expected_order_id": null,
       "order_id": null,
@@ -8694,7 +8680,7 @@
       "grounded": true,
       "decisions": {
         "intent": {
-          "value": "product_question",
+          "value": "other",
           "status": "accepted",
           "provider": "llm",
           "confidence": null
@@ -8736,14 +8722,14 @@
         "intent"
       ],
       "decision_llm_calls": 1,
-      "decision_llm_tokens": 246,
-      "decision_llm_ms": 269.296,
+      "decision_llm_tokens": 380,
+      "decision_llm_ms": 266.805,
       "summary": {
-        "trace_id": "b03bb9078be6c467b6ac27c500ab8be3",
+        "trace_id": "29a7cba7469a0a02814d55b26b27b330",
         "name": "support_ticket",
         "status": "ok",
-        "started_at": "2026-09-25T05:04:10Z",
-        "duration_ms": 1630.426,
+        "started_at": "2026-09-25T07:28:31Z",
+        "duration_ms": 1709.799,
         "attributes": {
           "ticket_id": "T-036",
           "mode": "hybrid",
@@ -8754,25 +8740,25 @@
         },
         "llm_calls": 2,
         "generation_calls": 1,
-        "decisions": 9,
+        "decisions": 8,
         "decisions_by_plane": {
-          "rule": 3,
+          "rule": 2,
           "llm": 1,
           "model": 5
         },
         "uncertain": 0,
         "escalations": 1,
-        "tool_calls": 2,
+        "tool_calls": 1,
         "errors": 0,
-        "llm_input_tokens": 450,
-        "llm_output_tokens": 46,
+        "llm_input_tokens": 585,
+        "llm_output_tokens": 45,
         "model_input_tokens": 431,
         "cost_usd": 0.0,
         "time_by_plane_ms": {
-          "rule": 0.127,
-          "model": 100.567,
-          "llm": 1522.101,
-          "tool": 0.069
+          "rule": 0.193,
+          "model": 130.01,
+          "llm": 1572.294,
+          "tool": 0.031
         }
       }
     },
@@ -8836,11 +8822,11 @@
       "decision_llm_tokens": 0,
       "decision_llm_ms": 0.0,
       "summary": {
-        "trace_id": "814e4409714846a6e5cb18cf547a518a",
+        "trace_id": "485fdc6bbde4845eb07c76edc8eecfd3",
         "name": "support_ticket",
         "status": "ok",
-        "started_at": "2026-09-25T05:04:12Z",
-        "duration_ms": 1457.953,
+        "started_at": "2026-09-25T07:28:32Z",
+        "duration_ms": 1560.092,
         "attributes": {
           "ticket_id": "T-037",
           "mode": "hybrid",
@@ -8865,10 +8851,10 @@
         "model_input_tokens": 466,
         "cost_usd": 0.0,
         "time_by_plane_ms": {
-          "rule": 0.129,
-          "model": 103.394,
-          "tool": 0.032,
-          "llm": 1347.561
+          "rule": 0.14,
+          "model": 130.876,
+          "tool": 0.033,
+          "llm": 1421.577
         }
       }
     },
@@ -8932,11 +8918,11 @@
       "decision_llm_tokens": 0,
       "decision_llm_ms": 0.0,
       "summary": {
-        "trace_id": "431c0a00382de5b9c76f185c720b9af9",
+        "trace_id": "b52c8d9c90e59bd658eecc21c6aaae41",
         "name": "support_ticket",
         "status": "ok",
-        "started_at": "2026-09-25T05:04:13Z",
-        "duration_ms": 1437.026,
+        "started_at": "2026-09-25T07:28:34Z",
+        "duration_ms": 1556.166,
         "attributes": {
           "ticket_id": "T-038",
           "mode": "hybrid",
@@ -8961,10 +8947,10 @@
         "model_input_tokens": 486,
         "cost_usd": 0.0,
         "time_by_plane_ms": {
-          "rule": 0.13,
-          "model": 108.544,
-          "tool": 0.032,
-          "llm": 1321.897
+          "rule": 0.146,
+          "model": 131.692,
+          "tool": 0.033,
+          "llm": 1417.543
         }
       }
     },
@@ -8972,10 +8958,10 @@
       "ticket_id": "T-039",
       "mode": "hybrid",
       "expected_action": "escalate_technical",
-      "action": "escalate_support",
-      "correct": false,
+      "action": "escalate_technical",
+      "correct": true,
       "expected_intent": "technical_issue",
-      "intent": "other",
+      "intent": "technical_issue",
       "intent_provider": "llm",
       "expected_order_id": null,
       "order_id": null,
@@ -8983,13 +8969,13 @@
       "grounded": true,
       "decisions": {
         "intent": {
-          "value": "other",
+          "value": "technical_issue",
           "status": "accepted",
           "provider": "llm",
           "confidence": null
         },
         "urgency": {
-          "value": "low",
+          "value": "medium",
           "status": "accepted",
           "provider": "llm",
           "confidence": null
@@ -9029,19 +9015,19 @@
         "wants_human"
       ],
       "decision_llm_calls": 1,
-      "decision_llm_tokens": 449,
-      "decision_llm_ms": 1198.621,
+      "decision_llm_tokens": 476,
+      "decision_llm_ms": 1263.36,
       "summary": {
-        "trace_id": "12a2a13999826b14644ca5c19a947914",
+        "trace_id": "c0e44b3d36d8f5b02b7e520b2a09d0d2",
         "name": "support_ticket",
         "status": "ok",
-        "started_at": "2026-09-25T05:04:14Z",
-        "duration_ms": 2363.844,
+        "started_at": "2026-09-25T07:28:35Z",
+        "duration_ms": 2529.015,
         "attributes": {
           "ticket_id": "T-039",
           "mode": "hybrid",
           "expected_action": "escalate_technical",
-          "action": "escalate_support",
+          "action": "escalate_technical",
           "reply_source": "llm",
           "grounded": true
         },
@@ -9057,15 +9043,15 @@
         "escalations": 5,
         "tool_calls": 1,
         "errors": 0,
-        "llm_input_tokens": 630,
-        "llm_output_tokens": 67,
+        "llm_input_tokens": 660,
+        "llm_output_tokens": 68,
         "model_input_tokens": 461,
         "cost_usd": 0.0,
         "time_by_plane_ms": {
-          "rule": 0.127,
-          "model": 98.252,
-          "llm": 2257.838,
-          "tool": 0.034
+          "rule": 0.145,
+          "model": 129.112,
+          "llm": 2391.853,
+          "tool": 0.033
         }
       }
     },
@@ -9126,14 +9112,14 @@
         "injection"
       ],
       "decision_llm_calls": 1,
-      "decision_llm_tokens": 138,
-      "decision_llm_ms": 239.51,
+      "decision_llm_tokens": 250,
+      "decision_llm_ms": 258.566,
       "summary": {
-        "trace_id": "e056ab54a53ff048761b6efdf0b51f73",
+        "trace_id": "b93fcc3511cc3e3c143854c608b4debd",
         "name": "support_ticket",
         "status": "ok",
-        "started_at": "2026-09-25T05:04:17Z",
-        "duration_ms": 1258.098,
+        "started_at": "2026-09-25T07:28:38Z",
+        "duration_ms": 1355.091,
         "attributes": {
           "ticket_id": "T-040",
           "mode": "hybrid",
@@ -9154,15 +9140,15 @@
         "escalations": 1,
         "tool_calls": 1,
         "errors": 0,
-        "llm_input_tokens": 355,
+        "llm_input_tokens": 467,
         "llm_output_tokens": 35,
         "model_input_tokens": 294,
         "cost_usd": 0.0,
         "time_by_plane_ms": {
-          "rule": 0.158,
-          "model": 85.974,
-          "llm": 1164.799,
-          "tool": 0.032
+          "rule": 0.144,
+          "model": 103.104,
+          "llm": 1244.515,
+          "tool": 0.031
         }
       }
     },
@@ -9224,14 +9210,14 @@
         "intent"
       ],
       "decision_llm_calls": 1,
-      "decision_llm_tokens": 137,
-      "decision_llm_ms": 235.252,
+      "decision_llm_tokens": 249,
+      "decision_llm_ms": 270.442,
       "summary": {
-        "trace_id": "de938bf198e1dfd65cffa1fea86241ff",
+        "trace_id": "b73502030da9e3c77f12225bd4c53c41",
         "name": "support_ticket",
         "status": "ok",
-        "started_at": "2026-09-25T05:04:18Z",
-        "duration_ms": 1330.167,
+        "started_at": "2026-09-25T07:28:39Z",
+        "duration_ms": 1427.145,
         "attributes": {
           "ticket_id": "T-041",
           "mode": "hybrid",
@@ -9252,15 +9238,15 @@
         "escalations": 2,
         "tool_calls": 1,
         "errors": 0,
-        "llm_input_tokens": 353,
+        "llm_input_tokens": 465,
         "llm_output_tokens": 35,
         "model_input_tokens": 471,
         "cost_usd": 0.0,
         "time_by_plane_ms": {
-          "rule": 0.15,
-          "model": 108.304,
-          "llm": 1216.212,
-          "tool": 0.031
+          "rule": 0.149,
+          "model": 132.282,
+          "llm": 1287.599,
+          "tool": 0.033
         }
       }
     },
@@ -9268,10 +9254,10 @@
       "ticket_id": "T-042",
       "mode": "hybrid",
       "expected_action": "escalate_technical",
-      "action": "escalate_technical",
-      "correct": true,
+      "action": "escalate_support",
+      "correct": false,
       "expected_intent": "technical_issue",
-      "intent": "technical_issue",
+      "intent": "other",
       "intent_provider": "llm",
       "expected_order_id": null,
       "order_id": null,
@@ -9279,7 +9265,7 @@
       "grounded": true,
       "decisions": {
         "intent": {
-          "value": "technical_issue",
+          "value": "other",
           "status": "accepted",
           "provider": "llm",
           "confidence": null
@@ -9323,19 +9309,19 @@
         "intent"
       ],
       "decision_llm_calls": 1,
-      "decision_llm_tokens": 362,
-      "decision_llm_ms": 779.373,
+      "decision_llm_tokens": 432,
+      "decision_llm_ms": 782.687,
       "summary": {
-        "trace_id": "0b061403e22f70b927837e16c897fafe",
+        "trace_id": "b3659268393dce5b6740772b4403fae7",
         "name": "support_ticket",
         "status": "ok",
-        "started_at": "2026-09-25T05:04:19Z",
-        "duration_ms": 1936.117,
+        "started_at": "2026-09-25T07:28:41Z",
+        "duration_ms": 2347.862,
         "attributes": {
           "ticket_id": "T-042",
           "mode": "hybrid",
           "expected_action": "escalate_technical",
-          "action": "escalate_technical",
+          "action": "escalate_support",
           "reply_source": "llm",
           "grounded": true
         },
@@ -9351,15 +9337,15 @@
         "escalations": 3,
         "tool_calls": 1,
         "errors": 0,
-        "llm_input_tokens": 567,
-        "llm_output_tokens": 53,
+        "llm_input_tokens": 634,
+        "llm_output_tokens": 63,
         "model_input_tokens": 486,
         "cost_usd": 0.0,
         "time_by_plane_ms": {
-          "rule": 0.141,
-          "model": 109.56,
-          "llm": 1820.761,
-          "tool": 0.033
+          "rule": 0.153,
+          "model": 134.867,
+          "llm": 2207.053,
+          "tool": 0.034
         }
       }
     },
@@ -9421,11 +9407,11 @@
       "decision_llm_tokens": 0,
       "decision_llm_ms": 0.0,
       "summary": {
-        "trace_id": "fc8ecca4d1494be8ae67720340e461b8",
+        "trace_id": "810fd960cc4be7a760dd459b80d47e45",
         "name": "support_ticket",
         "status": "ok",
-        "started_at": "2026-09-25T05:04:21Z",
-        "duration_ms": 1298.587,
+        "started_at": "2026-09-25T07:28:43Z",
+        "duration_ms": 1335.061,
         "attributes": {
           "ticket_id": "T-043",
           "mode": "hybrid",
@@ -9450,10 +9436,10 @@
         "model_input_tokens": 306,
         "cost_usd": 0.0,
         "time_by_plane_ms": {
-          "rule": 0.138,
-          "model": 87.923,
-          "tool": 0.03,
-          "llm": 1204.202
+          "rule": 0.154,
+          "model": 103.309,
+          "tool": 0.031,
+          "llm": 1224.383
         }
       }
     },
@@ -9514,14 +9500,14 @@
         "intent"
       ],
       "decision_llm_calls": 1,
-      "decision_llm_tokens": 256,
-      "decision_llm_ms": 403.516,
+      "decision_llm_tokens": 391,
+      "decision_llm_ms": 401.286,
       "summary": {
-        "trace_id": "bcd1f04d1a44dc0629f4cd262f396b4b",
+        "trace_id": "0a364b51615da1e5744af2acefa3480b",
         "name": "support_ticket",
         "status": "ok",
-        "started_at": "2026-09-25T05:04:23Z",
-        "duration_ms": 1744.652,
+        "started_at": "2026-09-25T07:28:44Z",
+        "duration_ms": 1776.518,
         "attributes": {
           "ticket_id": "T-044",
           "mode": "hybrid",
@@ -9542,15 +9528,15 @@
         "escalations": 1,
         "tool_calls": 2,
         "errors": 0,
-        "llm_input_tokens": 470,
+        "llm_input_tokens": 605,
         "llm_output_tokens": 42,
         "model_input_tokens": 496,
         "cost_usd": 0.0,
         "time_by_plane_ms": {
-          "rule": 0.155,
-          "model": 129.029,
-          "llm": 1608.797,
-          "tool": 0.096
+          "rule": 0.159,
+          "model": 134.656,
+          "llm": 1632.645,
+          "tool": 0.101
         }
       }
     },
@@ -9612,14 +9598,14 @@
         "injection"
       ],
       "decision_llm_calls": 1,
-      "decision_llm_tokens": 184,
-      "decision_llm_ms": 509.168,
+      "decision_llm_tokens": 268,
+      "decision_llm_ms": 517.618,
       "summary": {
-        "trace_id": "fc1b883d4148ad9460cbfe1fd1ce114d",
+        "trace_id": "4efe73bd5b1c81c937b351e9a2a347bd",
         "name": "support_ticket",
         "status": "ok",
-        "started_at": "2026-09-25T05:04:24Z",
-        "duration_ms": 1972.02,
+        "started_at": "2026-09-25T07:28:46Z",
+        "duration_ms": 2033.201,
         "attributes": {
           "ticket_id": "T-045",
           "mode": "hybrid",
@@ -9640,15 +9626,15 @@
         "escalations": 2,
         "tool_calls": 1,
         "errors": 0,
-        "llm_input_tokens": 385,
+        "llm_input_tokens": 469,
         "llm_output_tokens": 55,
         "model_input_tokens": 282,
         "cost_usd": 0.0,
         "time_by_plane_ms": {
-          "rule": 0.135,
-          "model": 92.246,
-          "llm": 1874.479,
-          "tool": 0.03
+          "rule": 0.142,
+          "model": 103.752,
+          "llm": 1921.512,
+          "tool": 0.033
         }
       }
     },
@@ -9711,14 +9697,14 @@
         "intent"
       ],
       "decision_llm_calls": 1,
-      "decision_llm_tokens": 365,
-      "decision_llm_ms": 795.199,
+      "decision_llm_tokens": 440,
+      "decision_llm_ms": 801.009,
       "summary": {
-        "trace_id": "70917693725c2d6db16d4b712584dcd3",
+        "trace_id": "2f8dd7301c08b0d01f6a41bbc2dc8e67",
         "name": "support_ticket",
         "status": "ok",
-        "started_at": "2026-09-25T05:04:26Z",
-        "duration_ms": 1695.467,
+        "started_at": "2026-09-25T07:28:48Z",
+        "duration_ms": 1746.616,
         "attributes": {
           "ticket_id": "T-046",
           "mode": "hybrid",
@@ -9739,15 +9725,15 @@
         "escalations": 3,
         "tool_calls": 1,
         "errors": 0,
-        "llm_input_tokens": 569,
+        "llm_input_tokens": 644,
         "llm_output_tokens": 46,
         "model_input_tokens": 407,
         "cost_usd": 0.0,
         "time_by_plane_ms": {
-          "rule": 0.193,
-          "model": 65.219,
-          "llm": 1624.991,
-          "tool": 0.032
+          "rule": 0.21,
+          "model": 85.189,
+          "llm": 1654.008,
+          "tool": 0.031
         }
       }
     },
@@ -9809,14 +9795,14 @@
         "intent"
       ],
       "decision_llm_calls": 1,
-      "decision_llm_tokens": 321,
-      "decision_llm_ms": 633.168,
+      "decision_llm_tokens": 423,
+      "decision_llm_ms": 644.07,
       "summary": {
-        "trace_id": "ccffc72d22f736e448d8ac85b02d9bf7",
+        "trace_id": "9f7d6a9b4f35618c8f72b2442291223a",
         "name": "support_ticket",
         "status": "ok",
-        "started_at": "2026-09-25T05:04:28Z",
-        "duration_ms": 1763.645,
+        "started_at": "2026-09-25T07:28:50Z",
+        "duration_ms": 1831.23,
         "attributes": {
           "ticket_id": "T-047",
           "mode": "hybrid",
@@ -9837,14 +9823,14 @@
         "escalations": 2,
         "tool_calls": 1,
         "errors": 0,
-        "llm_input_tokens": 539,
+        "llm_input_tokens": 641,
         "llm_output_tokens": 44,
         "model_input_tokens": 431,
         "cost_usd": 0.0,
         "time_by_plane_ms": {
-          "rule": 0.188,
-          "model": 81.199,
-          "llm": 1676.618,
+          "rule": 0.201,
+          "model": 86.622,
+          "llm": 1736.512,
           "tool": 0.034
         }
       }
@@ -9853,8 +9839,8 @@
       "ticket_id": "T-048",
       "mode": "hybrid",
       "expected_action": "escalate_human",
-      "action": "escalate_security",
-      "correct": false,
+      "action": "escalate_human",
+      "correct": true,
       "expected_intent": "cancel_subscription",
       "intent": "cancel_subscription",
       "intent_provider": "laya",
@@ -9888,7 +9874,7 @@
           "confidence": 1.0
         },
         "injection": {
-          "value": true,
+          "value": false,
           "status": "accepted",
           "provider": "llm",
           "confidence": null
@@ -9908,19 +9894,19 @@
         "intent"
       ],
       "decision_llm_calls": 1,
-      "decision_llm_tokens": 189,
-      "decision_llm_ms": 505.728,
+      "decision_llm_tokens": 274,
+      "decision_llm_ms": 522.924,
       "summary": {
-        "trace_id": "df4e38dfb0b6b5a2d804089ecdfa2059",
+        "trace_id": "893d8b41569b526d1fc238e4f64c9371",
         "name": "support_ticket",
         "status": "ok",
-        "started_at": "2026-09-25T05:04:30Z",
-        "duration_ms": 1988.18,
+        "started_at": "2026-09-25T07:28:52Z",
+        "duration_ms": 1606.828,
         "attributes": {
           "ticket_id": "T-048",
           "mode": "hybrid",
           "expected_action": "escalate_human",
-          "action": "escalate_security",
+          "action": "escalate_human",
           "reply_source": "llm",
           "grounded": true
         },
@@ -9936,15 +9922,15 @@
         "escalations": 3,
         "tool_calls": 1,
         "errors": 0,
-        "llm_input_tokens": 392,
-        "llm_output_tokens": 55,
+        "llm_input_tokens": 480,
+        "llm_output_tokens": 42,
         "model_input_tokens": 399,
         "cost_usd": 0.0,
         "time_by_plane_ms": {
-          "rule": 0.178,
-          "model": 101.152,
-          "llm": 1880.962,
-          "tool": 0.031
+          "rule": 0.181,
+          "model": 121.328,
+          "llm": 1477.461,
+          "tool": 0.066
         }
       }
     },
@@ -10005,14 +9991,14 @@
         "intent"
       ],
       "decision_llm_calls": 1,
-      "decision_llm_tokens": 262,
-      "decision_llm_ms": 423.572,
+      "decision_llm_tokens": 397,
+      "decision_llm_ms": 435.503,
       "summary": {
-        "trace_id": "aa63948108fe7707669d2c8042ef223e",
+        "trace_id": "3cc095ece1ade9787b6f7e41d849adb7",
         "name": "support_ticket",
         "status": "ok",
-        "started_at": "2026-09-25T05:04:32Z",
-        "duration_ms": 1546.226,
+        "started_at": "2026-09-25T07:28:53Z",
+        "duration_ms": 1639.355,
         "attributes": {
           "ticket_id": "T-049",
           "mode": "hybrid",
@@ -10033,15 +10019,15 @@
         "escalations": 1,
         "tool_calls": 1,
         "errors": 0,
-        "llm_input_tokens": 477,
+        "llm_input_tokens": 612,
         "llm_output_tokens": 38,
         "model_input_tokens": 418,
         "cost_usd": 0.0,
         "time_by_plane_ms": {
-          "rule": 0.18,
-          "model": 97.403,
-          "llm": 1442.291,
-          "tool": 0.039
+          "rule": 0.175,
+          "model": 124.47,
+          "llm": 1506.488,
+          "tool": 0.036
         }
       }
     },
@@ -10103,14 +10089,14 @@
         "wants_human"
       ],
       "decision_llm_calls": 1,
-      "decision_llm_tokens": 143,
-      "decision_llm_ms": 402.731,
+      "decision_llm_tokens": 264,
+      "decision_llm_ms": 381.8,
       "summary": {
-        "trace_id": "b3e38044a417d5912b75e8790d5a6347",
+        "trace_id": "80ff2e219efdd9abcc65f62ec7abebb8",
         "name": "support_ticket",
         "status": "ok",
-        "started_at": "2026-09-25T05:04:33Z",
-        "duration_ms": 1814.947,
+        "started_at": "2026-09-25T07:28:55Z",
+        "duration_ms": 1849.102,
         "attributes": {
           "ticket_id": "T-050",
           "mode": "hybrid",
@@ -10131,15 +10117,15 @@
         "escalations": 2,
         "tool_calls": 1,
         "errors": 0,
-        "llm_input_tokens": 363,
+        "llm_input_tokens": 484,
         "llm_output_tokens": 45,
         "model_input_tokens": 536,
         "cost_usd": 0.0,
         "time_by_plane_ms": {
-          "rule": 0.175,
-          "model": 124.133,
-          "llm": 1684.293,
-          "tool": 0.04
+          "rule": 0.158,
+          "model": 133.753,
+          "llm": 1706.644,
+          "tool": 0.083
         }
       }
     },
@@ -10201,14 +10187,14 @@
         "wants_human"
       ],
       "decision_llm_calls": 1,
-      "decision_llm_tokens": 329,
-      "decision_llm_ms": 620.438,
+      "decision_llm_tokens": 439,
+      "decision_llm_ms": 665.33,
       "summary": {
-        "trace_id": "449301b7a1ea9282bf64f575ec26d312",
+        "trace_id": "eaa295dcb03166f4a57aa62721ce6279",
         "name": "support_ticket",
         "status": "ok",
-        "started_at": "2026-09-25T05:04:35Z",
-        "duration_ms": 1602.45,
+        "started_at": "2026-09-25T07:28:57Z",
+        "duration_ms": 1734.977,
         "attributes": {
           "ticket_id": "T-051",
           "mode": "hybrid",
@@ -10229,15 +10215,15 @@
         "escalations": 2,
         "tool_calls": 1,
         "errors": 0,
-        "llm_input_tokens": 557,
+        "llm_input_tokens": 667,
         "llm_output_tokens": 42,
         "model_input_tokens": 470,
         "cost_usd": 0.0,
         "time_by_plane_ms": {
-          "rule": 0.207,
-          "model": 85.786,
-          "llm": 1509.823,
-          "tool": 0.031
+          "rule": 0.217,
+          "model": 90.998,
+          "llm": 1635.793,
+          "tool": 0.034
         }
       }
     },
@@ -10260,11 +10246,11 @@
       "decision_llm_tokens": 0,
       "decision_llm_ms": 0.0,
       "summary": {
-        "trace_id": "630a721bbb600aa892cadf2aab547de0",
+        "trace_id": "87af21468eae81e617edbf8dcae97c07",
         "name": "support_ticket",
         "status": "ok",
-        "started_at": "2026-09-25T05:04:37Z",
-        "duration_ms": 2.481,
+        "started_at": "2026-09-25T07:28:59Z",
+        "duration_ms": 3.199,
         "attributes": {
           "ticket_id": "T-052",
           "mode": "hybrid",
@@ -10311,11 +10297,11 @@
       "decision_llm_tokens": 0,
       "decision_llm_ms": 0.0,
       "summary": {
-        "trace_id": "69574d0bc18fceccbf9e04c46e1b5392",
+        "trace_id": "394b18e0dbb1d6422113c68040c9b7e1",
         "name": "support_ticket",
         "status": "ok",
-        "started_at": "2026-09-25T05:04:37Z",
-        "duration_ms": 0.824,
+        "started_at": "2026-09-25T07:28:59Z",
+        "duration_ms": 1.092,
         "attributes": {
           "ticket_id": "T-053",
           "mode": "hybrid",
@@ -10339,7 +10325,7 @@
         "model_input_tokens": 0,
         "cost_usd": 0.0,
         "time_by_plane_ms": {
-          "rule": 0.003
+          "rule": 0.002
         }
       }
     },
@@ -10401,11 +10387,11 @@
       "decision_llm_tokens": 0,
       "decision_llm_ms": 0.0,
       "summary": {
-        "trace_id": "d1b56252e9ca8538cc253a94e64df05c",
+        "trace_id": "d0b2b01afd20926b6116453673c92e7d",
         "name": "support_ticket",
         "status": "ok",
-        "started_at": "2026-09-25T05:04:37Z",
-        "duration_ms": 1586.547,
+        "started_at": "2026-09-25T07:28:59Z",
+        "duration_ms": 1731.929,
         "attributes": {
           "ticket_id": "T-001",
           "mode": "models",
@@ -10430,10 +10416,10 @@
         "model_input_tokens": 362,
         "cost_usd": 0.0,
         "time_by_plane_ms": {
-          "rule": 0.184,
-          "model": 52.043,
-          "tool": 0.092,
-          "llm": 1528.107
+          "rule": 0.242,
+          "model": 70.391,
+          "tool": 0.093,
+          "llm": 1654.0
         }
       }
     },
@@ -10497,11 +10483,11 @@
       "decision_llm_tokens": 0,
       "decision_llm_ms": 0.0,
       "summary": {
-        "trace_id": "a860550155522a16b85039cded08ffde",
+        "trace_id": "3bc8e3eceb7039e812a1fc1c421233dd",
         "name": "support_ticket",
         "status": "ok",
-        "started_at": "2026-09-25T05:04:38Z",
-        "duration_ms": 1669.669,
+        "started_at": "2026-09-25T07:29:00Z",
+        "duration_ms": 1813.774,
         "attributes": {
           "ticket_id": "T-002",
           "mode": "models",
@@ -10526,10 +10512,10 @@
         "model_input_tokens": 511,
         "cost_usd": 0.0,
         "time_by_plane_ms": {
-          "rule": 0.197,
-          "model": 71.599,
-          "tool": 0.142,
-          "llm": 1588.487
+          "rule": 0.228,
+          "model": 97.537,
+          "tool": 0.16,
+          "llm": 1705.97
         }
       }
     },
@@ -10591,11 +10577,11 @@
       "decision_llm_tokens": 0,
       "decision_llm_ms": 0.0,
       "summary": {
-        "trace_id": "9b129b32f39ee2c095fd2c22ca89f71c",
+        "trace_id": "064145405450cb25ca21dd85d059d8e3",
         "name": "support_ticket",
         "status": "ok",
-        "started_at": "2026-09-25T05:04:40Z",
-        "duration_ms": 1547.243,
+        "started_at": "2026-09-25T07:29:02Z",
+        "duration_ms": 1696.962,
         "attributes": {
           "ticket_id": "T-003",
           "mode": "models",
@@ -10621,9 +10607,9 @@
         "cost_usd": 0.0,
         "time_by_plane_ms": {
           "rule": 0.19,
-          "model": 50.907,
-          "tool": 0.212,
-          "llm": 1487.878
+          "model": 70.735,
+          "tool": 0.095,
+          "llm": 1619.543
         }
       }
     },
@@ -10685,11 +10671,11 @@
       "decision_llm_tokens": 0,
       "decision_llm_ms": 0.0,
       "summary": {
-        "trace_id": "6483d8d3f75825919dc16096bda94a64",
+        "trace_id": "c7fcdf8b22a2b2ca6d6dce4333c13f97",
         "name": "support_ticket",
         "status": "ok",
-        "started_at": "2026-09-25T05:04:42Z",
-        "duration_ms": 1798.474,
+        "started_at": "2026-09-25T07:29:04Z",
+        "duration_ms": 2027.634,
         "attributes": {
           "ticket_id": "T-004",
           "mode": "models",
@@ -10714,10 +10700,10 @@
         "model_input_tokens": 362,
         "cost_usd": 0.0,
         "time_by_plane_ms": {
-          "rule": 0.171,
-          "model": 51.74,
-          "tool": 0.09,
-          "llm": 1738.671
+          "rule": 0.2,
+          "model": 69.953,
+          "tool": 0.1,
+          "llm": 1949.015
         }
       }
     },
@@ -10779,11 +10765,11 @@
       "decision_llm_tokens": 0,
       "decision_llm_ms": 0.0,
       "summary": {
-        "trace_id": "08e8e970dc6418b656e7d4478dc51937",
+        "trace_id": "370b66fd17dd3df170e83b371ffc8d82",
         "name": "support_ticket",
         "status": "ok",
-        "started_at": "2026-09-25T05:04:43Z",
-        "duration_ms": 1739.486,
+        "started_at": "2026-09-25T07:29:06Z",
+        "duration_ms": 1974.485,
         "attributes": {
           "ticket_id": "T-005",
           "mode": "models",
@@ -10808,10 +10794,10 @@
         "model_input_tokens": 378,
         "cost_usd": 0.0,
         "time_by_plane_ms": {
-          "rule": 0.187,
-          "model": 53.424,
-          "tool": 0.084,
-          "llm": 1678.512
+          "rule": 0.188,
+          "model": 72.086,
+          "tool": 0.101,
+          "llm": 1894.018
         }
       }
     },
@@ -10873,11 +10859,11 @@
       "decision_llm_tokens": 0,
       "decision_llm_ms": 0.0,
       "summary": {
-        "trace_id": "3908b55989d39a8e18a38f070277b070",
+        "trace_id": "c9949b0977c97e568a380cca49be3845",
         "name": "support_ticket",
         "status": "ok",
-        "started_at": "2026-09-25T05:04:45Z",
-        "duration_ms": 1681.687,
+        "started_at": "2026-09-25T07:29:08Z",
+        "duration_ms": 1889.931,
         "attributes": {
           "ticket_id": "T-006",
           "mode": "models",
@@ -10902,10 +10888,10 @@
         "model_input_tokens": 374,
         "cost_usd": 0.0,
         "time_by_plane_ms": {
-          "rule": 0.171,
-          "model": 52.226,
-          "tool": 0.091,
-          "llm": 1621.351
+          "rule": 0.211,
+          "model": 69.235,
+          "tool": 0.098,
+          "llm": 1812.469
         }
       }
     },
@@ -10967,11 +10953,11 @@
       "decision_llm_tokens": 0,
       "decision_llm_ms": 0.0,
       "summary": {
-        "trace_id": "adcf2003d483bf1963367664f8572e5e",
+        "trace_id": "847e087609dd6d6b748a29184864aa3f",
         "name": "support_ticket",
         "status": "ok",
-        "started_at": "2026-09-25T05:04:47Z",
-        "duration_ms": 1384.8,
+        "started_at": "2026-09-25T07:29:10Z",
+        "duration_ms": 1595.829,
         "attributes": {
           "ticket_id": "T-007",
           "mode": "models",
@@ -10996,10 +10982,10 @@
         "model_input_tokens": 326,
         "cost_usd": 0.0,
         "time_by_plane_ms": {
-          "rule": 0.188,
-          "model": 51.17,
-          "tool": 0.087,
-          "llm": 1325.975
+          "rule": 0.233,
+          "model": 65.039,
+          "tool": 0.096,
+          "llm": 1521.653
         }
       }
     },
@@ -11061,11 +11047,11 @@
       "decision_llm_tokens": 0,
       "decision_llm_ms": 0.0,
       "summary": {
-        "trace_id": "ef609706e32adc72a64a8fd79c53dbae",
+        "trace_id": "83d16b1fdd015333ff26ed48febfc3e2",
         "name": "support_ticket",
         "status": "ok",
-        "started_at": "2026-09-25T05:04:48Z",
-        "duration_ms": 97.278,
+        "started_at": "2026-09-25T07:29:11Z",
+        "duration_ms": 114.929,
         "attributes": {
           "ticket_id": "T-008",
           "mode": "models",
@@ -11090,8 +11076,8 @@
         "model_input_tokens": 306,
         "cost_usd": 0.0,
         "time_by_plane_ms": {
-          "rule": 0.132,
-          "model": 91.713
+          "rule": 0.15,
+          "model": 109.21
         }
       }
     },
@@ -11153,11 +11139,11 @@
       "decision_llm_tokens": 0,
       "decision_llm_ms": 0.0,
       "summary": {
-        "trace_id": "5ea278511d02d47203acb53616016fad",
+        "trace_id": "091f87e1e1cc551151f9846a05407f75",
         "name": "support_ticket",
         "status": "ok",
-        "started_at": "2026-09-25T05:04:48Z",
-        "duration_ms": 1428.264,
+        "started_at": "2026-09-25T07:29:12Z",
+        "duration_ms": 1550.677,
         "attributes": {
           "ticket_id": "T-009",
           "mode": "models",
@@ -11182,10 +11168,10 @@
         "model_input_tokens": 342,
         "cost_usd": 0.0,
         "time_by_plane_ms": {
-          "rule": 0.177,
-          "model": 54.549,
-          "tool": 0.032,
-          "llm": 1368.592
+          "rule": 0.192,
+          "model": 70.942,
+          "tool": 0.072,
+          "llm": 1471.475
         }
       }
     },
@@ -11249,11 +11235,11 @@
       "decision_llm_tokens": 0,
       "decision_llm_ms": 0.0,
       "summary": {
-        "trace_id": "b1724383503f08149e341b0fa8cc85a3",
+        "trace_id": "82f4e0fd77c97dce2992e36a88e4e83c",
         "name": "support_ticket",
         "status": "ok",
-        "started_at": "2026-09-25T05:04:50Z",
-        "duration_ms": 1179.674,
+        "started_at": "2026-09-25T07:29:13Z",
+        "duration_ms": 1280.901,
         "attributes": {
           "ticket_id": "T-010",
           "mode": "models",
@@ -11278,10 +11264,10 @@
         "model_input_tokens": 496,
         "cost_usd": 0.0,
         "time_by_plane_ms": {
-          "rule": 0.185,
-          "model": 70.344,
-          "tool": 0.042,
-          "llm": 1103.809
+          "rule": 0.181,
+          "model": 96.606,
+          "tool": 0.043,
+          "llm": 1176.788
         }
       }
     },
@@ -11345,11 +11331,11 @@
       "decision_llm_tokens": 0,
       "decision_llm_ms": 0.0,
       "summary": {
-        "trace_id": "9c1c540e0f2488ad55c2020cf205cf20",
+        "trace_id": "2e4156bcd0810905eba70064d620c04f",
         "name": "support_ticket",
         "status": "ok",
-        "started_at": "2026-09-25T05:04:51Z",
-        "duration_ms": 1434.511,
+        "started_at": "2026-09-25T07:29:14Z",
+        "duration_ms": 1471.868,
         "attributes": {
           "ticket_id": "T-011",
           "mode": "models",
@@ -11374,10 +11360,10 @@
         "model_input_tokens": 536,
         "cost_usd": 0.0,
         "time_by_plane_ms": {
-          "rule": 0.183,
-          "model": 86.087,
-          "tool": 0.053,
-          "llm": 1341.725
+          "rule": 0.192,
+          "model": 96.981,
+          "tool": 0.037,
+          "llm": 1367.228
         }
       }
     },
@@ -11441,11 +11427,11 @@
       "decision_llm_tokens": 0,
       "decision_llm_ms": 0.0,
       "summary": {
-        "trace_id": "9602ed881273744ecdd617dde8dc1ce9",
+        "trace_id": "d2cdf3ae5e9e22b196639462d6fea519",
         "name": "support_ticket",
         "status": "ok",
-        "started_at": "2026-09-25T05:04:52Z",
-        "duration_ms": 1539.718,
+        "started_at": "2026-09-25T07:29:16Z",
+        "duration_ms": 1689.048,
         "attributes": {
           "ticket_id": "T-012",
           "mode": "models",
@@ -11470,10 +11456,10 @@
         "model_input_tokens": 511,
         "cost_usd": 0.0,
         "time_by_plane_ms": {
-          "rule": 0.177,
-          "model": 87.606,
-          "tool": 0.051,
-          "llm": 1445.042
+          "rule": 0.18,
+          "model": 96.072,
+          "tool": 0.049,
+          "llm": 1583.696
         }
       }
     },
@@ -11535,11 +11521,11 @@
       "decision_llm_tokens": 0,
       "decision_llm_ms": 0.0,
       "summary": {
-        "trace_id": "477ae072c25ccf295bff9ac371455766",
+        "trace_id": "04cd2ad824e7e3298835df49ae1174f0",
         "name": "support_ticket",
         "status": "ok",
-        "started_at": "2026-09-25T05:04:54Z",
-        "duration_ms": 1451.776,
+        "started_at": "2026-09-25T07:29:18Z",
+        "duration_ms": 1605.057,
         "attributes": {
           "ticket_id": "T-013",
           "mode": "models",
@@ -11564,10 +11550,10 @@
         "model_input_tokens": 322,
         "cost_usd": 0.0,
         "time_by_plane_ms": {
-          "rule": 0.179,
-          "model": 51.399,
-          "tool": 0.032,
-          "llm": 1393.656
+          "rule": 0.189,
+          "model": 68.544,
+          "tool": 0.031,
+          "llm": 1531.209
         }
       }
     },
@@ -11631,11 +11617,11 @@
       "decision_llm_tokens": 0,
       "decision_llm_ms": 0.0,
       "summary": {
-        "trace_id": "3462fecdbb12a96a30dc629d0e344b22",
+        "trace_id": "e059ab62ef4d96630dfd438c16b66c2a",
         "name": "support_ticket",
         "status": "ok",
-        "started_at": "2026-09-25T05:04:55Z",
-        "duration_ms": 1916.809,
+        "started_at": "2026-09-25T07:29:19Z",
+        "duration_ms": 2092.964,
         "attributes": {
           "ticket_id": "T-014",
           "mode": "models",
@@ -11660,10 +11646,10 @@
         "model_input_tokens": 461,
         "cost_usd": 0.0,
         "time_by_plane_ms": {
-          "rule": 0.192,
-          "model": 70.454,
-          "tool": 0.037,
-          "llm": 1840.653
+          "rule": 0.179,
+          "model": 93.497,
+          "tool": 0.035,
+          "llm": 1992.272
         }
       }
     },
@@ -11727,11 +11713,11 @@
       "decision_llm_tokens": 0,
       "decision_llm_ms": 0.0,
       "summary": {
-        "trace_id": "2ed8f900067bea8fb6cac340bf485813",
+        "trace_id": "2f822f5c074b09be604b1eca56fd241e",
         "name": "support_ticket",
         "status": "ok",
-        "started_at": "2026-09-25T05:04:57Z",
-        "duration_ms": 1703.657,
+        "started_at": "2026-09-25T07:29:21Z",
+        "duration_ms": 1903.428,
         "attributes": {
           "ticket_id": "T-015",
           "mode": "models",
@@ -11756,10 +11742,10 @@
         "model_input_tokens": 481,
         "cost_usd": 0.0,
         "time_by_plane_ms": {
-          "rule": 0.185,
-          "model": 68.857,
-          "tool": 0.036,
-          "llm": 1629.144
+          "rule": 0.189,
+          "model": 92.623,
+          "tool": 0.037,
+          "llm": 1803.376
         }
       }
     },
@@ -11821,11 +11807,11 @@
       "decision_llm_tokens": 0,
       "decision_llm_ms": 0.0,
       "summary": {
-        "trace_id": "cfc9c97c8914219dc357587bedb517fc",
+        "trace_id": "71f9c1b4e8f0c0d71c4d218fb70103d9",
         "name": "support_ticket",
         "status": "ok",
-        "started_at": "2026-09-25T05:04:59Z",
-        "duration_ms": 2628.314,
+        "started_at": "2026-09-25T07:29:23Z",
+        "duration_ms": 2769.432,
         "attributes": {
           "ticket_id": "T-016",
           "mode": "models",
@@ -11850,10 +11836,10 @@
         "model_input_tokens": 362,
         "cost_usd": 0.0,
         "time_by_plane_ms": {
-          "rule": 0.163,
-          "model": 96.549,
-          "tool": 0.034,
-          "llm": 2524.481
+          "rule": 0.15,
+          "model": 116.657,
+          "tool": 0.036,
+          "llm": 2645.442
         }
       }
     },
@@ -11917,11 +11903,11 @@
       "decision_llm_tokens": 0,
       "decision_llm_ms": 0.0,
       "summary": {
-        "trace_id": "843d7da7661798206abb36cca7e6ee58",
+        "trace_id": "cfd7933c9856266432af20cf8c1c472e",
         "name": "support_ticket",
         "status": "ok",
-        "started_at": "2026-09-25T05:05:02Z",
-        "duration_ms": 2151.375,
+        "started_at": "2026-09-25T07:29:26Z",
+        "duration_ms": 2589.832,
         "attributes": {
           "ticket_id": "T-017",
           "mode": "models",
@@ -11946,10 +11932,10 @@
         "model_input_tokens": 466,
         "cost_usd": 0.0,
         "time_by_plane_ms": {
-          "rule": 0.153,
-          "model": 110.339,
-          "tool": 0.038,
-          "llm": 2035.456
+          "rule": 0.143,
+          "model": 137.146,
+          "tool": 0.037,
+          "llm": 2445.183
         }
       }
     },
@@ -12013,11 +11999,11 @@
       "decision_llm_tokens": 0,
       "decision_llm_ms": 0.0,
       "summary": {
-        "trace_id": "22ee0a3c675ddc193427ef70de2695d1",
+        "trace_id": "565ccba9f7e0129f1f66fd62afbe7466",
         "name": "support_ticket",
         "status": "ok",
-        "started_at": "2026-09-25T05:05:04Z",
-        "duration_ms": 1857.166,
+        "started_at": "2026-09-25T07:29:29Z",
+        "duration_ms": 1956.021,
         "attributes": {
           "ticket_id": "T-018",
           "mode": "models",
@@ -12042,10 +12028,10 @@
         "model_input_tokens": 426,
         "cost_usd": 0.0,
         "time_by_plane_ms": {
-          "rule": 0.165,
-          "model": 68.552,
-          "tool": 0.03,
-          "llm": 1781.716
+          "rule": 0.18,
+          "model": 92.533,
+          "tool": 0.033,
+          "llm": 1856.293
         }
       }
     },
@@ -12109,11 +12095,11 @@
       "decision_llm_tokens": 0,
       "decision_llm_ms": 0.0,
       "summary": {
-        "trace_id": "a8f28b3f27684a52eb9515521f9f4609",
+        "trace_id": "69ac9801423c0c41ea15d466b82b8d8d",
         "name": "support_ticket",
         "status": "ok",
-        "started_at": "2026-09-25T05:05:06Z",
-        "duration_ms": 1980.541,
+        "started_at": "2026-09-25T07:29:30Z",
+        "duration_ms": 2179.07,
         "attributes": {
           "ticket_id": "T-019",
           "mode": "models",
@@ -12138,10 +12124,10 @@
         "model_input_tokens": 486,
         "cost_usd": 0.0,
         "time_by_plane_ms": {
-          "rule": 0.182,
-          "model": 70.871,
-          "tool": 0.031,
-          "llm": 1902.52
+          "rule": 0.199,
+          "model": 96.534,
+          "tool": 0.036,
+          "llm": 2074.266
         }
       }
     },
@@ -12203,11 +12189,11 @@
       "decision_llm_tokens": 0,
       "decision_llm_ms": 0.0,
       "summary": {
-        "trace_id": "5c6aa29052abecb4c72498d6f861f0c6",
+        "trace_id": "b2dd2187bca00055962fa12ef207eeca",
         "name": "support_ticket",
         "status": "ok",
-        "started_at": "2026-09-25T05:05:08Z",
-        "duration_ms": 98.783,
+        "started_at": "2026-09-25T07:29:33Z",
+        "duration_ms": 110.439,
         "attributes": {
           "ticket_id": "T-020",
           "mode": "models",
@@ -12232,8 +12218,8 @@
         "model_input_tokens": 270,
         "cost_usd": 0.0,
         "time_by_plane_ms": {
-          "rule": 0.136,
-          "model": 93.817
+          "rule": 0.135,
+          "model": 104.969
         }
       }
     },
@@ -12295,11 +12281,11 @@
       "decision_llm_tokens": 0,
       "decision_llm_ms": 0.0,
       "summary": {
-        "trace_id": "3ce0f6f9e6d82dea14c1c2def4be149e",
+        "trace_id": "f3d79fdabc23570ba82e846206be349b",
         "name": "support_ticket",
         "status": "ok",
-        "started_at": "2026-09-25T05:05:08Z",
-        "duration_ms": 1101.321,
+        "started_at": "2026-09-25T07:29:33Z",
+        "duration_ms": 1288.293,
         "attributes": {
           "ticket_id": "T-021",
           "mode": "models",
@@ -12324,10 +12310,10 @@
         "model_input_tokens": 302,
         "cost_usd": 0.0,
         "time_by_plane_ms": {
-          "rule": 0.176,
-          "model": 52.017,
+          "rule": 0.183,
+          "model": 76.233,
           "tool": 0.026,
-          "llm": 1042.238
+          "llm": 1204.743
         }
       }
     },
@@ -12391,11 +12377,11 @@
       "decision_llm_tokens": 0,
       "decision_llm_ms": 0.0,
       "summary": {
-        "trace_id": "c5796a5c2aa7040bf125ab6e9c2927a9",
+        "trace_id": "9effe0dfedd4a333a4c58c9bd16e56d9",
         "name": "support_ticket",
         "status": "ok",
-        "started_at": "2026-09-25T05:05:09Z",
-        "duration_ms": 1879.206,
+        "started_at": "2026-09-25T07:29:34Z",
+        "duration_ms": 2308.376,
         "attributes": {
           "ticket_id": "T-022",
           "mode": "models",
@@ -12420,10 +12406,10 @@
         "model_input_tokens": 506,
         "cost_usd": 0.0,
         "time_by_plane_ms": {
-          "rule": 0.151,
-          "model": 106.754,
-          "tool": 0.053,
-          "llm": 1762.707
+          "rule": 0.152,
+          "model": 150.853,
+          "tool": 0.046,
+          "llm": 2148.805
         }
       }
     },
@@ -12487,11 +12473,11 @@
       "decision_llm_tokens": 0,
       "decision_llm_ms": 0.0,
       "summary": {
-        "trace_id": "2ba216492af5bbbdad3c76f937aded07",
+        "trace_id": "92b1eb109b5f0016f472ab276e39052d",
         "name": "support_ticket",
         "status": "ok",
-        "started_at": "2026-09-25T05:05:11Z",
-        "duration_ms": 2121.292,
+        "started_at": "2026-09-25T07:29:36Z",
+        "duration_ms": 2345.086,
         "attributes": {
           "ticket_id": "T-023",
           "mode": "models",
@@ -12516,10 +12502,10 @@
         "model_input_tokens": 476,
         "cost_usd": 0.0,
         "time_by_plane_ms": {
-          "rule": 0.138,
-          "model": 109.948,
-          "tool": 0.032,
-          "llm": 2004.644
+          "rule": 0.149,
+          "model": 130.07,
+          "tool": 0.044,
+          "llm": 2207.391
         }
       }
     },
@@ -12581,11 +12567,11 @@
       "decision_llm_tokens": 0,
       "decision_llm_ms": 0.0,
       "summary": {
-        "trace_id": "25637edfea88ee393a5c798e40a0580f",
+        "trace_id": "ba2583a1e5dac6bd896577b083584658",
         "name": "support_ticket",
         "status": "ok",
-        "started_at": "2026-09-25T05:05:13Z",
-        "duration_ms": 1409.394,
+        "started_at": "2026-09-25T07:29:39Z",
+        "duration_ms": 1739.299,
         "attributes": {
           "ticket_id": "T-024",
           "mode": "models",
@@ -12610,10 +12596,10 @@
         "model_input_tokens": 254,
         "cost_usd": 0.0,
         "time_by_plane_ms": {
-          "rule": 0.143,
-          "model": 99.386,
-          "tool": 0.062,
-          "llm": 1303.961
+          "rule": 0.135,
+          "model": 110.794,
+          "tool": 0.052,
+          "llm": 1620.835
         }
       }
     },
@@ -12677,11 +12663,11 @@
       "decision_llm_tokens": 0,
       "decision_llm_ms": 0.0,
       "summary": {
-        "trace_id": "170919a8abd60439fa731e4205010b31",
+        "trace_id": "185998b17ba789e069afa1abaafd69d4",
         "name": "support_ticket",
         "status": "ok",
-        "started_at": "2026-09-25T05:05:14Z",
-        "duration_ms": 1616.445,
+        "started_at": "2026-09-25T07:29:40Z",
+        "duration_ms": 1826.259,
         "attributes": {
           "ticket_id": "T-025",
           "mode": "models",
@@ -12706,10 +12692,10 @@
         "model_input_tokens": 471,
         "cost_usd": 0.0,
         "time_by_plane_ms": {
-          "rule": 0.141,
-          "model": 107.321,
+          "rule": 0.148,
+          "model": 146.597,
           "tool": 0.047,
-          "llm": 1501.892
+          "llm": 1672.335
         }
       }
     },
@@ -12771,11 +12757,11 @@
       "decision_llm_tokens": 0,
       "decision_llm_ms": 0.0,
       "summary": {
-        "trace_id": "6e04b4dd55253e0bbcc27d886d201985",
+        "trace_id": "2bd411b07178c6dd0faf56ff40250377",
         "name": "support_ticket",
         "status": "ok",
-        "started_at": "2026-09-25T05:05:16Z",
-        "duration_ms": 1522.938,
+        "started_at": "2026-09-25T07:29:42Z",
+        "duration_ms": 1751.158,
         "attributes": {
           "ticket_id": "T-026",
           "mode": "models",
@@ -12800,10 +12786,10 @@
         "model_input_tokens": 282,
         "cost_usd": 0.0,
         "time_by_plane_ms": {
-          "rule": 0.131,
-          "model": 94.018,
+          "rule": 0.149,
+          "model": 110.844,
           "tool": 0.051,
-          "llm": 1421.801
+          "llm": 1633.023
         }
       }
     },
@@ -12865,11 +12851,11 @@
       "decision_llm_tokens": 0,
       "decision_llm_ms": 0.0,
       "summary": {
-        "trace_id": "06040032f95df6d2435e5bbfb1f909bc",
+        "trace_id": "8cff7c2c26a42ad1ce2be1be4068eead",
         "name": "support_ticket",
         "status": "ok",
-        "started_at": "2026-09-25T05:05:17Z",
-        "duration_ms": 1657.364,
+        "started_at": "2026-09-25T07:29:44Z",
+        "duration_ms": 1869.551,
         "attributes": {
           "ticket_id": "T-027",
           "mode": "models",
@@ -12894,10 +12880,10 @@
         "model_input_tokens": 338,
         "cost_usd": 0.0,
         "time_by_plane_ms": {
-          "rule": 0.147,
-          "model": 90.261,
-          "tool": 0.059,
-          "llm": 1559.895
+          "rule": 0.155,
+          "model": 116.751,
+          "tool": 0.049,
+          "llm": 1744.721
         }
       }
     },
@@ -12959,11 +12945,11 @@
       "decision_llm_tokens": 0,
       "decision_llm_ms": 0.0,
       "summary": {
-        "trace_id": "9b1a8e6c8130a657a21770849bb910bd",
+        "trace_id": "0d14d4df3d04228798b3ca76aee4ca37",
         "name": "support_ticket",
         "status": "ok",
-        "started_at": "2026-09-25T05:05:19Z",
-        "duration_ms": 1292.808,
+        "started_at": "2026-09-25T07:29:46Z",
+        "duration_ms": 1526.257,
         "attributes": {
           "ticket_id": "T-028",
           "mode": "models",
@@ -12988,10 +12974,10 @@
         "model_input_tokens": 278,
         "cost_usd": 0.0,
         "time_by_plane_ms": {
-          "rule": 0.151,
-          "model": 90.65,
-          "tool": 0.022,
-          "llm": 1197.032
+          "rule": 0.158,
+          "model": 112.408,
+          "tool": 0.023,
+          "llm": 1406.728
         }
       }
     },
@@ -13053,11 +13039,11 @@
       "decision_llm_tokens": 0,
       "decision_llm_ms": 0.0,
       "summary": {
-        "trace_id": "79beb1c78e5145bb2006fe5f9c968f46",
+        "trace_id": "ccb2db74a62d8e0dd4fa67f33f031f36",
         "name": "support_ticket",
         "status": "ok",
-        "started_at": "2026-09-25T05:05:20Z",
-        "duration_ms": 1398.38,
+        "started_at": "2026-09-25T07:29:47Z",
+        "duration_ms": 1550.481,
         "attributes": {
           "ticket_id": "T-029",
           "mode": "models",
@@ -13082,10 +13068,10 @@
         "model_input_tokens": 385,
         "cost_usd": 0.0,
         "time_by_plane_ms": {
-          "rule": 0.137,
-          "model": 126.666,
-          "tool": 0.087,
-          "llm": 1265.704
+          "rule": 0.141,
+          "model": 163.014,
+          "tool": 0.09,
+          "llm": 1379.526
         }
       }
     },
@@ -13149,11 +13135,11 @@
       "decision_llm_tokens": 0,
       "decision_llm_ms": 0.0,
       "summary": {
-        "trace_id": "6f58cc1371bedf85ad3d4f489237a2d7",
+        "trace_id": "be284ee90015e2510bc429a1516e50ca",
         "name": "support_ticket",
         "status": "ok",
-        "started_at": "2026-09-25T05:05:22Z",
-        "duration_ms": 1296.243,
+        "started_at": "2026-09-25T07:29:49Z",
+        "duration_ms": 1437.705,
         "attributes": {
           "ticket_id": "T-030",
           "mode": "models",
@@ -13179,9 +13165,9 @@
         "cost_usd": 0.0,
         "time_by_plane_ms": {
           "rule": 0.138,
-          "model": 108.099,
-          "tool": 0.032,
-          "llm": 1183.379
+          "model": 139.796,
+          "tool": 0.031,
+          "llm": 1290.914
         }
       }
     },
@@ -13245,11 +13231,11 @@
       "decision_llm_tokens": 0,
       "decision_llm_ms": 0.0,
       "summary": {
-        "trace_id": "a3e5f735327ee6468db220e54cff381f",
+        "trace_id": "a925acf4cba72153a5eb0bbd6d63efa5",
         "name": "support_ticket",
         "status": "ok",
-        "started_at": "2026-09-25T05:05:23Z",
-        "duration_ms": 1499.763,
+        "started_at": "2026-09-25T07:29:50Z",
+        "duration_ms": 1737.334,
         "attributes": {
           "ticket_id": "T-031",
           "mode": "models",
@@ -13274,10 +13260,10 @@
         "model_input_tokens": 486,
         "cost_usd": 0.0,
         "time_by_plane_ms": {
-          "rule": 0.149,
-          "model": 112.483,
-          "tool": 0.032,
-          "llm": 1382.27
+          "rule": 0.17,
+          "model": 140.141,
+          "tool": 0.034,
+          "llm": 1589.949
         }
       }
     },
@@ -13339,11 +13325,11 @@
       "decision_llm_tokens": 0,
       "decision_llm_ms": 0.0,
       "summary": {
-        "trace_id": "0217875f912a2288487a462f50f3357e",
+        "trace_id": "ddd7696d4a4d45c1bd1b3393738435f6",
         "name": "support_ticket",
         "status": "ok",
-        "started_at": "2026-09-25T05:05:24Z",
-        "duration_ms": 1373.637,
+        "started_at": "2026-09-25T07:29:52Z",
+        "duration_ms": 1535.717,
         "attributes": {
           "ticket_id": "T-032",
           "mode": "models",
@@ -13368,10 +13354,10 @@
         "model_input_tokens": 390,
         "cost_usd": 0.0,
         "time_by_plane_ms": {
-          "rule": 0.138,
-          "model": 131.508,
-          "tool": 0.093,
-          "llm": 1235.708
+          "rule": 0.152,
+          "model": 146.147,
+          "tool": 0.103,
+          "llm": 1380.251
         }
       }
     },
@@ -13435,11 +13421,11 @@
       "decision_llm_tokens": 0,
       "decision_llm_ms": 0.0,
       "summary": {
-        "trace_id": "7d23f201465b33250c98ffa3b21e1917",
+        "trace_id": "e1ca558ee8ea478d55b69019a8c9e1cb",
         "name": "support_ticket",
         "status": "ok",
-        "started_at": "2026-09-25T05:05:26Z",
-        "duration_ms": 1071.001,
+        "started_at": "2026-09-25T07:29:54Z",
+        "duration_ms": 1266.274,
         "attributes": {
           "ticket_id": "T-033",
           "mode": "models",
@@ -13465,9 +13451,9 @@
         "cost_usd": 0.0,
         "time_by_plane_ms": {
           "rule": 0.141,
-          "model": 107.166,
-          "tool": 0.03,
-          "llm": 958.853
+          "model": 136.328,
+          "tool": 0.047,
+          "llm": 1122.432
         }
       }
     },
@@ -13531,11 +13517,11 @@
       "decision_llm_tokens": 0,
       "decision_llm_ms": 0.0,
       "summary": {
-        "trace_id": "17771c9d128aa03bc27f7a82c9893d56",
+        "trace_id": "f52f28a522bdbd8859434963388dd832",
         "name": "support_ticket",
         "status": "ok",
-        "started_at": "2026-09-25T05:05:27Z",
-        "duration_ms": 1735.414,
+        "started_at": "2026-09-25T07:29:55Z",
+        "duration_ms": 1822.848,
         "attributes": {
           "ticket_id": "T-034",
           "mode": "models",
@@ -13560,10 +13546,10 @@
         "model_input_tokens": 471,
         "cost_usd": 0.0,
         "time_by_plane_ms": {
-          "rule": 0.15,
-          "model": 111.694,
-          "tool": 0.033,
-          "llm": 1618.437
+          "rule": 0.143,
+          "model": 142.247,
+          "tool": 0.035,
+          "llm": 1673.285
         }
       }
     },
@@ -13627,11 +13613,11 @@
       "decision_llm_tokens": 0,
       "decision_llm_ms": 0.0,
       "summary": {
-        "trace_id": "6df7b8d75f8b40f051ec5cd98afb9cda",
+        "trace_id": "70f959915681bb1f40891381c1dbf9bf",
         "name": "support_ticket",
         "status": "ok",
-        "started_at": "2026-09-25T05:05:29Z",
-        "duration_ms": 1176.431,
+        "started_at": "2026-09-25T07:29:57Z",
+        "duration_ms": 1043.301,
         "attributes": {
           "ticket_id": "T-035",
           "mode": "models",
@@ -13656,10 +13642,10 @@
         "model_input_tokens": 426,
         "cost_usd": 0.0,
         "time_by_plane_ms": {
-          "rule": 0.131,
-          "model": 98.803,
+          "rule": 0.13,
+          "model": 120.003,
           "tool": 0.033,
-          "llm": 1072.664
+          "llm": 916.36
         }
       }
     },
@@ -13723,11 +13709,11 @@
       "decision_llm_tokens": 0,
       "decision_llm_ms": 0.0,
       "summary": {
-        "trace_id": "8dcf3485c4b971994a386cd2d969fb73",
+        "trace_id": "b658249d32b5bd57c06d990e65007c9b",
         "name": "support_ticket",
         "status": "ok",
-        "started_at": "2026-09-25T05:05:30Z",
-        "duration_ms": 1152.074,
+        "started_at": "2026-09-25T07:29:58Z",
+        "duration_ms": 1049.417,
         "attributes": {
           "ticket_id": "T-036",
           "mode": "models",
@@ -13752,10 +13738,10 @@
         "model_input_tokens": 431,
         "cost_usd": 0.0,
         "time_by_plane_ms": {
-          "rule": 0.142,
-          "model": 113.312,
-          "tool": 0.04,
-          "llm": 1033.896
+          "rule": 0.137,
+          "model": 127.961,
+          "tool": 0.034,
+          "llm": 914.357
         }
       }
     },
@@ -13819,11 +13805,11 @@
       "decision_llm_tokens": 0,
       "decision_llm_ms": 0.0,
       "summary": {
-        "trace_id": "2492cf2bddf4ddeaa38e9bd13d5aa412",
+        "trace_id": "ee318d8ab1427af219709b3aaea2ce9a",
         "name": "support_ticket",
         "status": "ok",
-        "started_at": "2026-09-25T05:05:31Z",
-        "duration_ms": 1856.082,
+        "started_at": "2026-09-25T07:29:59Z",
+        "duration_ms": 1718.109,
         "attributes": {
           "ticket_id": "T-037",
           "mode": "models",
@@ -13848,10 +13834,10 @@
         "model_input_tokens": 466,
         "cost_usd": 0.0,
         "time_by_plane_ms": {
-          "rule": 0.148,
-          "model": 103.032,
-          "tool": 0.035,
-          "llm": 1747.694
+          "rule": 0.144,
+          "model": 130.73,
+          "tool": 0.033,
+          "llm": 1580.029
         }
       }
     },
@@ -13915,11 +13901,11 @@
       "decision_llm_tokens": 0,
       "decision_llm_ms": 0.0,
       "summary": {
-        "trace_id": "4555ada698c2f0aff0778a361e3d2bea",
+        "trace_id": "908b5cf20283b75a065e2c60d1df9a7b",
         "name": "support_ticket",
         "status": "ok",
-        "started_at": "2026-09-25T05:05:33Z",
-        "duration_ms": 2068.47,
+        "started_at": "2026-09-25T07:30:01Z",
+        "duration_ms": 1640.843,
         "attributes": {
           "ticket_id": "T-038",
           "mode": "models",
@@ -13944,10 +13930,10 @@
         "model_input_tokens": 486,
         "cost_usd": 0.0,
         "time_by_plane_ms": {
-          "rule": 0.136,
-          "model": 106.966,
-          "tool": 0.06,
-          "llm": 1956.352
+          "rule": 0.187,
+          "model": 143.034,
+          "tool": 0.039,
+          "llm": 1491.732
         }
       }
     },
@@ -14011,11 +13997,11 @@
       "decision_llm_tokens": 0,
       "decision_llm_ms": 0.0,
       "summary": {
-        "trace_id": "43a94f34c98d4d46cbdd23e57610eb25",
+        "trace_id": "30b7b61eb34aa184c5b6145369d3b4a6",
         "name": "support_ticket",
         "status": "ok",
-        "started_at": "2026-09-25T05:05:35Z",
-        "duration_ms": 1648.544,
+        "started_at": "2026-09-25T07:30:02Z",
+        "duration_ms": 1282.372,
         "attributes": {
           "ticket_id": "T-039",
           "mode": "models",
@@ -14040,10 +14026,10 @@
         "model_input_tokens": 461,
         "cost_usd": 0.0,
         "time_by_plane_ms": {
-          "rule": 0.146,
-          "model": 154.968,
-          "tool": 0.033,
-          "llm": 1485.841
+          "rule": 0.155,
+          "model": 134.638,
+          "tool": 0.035,
+          "llm": 1141.968
         }
       }
     },
@@ -14105,11 +14091,11 @@
       "decision_llm_tokens": 0,
       "decision_llm_ms": 0.0,
       "summary": {
-        "trace_id": "3855e3560004442ac2275a5d63e49c7c",
+        "trace_id": "411d572730196e2c616c384f7c4f1e79",
         "name": "support_ticket",
         "status": "ok",
-        "started_at": "2026-09-25T05:05:37Z",
-        "duration_ms": 1316.972,
+        "started_at": "2026-09-25T07:30:04Z",
+        "duration_ms": 1119.096,
         "attributes": {
           "ticket_id": "T-040",
           "mode": "models",
@@ -14134,10 +14120,10 @@
         "model_input_tokens": 294,
         "cost_usd": 0.0,
         "time_by_plane_ms": {
-          "rule": 0.141,
-          "model": 126.603,
-          "tool": 0.029,
-          "llm": 1183.921
+          "rule": 0.15,
+          "model": 104.863,
+          "tool": 0.035,
+          "llm": 1007.064
         }
       }
     },
@@ -14201,11 +14187,11 @@
       "decision_llm_tokens": 0,
       "decision_llm_ms": 0.0,
       "summary": {
-        "trace_id": "0fc34852eb2a31f7e60a6e1021c94d26",
+        "trace_id": "e5e521bd8ac4729d9c3d597648753d31",
         "name": "support_ticket",
         "status": "ok",
-        "started_at": "2026-09-25T05:05:38Z",
-        "duration_ms": 1078.612,
+        "started_at": "2026-09-25T07:30:05Z",
+        "duration_ms": 1144.006,
         "attributes": {
           "ticket_id": "T-041",
           "mode": "models",
@@ -14230,10 +14216,10 @@
         "model_input_tokens": 471,
         "cost_usd": 0.0,
         "time_by_plane_ms": {
-          "rule": 0.138,
-          "model": 106.038,
-          "tool": 0.031,
-          "llm": 965.999
+          "rule": 0.142,
+          "model": 131.186,
+          "tool": 0.034,
+          "llm": 1007.191
         }
       }
     },
@@ -14297,11 +14283,11 @@
       "decision_llm_tokens": 0,
       "decision_llm_ms": 0.0,
       "summary": {
-        "trace_id": "449e58f92a738940d943808f02a9a244",
+        "trace_id": "e0dbd3f252b49519c1c2d4bcb0c0c634",
         "name": "support_ticket",
         "status": "ok",
-        "started_at": "2026-09-25T05:05:39Z",
-        "duration_ms": 1107.822,
+        "started_at": "2026-09-25T07:30:06Z",
+        "duration_ms": 1170.641,
         "attributes": {
           "ticket_id": "T-042",
           "mode": "models",
@@ -14326,10 +14312,10 @@
         "model_input_tokens": 486,
         "cost_usd": 0.0,
         "time_by_plane_ms": {
-          "rule": 0.142,
-          "model": 107.511,
-          "tool": 0.03,
-          "llm": 993.79
+          "rule": 0.15,
+          "model": 136.951,
+          "tool": 0.035,
+          "llm": 1026.542
         }
       }
     },
@@ -14391,11 +14377,11 @@
       "decision_llm_tokens": 0,
       "decision_llm_ms": 0.0,
       "summary": {
-        "trace_id": "badb847e6adc0fde3a5032bc6d604c1d",
+        "trace_id": "174b9345f1bb9f5e4c5374d13f15827f",
         "name": "support_ticket",
         "status": "ok",
-        "started_at": "2026-09-25T05:05:40Z",
-        "duration_ms": 1722.769,
+        "started_at": "2026-09-25T07:30:07Z",
+        "duration_ms": 1332.745,
         "attributes": {
           "ticket_id": "T-043",
           "mode": "models",
@@ -14420,10 +14406,10 @@
         "model_input_tokens": 306,
         "cost_usd": 0.0,
         "time_by_plane_ms": {
-          "rule": 0.145,
-          "model": 105.729,
+          "rule": 0.147,
+          "model": 106.12,
           "tool": 0.033,
-          "llm": 1610.038
+          "llm": 1219.74
         }
       }
     },
@@ -14487,11 +14473,11 @@
       "decision_llm_tokens": 0,
       "decision_llm_ms": 0.0,
       "summary": {
-        "trace_id": "a9207849f20cf16239676745fcd22f22",
+        "trace_id": "a9a438f67cf30c5f14454eddd8004a7a",
         "name": "support_ticket",
         "status": "ok",
-        "started_at": "2026-09-25T05:05:42Z",
-        "duration_ms": 1318.066,
+        "started_at": "2026-09-25T07:30:08Z",
+        "duration_ms": 1457.131,
         "attributes": {
           "ticket_id": "T-044",
           "mode": "models",
@@ -14516,10 +14502,10 @@
         "model_input_tokens": 496,
         "cost_usd": 0.0,
         "time_by_plane_ms": {
-          "rule": 0.145,
-          "model": 113.393,
-          "tool": 0.05,
-          "llm": 1196.224
+          "rule": 0.151,
+          "model": 135.2,
+          "tool": 0.057,
+          "llm": 1314.514
         }
       }
     },
@@ -14581,11 +14567,11 @@
       "decision_llm_tokens": 0,
       "decision_llm_ms": 0.0,
       "summary": {
-        "trace_id": "c36b10636d307317fa5ad9cbcaafe613",
+        "trace_id": "f0df2680573a16622b84bda295cd6b48",
         "name": "support_ticket",
         "status": "ok",
-        "started_at": "2026-09-25T05:05:43Z",
-        "duration_ms": 1980.15,
+        "started_at": "2026-09-25T07:30:10Z",
+        "duration_ms": 1518.416,
         "attributes": {
           "ticket_id": "T-045",
           "mode": "models",
@@ -14610,10 +14596,10 @@
         "model_input_tokens": 282,
         "cost_usd": 0.0,
         "time_by_plane_ms": {
-          "rule": 0.124,
-          "model": 136.126,
-          "tool": 0.032,
-          "llm": 1837.02
+          "rule": 0.16,
+          "model": 106.383,
+          "tool": 0.031,
+          "llm": 1406.098
         }
       }
     },
@@ -14677,11 +14663,11 @@
       "decision_llm_tokens": 0,
       "decision_llm_ms": 0.0,
       "summary": {
-        "trace_id": "3e6328b301ea677a23fe547bf4a33f5a",
+        "trace_id": "7e97ce187d718a64a527ad81464a152a",
         "name": "support_ticket",
         "status": "ok",
-        "started_at": "2026-09-25T05:05:45Z",
-        "duration_ms": 1211.61,
+        "started_at": "2026-09-25T07:30:11Z",
+        "duration_ms": 1125.264,
         "attributes": {
           "ticket_id": "T-046",
           "mode": "models",
@@ -14706,10 +14692,10 @@
         "model_input_tokens": 407,
         "cost_usd": 0.0,
         "time_by_plane_ms": {
-          "rule": 0.195,
-          "model": 62.683,
-          "tool": 0.034,
-          "llm": 1141.566
+          "rule": 0.215,
+          "model": 86.709,
+          "tool": 0.033,
+          "llm": 1031.526
         }
       }
     },
@@ -14773,11 +14759,11 @@
       "decision_llm_tokens": 0,
       "decision_llm_ms": 0.0,
       "summary": {
-        "trace_id": "cc3ec644e29752b3eb59dd889ae2b22a",
+        "trace_id": "12e7869cac958b7181ef19c42852edb0",
         "name": "support_ticket",
         "status": "ok",
-        "started_at": "2026-09-25T05:05:46Z",
-        "duration_ms": 1138.023,
+        "started_at": "2026-09-25T07:30:12Z",
+        "duration_ms": 1274.564,
         "attributes": {
           "ticket_id": "T-047",
           "mode": "models",
@@ -14802,10 +14788,10 @@
         "model_input_tokens": 431,
         "cost_usd": 0.0,
         "time_by_plane_ms": {
-          "rule": 0.206,
-          "model": 68.964,
-          "tool": 0.048,
-          "llm": 1062.074
+          "rule": 0.216,
+          "model": 86.791,
+          "tool": 0.049,
+          "llm": 1181.461
         }
       }
     },
@@ -14869,11 +14855,11 @@
       "decision_llm_tokens": 0,
       "decision_llm_ms": 0.0,
       "summary": {
-        "trace_id": "984356d0c2548e608b2f60e2ba425bd4",
+        "trace_id": "d77d5d23d6b4a8236bdae2ef5216ec7c",
         "name": "support_ticket",
         "status": "ok",
-        "started_at": "2026-09-25T05:05:47Z",
-        "duration_ms": 1350.989,
+        "started_at": "2026-09-25T07:30:14Z",
+        "duration_ms": 1084.484,
         "attributes": {
           "ticket_id": "T-048",
           "mode": "models",
@@ -14898,10 +14884,10 @@
         "model_input_tokens": 399,
         "cost_usd": 0.0,
         "time_by_plane_ms": {
-          "rule": 0.189,
-          "model": 96.225,
-          "tool": 0.032,
-          "llm": 1247.864
+          "rule": 0.198,
+          "model": 123.951,
+          "tool": 0.036,
+          "llm": 953.107
         }
       }
     },
@@ -14965,11 +14951,11 @@
       "decision_llm_tokens": 0,
       "decision_llm_ms": 0.0,
       "summary": {
-        "trace_id": "9414c78b511d88dcd18394f4f3a3683b",
+        "trace_id": "421c7eacc7f8641ddb11cefd51f846db",
         "name": "support_ticket",
         "status": "ok",
-        "started_at": "2026-09-25T05:05:49Z",
-        "duration_ms": 1394.969,
+        "started_at": "2026-09-25T07:30:15Z",
+        "duration_ms": 1291.797,
         "attributes": {
           "ticket_id": "T-049",
           "mode": "models",
@@ -14994,10 +14980,10 @@
         "model_input_tokens": 418,
         "cost_usd": 0.0,
         "time_by_plane_ms": {
-          "rule": 0.194,
-          "model": 109.655,
-          "tool": 0.04,
-          "llm": 1279.484
+          "rule": 0.185,
+          "model": 128.358,
+          "tool": 0.062,
+          "llm": 1154.837
         }
       }
     },
@@ -15061,11 +15047,11 @@
       "decision_llm_tokens": 0,
       "decision_llm_ms": 0.0,
       "summary": {
-        "trace_id": "145ee4fe039f8090f3d6a5906769968e",
+        "trace_id": "bd507b880bd229a853cd839b8aa69dd2",
         "name": "support_ticket",
         "status": "ok",
-        "started_at": "2026-09-25T05:05:50Z",
-        "duration_ms": 1635.345,
+        "started_at": "2026-09-25T07:30:16Z",
+        "duration_ms": 1560.526,
         "attributes": {
           "ticket_id": "T-050",
           "mode": "models",
@@ -15090,10 +15076,10 @@
         "model_input_tokens": 536,
         "cost_usd": 0.0,
         "time_by_plane_ms": {
-          "rule": 0.156,
-          "model": 119.236,
-          "tool": 0.047,
-          "llm": 1510.334
+          "rule": 0.163,
+          "model": 137.303,
+          "tool": 0.054,
+          "llm": 1414.909
         }
       }
     },
@@ -15157,11 +15143,11 @@
       "decision_llm_tokens": 0,
       "decision_llm_ms": 0.0,
       "summary": {
-        "trace_id": "702e5beff65ad65ef40f7edeb887f027",
+        "trace_id": "8295c5597299473d8fd2f3c05dfd60a0",
         "name": "support_ticket",
         "status": "ok",
-        "started_at": "2026-09-25T05:05:52Z",
-        "duration_ms": 1113.352,
+        "started_at": "2026-09-25T07:30:18Z",
+        "duration_ms": 1177.229,
         "attributes": {
           "ticket_id": "T-051",
           "mode": "models",
@@ -15186,10 +15172,10 @@
         "model_input_tokens": 470,
         "cost_usd": 0.0,
         "time_by_plane_ms": {
-          "rule": 0.203,
-          "model": 80.937,
-          "tool": 0.069,
-          "llm": 1025.93
+          "rule": 0.225,
+          "model": 89.015,
+          "tool": 0.042,
+          "llm": 1080.558
         }
       }
     },
@@ -15212,11 +15198,11 @@
       "decision_llm_tokens": 0,
       "decision_llm_ms": 0.0,
       "summary": {
-        "trace_id": "f39cadfefdd7d3d0a507d1e3e1963ad9",
+        "trace_id": "4a6cea968f196d83ae8b8a29e26944b3",
         "name": "support_ticket",
         "status": "ok",
-        "started_at": "2026-09-25T05:05:53Z",
-        "duration_ms": 0.916,
+        "started_at": "2026-09-25T07:30:19Z",
+        "duration_ms": 3.054,
         "attributes": {
           "ticket_id": "T-052",
           "mode": "models",
@@ -15263,11 +15249,11 @@
       "decision_llm_tokens": 0,
       "decision_llm_ms": 0.0,
       "summary": {
-        "trace_id": "129a0f0ead062e993769a2894fd0166d",
+        "trace_id": "c8e796374a701e5fc79552a209407b59",
         "name": "support_ticket",
         "status": "ok",
-        "started_at": "2026-09-25T05:05:53Z",
-        "duration_ms": 1.151,
+        "started_at": "2026-09-25T07:30:19Z",
+        "duration_ms": 0.917,
         "attributes": {
           "ticket_id": "T-053",
           "mode": "models",

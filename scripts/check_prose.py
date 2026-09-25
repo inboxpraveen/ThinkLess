@@ -6,7 +6,9 @@ locally before opening a pull request:
 
     python scripts/check_prose.py
 
-It runs in CI on every push.
+It runs in CI on every push. Generated benchmark artifacts under
+benchmarks/results are skipped: they hold model output and dataset text, not
+writing from this project.
 """
 
 from __future__ import annotations
@@ -76,6 +78,7 @@ def tracked_files() -> list[Path]:
         and p.suffix.lower() in CHECKED_SUFFIXES
         and p.name not in SKIPPED
         and "scripts/check_prose.py" not in p.as_posix()
+        and "benchmarks/results/" not in p.as_posix()
     ]
 
 

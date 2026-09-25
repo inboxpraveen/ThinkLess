@@ -21,18 +21,27 @@ never matches an uncertain answer. For safety questions, handle the unsure
 case explicitly and fail closed: the demo blocks automatic refunds when the
 injection check leans yes without reaching its threshold.
 
+**Keep escalation context on.** An escalated question reaches the LLM without
+its siblings unless the engine passes the settled ones along, and that can
+flip answers (see [escalation context](../concepts/cascade.md#escalation-context)).
+It is on by default.
+
 **Order the cascade by cost, then check it by trace.** Rules first, local
 models next, hosted decision models after, the LLM last. Then read a day of
 traces: a provider that escalates nearly every time it is asked is costing
 latency without saving anything, and belongs off that question
 (`providers=(...)` on the question).
 
-**Use purpose-built models for narrow, high-stakes questions.** General
-decision models are convenient, not specialized. Prompt injection detection is
-the clearest case: a dedicated classifier such as
-`protectai/deberta-v3-base-prompt-injection-v2` (Apache 2.0) wrapped as a
-[custom provider](providers.md#writing-a-provider) will outperform a general
-yes/no model. Mind GPU memory when adding models.
+**Try purpose-built models, and measure them on your traffic.** A classifier
+trained for one narrow question can beat a general decision model, but a model
+named for your problem is not automatically trained on your problem. In our
+tests, `protectai/deberta-v3-base-prompt-injection-v2`, a widely used prompt
+injection classifier, flagged ordinary support tickets (a card form bug, a
+promo code complaint, messages in Spanish and German) as injections with full
+confidence, and missed a policy-override attempt. It was trained on jailbreaks
+aimed at LLM apps, not on customer messages. `HFClassifier` makes this kind of
+comparison a few lines, and `thinkless calibrate` shows whether any threshold
+makes the model safe to use. Mind GPU memory when adding models.
 
 ## Deployment
 

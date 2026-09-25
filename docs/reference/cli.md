@@ -1,7 +1,12 @@
 # Command line
 
 Every command has `--help`. The reasoning model is chosen with
-`--llm backend[:model]`; see [LLM backends](../guides/llm-backends.md#spec-strings).
+`--llm backend[:model]` (for example `openrouter:qwen/qwen3.7-flash`) and its
+reasoning with `--reasoning default|off|minimal|low|medium|high`; see
+[LLM backends](../guides/llm-backends.md#spec-strings).
+
+Every command reads `./.env` first. Variables already set in the environment
+win, and values are never printed.
 
 ## `thinkless doctor`
 
@@ -85,4 +90,5 @@ recommends the lowest threshold that meets the target.
 | `THINKLESS_LOG_LEVEL` | `WARNING` | Log level for the CLI |
 | `THINKLESS_PRICING` | bundled table | Path to a pricing TOML file |
 | `TYPESAFE_API_KEY` | | For `SystemOne.jev()` |
+| `OPENROUTER_API_KEY` | | For `openrouter:` models |
 | `ANTHROPIC_API_KEY`, `OPENAI_API_KEY` | | For hosted reasoning models |

@@ -48,6 +48,31 @@ settled.
 `decision.accepted` and `decision.is_(value)` make routing code safe by
 default: an uncertain answer never matches.
 
+## Escalation context
+
+When a question escalates, the next provider only receives the questions that
+are still open. For small models that is fine; for an LLM it can change the
+answer. On the support benchmark, a request like "I want a human to confirm
+it, not an automated reply" was classified correctly as a request for a person
+when an LLM saw the whole triage batch, but flagged as a prompt injection when
+the LLM was asked about injection alone, after the rules had already settled
+the human request. Asked in isolation on the calibration set, Gemini 2.5 Flash
+Lite called 5 of 10 such messages injections.
+
+So the engine tells providers that accept it (the LLM decider does) which
+questions of the same batch are already settled, and how:
+
+```text
+Already established by other checks:
+- "wants_human" (Does the customer explicitly ask to talk to a human ...?): yes
+```
+
+On the calibration set this removed those false positives (3 to 0 in the
+real cascade) without changing missed injections or the number of LLM calls.
+It costs one short line per settled question. Turn it off with
+`Engine(escalation_context=False)`; custom providers opt in by setting
+`accepts_context = True` and accepting a `context` keyword in `answer`.
+
 ## Escalations
 
 `decision.escalated` is true when an earlier provider answered below threshold

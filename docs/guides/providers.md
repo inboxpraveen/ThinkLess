@@ -92,6 +92,39 @@ kev = SystemOne.self_hosted("http://localhost:8009", name="kev", model="kev-late
 TypeSafe reports 70 to 500 ms per call for Jev. Kev and OpenJev need a large
 GPU to self-host (Kev-4B wants 32 GB).
 
+## HFClassifier
+
+Any Hugging Face `text-classification` model, answering the questions it was
+trained for. A general decision model answers anything reasonably; a
+classifier trained for one narrow question usually answers that question much
+better.
+
+```python
+from thinkless.providers import HFClassifier
+
+injection_guard = HFClassifier(
+    "protectai/deberta-v3-base-prompt-injection-v2",
+    answers={"injection": {"yes": "INJECTION"}},
+    field="message",
+)
+sentiment = HFClassifier(
+    "cardiffnlp/twitter-roberta-base-sentiment-latest",
+    answers={"tone": {"upset": "negative", "happy": "positive", "unclear": "neutral"}},
+)
+```
+
+| | |
+|---|---|
+| Install | `pip install "thinkless[local-llm]"` (transformers and torch) |
+| Answers | `Choice` and `YesNo`, only for the question names in `answers` |
+| Mapping | yes/no: the label that means yes; choice: option to model label |
+
+Put it in the cascade before the general models so it answers its questions
+first; it never claims any other question. Calibrate it on your own traffic
+before relying on it: the injection model above is a good example of why. It
+is widely used, and on customer support tickets it made confident mistakes
+(see the [production guide](production.md)).
+
 ## LLMDecider
 
 Any `LLM` answering questions through a prompt, the way most agents make

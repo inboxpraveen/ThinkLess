@@ -1,0 +1,605 @@
+{
+  "thinkless_version": "0.1.0",
+  "created_at": "2026-09-25T07:21:43Z",
+  "dataset": "banking77",
+  "dataset_title": "Banking77 (PolyAI), 77 banking intents",
+  "source": "https://github.com/PolyAI-LDN/task-specific-datasets",
+  "examples": 500,
+  "labels": 77,
+  "seed": 13,
+  "llm": "openrouter:anthropic/claude-haiku-4.5",
+  "target_accuracy": 0.95,
+  "environment": {
+    "python": "3.12.14",
+    "platform": "Windows-11-10.0.26200-SP0",
+    "torch": "2.14.0+cu130",
+    "device": "NVIDIA GeForce RTX 5060 Laptop GPU"
+  },
+  "providers": {
+    "gliner": {
+      "provider": "gliner",
+      "accuracy": 0.718,
+      "ece": 0.1156,
+      "latency_p50_ms": 32.7,
+      "latency_p95_ms": 37.3,
+      "mean_input_tokens": 0.0,
+      "cost_per_1k": 0.0,
+      "abstained": 0,
+      "sweep": [
+        {
+          "threshold": 0.0,
+          "coverage": 1.0,
+          "accuracy": 0.718,
+          "cascade_accuracy": null
+        },
+        {
+          "threshold": 0.05,
+          "coverage": 1.0,
+          "accuracy": 0.718,
+          "cascade_accuracy": null
+        },
+        {
+          "threshold": 0.1,
+          "coverage": 1.0,
+          "accuracy": 0.718,
+          "cascade_accuracy": null
+        },
+        {
+          "threshold": 0.15,
+          "coverage": 1.0,
+          "accuracy": 0.718,
+          "cascade_accuracy": null
+        },
+        {
+          "threshold": 0.2,
+          "coverage": 1.0,
+          "accuracy": 0.718,
+          "cascade_accuracy": null
+        },
+        {
+          "threshold": 0.25,
+          "coverage": 0.996,
+          "accuracy": 0.7208835341365462,
+          "cascade_accuracy": null
+        },
+        {
+          "threshold": 0.3,
+          "coverage": 0.99,
+          "accuracy": 0.7252525252525253,
+          "cascade_accuracy": null
+        },
+        {
+          "threshold": 0.35,
+          "coverage": 0.972,
+          "accuracy": 0.7366255144032922,
+          "cascade_accuracy": null
+        },
+        {
+          "threshold": 0.4,
+          "coverage": 0.954,
+          "accuracy": 0.7421383647798742,
+          "cascade_accuracy": null
+        },
+        {
+          "threshold": 0.45,
+          "coverage": 0.93,
+          "accuracy": 0.7548387096774194,
+          "cascade_accuracy": null
+        },
+        {
+          "threshold": 0.5,
+          "coverage": 0.9,
+          "accuracy": 0.7733333333333333,
+          "cascade_accuracy": null
+        },
+        {
+          "threshold": 0.55,
+          "coverage": 0.862,
+          "accuracy": 0.7958236658932715,
+          "cascade_accuracy": null
+        },
+        {
+          "threshold": 0.6,
+          "coverage": 0.822,
+          "accuracy": 0.8223844282238443,
+          "cascade_accuracy": null
+        },
+        {
+          "threshold": 0.65,
+          "coverage": 0.8,
+          "accuracy": 0.8275,
+          "cascade_accuracy": null
+        },
+        {
+          "threshold": 0.7,
+          "coverage": 0.766,
+          "accuracy": 0.835509138381201,
+          "cascade_accuracy": null
+        },
+        {
+          "threshold": 0.75,
+          "coverage": 0.732,
+          "accuracy": 0.8497267759562842,
+          "cascade_accuracy": null
+        },
+        {
+          "threshold": 0.8,
+          "coverage": 0.688,
+          "accuracy": 0.8662790697674418,
+          "cascade_accuracy": null
+        },
+        {
+          "threshold": 0.85,
+          "coverage": 0.622,
+          "accuracy": 0.8971061093247589,
+          "cascade_accuracy": null
+        },
+        {
+          "threshold": 0.9,
+          "coverage": 0.564,
+          "accuracy": 0.9113475177304965,
+          "cascade_accuracy": null
+        },
+        {
+          "threshold": 0.95,
+          "coverage": 0.464,
+          "accuracy": 0.9310344827586207,
+          "cascade_accuracy": null
+        },
+        {
+          "threshold": 0.97,
+          "coverage": 0.392,
+          "accuracy": 0.9387755102040817,
+          "cascade_accuracy": null
+        },
+        {
+          "threshold": 0.99,
+          "coverage": 0.248,
+          "accuracy": 0.967741935483871,
+          "cascade_accuracy": null
+        }
+      ],
+      "recommended": {
+        "threshold": 0.99,
+        "coverage": 0.248,
+        "accuracy": 0.967741935483871,
+        "cascade_accuracy": null
+      }
+    },
+    "laya": {
+      "provider": "laya",
+      "accuracy": 0.35,
+      "ece": 0.1844,
+      "latency_p50_ms": 44.59,
+      "latency_p95_ms": 68.59,
+      "mean_input_tokens": 313.8,
+      "cost_per_1k": 0.0,
+      "abstained": 0,
+      "sweep": [
+        {
+          "threshold": 0.0,
+          "coverage": 1.0,
+          "accuracy": 0.35,
+          "cascade_accuracy": null
+        },
+        {
+          "threshold": 0.05,
+          "coverage": 0.998,
+          "accuracy": 0.35070140280561124,
+          "cascade_accuracy": null
+        },
+        {
+          "threshold": 0.1,
+          "coverage": 0.85,
+          "accuracy": 0.40705882352941175,
+          "cascade_accuracy": null
+        },
+        {
+          "threshold": 0.15,
+          "coverage": 0.718,
+          "accuracy": 0.45125348189415043,
+          "cascade_accuracy": null
+        },
+        {
+          "threshold": 0.2,
+          "coverage": 0.676,
+          "accuracy": 0.46745562130177515,
+          "cascade_accuracy": null
+        },
+        {
+          "threshold": 0.25,
+          "coverage": 0.632,
+          "accuracy": 0.4810126582278481,
+          "cascade_accuracy": null
+        },
+        {
+          "threshold": 0.3,
+          "coverage": 0.59,
+          "accuracy": 0.48135593220338985,
+          "cascade_accuracy": null
+        },
+        {
+          "threshold": 0.35,
+          "coverage": 0.56,
+          "accuracy": 0.48928571428571427,
+          "cascade_accuracy": null
+        },
+        {
+          "threshold": 0.4,
+          "coverage": 0.526,
+          "accuracy": 0.49809885931558934,
+          "cascade_accuracy": null
+        },
+        {
+          "threshold": 0.45,
+          "coverage": 0.492,
+          "accuracy": 0.5121951219512195,
+          "cascade_accuracy": null
+        },
+        {
+          "threshold": 0.5,
+          "coverage": 0.456,
+          "accuracy": 0.5219298245614035,
+          "cascade_accuracy": null
+        },
+        {
+          "threshold": 0.55,
+          "coverage": 0.424,
+          "accuracy": 0.5518867924528302,
+          "cascade_accuracy": null
+        },
+        {
+          "threshold": 0.6,
+          "coverage": 0.402,
+          "accuracy": 0.5671641791044776,
+          "cascade_accuracy": null
+        },
+        {
+          "threshold": 0.65,
+          "coverage": 0.376,
+          "accuracy": 0.5691489361702128,
+          "cascade_accuracy": null
+        },
+        {
+          "threshold": 0.7,
+          "coverage": 0.352,
+          "accuracy": 0.5625,
+          "cascade_accuracy": null
+        },
+        {
+          "threshold": 0.75,
+          "coverage": 0.332,
+          "accuracy": 0.5903614457831325,
+          "cascade_accuracy": null
+        },
+        {
+          "threshold": 0.8,
+          "coverage": 0.302,
+          "accuracy": 0.6026490066225165,
+          "cascade_accuracy": null
+        },
+        {
+          "threshold": 0.85,
+          "coverage": 0.278,
+          "accuracy": 0.5971223021582733,
+          "cascade_accuracy": null
+        },
+        {
+          "threshold": 0.9,
+          "coverage": 0.252,
+          "accuracy": 0.6111111111111112,
+          "cascade_accuracy": null
+        },
+        {
+          "threshold": 0.95,
+          "coverage": 0.208,
+          "accuracy": 0.6442307692307693,
+          "cascade_accuracy": null
+        },
+        {
+          "threshold": 0.97,
+          "coverage": 0.178,
+          "accuracy": 0.6179775280898876,
+          "cascade_accuracy": null
+        },
+        {
+          "threshold": 0.99,
+          "coverage": 0.136,
+          "accuracy": 0.6617647058823529,
+          "cascade_accuracy": null
+        }
+      ],
+      "recommended": null
+    },
+    "llm": {
+      "provider": "llm",
+      "accuracy": 0.762,
+      "ece": null,
+      "latency_p50_ms": 1411.6,
+      "latency_p95_ms": 3065.16,
+      "mean_input_tokens": 598.8,
+      "cost_per_1k": 0.68073,
+      "abstained": 1,
+      "sweep": [],
+      "recommended": null
+    }
+  },
+  "cascade": [
+    {
+      "threshold": 0.0,
+      "accuracy": 0.718,
+      "llm_share": 0.0,
+      "mean_latency_ms": 33.46,
+      "cost_per_1k": 0.0,
+      "answered_by": {
+        "gliner": 1.0,
+        "laya": 0.0,
+        "llm": 0.0
+      }
+    },
+    {
+      "threshold": 0.05,
+      "accuracy": 0.718,
+      "llm_share": 0.0,
+      "mean_latency_ms": 33.46,
+      "cost_per_1k": 0.0,
+      "answered_by": {
+        "gliner": 1.0,
+        "laya": 0.0,
+        "llm": 0.0
+      }
+    },
+    {
+      "threshold": 0.1,
+      "accuracy": 0.718,
+      "llm_share": 0.0,
+      "mean_latency_ms": 33.46,
+      "cost_per_1k": 0.0,
+      "answered_by": {
+        "gliner": 1.0,
+        "laya": 0.0,
+        "llm": 0.0
+      }
+    },
+    {
+      "threshold": 0.15,
+      "accuracy": 0.718,
+      "llm_share": 0.0,
+      "mean_latency_ms": 33.46,
+      "cost_per_1k": 0.0,
+      "answered_by": {
+        "gliner": 1.0,
+        "laya": 0.0,
+        "llm": 0.0
+      }
+    },
+    {
+      "threshold": 0.2,
+      "accuracy": 0.718,
+      "llm_share": 0.0,
+      "mean_latency_ms": 33.46,
+      "cost_per_1k": 0.0,
+      "answered_by": {
+        "gliner": 1.0,
+        "laya": 0.0,
+        "llm": 0.0
+      }
+    },
+    {
+      "threshold": 0.25,
+      "accuracy": 0.72,
+      "llm_share": 0.004,
+      "mean_latency_ms": 39.81,
+      "cost_per_1k": 0.00275,
+      "answered_by": {
+        "gliner": 0.996,
+        "laya": 0.0,
+        "llm": 0.004
+      }
+    },
+    {
+      "threshold": 0.3,
+      "accuracy": 0.726,
+      "llm_share": 0.01,
+      "mean_latency_ms": 52.62,
+      "cost_per_1k": 0.0068,
+      "answered_by": {
+        "gliner": 0.99,
+        "laya": 0.0,
+        "llm": 0.01
+      }
+    },
+    {
+      "threshold": 0.35,
+      "accuracy": 0.73,
+      "llm_share": 0.024,
+      "mean_latency_ms": 76.9,
+      "cost_per_1k": 0.0163,
+      "answered_by": {
+        "gliner": 0.972,
+        "laya": 0.004,
+        "llm": 0.024
+      }
+    },
+    {
+      "threshold": 0.4,
+      "accuracy": 0.728,
+      "llm_share": 0.032,
+      "mean_latency_ms": 88.26,
+      "cost_per_1k": 0.02177,
+      "answered_by": {
+        "gliner": 0.954,
+        "laya": 0.014,
+        "llm": 0.032
+      }
+    },
+    {
+      "threshold": 0.45,
+      "accuracy": 0.73,
+      "llm_share": 0.046,
+      "mean_latency_ms": 109.7,
+      "cost_per_1k": 0.03139,
+      "answered_by": {
+        "gliner": 0.93,
+        "laya": 0.024,
+        "llm": 0.046
+      }
+    },
+    {
+      "threshold": 0.5,
+      "accuracy": 0.744,
+      "llm_share": 0.07,
+      "mean_latency_ms": 149.65,
+      "cost_per_1k": 0.04769,
+      "answered_by": {
+        "gliner": 0.9,
+        "laya": 0.03,
+        "llm": 0.07
+      }
+    },
+    {
+      "threshold": 0.55,
+      "accuracy": 0.752,
+      "llm_share": 0.094,
+      "mean_latency_ms": 191.3,
+      "cost_per_1k": 0.06426,
+      "answered_by": {
+        "gliner": 0.862,
+        "laya": 0.044,
+        "llm": 0.094
+      }
+    },
+    {
+      "threshold": 0.6,
+      "accuracy": 0.77,
+      "llm_share": 0.132,
+      "mean_latency_ms": 256.11,
+      "cost_per_1k": 0.09009,
+      "answered_by": {
+        "gliner": 0.822,
+        "laya": 0.046,
+        "llm": 0.132
+      }
+    },
+    {
+      "threshold": 0.65,
+      "accuracy": 0.772,
+      "llm_share": 0.142,
+      "mean_latency_ms": 274.91,
+      "cost_per_1k": 0.09694,
+      "answered_by": {
+        "gliner": 0.8,
+        "laya": 0.058,
+        "llm": 0.142
+      }
+    },
+    {
+      "threshold": 0.7,
+      "accuracy": 0.762,
+      "llm_share": 0.17,
+      "mean_latency_ms": 318.81,
+      "cost_per_1k": 0.1161,
+      "answered_by": {
+        "gliner": 0.766,
+        "laya": 0.064,
+        "llm": 0.17
+      }
+    },
+    {
+      "threshold": 0.75,
+      "accuracy": 0.764,
+      "llm_share": 0.202,
+      "mean_latency_ms": 371.55,
+      "cost_per_1k": 0.13807,
+      "answered_by": {
+        "gliner": 0.732,
+        "laya": 0.066,
+        "llm": 0.202
+      }
+    },
+    {
+      "threshold": 0.8,
+      "accuracy": 0.762,
+      "llm_share": 0.242,
+      "mean_latency_ms": 432.09,
+      "cost_per_1k": 0.16532,
+      "answered_by": {
+        "gliner": 0.688,
+        "laya": 0.07,
+        "llm": 0.242
+      }
+    },
+    {
+      "threshold": 0.85,
+      "accuracy": 0.766,
+      "llm_share": 0.302,
+      "mean_latency_ms": 533.04,
+      "cost_per_1k": 0.20633,
+      "answered_by": {
+        "gliner": 0.622,
+        "laya": 0.076,
+        "llm": 0.302
+      }
+    },
+    {
+      "threshold": 0.9,
+      "accuracy": 0.762,
+      "llm_share": 0.342,
+      "mean_latency_ms": 598.8,
+      "cost_per_1k": 0.23363,
+      "answered_by": {
+        "gliner": 0.564,
+        "laya": 0.094,
+        "llm": 0.342
+      }
+    },
+    {
+      "threshold": 0.95,
+      "accuracy": 0.756,
+      "llm_share": 0.444,
+      "mean_latency_ms": 765.62,
+      "cost_per_1k": 0.30337,
+      "answered_by": {
+        "gliner": 0.464,
+        "laya": 0.092,
+        "llm": 0.444
+      }
+    },
+    {
+      "threshold": 0.97,
+      "accuracy": 0.754,
+      "llm_share": 0.518,
+      "mean_latency_ms": 908.63,
+      "cost_per_1k": 0.35417,
+      "answered_by": {
+        "gliner": 0.392,
+        "laya": 0.09,
+        "llm": 0.518
+      }
+    },
+    {
+      "threshold": 0.99,
+      "accuracy": 0.754,
+      "llm_share": 0.66,
+      "mean_latency_ms": 1165.49,
+      "cost_per_1k": 0.44976,
+      "answered_by": {
+        "gliner": 0.248,
+        "laya": 0.092,
+        "llm": 0.66
+      }
+    },
+    {
+      "threshold": 1.01,
+      "accuracy": 0.762,
+      "llm_share": 1.0,
+      "mean_latency_ms": 1803.35,
+      "cost_per_1k": 0.68073,
+      "answered_by": {
+        "gliner": 0.0,
+        "laya": 0.0,
+        "llm": 1.0
+      }
+    }
+  ]
+}

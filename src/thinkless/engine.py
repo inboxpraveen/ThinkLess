@@ -101,6 +101,13 @@ class Engine:
             or ``$THINKLESS_PRICING`` when set.
         on_error: ``continue`` logs a failing provider and moves down the
             cascade; ``raise`` propagates the exception.
+        escalation_context: Tell providers that accept it (the LLM decider)
+            which questions of the same batch are already settled, and how.
+            An escalated question otherwise reaches the LLM stripped of its
+            siblings, and on the support benchmark that changed answers: asked
+            alone whether a request for a human is an injection, one model
+            said yes to 5 of 10 such messages. The cost is one short line per
+            settled question.
 
     Example:
         >>> engine = Engine([Rules(), GLiNER(), Laya(), LLMDecider(llm)], llm=llm)
@@ -120,6 +127,7 @@ class Engine:
         tracer: Tracer | None = None,
         prices: PriceTable | None = None,
         on_error: Literal["continue", "raise"] = "continue",
+        escalation_context: bool = True,
     ) -> None:
         names = [p.name for p in providers]
         duplicates = sorted({n for n in names if names.count(n) > 1})
@@ -137,6 +145,7 @@ class Engine:
         self.tracer = tracer or Tracer()
         self.prices = prices or default_prices()
         self.on_error = on_error
+        self.escalation_context = escalation_context
 
     # ------------------------------------------------------------------ runs
 
@@ -266,12 +275,15 @@ class Engine:
             completion = model.complete(
                 messages, system=system, max_tokens=max_tokens, temperature=temperature
             )
-            cost, known = self.prices.cost(model.provider, completion.model, completion.usage)
+            cost, source = self._cost(
+                model.provider, completion.model, completion.usage, completion.cost_usd
+            )
             span.set(
                 model=completion.model,
                 usage=completion.usage.model_dump(),
                 cost_usd=cost,
-                cost_known=known,
+                cost_known=source != "unknown",
+                cost_source=source,
                 stop_reason=completion.stop_reason,
             )
             if self.tracer.capture_content:
@@ -353,6 +365,19 @@ class Engine:
         if not batch:
             raise ConfigurationError("at least one question is required")
         return batch
+
+    def _cost(
+        self, provider: str, model: str | None, usage: Any, reported: float | None
+    ) -> tuple[float, str]:
+        """Cost of one call and where the number came from.
+
+        A cost reported by the backend wins over the price table: it is what
+        was actually billed.
+        """
+        if reported is not None:
+            return reported, "reported"
+        cost, known = self.prices.cost(provider, model, usage)
+        return cost, "price_table" if known else "unknown"
 
     def _threshold(self, key: str, question: Question, provider: str | None = None) -> float:
         # Most specific first: a calibrated threshold for this question on this
@@ -463,7 +488,12 @@ class Engine:
             ) as span:
                 started = time.perf_counter()
                 try:
-                    result = provider.answer(state, asked)
+                    if self.escalation_context and provider.accepts_context and resolved:
+                        settled = {k: (batch[k], d) for k, d in resolved.items()}
+                        span.set(context_from=list(settled))
+                        result = provider.answer(state, asked, context=settled)  # type: ignore[call-arg]
+                    else:
+                        result = provider.answer(state, asked)
                 except Exception as exc:
                     elapsed = (time.perf_counter() - started) * 1000.0
                     span.fail(exc)
@@ -482,12 +512,15 @@ class Engine:
                         raise
                     continue
                 elapsed = (time.perf_counter() - started) * 1000.0
-                cost, known = self.prices.cost(provider.price_key, result.model, result.usage)
+                cost, source = self._cost(
+                    provider.price_key, result.model, result.usage, result.cost_usd
+                )
                 span.set(
                     model=result.model,
                     usage=result.usage.model_dump(),
                     cost_usd=cost,
-                    cost_known=known,
+                    cost_known=source != "unknown",
+                    cost_source=source,
                     **result.meta,
                 )
                 if self.tracer.capture_content and result.content:

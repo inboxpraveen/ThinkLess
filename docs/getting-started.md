@@ -9,7 +9,7 @@ no model libraries; decision models and LLM backends are extras.
 pip install thinkless                          # core: rules, tracing, the HTTP System One provider
 pip install "thinkless[local]"                 # GLiNER, Laya and a local LLM (needs torch)
 pip install "thinkless[anthropic]"             # Claude as the reasoning plane
-pip install "thinkless[openai]"                # OpenAI, Ollama, vLLM and other compatible servers
+pip install "thinkless[openai]"                # OpenRouter, OpenAI, Ollama, vLLM and compatible servers
 pip install "thinkless[all]"                   # everything, including OpenTelemetry and benchmarks
 ```
 
@@ -119,8 +119,9 @@ thinkless demo --message "Where is order 2290?" --customer C-1007
 thinkless bench support                                      # every ticket, every mode
 ```
 
-Add `--llm anthropic` (or `--llm ollama:qwen3:8b`, `--llm openai:<model>`) to
-use a different reasoning model.
+Add `--llm openrouter:qwen/qwen3.7-flash --reasoning off` (with
+`OPENROUTER_API_KEY` in `.env`), or `--llm anthropic`, `--llm ollama:qwen3:8b`
+or `--llm openai:<model>`, to use a different reasoning model.
 
 ## Next
 

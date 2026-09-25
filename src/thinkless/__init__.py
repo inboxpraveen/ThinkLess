@@ -30,6 +30,7 @@ from .engine import Engine, Run
 from .errors import ConfigurationError, ThinkLessError
 from .logs import configure_logging
 from .questions import Choice, Extract, Kind, Question, Score, YesNo
+from .settings import load_env
 from .tracing import ConsoleSink, JSONLSink, MemorySink, Tracer, TraceSummary, summarize, tool
 
 __all__ = [
@@ -56,6 +57,7 @@ __all__ = [
     "YesNo",
     "__version__",
     "configure_logging",
+    "load_env",
     "summarize",
     "tool",
 ]

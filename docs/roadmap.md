@@ -10,16 +10,15 @@ you, or if something that is not here should be.
 - **Shadow mode.** Run a second provider on a sample of live decisions in the
   background and record agreement, so a team can measure a small model
   against its current LLM on real traffic before switching.
-- **Hugging Face classifier provider.** Wrap any `text-classification`
-  pipeline as a provider, mapping labels to choice options or yes/no, so a
-  fine-tuned classifier (prompt injection, toxicity, a house intent model)
-  drops into the cascade without custom code.
 - **Calibration from traces.** Export the decisions of one question from a
   trace directory as a labeling file, and feed labeled traces back into
   `thinkless calibrate`.
-- **Frontier baselines in the published benchmarks.** The current results use
-  a local 1.7B reasoning model so anyone can reproduce them offline. Runs with
-  hosted models, with their exact configuration, will be added next to them.
+- **Calibrated LLM confidence.** Several hosted models expose token log
+  probabilities; an `LLMDecider` that reads them would give LLM answers a real
+  confidence, so they could be thresholded like every other provider.
+- **Jev and the direct Anthropic SDK path in the published benchmarks.** Both
+  are unit tested (Jev against TypeSafe's own SDK models) but have not been
+  benchmarked live.
 
 ## Later
 

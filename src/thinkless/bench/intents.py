@@ -108,7 +108,9 @@ def load_dataset_rows(name: str) -> list[dict[str, str]]:
     return [{"text": row["text"], "label": _humanize(names[row[spec["label"]]])} for row in dataset]
 
 
-def build_provider(name: str, *, llm_spec: str = "local", device: str = "auto") -> DecisionProvider:
+def build_provider(
+    name: str, *, llm_spec: str = "local", device: str = "auto", reasoning: str | None = None
+) -> DecisionProvider:
     """A provider by short name: ``gliner``, ``laya``, ``llm`` or ``jev``."""
     if name == "gliner":
         from ..providers.gliner import GLiNER
@@ -122,7 +124,7 @@ def build_provider(name: str, *, llm_spec: str = "local", device: str = "auto") 
         from ..llm import from_spec
         from ..providers import LLMDecider
 
-        return LLMDecider(from_spec(llm_spec, device=device))
+        return LLMDecider(from_spec(llm_spec, device=device, reasoning=reasoning))
     if name == "jev":
         from ..providers import SystemOne
 
@@ -139,6 +141,7 @@ class ChoiceEvaluation(BaseModel):
     correct: list[bool]
     latencies_ms: list[float]
     input_tokens: list[int]
+    costs_usd: list[float] = Field(default_factory=list)
 
     @property
     def accuracy(self) -> float:
@@ -169,6 +172,7 @@ def evaluate_question(
     correct: list[bool] = []
     latencies: list[float] = []
     tokens: list[int] = []
+    costs: list[float] = []
     for index, row in enumerate(rows):
         truth = row[label_field]
         if isinstance(question, YesNo):
@@ -184,6 +188,7 @@ def evaluate_question(
         confidences.append(decision.confidence)
         correct.append(decision.value == truth)
         tokens.append(decision.usage.input_tokens)
+        costs.append(decision.cost_usd)
         if progress is not None:
             progress(index + 1, len(rows))
     return ChoiceEvaluation(
@@ -193,6 +198,7 @@ def evaluate_question(
         correct=correct,
         latencies_ms=latencies,
         input_tokens=tokens,
+        costs_usd=costs,
     )
 
 
@@ -214,6 +220,7 @@ class ProviderEval(BaseModel):
     latency_p50_ms: float
     latency_p95_ms: float
     mean_input_tokens: float
+    cost_per_1k: float = 0.0
     abstained: int
     sweep: list[ThresholdPoint] = Field(default_factory=list)
     recommended: ThresholdPoint | None = None
@@ -226,6 +233,7 @@ class CascadePoint(BaseModel):
     accuracy: float
     llm_share: float
     mean_latency_ms: float
+    cost_per_1k: float = 0.0
     answered_by: dict[str, float]
 
 
@@ -245,6 +253,10 @@ class IntentsBenchmark(BaseModel):
     cascade: list[CascadePoint]
 
 
+def _cost_at(evaluation: ChoiceEvaluation, index: int) -> float:
+    return evaluation.costs_usd[index] if index < len(evaluation.costs_usd) else 0.0
+
+
 def _cascade(
     evaluations: dict[str, ChoiceEvaluation], order: Sequence[str], fallback: str | None
 ) -> list[CascadePoint]:
@@ -255,11 +267,13 @@ def _cascade(
         hits = 0
         llm_calls = 0
         latency = 0.0
+        cost = 0.0
         answered: dict[str, int] = dict.fromkeys([*small, fallback or "unresolved"], 0)
         for i in range(n):
             chosen = None
             for name in small:
                 latency += evaluations[name].latencies_ms[i]
+                cost += _cost_at(evaluations[name], i)
                 confidence = evaluations[name].confidences[i]
                 if confidence is not None and confidence >= threshold:
                     chosen = name
@@ -268,6 +282,7 @@ def _cascade(
                 chosen = fallback
                 llm_calls += 1
                 latency += evaluations[fallback].latencies_ms[i]
+                cost += _cost_at(evaluations[fallback], i)
             if chosen is None:
                 answered["unresolved"] += 1
                 continue
@@ -279,6 +294,7 @@ def _cascade(
                 accuracy=round(hits / n, 4),
                 llm_share=round(llm_calls / n, 4),
                 mean_latency_ms=round(latency / n, 2),
+                cost_per_1k=round(cost / n * 1000, 5),
                 answered_by={k: round(v / n, 4) for k, v in answered.items()},
             )
         )
@@ -300,6 +316,7 @@ def run_intents_benchmark(
     providers: Sequence[str] = ("gliner", "laya", "llm"),
     llm_spec: str = "local",
     device: str = "auto",
+    reasoning: str | None = None,
     limit: int = 500,
     seed: int = 13,
     target_accuracy: float = 0.95,
@@ -322,7 +339,7 @@ def run_intents_benchmark(
     evaluations: dict[str, ChoiceEvaluation] = {}
     reports: dict[str, ProviderEval] = {}
     for name in providers:
-        provider = build_provider(name, llm_spec=llm_spec, device=device)
+        provider = build_provider(name, llm_spec=llm_spec, device=device, reasoning=reasoning)
         started = time.perf_counter()
 
         def tick(done: int, total: int, name: str = name, started: float = started) -> None:
@@ -343,6 +360,7 @@ def run_intents_benchmark(
             latency_p50_ms=round(evaluation.latency_p50_ms, 2),
             latency_p95_ms=round(percentile(evaluation.latencies_ms, 95), 2),
             mean_input_tokens=round(sum(evaluation.input_tokens) / len(sample), 1),
+            cost_per_1k=round(sum(evaluation.costs_usd) / len(sample) * 1000, 5),
             abstained=sum(p is None for p in evaluation.predictions),
             sweep=sweep,
             recommended=recommend_threshold(sweep, target_accuracy) if sweep else None,
@@ -358,7 +376,12 @@ def run_intents_benchmark(
         examples=len(sample),
         labels=len(labels),
         seed=seed,
-        llm=_resolved_llm(llm_spec) if "llm" in providers else "not used",
+        llm=(
+            _resolved_llm(llm_spec)
+            + ("" if reasoning in (None, "default") else f" (reasoning {reasoning})")
+        )
+        if "llm" in providers
+        else "not used",
         target_accuracy=target_accuracy,
         environment=environment_info(),
         providers=reports,

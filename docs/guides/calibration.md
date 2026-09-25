@@ -107,8 +107,10 @@ would have produced:
 - Laya's answers to "is this a prompt injection?" often sat close to a coin
   flip on ordinary messages. Only from a threshold of 0.75 were all of its
   accepted answers correct, and one ordinary benchmark ticket scored
-  `P(yes) = 0.84`. A dedicated injection classifier is the better tool for
-  production; see the [production guide](production.md).
+  `P(yes) = 0.84`. A purpose-built prompt injection classifier did not fix
+  this: it made confident mistakes on ordinary customer messages (see the
+  [production guide](production.md)). The question stays with rules, Laya at
+  a calibrated threshold, and the LLM for everything Laya is unsure about.
 - The same intent question needs a different threshold on each model.
 
 Forty-eight rows is enough to find problems like these and not enough to

@@ -16,6 +16,7 @@ if TYPE_CHECKING:
     from .anthropic import AnthropicLLM
     from .local import TransformersLLM
     from .openai_compat import OpenAICompatibleLLM
+    from .openrouter import OpenRouterLLM
 
 __all__ = [
     "LLM",
@@ -23,6 +24,7 @@ __all__ = [
     "Completion",
     "Message",
     "OpenAICompatibleLLM",
+    "OpenRouterLLM",
     "ScriptedLLM",
     "TransformersLLM",
     "as_messages",
@@ -32,6 +34,7 @@ __all__ = [
 _LAZY = {
     "AnthropicLLM": ".anthropic",
     "OpenAICompatibleLLM": ".openai_compat",
+    "OpenRouterLLM": ".openrouter",
     "TransformersLLM": ".local",
 }
 

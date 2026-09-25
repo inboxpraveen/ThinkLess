@@ -23,7 +23,11 @@ def as_messages(prompt: str | Sequence[Message]) -> list[Message]:
 
 
 class Completion(BaseModel):
-    """The result of one generation."""
+    """The result of one generation.
+
+    ``cost_usd`` is the cost the backend reported for this call (OpenRouter
+    does). When it is ``None`` the engine estimates cost from the price table.
+    """
 
     model_config = ConfigDict(extra="forbid")
 
@@ -32,6 +36,7 @@ class Completion(BaseModel):
     usage: Usage = Field(default_factory=Usage)
     latency_ms: float = 0.0
     stop_reason: str | None = None
+    cost_usd: float | None = None
     raw: dict[str, Any] | None = None
 
 

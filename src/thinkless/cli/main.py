@@ -19,7 +19,7 @@ from rich.table import Table
 
 from .._version import __version__
 from ..logs import configure_logging
-from ..settings import Settings
+from ..settings import Settings, load_env
 
 app = typer.Typer(
     name="thinkless",
@@ -40,11 +40,19 @@ LlmOption = Annotated[
     str,
     typer.Option(
         "--llm",
-        help="Reasoning model as backend[:model]: local, local:Qwen/Qwen3-4B, anthropic, "
-        "anthropic:claude-haiku-4-5, openai:<model>, ollama:qwen3:8b, vllm:<model>.",
+        help="Reasoning model as backend[:model]: local, local:Qwen/Qwen3-4B, "
+        "openrouter:qwen/qwen3.7-flash, anthropic, anthropic:claude-haiku-4-5, openai:<model>, "
+        "ollama:qwen3:8b, vllm:<model>.",
     ),
 ]
 DeviceOption = Annotated[str, typer.Option(help="Device for local models: auto, cpu, cuda or mps.")]
+ReasoningOption = Annotated[
+    str,
+    typer.Option(
+        help="Reasoning for the LLM: default, off, minimal, low, medium or high. "
+        "Reasoning tokens are billed and count against output limits."
+    ),
+]
 VerboseOption = Annotated[bool, typer.Option("--verbose", "-v", help="Show info logs.")]
 
 
@@ -64,6 +72,7 @@ def main(
     ] = False,
 ) -> None:
     """ThinkLess command line."""
+    load_env()
 
 
 def _setup(verbose: bool) -> None:
@@ -128,7 +137,7 @@ def doctor() -> None:
         version = _installed(package)
         table.add_row(label, f"[green]{version}[/]" if version else "[yellow]not installed[/]")
 
-    for key in ("TYPESAFE_API_KEY", "ANTHROPIC_API_KEY", "OPENAI_API_KEY"):
+    for key in ("TYPESAFE_API_KEY", "OPENROUTER_API_KEY", "ANTHROPIC_API_KEY", "OPENAI_API_KEY"):
         table.add_row(key, "[green]set[/]" if os.environ.get(key) else "[dim]not set[/]")
     table.add_row("trace dir", str(settings.trace_dir))
     table.add_row("device", settings.device)
@@ -161,6 +170,7 @@ def demo(
     ] = None,
     llm: LlmOption = "local",
     device: DeviceOption = "auto",
+    reasoning: ReasoningOption = "default",
     threshold: Annotated[float, typer.Option(help="Engine confidence threshold.")] = 0.8,
     view: Annotated[bool, typer.Option(help="Open the HTML trace viewer afterwards.")] = False,
     verbose: VerboseOption = False,
@@ -193,7 +203,7 @@ def demo(
 
     settings = Settings()
     err.print(f"[dim]Loading models for {', '.join(modes)} ({llm})...[/]")
-    stack = SupportStack(from_spec(llm, device=device), device=device)
+    stack = SupportStack(from_spec(llm, device=device, reasoning=reasoning), device=device)
     stack.warmup(tuple(modes))
     trace_dir = settings.trace_dir / "demo"
     written: list[str] = []
@@ -246,6 +256,7 @@ def bench_support(
     ] = None,
     llm: LlmOption = "local",
     device: DeviceOption = "auto",
+    reasoning: ReasoningOption = "default",
     limit: Annotated[int | None, typer.Option(help="Only the first N tickets.")] = None,
     out: Annotated[
         Path | None,
@@ -278,7 +289,9 @@ def bench_support(
     scenarios = load_scenarios()[:limit] if limit else load_scenarios()
     output = out or Settings().trace_dir.parent / "bench" / time.strftime("support-%Y%m%dT%H%M%S")
     stack = SupportStack(
-        from_spec(llm, device=device), device=device, jev=SystemOne.jev() if jev else None
+        from_spec(llm, device=device, reasoning=reasoning),
+        device=device,
+        jev=SystemOne.jev() if jev else None,
     )
     err.print(f"[dim]Loading models for {', '.join(modes)} ({llm})...[/]")
     stack.warmup(tuple(modes))
@@ -301,7 +314,8 @@ def bench_support(
 
     bench = run_support_benchmark(
         {m: factory(m) for m in modes},
-        reasoning_model=stack.llm.name,
+        reasoning_model=stack.llm.name
+        + ("" if reasoning == "default" else f" (reasoning {reasoning})"),
         scenarios=scenarios,
         output_dir=output,
         reference_price=reference,
@@ -324,6 +338,7 @@ def bench_intents(
     ] = None,
     llm: LlmOption = "local",
     device: DeviceOption = "auto",
+    reasoning: ReasoningOption = "default",
     limit: Annotated[int, typer.Option(help="Examples to sample from the test split.")] = 500,
     seed: Annotated[int, typer.Option(help="Sampling seed.")] = 13,
     target: Annotated[
@@ -346,6 +361,7 @@ def bench_intents(
         providers=providers,
         llm_spec=llm,
         device=device,
+        reasoning=reasoning,
         limit=limit,
         seed=seed,
         target_accuracy=target,
@@ -384,6 +400,7 @@ def calibrate(
     target: Annotated[float, typer.Option(help="Accuracy the accepted answers must reach.")] = 0.95,
     llm: LlmOption = "local",
     device: DeviceOption = "auto",
+    reasoning: ReasoningOption = "default",
     verbose: VerboseOption = False,
 ) -> None:
     """Find the threshold that meets a target accuracy on your own labeled data.
@@ -429,7 +446,7 @@ def calibrate(
         raise typer.BadParameter("calibration supports choice and yes/no questions")
 
     evaluation = evaluate_question(
-        build_provider(provider, llm_spec=llm, device=device),
+        build_provider(provider, llm_spec=llm, device=device, reasoning=reasoning),
         asked,
         rows,
         text_field=text_field,

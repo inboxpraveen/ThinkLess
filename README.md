@@ -20,12 +20,13 @@ handled it, its confidence, latency, tokens and cost.
 It is model-neutral. Rules, [GLiNER 2.5](https://github.com/fastino-ai/GLiNER2),
 [Laya](https://github.com/NandhaKishorM/laya), TypeSafe's
 [Jev](https://typesafe.ai) (and any server speaking its System One API, such as
-Kev and OpenJev), and any LLM (local through Transformers, Ollama or vLLM, or
-hosted through Anthropic or OpenAI) plug into the same cascade. The whole stack
-runs offline on a laptop GPU, with no API key.
+Kev and OpenJev), any Hugging Face classifier, and any LLM (local through
+Transformers, Ollama or vLLM, or hosted through OpenRouter, Anthropic or
+OpenAI) plug into the same cascade. The whole stack also runs offline on a
+laptop GPU, with no API key.
 
 <p align="center">
-  <img src="docs/assets/trace-viewer.png" alt="The ThinkLess trace viewer comparing three decision planes on the support benchmark, with one ticket's waterfall: six decisions answered by rules, GLiNER and Laya in 115 ms, then a single LLM call for the reply" width="100%">
+  <img src="docs/assets/trace-viewer.png" alt="The ThinkLess trace viewer comparing three decision planes on the support benchmark, with one ticket's waterfall: six decisions answered by rules, GLiNER and Laya in 126 ms, then a single LLM call for the reply" width="100%">
 </p>
 
 ## Why
@@ -49,47 +50,37 @@ if intent.is_("refund_duplicate_charge"):       # only true when the answer is c
 
 ## Results
 
-Same agent, same 53 labeled support tickets, three decision planes. Local run
-on an RTX 5060 laptop GPU with Qwen3-1.7B as the LLM
-([full report](benchmarks/results/support-local/report.md),
-[interactive traces](benchmarks/results/support-local/viewer.html)):
+Same agent, same 53 labeled support tickets, two decision planes: `llm` sends
+every decision to the LLM, `hybrid` asks rules, GLiNER and Laya first. Hosted
+models ran through OpenRouter, and the dollar figures are what OpenRouter
+billed ([full results](docs/benchmarks.md)):
 
-| | LLM decides everything | Hybrid (ThinkLess) | Small models only |
-|---|---:|---:|---:|
-| Task success (correct action) | 86.8% | **90.6%** | 73.6% |
-| Order id extraction | 94.1% | **100%** | 100% |
-| LLM calls for decisions, per ticket | 1.04 | **0.68** | 0 |
-| Decision time per ticket | 1.71 s | **416 ms** | 88 ms |
-| End-to-end latency p50 / p95 | 3.07 s / 4.24 s | **1.87 s / 2.57 s** | 1.45 s / 2.09 s |
-| LLM tokens spent on decisions | 524 | **155** | 0 |
-| Estimated cost per 1k tickets at Claude Sonnet 5 prices | $2.16 | **$1.16** | $0.77 |
-| Decisions by plane | rule 33%, LLM 67% | rule 39%, model 48%, LLM 12% | rule 40%, model 60% |
+| Fallback LLM | Success, `llm` | Success, `hybrid` | Billed per 1k tickets, `llm` | Billed per 1k tickets, `hybrid` | Decision time |
+|---|---:|---:|---:|---:|---:|
+| Qwen 3.7 Flash | 92.5% | **98.1%** | $0.034 | **$0.019** | 1.27 s to **0.58 s** |
+| Gemini 2.5 Flash Lite | 98.1% | **98.1%** | $0.104 | **$0.059** | 1.17 s to **0.76 s** |
+| GPT-5.6 Luna | 98.1% | **100%** | $0.235 | **$0.141** | 2.50 s to **1.18 s** |
+| Claude Haiku 4.5 | 98.1% | **98.1%** | $1.338 | **$0.788** | 2.21 s to **1.34 s** |
+| Qwen3-1.7B, local | 86.8% | **94.3%** | free | free | 1.84 s to **0.43 s** |
 
-What the numbers do and do not say:
-
-- **Hybrid matched or beat the LLM-only baseline while taking the LLM out of
-  88 percent of decisions.** With 53 tickets, a two-ticket gap is not a claim
-  of higher accuracy; equal accuracy at a quarter of the decision latency is.
-- **Every hybrid failure came from the fallback LLM**, a 1.7B model chosen so
-  anyone can reproduce the run offline. None came from the small models.
-  Frontier-model runs are the next addition. The hosted backends (Anthropic,
-  OpenAI-compatible, Jev) are unit-tested against mocked clients but have not
-  yet been run against the live APIs for these results.
-- **Thresholds were calibrated on a separate labeled set**, not on these
-  tickets, with accuracy targets fixed in advance. See
-  [calibration](docs/guides/calibration.md).
-- **The baseline is fair.** In LLM mode all six triage questions share one
-  structured prompt per ticket, the strongest form of that design, and
-  deterministic checks (authentication, duplicate detection, refund limits)
-  run as code in every mode.
-- Cost is an estimate: Qwen token counts priced at Anthropic's published rates.
-  Compare the ratio between modes.
-
-On public data, [Banking77](benchmarks/results/intents-banking77/report.md)
-(500 examples, 77 intents) shows why calibration matters: GLiNER 2.5 reached
-71.8 percent at 34 ms, while the same 1.7B LLM reached 51.4 percent at 405 ms.
-Escalating to a weaker model cannot help a cascade, and the benchmark shows
-exactly where that line is. More in [benchmarks](docs/benchmarks.md).
+- **Hybrid matched or beat the LLM-only design on every model, at 40 to 44
+  percent lower billed cost** and 35 to 55 percent less time spent on
+  decisions. 87 percent of hybrid decisions never reached the LLM.
+- **Small models are the most reliable extractors.** Rules and GLiNER found
+  every order number on every run. The larger hosted LLMs did too; Qwen 3.7
+  Flash and the local 1.7B model missed ones written without the word
+  "order".
+- **On Banking77 (77 intents, 500 examples) the cascade matched or beat its
+  LLM at a quarter of the cost.** GLiNER alone 71.8 percent; Qwen 3.7 Flash
+  alone 73.8 percent, cascade 74.8 percent; Claude Haiku 4.5 alone 76.2
+  percent, cascade 76.2 percent. Each time a quarter of the calls reached the
+  LLM.
+- **Nothing was tuned on the test tickets.** Thresholds and every fix were
+  validated on a separate calibration set first. The baseline is the
+  strongest form of the LLM design: all six triage questions in one prompt.
+- The support set is 53 synthetic tickets: evidence of the mechanism and its
+  failure modes, not a leaderboard. The [benchmarks page](docs/benchmarks.md)
+  lists the weak areas found and what was done about each.
 
 ## Quick start
 
@@ -132,6 +123,15 @@ for name, d in decisions.items():
 print(run.summary().decisions_by_plane)      # which plane answered what
 ```
 
+Prefer a hosted model? Put `OPENROUTER_API_KEY=...` in `.env` and swap one
+line; OpenRouter reaches Qwen, Gemini, GPT and Claude models with one key:
+
+```python
+from thinkless.llm import OpenRouterLLM
+
+llm = OpenRouterLLM("qwen/qwen3.7-flash", reasoning={"enabled": False})
+```
+
 Then open the trace:
 
 ```bash
@@ -154,7 +154,7 @@ Spanish and German tickets).
 thinkless demo --ticket T-016                          # one ticket, printed as a trace tree
 thinkless demo --ticket T-051 --mode hybrid --mode llm # compare decision planes
 thinkless bench support                                # every ticket in every mode
-thinkless bench support --llm anthropic:claude-haiku-4-5
+thinkless bench support --llm openrouter:qwen/qwen3.7-flash --reasoning off
 thinkless bench intents --dataset banking77
 ```
 
@@ -197,12 +197,14 @@ without losing structure, timings or confidences.
 | `GLiNER` (GLiNER 2.5) | choice, extract | local, 16 to 38 ms on a laptop GPU, about 85 ms on CPU |
 | `Laya` | choice, score, yes/no | local, about 30 ms per batch on a laptop GPU |
 | `SystemOne` (Jev, Kev, OpenJev) | choice, score, yes/no | hosted or self-hosted HTTP |
+| `HFClassifier` | choice, yes/no, for the questions it was trained on | any Hugging Face text classifier, local |
 | `LLMDecider` | every kind | any LLM backend below |
 
 | LLM backends | Covers |
 |---|---|
 | `TransformersLLM` | any Hugging Face chat model, in-process |
-| `OpenAICompatibleLLM` | OpenAI, Ollama, vLLM, LM Studio, llama.cpp, OpenRouter, Groq |
+| `OpenRouterLLM` | hundreds of hosted models with one key, billed cost recorded per call |
+| `OpenAICompatibleLLM` | OpenAI, Ollama, vLLM, LM Studio, llama.cpp, Groq |
 | `AnthropicLLM` | Claude, with server-side refusal fallbacks |
 
 Writing your own provider is one class. [Providers](docs/guides/providers.md),
@@ -229,9 +231,8 @@ Writing your own provider is one class. [Providers](docs/guides/providers.md),
 
 ThinkLess is at 0.1: the core API (questions, the engine, decisions and
 traces) is meant to stay stable, and providers and benchmarks will grow.
-Next up are shadow mode, a generic Hugging Face classifier provider,
-calibration from traces, and frontier-model baselines. See the
-[roadmap](docs/roadmap.md).
+Next up are shadow mode, calibration from traces, calibrated LLM confidence
+from log probabilities, and live Jev runs. See the [roadmap](docs/roadmap.md).
 
 ## Contributing
 

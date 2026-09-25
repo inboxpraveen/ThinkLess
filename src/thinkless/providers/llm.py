@@ -13,12 +13,18 @@ import re
 from collections.abc import Mapping
 from typing import Any, ClassVar
 
-from ..decision import Answer, Plane
+from ..decision import Answer, Decision, Plane
 from ..llm.base import LLM
+from ..logs import get_logger
 from ..questions import Choice, Extract, Kind, Question, Score, YesNo
 from .base import DecisionProvider, ProviderResult, State, render_state
 
 __all__ = ["LLMDecider", "build_prompt", "parse_reply"]
+
+logger = get_logger("providers.llm")
+
+# Stop reasons that mean the reply hit the token limit, across backends.
+TRUNCATED = frozenset({"length", "max_tokens"})
 
 SYSTEM_PROMPT = (
     "You answer typed questions about an input. Follow the allowed answers exactly. "
@@ -65,18 +71,46 @@ def _describe(key: str, question: Question, number: int) -> tuple[str, str]:
     return "\n".join(lines), f'"{key}": {placeholder}'
 
 
-def build_prompt(state: State, questions: Mapping[str, Question]) -> str:
-    """The user prompt for a batch of questions."""
+def _settled_value(question: Question, decision: Decision) -> str:
+    if isinstance(question, YesNo):
+        return "yes" if decision.value else "no"
+    if isinstance(question, Score):
+        return str(decision.level)
+    if isinstance(question, Extract):
+        return json.dumps(decision.value, ensure_ascii=False)
+    return str(decision.value)
+
+
+def build_prompt(
+    state: State,
+    questions: Mapping[str, Question],
+    context: Mapping[str, tuple[Question, Decision]] | None = None,
+) -> str:
+    """The user prompt for a batch of questions.
+
+    ``context`` lists decisions already settled for the same input by other
+    providers. They are shown as established facts so the model reads each
+    open question with the same information it would have had in one batch.
+    """
     blocks = []
     shapes = []
     for number, (key, question) in enumerate(questions.items(), start=1):
         block, shape = _describe(key, question, number)
         blocks.append(block)
         shapes.append(shape)
+    known = ""
+    if context:
+        lines = [
+            f'- "{key}" ({question.instructions}): {_settled_value(question, decision)}'
+            for key, (question, decision) in context.items()
+        ]
+        known = "Already established by other checks:\n" + "\n".join(lines) + "\n\n"
     return (
         "Input:\n<<<\n"
         + render_state(state)
-        + "\n>>>\n\nQuestions:\n"
+        + "\n>>>\n\n"
+        + known
+        + "Questions:\n"
         + "\n".join(blocks)
         + "\n\nReply with JSON in this shape:\n{"
         + ", ".join(shapes)
@@ -187,36 +221,85 @@ class LLMDecider(DecisionProvider):
     Args:
         llm: The model to prompt.
         name: Provider name. Defaults to ``llm``.
-        max_tokens: Reply budget per batch.
+        max_tokens: Reply budget per batch, plus 48 tokens per question.
+        retry_on_truncation: When a reply is cut off at the token limit and
+            answers are missing, retry once with three times the budget.
+            Reasoning models are the usual cause: hidden reasoning tokens
+            count against the limit. The retry is recorded in the trace.
     """
 
     plane: ClassVar[Plane] = Plane.LLM
     kinds: ClassVar[frozenset[Kind]] = frozenset(Kind)
     calibrated: ClassVar[bool] = False
+    accepts_context: ClassVar[bool] = True
 
-    def __init__(self, llm: LLM, *, name: str = "llm", max_tokens: int = 256) -> None:
+    def __init__(
+        self,
+        llm: LLM,
+        *,
+        name: str = "llm",
+        max_tokens: int = 256,
+        retry_on_truncation: bool = True,
+    ) -> None:
         self.llm = llm
         self.name = name
         self.price_key = llm.provider
         self._max_tokens = max_tokens
+        self._retry_on_truncation = retry_on_truncation
 
     def warmup(self) -> None:
         self.llm.warmup()
 
-    def answer(self, state: State, questions: Mapping[str, Question]) -> ProviderResult:
-        prompt = build_prompt(state, questions)
+    def answer(
+        self,
+        state: State,
+        questions: Mapping[str, Question],
+        *,
+        context: Mapping[str, tuple[Question, Decision]] | None = None,
+    ) -> ProviderResult:
+        prompt = build_prompt(state, questions, context)
+        budget = self._max_tokens + 48 * len(questions)
+        messages = [{"role": "user", "content": prompt}]
         completion = self.llm.complete(
-            [{"role": "user", "content": prompt}],
-            system=SYSTEM_PROMPT,
-            max_tokens=self._max_tokens + 48 * len(questions),
-            json_mode=True,
+            messages, system=SYSTEM_PROMPT, max_tokens=budget, json_mode=True
         )
         answers = parse_reply(completion.text, questions)
         invalid = [key for key, answer in answers.items() if answer is None]
+        usage = completion.usage
+        cost = completion.cost_usd
+        truncated = completion.stop_reason in TRUNCATED and bool(invalid)
+        retried = False
+        if truncated:
+            logger.warning(
+                "%s stopped at the %d token limit with %d of %d answers missing; if the model "
+                "reasons, lower its reasoning effort (for example --reasoning off)",
+                completion.model,
+                budget,
+                len(invalid),
+                len(questions),
+            )
+            if self._retry_on_truncation:
+                retried = True
+                completion = self.llm.complete(
+                    messages, system=SYSTEM_PROMPT, max_tokens=budget * 3, json_mode=True
+                )
+                answers = parse_reply(completion.text, questions)
+                invalid = [key for key, answer in answers.items() if answer is None]
+                usage = usage + completion.usage
+                if cost is not None and completion.cost_usd is not None:
+                    cost += completion.cost_usd
+                else:
+                    cost = None
         return ProviderResult(
             answers=answers,
             model=completion.model,
-            usage=completion.usage,
-            meta={"invalid": invalid, "stop_reason": completion.stop_reason},
+            usage=usage,
+            cost_usd=cost,
+            meta={
+                "invalid": invalid,
+                "stop_reason": completion.stop_reason,
+                "truncated": truncated,
+                "retried": retried,
+            },
             content={"system": SYSTEM_PROMPT, "prompt": prompt, "completion": completion.text},
         )

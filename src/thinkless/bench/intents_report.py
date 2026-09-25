@@ -55,14 +55,14 @@ def intents_markdown(result: IntentsBenchmark) -> str:
         "",
         "## Providers",
         "",
-        f"| Provider | Accuracy | ECE | p50 latency | p95 latency | Threshold for {result.target_accuracy:.0%} accuracy |",
-        "|---|---:|---:|---:|---:|---|",
+        f"| Provider | Accuracy | ECE | p50 latency | p95 latency | Cost per 1k | Threshold for {result.target_accuracy:.0%} accuracy |",
+        "|---|---:|---:|---:|---:|---:|---|",
     ]
     for name, report in result.providers.items():
         rec = report.recommended
         lines.append(
             f"| `{name}` | {_pct(report.accuracy)} | {'n/a' if report.ece is None else f'{report.ece:.3f}'} | "
-            f"{report.latency_p50_ms:.1f} ms | {report.latency_p95_ms:.1f} ms | "
+            f"{report.latency_p50_ms:.1f} ms | {report.latency_p95_ms:.1f} ms | ${report.cost_per_1k:.4f} | "
             + (f"{rec.threshold:.2f}, answers {_pct(rec.coverage)} alone" if rec else "not reached")
             + " |"
         )
@@ -74,13 +74,14 @@ def intents_markdown(result: IntentsBenchmark) -> str:
             "Small models are tried in order; an answer below the threshold goes to the next one, and "
             "finally to the LLM. Accuracy is for the whole cascade.",
             "",
-            "| Threshold | Accuracy | Calls reaching the LLM | Mean latency | Answered by |",
-            "|---:|---:|---:|---:|---|",
+            "| Threshold | Accuracy | Calls reaching the LLM | Mean latency | Cost per 1k | Answered by |",
+            "|---:|---:|---:|---:|---:|---|",
         ]
         for point in result.cascade:
             answered = ", ".join(f"{k} {_pct(v)}" for k, v in point.answered_by.items() if v)
             label = "never accept" if point.threshold > 1 else f"{point.threshold:.2f}"
             lines.append(
-                f"| {label} | {_pct(point.accuracy)} | {_pct(point.llm_share)} | {point.mean_latency_ms:.0f} ms | {answered} |"
+                f"| {label} | {_pct(point.accuracy)} | {_pct(point.llm_share)} | {point.mean_latency_ms:.0f} ms | "
+                f"${point.cost_per_1k:.4f} | {answered} |"
             )
     return "\n".join(lines) + "\n"

@@ -38,6 +38,7 @@ pip install -e ".[dev,openai,anthropic,otel]"
 ```bash
 pytest                           # unit tests, no model downloads
 pytest -m local                  # real inference with local models (downloads weights)
+pytest -m network                # live OpenRouter calls, needs OPENROUTER_API_KEY (under a cent)
 ruff check src tests scripts benchmarks examples
 ruff format src tests scripts benchmarks examples
 mypy

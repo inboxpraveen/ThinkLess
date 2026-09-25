@@ -30,8 +30,10 @@ install them manually if you installed `gliner2` on its own.
 **`OSError: [WinError 1314] A required privilege is not held by the client`.**
 The Hugging Face cache uses symbolic links, and on Windows a parallel download
 can hit a race in the symlink check. Run the command again; the partial
-download is reused. Enabling Windows Developer Mode, which allows symlinks
-without administrator rights, avoids it entirely.
+download is reused. Downloading serially avoids the race:
+`huggingface_hub.snapshot_download("<model>", max_workers=1)`. Enabling Windows
+Developer Mode, which allows symlinks without administrator rights, avoids it
+entirely.
 
 **The first run is slow.** Models download on first use: about 0.9 GB for
 Laya, 0.8 GB for GLiNER base and 3.4 GB for Qwen3-1.7B. Later runs load from
@@ -43,6 +45,13 @@ the cache in seconds.
 6.7 GB together. On smaller cards, move the decision models to the CPU
 (`GLiNER(device="cpu")` stays fast), or serve the LLM from another machine
 through an OpenAI-compatible server.
+
+**Everything is suddenly ten times slower on Windows.** Another process is
+probably holding GPU memory. On Windows the driver does not fail when video
+memory runs out; it quietly spills into system memory, and every model slows
+down by an order of magnitude. Laya going from 30 ms to over a second per call
+is the typical sign. Check `nvidia-smi`, and run one GPU workload at a time
+(two benchmark processes each load their own copy of the models).
 
 **Generation is slow.** `TransformersLLM` runs the plain Transformers
 generation loop, about 22 tokens per second for Qwen3-1.7B on a laptop GPU.
@@ -69,6 +78,24 @@ from the question (`providers=(...)`) so it stops adding latency.
 calibration temperatures only for smaller option counts; for choices with more
 than about ten options it warns and falls back. Treat its confidence on those
 questions with care, and calibrate.
+
+## Hosted models
+
+**Empty replies or every LLM decision abstaining.** The model is probably
+reasoning by default and spending the whole token budget before it answers.
+Run with `--reasoning off` (or `low`). `LLMDecider` retries once with a larger
+budget and logs a warning when this happens; the attempt span shows
+`truncated: true`.
+
+**`OpenRouter needs an API key`.** Put `OPENROUTER_API_KEY=...` in `.env` in
+the directory you run the CLI from, or export it.
+
+**OpenRouter's dashboard shows less spend than the traces.** Its key usage
+figure lags by a few minutes. The costs on spans come from each response and
+are immediate.
+
+**A model rejects `response_format`.** The client retries without JSON mode
+and logs a warning once; decisions keep working through the prompt.
 
 ## Traces
 

@@ -36,6 +36,10 @@ ROWS: Sequence[tuple[str, Any]] = (
         lambda m: f"{m.llm_input_tokens:.0f} / {m.llm_output_tokens:.0f}",
     ),
     ("LLM tokens spent on decisions", lambda m: f"{m.decision_llm_tokens:.0f}"),
+    (
+        "Billed cost per 1k tickets",
+        lambda m: f"${m.cost_usd * 1000:.3f}" if m.cost_usd else "n/a (local)",
+    ),
     ("Reference cost per 1k tickets", lambda m: f"${m.reference_cost_per_1k_tickets:.2f}"),
     ("Replies passing the grounding check", lambda m: _pct(m.grounded_rate)),
 )
@@ -78,9 +82,9 @@ def support_markdown(bench: SupportBenchmark) -> str:
         f"- Environment: {bench.environment.get('device', 'cpu')}, Python {bench.environment.get('python')}, "
         f"torch {bench.environment.get('torch', 'n/a')}",
         f"- Tickets: {modes[0].tickets}",
-        "- Cost is an estimate: LLM tokens are counted with the reasoning model's tokenizer and priced "
-        "at the reference model's published rates. Tokenizers differ, so compare modes by ratio rather "
-        "than reading the dollar figure as a quote.",
+        "- Billed cost is what the provider reported for each call (OpenRouter does). Reference cost "
+        "prices the same LLM tokens at the reference model's published rates, so runs on different "
+        "models and local runs can be compared; tokenizers differ, so compare it by ratio.",
         "",
         "| Metric | " + " | ".join(f"`{m.mode}`" for m in modes) + " |",
         "|---|" + "---:|" * len(modes),

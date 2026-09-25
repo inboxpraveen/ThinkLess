@@ -15,11 +15,13 @@ from .systemone import SystemOne, SystemOneError
 
 if TYPE_CHECKING:
     from .gliner import GLiNER
+    from .hf import HFClassifier
     from .laya import Laya
 
 __all__ = [
     "DecisionProvider",
     "GLiNER",
+    "HFClassifier",
     "LLMDecider",
     "Laya",
     "ProviderResult",
@@ -30,7 +32,7 @@ __all__ = [
     "render_state",
 ]
 
-_LAZY = {"GLiNER": ".gliner", "Laya": ".laya"}
+_LAZY = {"GLiNER": ".gliner", "HFClassifier": ".hf", "Laya": ".laya"}
 
 
 def __getattr__(name: str) -> Any:

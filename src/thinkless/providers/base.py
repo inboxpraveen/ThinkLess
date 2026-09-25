@@ -51,6 +51,8 @@ class ProviderResult(BaseModel):
             abstained on that question.
         model: The model that served the call, as reported by the backend.
         usage: Tokens consumed by the call.
+        cost_usd: Cost reported by the backend for this call. When ``None``,
+            the engine estimates it from the price table.
         meta: Structural details recorded on the trace span.
         content: Prompts and raw completions; recorded only when content
             capture is on.
@@ -61,6 +63,7 @@ class ProviderResult(BaseModel):
     answers: dict[str, Answer | None]
     model: str | None = None
     usage: Usage = Field(default_factory=Usage)
+    cost_usd: float | None = None
     meta: dict[str, Any] = Field(default_factory=dict)
     content: dict[str, Any] = Field(default_factory=dict)
 
@@ -74,6 +77,9 @@ class DecisionProvider(ABC):
         kinds: Question kinds the provider can answer.
         calibrated: Whether its probabilities are meaningful enough to
             threshold. Prompted LLMs are not.
+        accepts_context: Whether ``answer`` takes a ``context`` keyword with
+            the decisions already settled in the same batch. The engine only
+            passes it to providers that set this.
         price_key: Provider id used for price lookup.
     """
 
@@ -81,6 +87,7 @@ class DecisionProvider(ABC):
     plane: ClassVar[Plane] = Plane.MODEL
     kinds: ClassVar[frozenset[Kind]] = frozenset()
     calibrated: ClassVar[bool] = True
+    accepts_context: ClassVar[bool] = False
     price_key: str = "local"
 
     def supports(self, question: Question) -> bool:

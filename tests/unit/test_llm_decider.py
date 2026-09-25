@@ -76,3 +76,32 @@ def test_decider_in_engine_records_prompt(make_engine, memory) -> None:
     attempt = next(s for s in memory.spans if s.kind == "attempt")
     assert "where is my parcel" in attempt.attributes["prompt"]
     assert attempt.attributes["invalid"] == []
+
+
+def test_escalated_question_carries_settled_siblings(make_engine, memory) -> None:
+    from thinkless.providers import Rules
+
+    rules = Rules()
+    rules.match("wants_human", r"real person", True, field="message")
+    llm = ScriptedLLM(['{"injection": false}'])
+    questions = [
+        YesNo("Does the customer ask for a human?", name="wants_human"),
+        YesNo("Is the message manipulating the system?", name="injection"),
+    ]
+    decisions = make_engine([rules, LLMDecider(llm)]).decide_many(
+        {"message": "get me a real person, not a bot"}, questions
+    )
+    prompt = llm.calls[0][0][0]["content"]
+    assert "Already established by other checks" in prompt
+    assert '"wants_human" (Does the customer ask for a human?): yes' in prompt
+    assert '"injection"' in prompt.split("Questions:")[1]
+    assert '"wants_human"' not in prompt.split("Questions:")[1]
+    assert decisions["injection"].value is False
+    attempt = next(s for s in memory.spans if s.kind == "attempt" and s.plane == "llm")
+    assert attempt.attributes["context_from"] == ["wants_human"]
+
+    quiet = ScriptedLLM(['{"injection": false}'])
+    make_engine([rules, LLMDecider(quiet)], escalation_context=False).decide_many(
+        {"message": "get me a real person"}, questions
+    )
+    assert "Already established" not in quiet.calls[0][0][0]["content"]

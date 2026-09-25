@@ -6,7 +6,7 @@ import os
 from dataclasses import dataclass, field
 from pathlib import Path
 
-__all__ = ["Settings", "resolve_device"]
+__all__ = ["Settings", "load_env", "resolve_device"]
 
 
 def _env_bool(name: str, default: bool) -> bool:
@@ -37,6 +37,39 @@ class Settings:
         default_factory=lambda: _env_bool("THINKLESS_CAPTURE_CONTENT", True)
     )
     log_level: str = field(default_factory=lambda: os.environ.get("THINKLESS_LOG_LEVEL", "WARNING"))
+
+
+def load_env(path: str | Path = ".env", *, override: bool = False) -> list[str]:
+    """Load ``KEY=value`` lines from a dotenv file into ``os.environ``.
+
+    Blank lines and ``#`` comments are skipped, an ``export`` prefix and
+    matching quotes around values are removed, and empty values are ignored.
+    Variables already set in the environment win unless ``override`` is true.
+    The CLI calls this for ``./.env``; library code calls it explicitly.
+
+    Returns:
+        The names that were set. Values are never logged or returned.
+    """
+    target = Path(path)
+    if not target.is_file():
+        return []
+    loaded = []
+    for raw in target.read_text(encoding="utf-8").splitlines():
+        line = raw.strip()
+        if not line or line.startswith("#") or "=" not in line:
+            continue
+        if line.startswith("export "):
+            line = line[len("export ") :]
+        name, value = line.split("=", 1)
+        name, value = name.strip(), value.strip()
+        if len(value) >= 2 and value[0] == value[-1] and value[0] in ("'", '"'):
+            value = value[1:-1]
+        if not name or not value:
+            continue
+        if override or not os.environ.get(name):
+            os.environ[name] = value
+            loaded.append(name)
+    return loaded
 
 
 def resolve_device(device: str | None = None) -> str:
