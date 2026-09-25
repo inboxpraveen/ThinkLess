@@ -4,6 +4,20 @@ Thank you for considering a contribution. Bug reports, new providers,
 benchmark runs on hardware or models we have not tried, documentation fixes
 and new demo scenarios are all welcome.
 
+## Where to start
+
+- **[Good first issues](https://github.com/inboxpraveen/ThinkLess/labels/good%20first%20issue)**
+  are scoped to a few files and say what "done" means.
+- **[Help wanted](https://github.com/inboxpraveen/ThinkLess/labels/help%20wanted)**
+  issues are larger: new providers, calibrated LLM confidence, more models on
+  the decision benchmark.
+- **Questions** go to [Discussions](https://github.com/inboxpraveen/ThinkLess/discussions/categories/q-a).
+- **Benchmark runs** of a model follow the
+  [submission guide](https://inboxpraveen.github.io/ThinkLess/decision-benchmark/submitting/).
+
+Comment on an issue before starting, so two people do not build the same
+thing.
+
 ## Ground rules
 
 - **Evidence over claims.** A change that affects accuracy, latency or cost
@@ -71,6 +85,12 @@ decisions produce the expected action for every scenario, so a new scenario
 either passes it or reveals a bug. Keep calibration examples
 (`calibration.jsonl`) and benchmark scenarios separate: thresholds must never
 be tuned on the tickets used to report results.
+
+## Pull requests
+
+`main` is protected: changes arrive through pull requests, which need the lint,
+test, benchmark and build checks to pass, and are squash-merged. Release tags
+(`v*`) cannot be moved or deleted once pushed.
 
 ## Commit messages and releases
 

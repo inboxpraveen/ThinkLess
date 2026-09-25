@@ -77,15 +77,23 @@ reports before opening the pull request.
 
 ## 4. Open a pull request
 
-Add the file as `benchmarks/decisions/results/submitted/<name>.json` and, in
-the description, say:
+Add the file as `benchmarks/decisions/results/submitted/<name>.json`, and
+regenerate the leaderboard page in the same pull request:
+
+```bash
+thinkless bench decisions leaderboard benchmarks/decisions/results \
+    --out docs/decision-benchmark/leaderboard.md
+```
+
+In the description, say:
 
 - what the model is, with a link to its model card or documentation;
 - how to reproduce the run (the command line and any code);
 - the hardware, for local models;
 - whether the model saw any of these datasets in training.
 
-CI verifies the file and regenerates the leaderboard. After review the
+CI verifies the file and checks that the leaderboard page matches the
+results. After review the
 result appears marked **submitted**. When the maintainers can rerun it
 (public weights, or API access), they do, and the result is marked
 **verified**.

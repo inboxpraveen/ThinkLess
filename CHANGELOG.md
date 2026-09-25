@@ -6,6 +6,25 @@ All notable changes are recorded here. The format follows
 
 ## Unreleased
 
+## 0.4.1 - 2026-09-25
+
+Project and packaging updates; no change to the library's behavior.
+
+### Changed
+
+- Package metadata: development status Beta, more keywords, and links to
+  Discussions, the decision benchmark leaderboard, release notes and funding.
+- The README links to good first issues and Discussions and shows the docs,
+  leaderboard and OpenSSF Scorecard badges.
+- The submission guide says submitters regenerate the leaderboard page in
+  their pull request; the release guide explains that release tags are
+  permanent.
+
+### Security
+
+- Every GitHub Action in the workflows is pinned to a commit.
+- An OpenSSF Scorecard workflow checks the repository's supply chain weekly.
+
 ## 0.4.0 - 2026-09-25
 
 The decision benchmark.

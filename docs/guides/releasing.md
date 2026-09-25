@@ -141,13 +141,19 @@ section.
 
 | Symptom | Cause | Fix |
 |---|---|---|
-| `Tag v0.2.1 does not match the package version 0.2.0` | the tag and `_version.py` differ | delete the tag (below), fix the version, tag again |
+| `Tag v0.2.1 does not match the package version 0.2.0` | the tag and `_version.py` differ | nothing was published; fix the version and release the next patch version (below) |
 | `invalid-publisher: valid token, but no corresponding publisher` | a field on PyPI does not match the repository, workflow file or environment | correct the publisher on PyPI, then **Re-run failed jobs** |
 | `File already exists` | that version was uploaded before | PyPI never accepts the same version twice, even after deleting it; bump to the next patch version |
 | The publish job never starts | it is waiting for approval, or the tag rule does not match | approve it under **Review deployments**, or check the environment's tag rule |
 | `twine check` fails | the README does not render on PyPI | fix the Markdown; relative links and images must be absolute URLs |
 
-To delete a tag that has not published anything:
+Release tags are permanent: a repository ruleset stops `v*` tags from being
+moved or deleted, and releases are immutable once published, so what a tag
+points to never changes after people have installed it. When a tag goes out
+wrong, leave it and release the next patch version. If a tag must go (it
+points at the wrong commit and nothing was published), a maintainer can
+disable the "release tags are permanent" ruleset under **Settings**, then
+**Rules**, delete the tag, and enable the ruleset again:
 
 ```bash
 git tag -d v0.2.1

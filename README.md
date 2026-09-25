@@ -4,10 +4,13 @@
 
 <p align="center">
   <a href="https://pypi.org/project/thinkless/"><img alt="PyPI" src="https://img.shields.io/pypi/v/thinkless.svg"></a>
+  <a href="https://pypi.org/project/thinkless/"><img alt="Python 3.10 to 3.13" src="https://img.shields.io/pypi/pyversions/thinkless.svg"></a>
   <a href="https://github.com/inboxpraveen/ThinkLess/actions/workflows/ci.yml"><img alt="CI" src="https://github.com/inboxpraveen/ThinkLess/actions/workflows/ci.yml/badge.svg"></a>
+  <a href="https://inboxpraveen.github.io/ThinkLess/"><img alt="Docs" src="https://img.shields.io/badge/docs-inboxpraveen.github.io-blue.svg"></a>
+  <a href="https://inboxpraveen.github.io/ThinkLess/decision-benchmark/leaderboard/"><img alt="Decision benchmark" src="https://img.shields.io/badge/decision%20benchmark-leaderboard-brightgreen.svg"></a>
+  <a href="https://scorecard.dev/viewer/?uri=github.com/inboxpraveen/ThinkLess"><img alt="OpenSSF Scorecard" src="https://api.scorecard.dev/projects/github.com/inboxpraveen/ThinkLess/badge"></a>
+  <a href="https://github.com/inboxpraveen/ThinkLess/discussions"><img alt="Discussions" src="https://img.shields.io/github/discussions/inboxpraveen/ThinkLess.svg"></a>
   <a href="https://github.com/inboxpraveen/ThinkLess/blob/main/LICENSE"><img alt="License: Apache 2.0" src="https://img.shields.io/badge/license-Apache%202.0-blue.svg"></a>
-  <img alt="Python 3.10+" src="https://img.shields.io/badge/python-3.10%2B-blue.svg">
-  <a href="https://inboxpraveen.github.io/ThinkLess/benchmarks/"><img alt="Benchmarks" src="https://img.shields.io/badge/benchmarks-reproducible-brightgreen.svg"></a>
 </p>
 
 ThinkLess is an open-source decision plane for AI agents. The routine
@@ -295,9 +298,11 @@ calibrated LLM confidence from log probabilities. See the [roadmap](https://inbo
 ## Contributing
 
 Issues, providers, benchmark runs on other hardware and models, and new demo
-scenarios are all welcome. Start with [CONTRIBUTING.md](https://github.com/inboxpraveen/ThinkLess/blob/main/CONTRIBUTING.md). The
-bar for changes that affect accuracy, latency or cost is evidence: a before
-and after from `thinkless bench` or `thinkless calibrate`.
+scenarios are all welcome. Start with [CONTRIBUTING.md](https://github.com/inboxpraveen/ThinkLess/blob/main/CONTRIBUTING.md),
+pick a [good first issue](https://github.com/inboxpraveen/ThinkLess/labels/good%20first%20issue),
+or ask in [Discussions](https://github.com/inboxpraveen/ThinkLess/discussions).
+The bar for changes that affect accuracy, latency or cost is evidence: a
+before and after from `thinkless bench` or `thinkless calibrate`.
 
 ## Sponsoring
 
