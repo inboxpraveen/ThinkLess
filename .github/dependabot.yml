@@ -5,6 +5,12 @@ updates:
     schedule:
       interval: weekly
     open-pull-requests-limit: 5
+    ignore:
+      # GLiNER2 requires transformers<5, and every local extra shares that
+      # bound so one environment resolves. Lift this once GLiNER2 supports 5.x
+      # and the local model tests pass on it.
+      - dependency-name: "transformers"
+        versions: [">=5"]
   - package-ecosystem: github-actions
     directory: "/"
     schedule:

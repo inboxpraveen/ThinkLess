@@ -276,15 +276,22 @@ def test_span_tree_is_linked(make_engine, memory) -> None:
 def test_capture_content_off_redacts(make_engine, memory) -> None:
     from thinkless import Tracer
 
+    # Markers use letters outside 0-9a-f so they can never appear by chance
+    # inside random hex trace ids or numeric timestamps.
     engine = make_engine(
-        [FakeProvider("p", {"order": Answer(value={"order_id": "999"}, fields={"order_id": 1.0})})],
+        [
+            FakeProvider(
+                "p", {"order": Answer(value={"order_id": "zqx-order"}, fields={"order_id": 1.0})}
+            )
+        ],
         tracer=Tracer([memory], capture_content=False),
     )
-    with engine.run("ticket", input={"message": "secret"}):
-        engine.extract("my order 999", {"order_id": "order"}, name="order")
+    with engine.run("ticket", input={"message": "wyz-private-note"}):
+        engine.extract("my order zqx-order", {"order_id": "order"}, name="order")
     text = str([s.to_dict() for s in memory.spans])
-    assert "999" not in text
-    assert "secret" not in text
+    assert "zqx-order" not in text
+    assert "wyz-private-note" not in text
+    assert "[redacted]" in text
 
 
 def test_duplicate_provider_names_rejected(make_engine) -> None:
