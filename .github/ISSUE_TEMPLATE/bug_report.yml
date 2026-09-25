@@ -1,0 +1,36 @@
+name: Bug report
+description: Something does not work the way the docs say it should.
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: Thanks for taking the time to report this. A trace file makes most issues much faster to fix.
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened
+      description: What you did, what you expected, and what happened instead.
+    validations:
+      required: true
+  - type: textarea
+    id: repro
+    attributes:
+      label: How to reproduce
+      description: The smallest code or command that shows the problem.
+      render: python
+    validations:
+      required: true
+  - type: textarea
+    id: doctor
+    attributes:
+      label: Output of `thinkless doctor`
+      render: text
+    validations:
+      required: true
+  - type: textarea
+    id: trace
+    attributes:
+      label: Trace (optional)
+      description: >
+        Attach the .jsonl trace or the viewer HTML from `thinkless trace view`.
+        Remove anything sensitive first, or set THINKLESS_CAPTURE_CONTENT=false and rerun.

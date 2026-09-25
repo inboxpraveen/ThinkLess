@@ -1,0 +1,18 @@
+# Conda environment for developing ThinkLess with the full local stack.
+#
+#   conda env create -f environment.yml
+#   conda activate thinkless
+#
+# PyTorch is installed from the CUDA 13.0 wheel index, which covers
+# NVIDIA Blackwell (RTX 50 series) and older cards. On a machine without
+# an NVIDIA GPU, delete the --extra-index-url line to get the CPU build.
+name: thinkless
+channels:
+  - conda-forge
+dependencies:
+  - python=3.12
+  - pip
+  - pip:
+      - --extra-index-url https://download.pytorch.org/whl/cu130
+      - torch>=2.9
+      - -e .[all,dev]

@@ -1,0 +1,411 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ThinkLess Traces</title>
+<style>
+:root {
+  --bg: #f6f6f4; --surface: #ffffff; --surface-2: #f1f1ee; --text: #1c1c21; --muted: #676772;
+  --border: #e2e2dd; --accent: #1f5eff; --warn: #b45309; --bad: #c2362b; --good: #15803d;
+  --rule: #0e8f84; --model: #2563eb; --llm: #7c3aed; --tool: #15803d; --code: #7b7b86;
+  --radius: 10px; --shadow: 0 1px 2px rgba(20, 20, 30, .06), 0 4px 16px rgba(20, 20, 30, .04);
+  --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0f1013; --surface: #17191e; --surface-2: #1d2027; --text: #e8e8ec; --muted: #9b9ba8;
+    --border: #2a2d36; --accent: #6d9bff; --warn: #f59e0b; --bad: #f87171; --good: #4ade80;
+    --rule: #2dd4bf; --model: #60a5fa; --llm: #a78bfa; --tool: #4ade80; --code: #a1a1aa;
+    --shadow: none; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0f1013; --surface: #17191e; --surface-2: #1d2027; --text: #e8e8ec; --muted: #9b9ba8;
+  --border: #2a2d36; --accent: #6d9bff; --warn: #f59e0b; --bad: #f87171; --good: #4ade80;
+  --rule: #2dd4bf; --model: #60a5fa; --llm: #a78bfa; --tool: #4ade80; --code: #a1a1aa;
+  --shadow: none; color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; background: var(--bg); color: var(--text); }
+body { font: 14px/1.45 system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+header.top { display: flex; align-items: center; gap: 16px; padding: 14px 20px; border-bottom: 1px solid var(--border); background: var(--surface); position: sticky; top: 0; z-index: 5; }
+.brand { font-weight: 700; letter-spacing: .2px; font-size: 16px; }
+.brand span { color: var(--accent); }
+.subtitle { color: var(--muted); font-size: 13px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.spacer { flex: 1; }
+button, select, input { font: inherit; color: inherit; }
+.btn { border: 1px solid var(--border); background: var(--surface-2); border-radius: 8px; padding: 6px 10px; cursor: pointer; }
+.btn:hover { border-color: var(--accent); }
+main { display: grid; grid-template-columns: 320px minmax(0, 1fr); gap: 16px; padding: 16px 20px 40px; max-width: 1600px; margin: 0 auto; }
+@media (max-width: 900px) { main { grid-template-columns: minmax(0, 1fr); padding: 12px 16px 32px; } }
+.card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow); }
+.section-title { font-size: 12px; text-transform: uppercase; letter-spacing: .6px; color: var(--muted); margin: 0 0 8px; font-weight: 600; }
+aside .card { padding: 12px; }
+.filters { display: grid; gap: 8px; margin-bottom: 10px; }
+.filters input, .filters select { width: 100%; padding: 7px 9px; border: 1px solid var(--border); border-radius: 8px; background: var(--surface-2); }
+.runs { list-style: none; margin: 0; padding: 0; max-height: calc(100vh - 260px); overflow: auto; }
+@media (max-width: 900px) { .runs { max-height: 320px; } }
+.run { padding: 8px 10px; border-radius: 8px; cursor: pointer; display: grid; grid-template-columns: 1fr auto; gap: 2px 8px; border: 1px solid transparent; }
+.run:hover { background: var(--surface-2); }
+.run.active { border-color: var(--accent); background: var(--surface-2); }
+.run .name { font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.run .meta { color: var(--muted); font-size: 12px; grid-column: 1 / -1; display: flex; gap: 8px; flex-wrap: wrap; }
+.run .dur { font-family: var(--mono); font-size: 12px; color: var(--muted); }
+.pill { display: inline-flex; align-items: center; gap: 4px; border-radius: 999px; padding: 1px 8px; font-size: 11.5px; border: 1px solid var(--border); background: var(--surface-2); white-space: nowrap; }
+.pill.bad { color: var(--bad); border-color: color-mix(in srgb, var(--bad) 40%, var(--border)); }
+.pill.warn { color: var(--warn); border-color: color-mix(in srgb, var(--warn) 40%, var(--border)); }
+.dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+.overview { padding: 14px; margin-bottom: 16px; overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; font-size: 13px; }
+th, td { text-align: right; padding: 6px 10px; border-bottom: 1px solid var(--border); white-space: nowrap; }
+th:first-child, td:first-child { text-align: left; }
+th { color: var(--muted); font-weight: 600; font-size: 12px; }
+.detail { padding: 16px; min-width: 0; }
+.detail h2 { margin: 0 0 4px; font-size: 18px; }
+.detail .sub { color: var(--muted); margin-bottom: 14px; display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+.cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; margin-bottom: 16px; }
+.metric { border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px; background: var(--surface-2); min-width: 0; }
+.metric .label { color: var(--muted); font-size: 12px; }
+.metric .value { font-size: 18px; font-weight: 650; font-variant-numeric: tabular-nums; margin-top: 2px; }
+.metric .hint { color: var(--muted); font-size: 11.5px; }
+.stack { display: flex; height: 8px; border-radius: 4px; overflow: hidden; background: var(--border); margin-top: 6px; }
+.stack > div { height: 100%; }
+.legend { display: flex; gap: 12px; flex-wrap: wrap; color: var(--muted); font-size: 12px; margin: 4px 0 10px; }
+.legend span { display: inline-flex; align-items: center; gap: 5px; }
+.waterfall { border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+.row { display: grid; grid-template-columns: minmax(180px, 38%) minmax(0, 1fr) 76px; align-items: center; gap: 10px; padding: 5px 10px; border-bottom: 1px solid var(--border); cursor: pointer; }
+.row:last-child { border-bottom: 0; }
+.row:hover { background: var(--surface-2); }
+.row.selected { background: color-mix(in srgb, var(--accent) 10%, var(--surface)); }
+.row .label { display: flex; align-items: center; gap: 6px; min-width: 0; }
+.row .label .text { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.kind { font-family: var(--mono); font-size: 10.5px; padding: 0 5px; border-radius: 4px; color: #fff; flex: none; }
+.track { position: relative; height: 16px; background: repeating-linear-gradient(90deg, transparent 0 calc(25% - 1px), var(--border) calc(25% - 1px) 25%); border-radius: 3px; }
+.bar { position: absolute; top: 2px; height: 12px; border-radius: 3px; min-width: 2px; opacity: .92; }
+.row .ms { font-family: var(--mono); font-size: 12px; color: var(--muted); text-align: right; }
+.row.error .text { color: var(--bad); }
+.chips { grid-column: 1 / -1; display: flex; flex-wrap: wrap; gap: 6px; padding: 2px 0 4px 22px; }
+.chip { font-size: 12px; border: 1px solid var(--border); border-radius: 6px; padding: 2px 7px; background: var(--surface); font-family: var(--mono); }
+.chip b { font-family: inherit; }
+.chip.uncertain { border-color: var(--warn); }
+.inspector { margin-top: 16px; border: 1px solid var(--border); border-radius: 8px; padding: 12px; background: var(--surface-2); }
+.inspector h3 { margin: 0 0 8px; font-size: 14px; }
+pre { margin: 0; font-family: var(--mono); font-size: 12px; white-space: pre-wrap; word-break: break-word; max-height: 420px; overflow: auto; }
+.text-block { margin-top: 10px; }
+.text-block .section-title { margin-bottom: 4px; }
+.text-block pre { background: var(--surface); border: 1px solid var(--border); border-radius: 6px; padding: 8px; }
+.empty { color: var(--muted); padding: 40px; text-align: center; }
+.tabs { display: flex; gap: 6px; margin-bottom: 10px; flex-wrap: wrap; }
+.tab { padding: 5px 10px; border-radius: 8px; border: 1px solid var(--border); cursor: pointer; background: var(--surface-2); }
+.tab.active { border-color: var(--accent); color: var(--accent); }
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="brand">Think<span>Less</span></div>
+  <div class="subtitle" id="subtitle"></div>
+  <div class="spacer"></div>
+  <button class="btn" id="theme" type="button" aria-label="Toggle color theme">Theme</button>
+</header>
+<main>
+  <aside>
+    <div class="card">
+      <p class="section-title">Runs</p>
+      <div class="filters">
+        <input id="search" type="search" placeholder="Filter by name, ticket, action" aria-label="Filter runs">
+        <select id="mode" aria-label="Filter by mode"></select>
+      </div>
+      <ul class="runs" id="runs"></ul>
+    </div>
+  </aside>
+  <section>
+    <div class="card overview" id="overview" hidden></div>
+    <div class="card detail" id="detail"><div class="empty">Select a run</div></div>
+  </section>
+</main>
+<script id="thinkless-data" type="application/json">__THINKLESS_DATA__</script>
+<script>
+(function () {
+  "use strict";
+  const data = JSON.parse(document.getElementById("thinkless-data").textContent);
+  const PLANES = ["rule", "model", "llm", "tool", "code"];
+  const KIND_PLANE = { run: "code", step: "code", decide: "code" };
+  const state = { selected: null, span: null, mode: "all", query: "" };
+
+  const el = (tag, attrs, ...children) => {
+    const node = document.createElement(tag);
+    for (const [k, v] of Object.entries(attrs || {})) {
+      if (k === "class") node.className = v;
+      else if (k === "style") node.setAttribute("style", v);
+      else if (k.startsWith("on")) node.addEventListener(k.slice(2), v);
+      else if (v !== undefined && v !== null) node.setAttribute(k, v);
+    }
+    for (const child of children.flat()) {
+      if (child === null || child === undefined || child === false) continue;
+      node.append(child instanceof Node ? child : document.createTextNode(String(child)));
+    }
+    return node;
+  };
+  const cssVar = (name) => `var(--${name})`;
+  const planeOf = (span) => span.plane || KIND_PLANE[span.kind] || "code";
+  const fmtMs = (ms) => ms == null ? "?" : ms >= 1000 ? (ms / 1000).toFixed(2) + " s" : ms >= 10 ? ms.toFixed(0) + " ms" : ms.toFixed(1) + " ms";
+  const fmtCost = (usd) => usd ? "$" + (usd < 0.01 ? usd.toFixed(6) : usd.toFixed(4)) : "$0";
+  const short = (value, n) => {
+    const s = typeof value === "string" ? value : JSON.stringify(value);
+    return s && s.length > n ? s.slice(0, n - 3) + "..." : s;
+  };
+
+  // Theme
+  const root = document.documentElement;
+  try { const saved = localStorage.getItem("thinkless-theme"); if (saved) root.dataset.theme = saved; } catch (e) {}
+  document.getElementById("theme").addEventListener("click", () => {
+    const dark = root.dataset.theme ? root.dataset.theme === "dark" : matchMedia("(prefers-color-scheme: dark)").matches;
+    root.dataset.theme = dark ? "light" : "dark";
+    try { localStorage.setItem("thinkless-theme", root.dataset.theme); } catch (e) {}
+  });
+
+  const traces = data.traces
+    .map((t) => {
+      const rootSpan = t.spans.find((s) => !s.parent_id) || t.spans[0];
+      const attrs = (rootSpan && rootSpan.attributes) || {};
+      return { ...t, root: rootSpan, attrs, mode: attrs.mode || "default" };
+    })
+    .sort((a, b) => (a.root.start_ms || 0) - (b.root.start_ms || 0))
+    .map((t, index) => ({ ...t, index }));
+  const modes = [...new Set(traces.map((t) => t.mode))];
+  const hasExpected = traces.some((t) => t.attrs.expected_action !== undefined);
+
+  document.getElementById("subtitle").textContent =
+    `${data.title || "Traces"} · ${traces.length} run${traces.length === 1 ? "" : "s"}` +
+    (data.generated_at ? ` · generated ${data.generated_at}` : "");
+
+  // Mode filter
+  const modeSelect = document.getElementById("mode");
+  modeSelect.append(el("option", { value: "all" }, "All modes"));
+  for (const m of modes) modeSelect.append(el("option", { value: m }, m));
+  modeSelect.hidden = modes.length < 2;
+  modeSelect.addEventListener("change", () => { state.mode = modeSelect.value; renderRuns(); });
+  document.getElementById("search").addEventListener("input", (e) => { state.query = e.target.value.toLowerCase(); renderRuns(); });
+
+  function planeStack(counts) {
+    const total = PLANES.reduce((a, p) => a + (counts[p] || 0), 0) + (counts.unresolved || 0);
+    const bar = el("div", { class: "stack", title: "decisions by plane" });
+    if (!total) return bar;
+    for (const p of [...PLANES, "unresolved"]) {
+      const n = counts[p] || 0;
+      if (n) bar.append(el("div", { style: `width:${(n / total) * 100}%;background:${p === "unresolved" ? cssVar("bad") : cssVar(p)}`, title: `${p}: ${n}` }));
+    }
+    return bar;
+  }
+
+  function renderOverview() {
+    const box = document.getElementById("overview");
+    if (modes.length < 2) { box.hidden = true; return; }
+    box.hidden = false;
+    const rows = modes.map((m) => {
+      const ts = traces.filter((t) => t.mode === m);
+      const n = ts.length || 1;
+      const sum = (f) => ts.reduce((a, t) => a + (f(t.summary) || 0), 0);
+      const planes = {};
+      for (const t of ts) for (const [k, v] of Object.entries(t.summary.decisions_by_plane || {})) planes[k] = (planes[k] || 0) + v;
+      const labeled = ts.filter((t) => t.attrs.expected_action !== undefined);
+      const correct = labeled.filter((t) => t.attrs.expected_action === t.attrs.action).length;
+      const lat = ts.map((t) => t.summary.duration_ms).sort((a, b) => a - b);
+      const p50 = lat.length ? lat[Math.floor((lat.length - 1) / 2)] : 0;
+      return el("tr", {},
+        el("td", {}, el("b", {}, m)),
+        el("td", {}, String(ts.length)),
+        hasExpected ? el("td", {}, labeled.length ? ((correct / labeled.length) * 100).toFixed(1) + "%" : "n/a") : null,
+        el("td", {}, (sum((s) => s.llm_calls) / n).toFixed(2)),
+        el("td", {}, (sum((s) => s.decisions) / n).toFixed(1)),
+        el("td", { style: "min-width:140px" }, planeStack(planes)),
+        el("td", {}, (sum((s) => s.escalations) / n).toFixed(2)),
+        el("td", {}, fmtMs(p50)),
+        el("td", {}, Math.round(sum((s) => s.llm_input_tokens + s.llm_output_tokens) / n).toString()),
+        el("td", {}, fmtCost(sum((s) => s.cost_usd) / n)));
+    });
+    box.replaceChildren(
+      el("p", { class: "section-title" }, "Modes compared (means per run)"),
+      el("table", {},
+        el("thead", {}, el("tr", {}, ["Mode", "Runs", hasExpected ? "Correct" : null, "LLM calls", "Decisions", "By plane", "Escalations", "Latency p50", "LLM tokens", "Cost"].filter(Boolean).map((h) => el("th", {}, h)))),
+        el("tbody", {}, rows)),
+      legend());
+  }
+
+  function legend() {
+    return el("div", { class: "legend" }, PLANES.map((p) => el("span", {}, el("i", { class: "dot", style: `background:${cssVar(p)}` }), p)));
+  }
+
+  function matches(t) {
+    if (state.mode !== "all" && t.mode !== state.mode) return false;
+    if (!state.query) return true;
+    const hay = [t.root && t.root.name, t.attrs.ticket_id, t.attrs.action, t.mode, t.file].join(" ").toLowerCase();
+    return hay.includes(state.query);
+  }
+
+  function renderRuns() {
+    const list = document.getElementById("runs");
+    const items = traces.filter(matches).map((t) => {
+      const s = t.summary;
+      const label = t.attrs.ticket_id ? `${t.attrs.ticket_id} · ${t.root.name}` : t.root.name;
+      const meta = [el("span", {}, `${s.llm_calls} LLM`), el("span", {}, `${s.decisions} decisions`)];
+      if (modes.length > 1) meta.unshift(el("span", { class: "pill" }, t.mode));
+      if (t.attrs.action) meta.push(el("span", {}, t.attrs.action));
+      if (s.uncertain) meta.push(el("span", { class: "pill warn" }, `${s.uncertain} uncertain`));
+      if (s.errors) meta.push(el("span", { class: "pill bad" }, `${s.errors} errors`));
+      return el("li", { class: "run" + (state.selected === t.index ? " active" : ""), onclick: () => select(t.index) },
+        el("div", { class: "name", title: label }, label), el("div", { class: "dur" }, fmtMs(s.duration_ms)), el("div", { class: "meta" }, meta));
+    });
+    list.replaceChildren(...(items.length ? items : [el("li", { class: "empty" }, "No runs match")]));
+  }
+
+  function select(index) {
+    state.selected = index;
+    state.span = null;
+    renderRuns();
+    renderDetail();
+    const t = traces[index];
+    if (t) {
+      const params = new URLSearchParams();
+      if (modes.length > 1) params.set("mode", t.mode);
+      if (t.attrs.ticket_id) params.set("ticket", t.attrs.ticket_id); else params.set("run", String(index));
+      if (root.dataset.theme) params.set("theme", root.dataset.theme);
+      try { history.replaceState(null, "", "#" + params.toString()); } catch (e) {}
+    }
+  }
+
+  function initialRun() {
+    const params = new URLSearchParams(location.hash.slice(1));
+    if (params.get("theme")) root.dataset.theme = params.get("theme");
+    if (params.get("run")) return Number(params.get("run")) || 0;
+    const ticket = params.get("ticket");
+    const mode = params.get("mode");
+    if (ticket || mode) {
+      const found = traces.find((t) => (!ticket || t.attrs.ticket_id === ticket) && (!mode || t.mode === mode));
+      if (found) {
+        if (mode) { state.mode = mode; modeSelect.value = mode; }
+        return found.index;
+      }
+    }
+    return 0;
+  }
+
+  function orderSpans(spans) {
+    const children = new Map();
+    const ids = new Set(spans.map((s) => s.span_id));
+    for (const s of spans) {
+      const parent = ids.has(s.parent_id) ? s.parent_id : null;
+      if (!children.has(parent)) children.set(parent, []);
+      children.get(parent).push(s);
+    }
+    for (const list of children.values()) list.sort((a, b) => a.start_ms - b.start_ms);
+    const out = [];
+    const walk = (parent, depth) => { for (const s of children.get(parent) || []) { out.push([s, depth]); walk(s.span_id, depth + 1); } };
+    walk(null, 0);
+    return out;
+  }
+
+  function spanLabel(span) {
+    const a = span.attributes || {};
+    if (span.kind === "attempt") return `${a.provider || span.name}${a.model ? " [" + a.model + "]" : ""}  ${(a.accepted || []).length}/${(a.questions || []).length} accepted`;
+    if (span.kind === "llm") { const u = a.usage || {}; return `${span.name}${a.model ? " [" + a.model + "]" : ""}  ${u.input_tokens || 0} in / ${u.output_tokens || 0} out`; }
+    if (span.kind === "rule") return `${span.name} = ${short(a.value, 40)}`;
+    if (span.kind === "run" && a.mode) return `${span.name}  (${a.mode})`;
+    return span.name;
+  }
+
+  function metric(label, value, hint, extra) {
+    return el("div", { class: "metric" }, el("div", { class: "label" }, label), el("div", { class: "value" }, value), hint ? el("div", { class: "hint" }, hint) : null, extra || null);
+  }
+
+  function renderDetail() {
+    const box = document.getElementById("detail");
+    const t = traces[state.selected];
+    if (!t) { box.replaceChildren(el("div", { class: "empty" }, "Select a run")); return; }
+    const s = t.summary;
+    const planes = s.decisions_by_plane || {};
+    const byPlane = (s.time_by_plane_ms || {});
+    const sub = [el("span", { class: "pill" }, t.mode), el("span", {}, s.started_at)];
+    if (t.attrs.action) sub.push(el("span", { class: "pill" }, "action: " + t.attrs.action));
+    if (t.attrs.expected_action) sub.push(el("span", { class: "pill" + (t.attrs.expected_action === t.attrs.action ? "" : " bad") }, "expected: " + t.attrs.expected_action));
+    if (t.file) sub.push(el("span", {}, t.file));
+
+    const cards = el("div", { class: "cards" },
+      metric("Total time", fmtMs(s.duration_ms), Object.entries(byPlane).map(([k, v]) => `${k} ${fmtMs(v)}`).join(", ")),
+      metric("LLM calls", String(s.llm_calls), `${s.generation_calls} generation, ${s.llm_calls - s.generation_calls} decision`),
+      metric("Decisions", String(s.decisions), PLANES.filter((p) => planes[p]).map((p) => `${p} ${planes[p]}`).join(", ") + (planes.unresolved ? `, unresolved ${planes.unresolved}` : ""), planeStack(planes)),
+      metric("Escalations", String(s.escalations), `${s.uncertain} uncertain`),
+      metric("LLM tokens", String(s.llm_input_tokens + s.llm_output_tokens), `${s.llm_input_tokens} in / ${s.llm_output_tokens} out`),
+      metric("Cost", fmtCost(s.cost_usd), "from the price table"));
+
+    const ordered = orderSpans(t.spans);
+    const start = Math.min(...t.spans.map((x) => x.start_ms));
+    const end = Math.max(...t.spans.map((x) => x.start_ms + (x.duration_ms || 0)));
+    const total = Math.max(end - start, 0.001);
+    const rows = [];
+    for (const [span, depth] of ordered) {
+      const plane = planeOf(span);
+      const left = ((span.start_ms - start) / total) * 100;
+      const width = Math.max(((span.duration_ms || 0) / total) * 100, 0.3);
+      const row = el("div", { class: "row" + (span.status === "error" ? " error" : "") + (state.span === span.span_id ? " selected" : ""), onclick: () => { state.span = span.span_id; renderDetail(); } },
+        el("div", { class: "label", style: `padding-left:${depth * 14}px` },
+          el("span", { class: "kind", style: `background:${cssVar(plane)}` }, span.kind),
+          el("span", { class: "text", title: spanLabel(span) }, spanLabel(span))),
+        el("div", { class: "track" }, el("div", { class: "bar", style: `left:${left}%;width:${width}%;background:${cssVar(plane)}` })),
+        el("div", { class: "ms" }, fmtMs(span.duration_ms)));
+      rows.push(row);
+      if (span.kind === "decide") {
+        const decisions = (span.attributes || {}).decisions || [];
+        if (decisions.length) {
+          rows.push(el("div", { class: "row", style: "cursor:default", onclick: null },
+            el("div", { class: "chips" }, decisions.map((d) => {
+              const conf = d.confidence == null ? "n/a" : d.confidence.toFixed(2);
+              const color = d.plane ? cssVar(d.plane) : cssVar("bad");
+              const value = d.level || d.value;
+              return el("span", { class: "chip" + (d.status !== "accepted" ? " uncertain" : ""), title: `status ${d.status}, threshold ${d.threshold}, tried ${(d.attempts || []).join(" > ")}` },
+                el("i", { class: "dot", style: `background:${color};margin-right:5px` }),
+                el("b", {}, d.name), " = ", short(value, 36), `  ${conf}  ${d.provider || "none"}`,
+                (d.attempts || []).length > 1 ? `  (${d.attempts.join(" > ")})` : "");
+            }))));
+        }
+      }
+    }
+
+    const inspector = renderInspector(t);
+    box.replaceChildren(
+      el("h2", {}, t.attrs.ticket_id ? `${t.attrs.ticket_id} · ${t.root.name}` : t.root.name),
+      el("div", { class: "sub" }, sub),
+      cards,
+      legend(),
+      el("div", { class: "waterfall" }, rows),
+      inspector);
+  }
+
+  function renderInspector(t) {
+    const span = t.spans.find((x) => x.span_id === state.span) || t.root;
+    const attrs = { ...(span.attributes || {}) };
+    const blocks = [];
+    for (const key of ["prompt", "system", "completion", "messages", "state", "input", "arguments", "result"]) {
+      if (attrs[key] === undefined) continue;
+      const value = attrs[key];
+      delete attrs[key];
+      const text = typeof value === "string" ? value : JSON.stringify(value, null, 2);
+      blocks.push(el("div", { class: "text-block" }, el("p", { class: "section-title" }, key), el("pre", {}, text)));
+    }
+    const header = { kind: span.kind, name: span.name, plane: span.plane, status: span.status, duration_ms: span.duration_ms, span_id: span.span_id, parent_id: span.parent_id, error: span.error || undefined };
+    return el("div", { class: "inspector" },
+      el("h3", {}, `${span.kind} · ${span.name}`),
+      el("pre", {}, JSON.stringify({ ...header, attributes: attrs }, null, 2)),
+      blocks);
+  }
+
+  const first = initialRun();
+  renderOverview();
+  renderRuns();
+  if (traces.length) select(first);
+})();
+</script>
+</body>
+</html>

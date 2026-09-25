@@ -1,0 +1,27 @@
+name: Feature or provider request
+description: A new provider, integration, benchmark or capability.
+labels: ["enhancement"]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: The problem
+      description: What are you trying to do, and what gets in the way today?
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: What you propose
+      description: The API or behavior you have in mind. Sketches are welcome.
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Evidence
+      description: Links, benchmark numbers or traces that show the gain.
+  - type: checkboxes
+    id: help
+    attributes:
+      label: Contributing
+      options:
+        - label: I would like to open a pull request for this.

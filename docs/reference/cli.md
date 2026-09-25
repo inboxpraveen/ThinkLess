@@ -1,0 +1,88 @@
+# Command line
+
+Every command has `--help`. The reasoning model is chosen with
+`--llm backend[:model]`; see [LLM backends](../guides/llm-backends.md#spec-strings).
+
+## `thinkless doctor`
+
+Checks the environment: Python, torch and the accelerator, which optional
+backends are installed, which API keys are set, and the active settings.
+Include its output in bug reports.
+
+## `thinkless demo`
+
+Runs the support agent on one ticket and prints the trace tree, the action
+and the reply.
+
+| Option | Default | |
+|---|---|---|
+| `--ticket` | `T-001` | A scenario id from the bundled set (`T-001` to `T-053`) |
+| `--message`, `--customer` | | Your own ticket text instead of a scenario |
+| `--mode` | `hybrid` | `hybrid`, `llm` or `models`; repeat to compare |
+| `--llm` | `local` | Reasoning model |
+| `--device` | `auto` | Device for local models |
+| `--threshold` | `0.8` | Engine default threshold |
+| `--view` | off | Write and open the HTML viewer |
+
+## `thinkless bench support`
+
+Runs every scenario in every mode and writes `results.json`, `report.md`,
+per-ticket traces and `viewer.html` to the output directory.
+
+| Option | Default | |
+|---|---|---|
+| `--mode` | `llm`, `hybrid`, `models` | Repeat to choose |
+| `--llm` | `local` | Reasoning model, also the LLM decision provider |
+| `--limit` | all | Only the first N tickets |
+| `--out` | `.thinkless/bench/support-<time>` | Output directory |
+| `--reference` | `anthropic:claude-sonnet-5` | Price list used to estimate cost |
+| `--threshold` | `0.8` | Engine default threshold |
+| `--jev` | off | Add TypeSafe Jev to the cascade (needs `TYPESAFE_API_KEY`) |
+
+## `thinkless bench intents`
+
+Accuracy, calibration and the simulated cascade on a public dataset.
+
+| Option | Default | |
+|---|---|---|
+| `--dataset` | `banking77` | `banking77`, `clinc150` or `emotion` |
+| `--provider` | `gliner`, `laya`, `llm` | Repeat to choose; `llm` is the cascade fallback |
+| `--limit` | `500` | Examples sampled from the test split |
+| `--seed` | `13` | Sampling seed |
+| `--target` | `0.95` | Accuracy target for threshold recommendations |
+| `--out` | `.thinkless/bench/intents-<dataset>-<time>` | Output directory |
+
+## `thinkless calibrate DATA`
+
+Sweeps thresholds for one question and provider on labeled JSON Lines and
+recommends the lowest threshold that meets the target.
+
+| Option | Default | |
+|---|---|---|
+| `--provider` | `gliner` | `gliner`, `laya`, `llm` or `jev` |
+| `--kind` | `choice` | `choice` or `yes_no` |
+| `--question` | | The instructions to ask |
+| `--labels` | from the data | Choice options, comma-separated |
+| `--demo-question` | | Use a question from the support demo by name |
+| `--text-field`, `--label-field` | `text`, `label` | Field names in the data |
+| `--target` | `0.95` | Accuracy the accepted answers must reach |
+
+## `thinkless trace`
+
+| Command | |
+|---|---|
+| `trace ls [DIR]` | Recent traces with their headline numbers |
+| `trace show FILE` | One trace as a tree with its summary |
+| `trace view [PATHS...] [--out FILE] [--no-open]` | Write the self-contained HTML viewer |
+
+## Environment variables
+
+| Variable | Default | |
+|---|---|---|
+| `THINKLESS_TRACE_DIR` | `.thinkless/traces` | Where the CLI writes traces |
+| `THINKLESS_DEVICE` | `auto` | Default device for local models |
+| `THINKLESS_CAPTURE_CONTENT` | `true` | Record inputs and outputs in traces |
+| `THINKLESS_LOG_LEVEL` | `WARNING` | Log level for the CLI |
+| `THINKLESS_PRICING` | bundled table | Path to a pricing TOML file |
+| `TYPESAFE_API_KEY` | | For `SystemOne.jev()` |
+| `ANTHROPIC_API_KEY`, `OPENAI_API_KEY` | | For hosted reasoning models |

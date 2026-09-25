@@ -1,0 +1,56 @@
+# Reference prices used to estimate cost in traces and benchmark reports.
+#
+# Prices are USD per million tokens. They change; check the source before
+# relying on a number, and override this file with your negotiated rates:
+#
+#   THINKLESS_PRICING=/path/to/pricing.toml
+#
+# Matching: an entry applies when the provider matches and the model id equals
+# `model`, or starts with it when `match = "prefix"`. Local models are free at
+# the API level and need no entry; unknown hosted models cost 0 and are
+# flagged in the trace as `cost_known = false`.
+
+as_of = "2026-09-25"
+
+[[price]]
+provider = "anthropic"
+model = "claude-fable-5-1"
+input = 10.00
+output = 50.00
+source = "https://platform.claude.com/docs/en/about-claude/pricing"
+
+[[price]]
+provider = "anthropic"
+model = "claude-opus-5-5"
+input = 4.00
+output = 20.00
+source = "https://platform.claude.com/docs/en/about-claude/pricing"
+
+[[price]]
+provider = "anthropic"
+model = "claude-opus-5"
+input = 5.00
+output = 25.00
+source = "https://platform.claude.com/docs/en/about-claude/pricing"
+
+[[price]]
+provider = "anthropic"
+model = "claude-sonnet-5"
+input = 2.00
+output = 10.00
+source = "https://platform.claude.com/docs/en/about-claude/pricing"
+
+[[price]]
+provider = "anthropic"
+model = "claude-haiku-4-5"
+input = 1.00
+output = 5.00
+source = "https://platform.claude.com/docs/en/about-claude/pricing"
+
+[[price]]
+provider = "typesafe"
+model = "jev"
+match = "prefix"
+input = 0.042
+output = 0.0
+source = "https://docs.typesafe.ai/models"

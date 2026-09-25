@@ -1,0 +1,70 @@
+site_name: ThinkLess
+site_description: The decision plane for AI agents. Rules and small calibrated models make the routine decisions, the LLM is reserved for the steps that need thought.
+site_url: https://inboxpraveen.github.io/ThinkLess/
+repo_url: https://github.com/inboxpraveen/ThinkLess
+repo_name: inboxpraveen/ThinkLess
+edit_uri: edit/main/docs/
+copyright: Copyright 2026 Praveen Kumar. Apache License 2.0.
+
+theme:
+  name: material
+  features:
+    - navigation.sections
+    - navigation.top
+    - content.code.copy
+    - search.suggest
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: indigo
+      toggle:
+        icon: material/weather-night
+        name: Dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: indigo
+      toggle:
+        icon: material/weather-sunny
+        name: Light mode
+
+nav:
+  - Home: index.md
+  - Getting started: getting-started.md
+  - Concepts:
+      - The four planes: concepts/planes.md
+      - Questions: concepts/questions.md
+      - Confidence and thresholds: concepts/confidence.md
+      - The engine and the cascade: concepts/cascade.md
+      - Tracing: concepts/tracing.md
+  - Guides:
+      - The support agent: guides/support-agent.md
+      - Calibrating thresholds: guides/calibration.md
+      - Providers: guides/providers.md
+      - LLM backends: guides/llm-backends.md
+      - Production: guides/production.md
+      - Troubleshooting: guides/troubleshooting.md
+  - Benchmarks: benchmarks.md
+  - Reference:
+      - Command line: reference/cli.md
+      - Python API: reference/api.md
+  - Roadmap: roadmap.md
+
+plugins:
+  - search
+  - mkdocstrings:
+      handlers:
+        python:
+          paths: [src]
+          options:
+            show_source: false
+            docstring_style: google
+            members_order: source
+            show_root_heading: true
+
+markdown_extensions:
+  - admonition
+  - tables
+  - toc:
+      permalink: true
+  - pymdownx.highlight
+  - pymdownx.superfences
