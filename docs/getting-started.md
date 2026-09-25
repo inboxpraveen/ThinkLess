@@ -13,6 +13,10 @@ pip install "thinkless[openai]"                # OpenRouter, OpenAI, Ollama, vLL
 pip install "thinkless[all]"                   # everything, including OpenTelemetry and benchmarks
 ```
 
+For local models on a GPU, install PyTorch first; the
+[installation guide](guides/installation.md) has the command for each
+platform and explains every extra.
+
 With conda, `environment.yml` creates an environment with everything and the
 right PyTorch build for recent NVIDIA GPUs:
 

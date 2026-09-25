@@ -7,6 +7,7 @@ import time
 from collections.abc import Mapping
 from typing import Any, ClassVar
 
+from .._hub import ensure_downloaded
 from ..confidence import normalize_distribution
 from ..decision import Answer, Plane
 from ..logs import get_logger
@@ -101,6 +102,7 @@ class HFClassifier(DecisionProvider):
                     ) from exc
                 device = resolve_device(self._device_request)
                 started = time.perf_counter()
+                ensure_downloaded(self.model)
                 self._pipeline = pipeline(
                     "text-classification",
                     model=self.model,

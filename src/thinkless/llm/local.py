@@ -9,6 +9,7 @@ import time
 from collections.abc import Sequence
 from typing import Any
 
+from .._hub import ensure_downloaded
 from ..decision import Usage
 from ..logs import get_logger
 from ..settings import resolve_device
@@ -91,6 +92,7 @@ class TransformersLLM(LLM):
             else:
                 dtype = torch.float32
             started = time.perf_counter()
+            ensure_downloaded(self.model)
             tokenizer = AutoTokenizer.from_pretrained(self.model)
             model: Any = AutoModelForCausalLM.from_pretrained(self.model, dtype=dtype)
             model.to(device)

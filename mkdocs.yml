@@ -30,6 +30,7 @@ theme:
 nav:
   - Home: index.md
   - Getting started: getting-started.md
+  - Installation: guides/installation.md
   - Concepts:
       - The four planes: concepts/planes.md
       - Questions: concepts/questions.md
@@ -43,6 +44,7 @@ nav:
       - LLM backends: guides/llm-backends.md
       - Production: guides/production.md
       - Troubleshooting: guides/troubleshooting.md
+      - Releasing: guides/releasing.md
   - Benchmarks: benchmarks.md
   - Reference:
       - Command line: reference/cli.md

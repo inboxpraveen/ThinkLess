@@ -7,6 +7,7 @@ import time
 from collections.abc import Mapping
 from typing import Any, ClassVar
 
+from .._hub import ensure_downloaded
 from ..decision import Plane, Usage
 from ..logs import get_logger
 from ..questions import Kind, Question
@@ -93,6 +94,7 @@ class Laya(DecisionProvider):
                     ) from exc
                 device = resolve_device(self._device_request)
                 started = time.perf_counter()
+                ensure_downloaded(self.model)
                 self._agent = laya.load(self.model, device=device)
                 self.device = device
                 logger.info(

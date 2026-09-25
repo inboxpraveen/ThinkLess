@@ -3,10 +3,11 @@
 <p align="center"><b>Stop using an LLM for every decision.</b></p>
 
 <p align="center">
+  <a href="https://pypi.org/project/thinkless/"><img alt="PyPI" src="https://img.shields.io/pypi/v/thinkless.svg"></a>
   <a href="https://github.com/inboxpraveen/ThinkLess/actions/workflows/ci.yml"><img alt="CI" src="https://github.com/inboxpraveen/ThinkLess/actions/workflows/ci.yml/badge.svg"></a>
-  <a href="LICENSE"><img alt="License: Apache 2.0" src="https://img.shields.io/badge/license-Apache%202.0-blue.svg"></a>
+  <a href="https://github.com/inboxpraveen/ThinkLess/blob/main/LICENSE"><img alt="License: Apache 2.0" src="https://img.shields.io/badge/license-Apache%202.0-blue.svg"></a>
   <img alt="Python 3.10+" src="https://img.shields.io/badge/python-3.10%2B-blue.svg">
-  <a href="docs/benchmarks.md"><img alt="Benchmarks" src="https://img.shields.io/badge/benchmarks-reproducible-brightgreen.svg"></a>
+  <a href="https://github.com/inboxpraveen/ThinkLess/blob/main/docs/benchmarks.md"><img alt="Benchmarks" src="https://img.shields.io/badge/benchmarks-reproducible-brightgreen.svg"></a>
 </p>
 
 ThinkLess is an open-source decision plane for AI agents. The routine
@@ -26,7 +27,7 @@ OpenAI) plug into the same cascade. The whole stack also runs offline on a
 laptop GPU, with no API key.
 
 <p align="center">
-  <img src="docs/assets/trace-viewer.png" alt="The ThinkLess trace viewer comparing three decision planes on the support benchmark, with one ticket's waterfall: six decisions answered by rules, GLiNER and Laya in 126 ms, then a single LLM call for the reply" width="100%">
+  <img src="https://raw.githubusercontent.com/inboxpraveen/ThinkLess/main/docs/assets/trace-viewer.png" alt="The ThinkLess trace viewer comparing three decision planes on the support benchmark, with one ticket's waterfall: six decisions answered by rules, GLiNER and Laya in 126 ms, then a single LLM call for the reply" width="100%">
 </p>
 
 ## Why
@@ -53,7 +54,7 @@ if intent.is_("refund_duplicate_charge"):       # only true when the answer is c
 Same agent, same 53 labeled support tickets, two decision planes: `llm` sends
 every decision to the LLM, `hybrid` asks rules, GLiNER and Laya first. Hosted
 models ran through OpenRouter, and the dollar figures are what OpenRouter
-billed ([full results](docs/benchmarks.md)):
+billed ([full results](https://github.com/inboxpraveen/ThinkLess/blob/main/docs/benchmarks.md)):
 
 | Fallback LLM | Success, `llm` | Success, `hybrid` | Billed per 1k tickets, `llm` | Billed per 1k tickets, `hybrid` | Decision time |
 |---|---:|---:|---:|---:|---:|
@@ -79,7 +80,7 @@ billed ([full results](docs/benchmarks.md)):
   validated on a separate calibration set first. The baseline is the
   strongest form of the LLM design: all six triage questions in one prompt.
 - The support set is 53 synthetic tickets: evidence of the mechanism and its
-  failure modes, not a leaderboard. The [benchmarks page](docs/benchmarks.md)
+  failure modes, not a leaderboard. The [benchmarks page](https://github.com/inboxpraveen/ThinkLess/blob/main/docs/benchmarks.md)
   lists the weak areas found and what was done about each.
 
 ## Quick start
@@ -139,7 +140,7 @@ thinkless trace view
 ```
 
 No GPU? `pip install thinkless` and run
-[`examples/01_rules_only.py`](examples/01_rules_only.py): the API, the cascade
+[`examples/01_rules_only.py`](https://github.com/inboxpraveen/ThinkLess/blob/main/examples/01_rules_only.py): the API, the cascade
 and the traces with no model downloads.
 
 ## Try the demo agent
@@ -163,31 +164,31 @@ thinkless bench intents --dataset banking77
 **Typed questions.** `Choice`, `Score`, `YesNo` and `Extract` declare what you
 want to know and which answers are allowed. They follow the System One wire
 format, so the same question works on every provider.
-[Questions](docs/concepts/questions.md)
+[Questions](https://github.com/inboxpraveen/ThinkLess/blob/main/docs/concepts/questions.md)
 
 **A confidence cascade.** Providers are tried cheapest first. Each gets one
 call with every open question it supports; answers that clear their threshold
 close, the rest move on. Unresolved questions come back `uncertain` with the
 best answer seen, and `decision.is_()` never matches an uncertain answer.
-[The cascade](docs/concepts/cascade.md)
+[The cascade](https://github.com/inboxpraveen/ThinkLess/blob/main/docs/concepts/cascade.md)
 
 **One meaning of confidence.** Providers disagree about what "confidence"
 means (Laya and TypeSafe compute it differently), so a threshold of 0.8 would
 mean different things per backend. ThinkLess derives a single normalized
 confidence from each provider's probabilities.
-[Confidence](docs/concepts/confidence.md)
+[Confidence](https://github.com/inboxpraveen/ThinkLess/blob/main/docs/concepts/confidence.md)
 
 **Thresholds from data.** `thinkless calibrate` sweeps thresholds on labeled
 examples and recommends the lowest one that meets your accuracy target, per
 question and per provider (`thresholds={"intent@gliner": 0.9}`).
-[Calibration](docs/guides/calibration.md)
+[Calibration](https://github.com/inboxpraveen/ThinkLess/blob/main/docs/guides/calibration.md)
 
 **Traces for everything.** Decisions, provider attempts, generations, tool
 calls and rule checks are spans with W3C-compatible ids. Write JSONL audit
 files, export to any OpenTelemetry backend with GenAI semantic conventions, or
 open the self-contained HTML viewer. Content capture can be switched off
 without losing structure, timings or confidences.
-[Tracing](docs/concepts/tracing.md)
+[Tracing](https://github.com/inboxpraveen/ThinkLess/blob/main/docs/concepts/tracing.md)
 
 ## Providers and backends
 
@@ -207,37 +208,37 @@ without losing structure, timings or confidences.
 | `OpenAICompatibleLLM` | OpenAI, Ollama, vLLM, LM Studio, llama.cpp, Groq |
 | `AnthropicLLM` | Claude, with server-side refusal fallbacks |
 
-Writing your own provider is one class. [Providers](docs/guides/providers.md),
-[LLM backends](docs/guides/llm-backends.md)
+Writing your own provider is one class. [Providers](https://github.com/inboxpraveen/ThinkLess/blob/main/docs/guides/providers.md),
+[LLM backends](https://github.com/inboxpraveen/ThinkLess/blob/main/docs/guides/llm-backends.md)
 
 ## Documentation
 
-- [Getting started](docs/getting-started.md)
-- Concepts: [the four planes](docs/concepts/planes.md),
-  [questions](docs/concepts/questions.md),
-  [confidence](docs/concepts/confidence.md),
-  [the cascade](docs/concepts/cascade.md),
-  [tracing](docs/concepts/tracing.md)
-- Guides: [the support agent](docs/guides/support-agent.md),
-  [calibration](docs/guides/calibration.md),
-  [providers](docs/guides/providers.md),
-  [LLM backends](docs/guides/llm-backends.md),
-  [production](docs/guides/production.md),
-  [troubleshooting](docs/guides/troubleshooting.md)
-- [Benchmarks](docs/benchmarks.md), [CLI reference](docs/reference/cli.md),
-  [Python API](docs/reference/api.md), [roadmap](docs/roadmap.md)
+- [Getting started](https://github.com/inboxpraveen/ThinkLess/blob/main/docs/getting-started.md)
+- Concepts: [the four planes](https://github.com/inboxpraveen/ThinkLess/blob/main/docs/concepts/planes.md),
+  [questions](https://github.com/inboxpraveen/ThinkLess/blob/main/docs/concepts/questions.md),
+  [confidence](https://github.com/inboxpraveen/ThinkLess/blob/main/docs/concepts/confidence.md),
+  [the cascade](https://github.com/inboxpraveen/ThinkLess/blob/main/docs/concepts/cascade.md),
+  [tracing](https://github.com/inboxpraveen/ThinkLess/blob/main/docs/concepts/tracing.md)
+- Guides: [the support agent](https://github.com/inboxpraveen/ThinkLess/blob/main/docs/guides/support-agent.md),
+  [calibration](https://github.com/inboxpraveen/ThinkLess/blob/main/docs/guides/calibration.md),
+  [providers](https://github.com/inboxpraveen/ThinkLess/blob/main/docs/guides/providers.md),
+  [LLM backends](https://github.com/inboxpraveen/ThinkLess/blob/main/docs/guides/llm-backends.md),
+  [production](https://github.com/inboxpraveen/ThinkLess/blob/main/docs/guides/production.md),
+  [troubleshooting](https://github.com/inboxpraveen/ThinkLess/blob/main/docs/guides/troubleshooting.md)
+- [Benchmarks](https://github.com/inboxpraveen/ThinkLess/blob/main/docs/benchmarks.md), [CLI reference](https://github.com/inboxpraveen/ThinkLess/blob/main/docs/reference/cli.md),
+  [Python API](https://github.com/inboxpraveen/ThinkLess/blob/main/docs/reference/api.md), [roadmap](https://github.com/inboxpraveen/ThinkLess/blob/main/docs/roadmap.md)
 
 ## Status
 
 ThinkLess is at 0.1: the core API (questions, the engine, decisions and
 traces) is meant to stay stable, and providers and benchmarks will grow.
 Next up are shadow mode, calibration from traces, calibrated LLM confidence
-from log probabilities, and live Jev runs. See the [roadmap](docs/roadmap.md).
+from log probabilities, and live Jev runs. See the [roadmap](https://github.com/inboxpraveen/ThinkLess/blob/main/docs/roadmap.md).
 
 ## Contributing
 
 Issues, providers, benchmark runs on other hardware and models, and new demo
-scenarios are all welcome. Start with [CONTRIBUTING.md](CONTRIBUTING.md). The
+scenarios are all welcome. Start with [CONTRIBUTING.md](https://github.com/inboxpraveen/ThinkLess/blob/main/CONTRIBUTING.md). The
 bar for changes that affect accuracy, latency or cost is evidence: a before
 and after from `thinkless bench` or `thinkless calibrate`.
 
@@ -250,7 +251,7 @@ demos.
 
 ## Citing
 
-See [CITATION.cff](CITATION.cff).
+See [CITATION.cff](https://github.com/inboxpraveen/ThinkLess/blob/main/CITATION.cff).
 
 ## Acknowledgements
 
@@ -267,4 +268,4 @@ which studies adaptive reasoning inside a single model.
 
 ## License
 
-[Apache License 2.0](LICENSE).
+[Apache License 2.0](https://github.com/inboxpraveen/ThinkLess/blob/main/LICENSE).

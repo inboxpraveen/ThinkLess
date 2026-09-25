@@ -95,10 +95,25 @@ def _installed(package: str) -> str | None:
 # ----------------------------------------------------------------- doctor
 
 
+def _nvidia_gpu_present() -> bool:
+    """True when an NVIDIA driver is installed, even if torch cannot use it."""
+    import shutil
+    import subprocess
+
+    if shutil.which("nvidia-smi") is None:
+        return False
+    try:
+        result = subprocess.run(["nvidia-smi", "-L"], capture_output=True, text=True, timeout=10)
+    except (OSError, subprocess.SubprocessError):
+        return False
+    return result.returncode == 0 and "GPU" in result.stdout
+
+
 @app.command()
 def doctor() -> None:
     """Check the environment: accelerators, optional backends, keys and settings."""
     settings = Settings()
+    warnings: list[str] = []
     table = Table(show_header=False, box=None)
     table.add_column(style="dim")
     table.add_column()
@@ -116,6 +131,13 @@ def doctor() -> None:
                 accel = f"CUDA: {props.name}, {props.total_memory / 1e9:.1f} GB"
             elif getattr(torch.backends, "mps", None) and torch.backends.mps.is_available():
                 accel = "Apple MPS"
+            elif _nvidia_gpu_present():
+                accel = "[yellow]CPU only, but an NVIDIA GPU is present[/]"
+                warnings.append(
+                    "This torch build has no CUDA support, so local models run on the CPU. Install a CUDA "
+                    "build first, for example: pip install torch --index-url "
+                    "https://download.pytorch.org/whl/cu130 (see docs/guides/installation.md)."
+                )
             else:
                 accel = "CPU only"
         except Exception as exc:  # pragma: no cover - environment specific
@@ -145,11 +167,19 @@ def doctor() -> None:
     table.add_row(
         "HF cache", os.environ.get("HF_HOME", str(Path.home() / ".cache" / "huggingface"))
     )
+    from .._hub import DEFAULT_CHECKPOINTS, cached_checkpoints
+
+    for repo, size in cached_checkpoints().items():
+        state = f"[green]cached, {size} GB[/]" if size else "[dim]downloads on first use[/]"
+        table.add_row(repo, f"{state}  ({DEFAULT_CHECKPOINTS[repo]})")
     console.print(table)
+    for message in warnings:
+        console.print(f"[yellow]Warning:[/] {message}")
     if platform.system() == "Windows":
         console.print(
-            "[dim]Windows note: if a first model download fails with WinError 1314 (symlink privilege), "
-            "run the command again or enable Developer Mode. See docs/guides/troubleshooting.md.[/]"
+            "[dim]Windows: models download one file at a time to avoid a symlink race in the "
+            "Hugging Face cache. If a download still fails with WinError 1314, run the command again "
+            "or enable Developer Mode (docs/guides/troubleshooting.md).[/]"
         )
 
 

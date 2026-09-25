@@ -7,6 +7,7 @@ import time
 from collections.abc import Mapping
 from typing import Any, ClassVar
 
+from .._hub import ensure_downloaded
 from ..confidence import normalize_distribution
 from ..decision import Answer, Plane
 from ..logs import get_logger
@@ -105,6 +106,7 @@ class GLiNER(DecisionProvider):
                     ) from exc
                 device = resolve_device(self._device_request)
                 started = time.perf_counter()
+                ensure_downloaded(self.model)
                 model = AutoExtractor.from_pretrained(self.model)
                 if device != "cpu":
                     model = model.to(device)

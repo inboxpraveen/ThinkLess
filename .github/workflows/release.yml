@@ -1,29 +1,49 @@
 name: Release
 
-# Publishes to PyPI with trusted publishing when a version tag is pushed.
-# Configure the "pypi" environment and the trusted publisher on PyPI first:
-# https://docs.pypi.org/trusted-publishers/
+# Publishes to PyPI with trusted publishing when a version tag (v0.2.0, ...) is
+# pushed. One-time setup is in docs/guides/releasing.md.
 
 on:
   push:
     tags: ["v*"]
 
+permissions:
+  contents: read
+
 jobs:
   build:
+    name: Build and check
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
       - uses: actions/setup-python@v7
         with:
           python-version: "3.12"
-      - run: python -m pip install build
+      - name: Check the tag matches the package version
+        run: |
+          version=$(python -c "import re, pathlib; print(re.search(r'\"([^\"]+)\"', pathlib.Path('src/thinkless/_version.py').read_text()).group(1))")
+          if [ "${GITHUB_REF_NAME}" != "v${version}" ]; then
+            echo "Tag ${GITHUB_REF_NAME} does not match the package version ${version}."
+            echo "Bump src/thinkless/_version.py or retag."
+            exit 1
+          fi
+      - run: python -m pip install build twine
       - run: python -m build
+      - run: twine check --strict dist/*
+      - name: Install the wheel in a clean environment and smoke test it
+        run: |
+          python -m venv /tmp/smoke
+          /tmp/smoke/bin/pip install dist/*.whl
+          /tmp/smoke/bin/thinkless --version
+          /tmp/smoke/bin/thinkless doctor
+          /tmp/smoke/bin/python examples/01_rules_only.py
       - uses: actions/upload-artifact@v7
         with:
           name: dist
           path: dist/
 
   publish:
+    name: Publish to PyPI
     needs: build
     runs-on: ubuntu-latest
     environment: pypi

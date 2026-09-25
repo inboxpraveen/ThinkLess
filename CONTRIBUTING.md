@@ -77,7 +77,8 @@ be tuned on the tickets used to report results.
 Write commit messages in the imperative ("Add Kev provider", "Fix escalation
 count"). Add a line to `CHANGELOG.md` under "Unreleased" for anything a user
 would notice. Releases are cut by tagging `vX.Y.Z`, which publishes to PyPI
-through the release workflow.
+through the release workflow; the steps are in
+[docs/guides/releasing.md](docs/guides/releasing.md).
 
 ## Code of conduct
 

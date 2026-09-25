@@ -6,6 +6,10 @@ All notable changes are recorded here. The format follows
 
 ## Unreleased
 
+## 0.2.0 - 2026-09-25
+
+First release on PyPI.
+
 ### Added
 
 - `OpenRouterLLM` and the `openrouter:<slug>` spec: one key for models from
