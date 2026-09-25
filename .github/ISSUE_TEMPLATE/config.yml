@@ -1,8 +1,14 @@
 blank_issues_enabled: false
 contact_links:
-  - name: Questions and ideas
+  - name: Questions
+    url: https://github.com/inboxpraveen/ThinkLess/discussions/categories/q-a
+    about: Ask how to use ThinkLess, its adapters, calibration or deployment.
+  - name: Ideas and show and tell
     url: https://github.com/inboxpraveen/ThinkLess/discussions
-    about: Ask how to use ThinkLess or share what you built with it.
+    about: Suggest a feature or share what you built with ThinkLess.
+  - name: Decision benchmark submissions
+    url: https://github.com/inboxpraveen/ThinkLess/discussions/categories/benchmark-submissions
+    about: Ask about the benchmark, or ask the maintainers to run and verify your model.
   - name: Security issue
     url: https://github.com/inboxpraveen/ThinkLess/security/advisories/new
     about: Report a vulnerability privately. Please do not open a public issue.
