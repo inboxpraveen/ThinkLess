@@ -79,6 +79,39 @@ recommends the lowest threshold that meets the target.
 | `trace ls [DIR]` | Recent traces with their headline numbers |
 | `trace show FILE` | One trace as a tree with its summary |
 | `trace view [PATHS...] [--out FILE] [--no-open]` | Write the self-contained HTML viewer |
+| `trace export PATHS... --out FILE` | Traced decisions as labeling rows for `calibrate`; filter with `--question`, `--status`, `--plane`, `--limit` |
+| `trace drift --baseline PATHS --current PATHS` | Compare two periods question by question; exits with 1 when a question drifted |
+
+## `thinkless shadow`
+
+Reads the logs written by [shadow mode](../guides/shadow-mode.md).
+
+| Command | |
+|---|---|
+| `shadow report LOGS...` | Agreement with a 95% interval, share settled without an LLM, cost and latency on both sides, fitted thresholds and a verdict per question |
+| `shadow export LOGS... --out FILE` | Disagreements (or every call with `--all`) as labeling rows for `calibrate` |
+
+`shadow report` options: `--target` (agreement the lower bound must reach,
+default `0.95`), `--min-calls` (default `100`), `--volume` (decisions a month,
+for the monthly projection) and `--json`. `shadow export` options:
+`--question`, `--all` and `--label-from primary|shadow|none`.
+
+## `thinkless serve ENGINE`
+
+Serves an engine over HTTP; see [serving](../guides/serving.md). `ENGINE` is
+`module:attribute`, an engine or a function that returns one.
+
+| Option | Default | |
+|---|---|---|
+| `--questions` | `QUESTIONS` in the engine's module | Registered questions, as `module:attribute` |
+| `--host`, `--port` | `127.0.0.1`, `8080` | Where to listen |
+| `--api-key-env` | `THINKLESS_API_KEY` | Variable holding the bearer token clients must send |
+| `--registered-only` | off | Refuse question specs that are not registered |
+
+## `thinkless mcp ENGINE`
+
+Serves the registered questions as MCP tools, one `decide_<question>` tool
+each. `--transport stdio` (default) or `streamable-http`.
 
 ## Environment variables
 
@@ -92,3 +125,4 @@ recommends the lowest threshold that meets the target.
 | `TYPESAFE_API_KEY` | | For `SystemOne.jev()` |
 | `OPENROUTER_API_KEY` | | For `openrouter:` models |
 | `ANTHROPIC_API_KEY`, `OPENAI_API_KEY` | | For hosted reasoning models |
+| `THINKLESS_API_KEY` | | Bearer token for `thinkless serve` |

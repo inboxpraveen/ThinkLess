@@ -62,9 +62,40 @@ worker threads.
 Qwen3-1.7B loaded together: 6.7 GB. On CPU-only hosts, GLiNER stays fast
 (about 85 ms) while Laya slows to about 650 ms per call.
 
+**Serve one engine to many agents.** `thinkless serve` puts an engine behind
+HTTP, with a System One compatible endpoint, and `thinkless mcp` exposes its
+questions as MCP tools; see [serving](serving.md).
+
 **Pin versions.** GLiNER2 requires `transformers<5`. Model weights on the
 Hugging Face Hub can change under a moving revision; pin revisions for
 reproducible behavior.
+
+## Limits
+
+**Give every request a deadline.** `Engine(deadline_ms=...)`, or
+`decide(..., deadline_ms=...)` per call, bounds the time a decision may take.
+The deadline is checked before each provider: once it has passed, the rest of
+the cascade is skipped and open questions come back `uncertain` with the best
+answer so far. A provider call already running is not interrupted, so give
+hosted clients their own timeout as well.
+
+**Cap what the engine may spend.** `SpendLimit` is a dollar budget over the
+engine's lifetime or a rolling window:
+
+```python
+from thinkless import Engine, SpendLimit
+
+engine = Engine(providers, llm=llm, spend_limit=SpendLimit(50.0, window_s=86400))
+
+with engine.run("ticket", max_cost_usd=0.02):   # and a cap for one run
+    ...
+```
+
+Past a limit, paid providers are skipped (their attempts are recorded with
+reason `spend_limit`), rules and local models keep answering, and
+`engine.generate` raises `SpendLimitError`. The check runs before each paid
+call, so the call that crosses the limit completes. `limit.spent_usd` and
+`limit.remaining_usd` feed a dashboard.
 
 ## Observability
 
@@ -82,16 +113,38 @@ with GenAI semantic convention attributes. Alert on the numbers that drift:
 escalation rate per question, share of decisions reaching the LLM, and
 uncertain decisions per hour.
 
+**Check for drift on a schedule.** Traffic changes, and confidence
+distributions move with it. `thinkless trace drift` compares two periods of
+traces question by question: the share reaching the LLM, the share not
+accepted, the answer distribution and the mean confidence. It exits with
+status 1 when a question crosses a threshold, so a nightly job can page
+someone:
+
+```bash
+thinkless trace drift --baseline traces/2026-09 --current traces/2026-10
+```
+
+**Turn traces into labels.** `thinkless trace export` writes traced decisions
+as rows in the format `thinkless calibrate` reads. Export the uncertain and
+escalated ones, label them, and recalibrate:
+
+```bash
+thinkless trace export traces/2026-10 --out to_label.jsonl --status uncertain --limit 500
+```
+
+Both need traces written with content capture on, at least for a sample.
+
 **Log through the `thinkless` logger.** The library never configures logging
 itself. `thinkless.configure_logging(json_format=True)` emits one JSON object
 per line for log shippers.
 
 ## Rolling out
 
-**Start in shadow.** Run the hybrid engine next to your current agent on the
-same inputs, compare decisions from the traces, and switch once agreement on
-the questions that matter is where you need it. The `llm` mode of the support
-benchmark is exactly this comparison, run offline.
+**Start in shadow.** [Shadow mode](shadow-mode.md) runs the engine next to
+your current code on live traffic, changes nothing it returns, and reports
+agreement, projected savings and a verdict per question. Switch a question
+over once its verdict is ready, and keep a small audit shadow running
+afterwards. The [migration guide](migration.md) walks through it.
 
 **Watch the tail, not the mean.** Escalations are where latency hides: a
 ticket that escalates one question pays for a full LLM call. Track p95

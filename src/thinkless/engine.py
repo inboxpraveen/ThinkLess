@@ -13,9 +13,10 @@ from typing import Any, Literal
 from .confidence import from_distribution, from_yes_probability
 from .decision import Answer, Attempt, Decision, Plane, Status
 from .errors import ConfigurationError
+from .limits import SpendLimit, SpendLimitError, _run_limit
 from .llm.base import LLM, Completion, Message, as_messages
 from .logs import get_logger
-from .pricing import PriceTable, default_prices
+from .pricing import LOCAL_PROVIDERS, PriceTable, default_prices
 from .providers.base import DecisionProvider, ProviderResult, State
 from .questions import Extract, Kind, Question, Score
 from .tracing.span import Span
@@ -108,6 +109,17 @@ class Engine:
             alone whether a request for a human is an injection, one model
             said yes to 5 of 10 such messages. The cost is one short line per
             settled question.
+        deadline_ms: Time budget for one ``decide`` or ``decide_many`` call.
+            It is checked before each provider is asked: once it has passed,
+            the remaining providers are skipped and open questions come back
+            ``uncertain`` with the best answer so far. A provider call that
+            is already running is not interrupted, so give hosted clients
+            their own timeout.
+        spend_limit: A :class:`~thinkless.SpendLimit` shared by every call on
+            this engine. Once it is used up, paid providers are skipped and
+            :meth:`generate` raises :class:`~thinkless.SpendLimitError`;
+            rules and local models keep answering. ``run(max_cost_usd=...)``
+            adds a cap for one run.
 
     Example:
         >>> engine = Engine([Rules(), GLiNER(), Laya(), LLMDecider(llm)], llm=llm)
@@ -128,6 +140,8 @@ class Engine:
         prices: PriceTable | None = None,
         on_error: Literal["continue", "raise"] = "continue",
         escalation_context: bool = True,
+        deadline_ms: float | None = None,
+        spend_limit: SpendLimit | None = None,
     ) -> None:
         names = [p.name for p in providers]
         duplicates = sorted({n for n in names if names.count(n) > 1})
@@ -137,6 +151,8 @@ class Engine:
             raise ConfigurationError("threshold must be between 0 and 1")
         if on_error not in ("continue", "raise"):
             raise ConfigurationError("on_error must be 'continue' or 'raise'")
+        if deadline_ms is not None and deadline_ms <= 0:
+            raise ConfigurationError("deadline_ms must be positive")
         self.providers: list[DecisionProvider] = list(providers)
         self.llm = llm
         self.threshold = threshold
@@ -146,25 +162,47 @@ class Engine:
         self.prices = prices or default_prices()
         self.on_error = on_error
         self.escalation_context = escalation_context
+        self.deadline_ms = deadline_ms
+        self.spend_limit = spend_limit
 
     # ------------------------------------------------------------------ runs
 
     @contextmanager
-    def run(self, name: str, *, input: Any = None, **attributes: Any) -> Iterator[Run]:
+    def run(
+        self,
+        name: str,
+        *,
+        input: Any = None,
+        max_cost_usd: float | None = None,
+        **attributes: Any,
+    ) -> Iterator[Run]:
         """Open a root span for one unit of work (a ticket, a request, a task).
 
         Everything the engine does inside the block, including decorated tool
         calls, becomes part of this trace.
+
+        Args:
+            name: Span name.
+            input: Recorded on the root span when content capture is on.
+            max_cost_usd: Spend cap for this run. Past it, paid providers are
+                skipped and ``generate`` raises
+                :class:`~thinkless.SpendLimitError`, as with the engine-wide
+                ``spend_limit``.
+            attributes: Recorded on the root span.
         """
         collector = _RunCollector()
         self.tracer.add_sink(collector)
+        token = _run_limit.set(SpendLimit(max_cost_usd) if max_cost_usd is not None else None)
         try:
             with self.tracer.span("run", name, **attributes) as span:
                 collector.trace_id = span.trace_id
                 if input is not None:
                     span.set(input=self.tracer.content(input))
+                if max_cost_usd is not None:
+                    span.set(max_cost_usd=max_cost_usd)
                 yield Run(span, collector)
         finally:
+            _run_limit.reset(token)
             self.tracer.sinks.remove(collector)
 
     @contextmanager
@@ -186,10 +224,17 @@ class Engine:
 
     # ------------------------------------------------------------- decisions
 
-    def decide(self, state: State, question: Question, *, name: str | None = None) -> Decision:
+    def decide(
+        self,
+        state: State,
+        question: Question,
+        *,
+        name: str | None = None,
+        deadline_ms: float | None = None,
+    ) -> Decision:
         """Answer one question. See :meth:`decide_many` for batching."""
         key = name or question.key
-        return self.decide_many(state, {key: question}, label=key)[key]
+        return self.decide_many(state, {key: question}, label=key, deadline_ms=deadline_ms)[key]
 
     def decide_many(
         self,
@@ -197,6 +242,7 @@ class Engine:
         questions: Mapping[str, Question] | Sequence[Question],
         *,
         label: str | None = None,
+        deadline_ms: float | None = None,
     ) -> dict[str, Decision]:
         """Answer several questions about the same state.
 
@@ -209,11 +255,14 @@ class Engine:
             questions: A mapping of name to question, or a sequence of
                 questions keyed by their ``key``.
             label: Span name. Defaults to the joined question names.
+            deadline_ms: Time budget for this call. Defaults to the engine's
+                ``deadline_ms``.
 
         Returns:
             Decisions keyed by question name, in input order.
         """
         batch = self._as_mapping(questions)
+        deadline = deadline_ms if deadline_ms is not None else self.deadline_ms
         with self.tracer.span("decide", label or ", ".join(batch)[:80]) as span:
             span.set(
                 questions={
@@ -223,7 +272,7 @@ class Engine:
             )
             if self.tracer.capture_content:
                 span.set(state=self.tracer.content(state))
-            decisions = self._cascade(state, batch)
+            decisions = self._cascade(state, batch, deadline)
             for decision in decisions.values():
                 decision.span_id = span.span_id
             span.set(decisions=[self._trace_summary(d) for d in decisions.values()])
@@ -267,6 +316,11 @@ class Engine:
                 "generate() needs an LLM: pass llm= to Engine or to generate()"
             )
         messages = as_messages(prompt)
+        paid = model.provider not in LOCAL_PROVIDERS
+        if paid:
+            limit = self._exhausted_limit()
+            if limit is not None:
+                raise SpendLimitError(f"generate() refused: {limit!r} is used up")
         with self.tracer.span(
             "llm", name, plane="llm", provider=model.provider, model=model.model
         ) as span:
@@ -278,6 +332,7 @@ class Engine:
             cost, source = self._cost(
                 model.provider, completion.model, completion.usage, completion.cost_usd
             )
+            self._charge(cost)
             span.set(
                 model=completion.model,
                 usage=completion.usage.model_dump(),
@@ -293,9 +348,16 @@ class Engine:
     # ----------------------------------------------------------------- async
 
     async def adecide(
-        self, state: State, question: Question, *, name: str | None = None
+        self,
+        state: State,
+        question: Question,
+        *,
+        name: str | None = None,
+        deadline_ms: float | None = None,
     ) -> Decision:
-        return await asyncio.to_thread(self.decide, state, question, name=name)
+        return await asyncio.to_thread(
+            self.decide, state, question, name=name, deadline_ms=deadline_ms
+        )
 
     async def adecide_many(
         self,
@@ -303,8 +365,11 @@ class Engine:
         questions: Mapping[str, Question] | Sequence[Question],
         *,
         label: str | None = None,
+        deadline_ms: float | None = None,
     ) -> dict[str, Decision]:
-        return await asyncio.to_thread(self.decide_many, state, questions, label=label)
+        return await asyncio.to_thread(
+            self.decide_many, state, questions, label=label, deadline_ms=deadline_ms
+        )
 
     async def agenerate(self, prompt: str | Sequence[Message], **kwargs: Any) -> Completion:
         return await asyncio.to_thread(self.generate, prompt, **kwargs)
@@ -378,6 +443,17 @@ class Engine:
             return reported, "reported"
         cost, known = self.prices.cost(provider, model, usage)
         return cost, "price_table" if known else "unknown"
+
+    def _limits(self) -> list[SpendLimit]:
+        run_limit = _run_limit.get()
+        return [lim for lim in (self.spend_limit, run_limit) if lim is not None]
+
+    def _exhausted_limit(self) -> SpendLimit | None:
+        return next((lim for lim in self._limits() if lim.exhausted), None)
+
+    def _charge(self, cost: float) -> None:
+        for limit in self._limits():
+            limit.add(cost)
 
     def _threshold(self, key: str, question: Question, provider: str | None = None) -> float:
         # Most specific first: a calibrated threshold for this question on this
@@ -466,18 +542,47 @@ class Engine:
         summary["value"] = self._trace_value(decision.kind, decision.value)
         return summary
 
-    def _cascade(self, state: State, batch: dict[str, Question]) -> dict[str, Decision]:
+    def _skip_reason(
+        self, provider: DecisionProvider, started: float, deadline_ms: float | None
+    ) -> str | None:
+        if deadline_ms is not None and (time.perf_counter() - started) * 1000.0 >= deadline_ms:
+            return "deadline"
+        if provider.price_key not in LOCAL_PROVIDERS and self._exhausted_limit() is not None:
+            return "spend_limit"
+        return None
+
+    def _cascade(
+        self, state: State, batch: dict[str, Question], deadline_ms: float | None = None
+    ) -> dict[str, Decision]:
         pending = dict(batch)
         resolved: dict[str, Decision] = {}
         best: dict[str, Decision] = {}
         attempts: dict[str, list[Attempt]] = defaultdict(list)
         latency: dict[str, float] = defaultdict(float)
+        cascade_started = time.perf_counter()
 
         for provider in self.providers:
             if not pending:
                 break
             asked = {k: q for k, q in pending.items() if provider.supports(q)}
             if not asked:
+                continue
+            skip = self._skip_reason(provider, cascade_started, deadline_ms)
+            if skip is not None:
+                logger.info("skipping %s for %s: %s", provider.name, list(asked), skip)
+                with self.tracer.span(
+                    "attempt",
+                    provider.name,
+                    plane=provider.plane.value,
+                    provider=provider.name,
+                    questions=list(asked),
+                    skipped=skip,
+                ):
+                    pass
+                for key in asked:
+                    attempts[key].append(
+                        Attempt(provider=provider.name, plane=provider.plane, reason=skip)
+                    )
                 continue
             with self.tracer.span(
                 "attempt",
@@ -515,6 +620,7 @@ class Engine:
                 cost, source = self._cost(
                     provider.price_key, result.model, result.usage, result.cost_usd
                 )
+                self._charge(cost)
                 span.set(
                     model=result.model,
                     usage=result.usage.model_dump(),

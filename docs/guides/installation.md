@@ -18,6 +18,10 @@ that brings in heavy dependencies is an extra.
 | All local models | `pip install "thinkless[local]"` | the three above |
 | OpenTelemetry export | `pip install "thinkless[otel]"` | `opentelemetry-sdk` and the OTLP exporter |
 | The public dataset benchmarks | `pip install "thinkless[bench]"` | `datasets` |
+| The LangGraph adapter | `pip install "thinkless[langgraph]"` | `langgraph` |
+| The OpenAI Agents SDK adapter | `pip install "thinkless[openai-agents]"` | `openai-agents` |
+| The decision server (`thinkless serve`) | `pip install "thinkless[server]"` | `fastapi`, `uvicorn` |
+| MCP tools (`thinkless mcp`) | `pip install "thinkless[mcp]"` | `mcp` |
 | Everything | `pip install "thinkless[all]"` | all of the above |
 
 Extras combine: `pip install "thinkless[gliner,laya,openai]"`.
@@ -83,6 +87,7 @@ Python 3.12, install PyTorch as above, then `pip install "thinkless[local]"`.
 | Model weights | the Hugging Face cache, `~/.cache/huggingface` | `HF_HOME` |
 | Banking77 test file for the benchmarks | `~/.cache/thinkless/datasets` | |
 | Traces written by the CLI | `./.thinkless/traces` | `THINKLESS_TRACE_DIR` |
+| Shadow logs | wherever `Shadow(log=...)` points | |
 | Benchmark output | `./.thinkless/bench/<run>` | `--out` |
 | API keys | environment variables, or `./.env` for the CLI | |
 

@@ -1,8 +1,9 @@
 # Python API
 
 The public API is everything importable from `thinkless`,
-`thinkless.providers`, `thinkless.llm` and `thinkless.tracing`. Anything with
-a leading underscore is internal and may change.
+`thinkless.providers`, `thinkless.llm`, `thinkless.tracing`,
+`thinkless.shadow`, `thinkless.integrations` and `thinkless.server`. Anything
+with a leading underscore is internal and may change.
 
 ## Engine
 
@@ -20,6 +21,8 @@ a leading underscore is internal and may change.
 
 ::: thinkless.Extract
 
+::: thinkless.questions.question_from_spec
+
 ## Results
 
 ::: thinkless.Decision
@@ -29,6 +32,58 @@ a leading underscore is internal and may change.
 ::: thinkless.Status
 
 ::: thinkless.Plane
+
+## Limits
+
+::: thinkless.SpendLimit
+
+::: thinkless.SpendLimitError
+
+## Shadow mode
+
+::: thinkless.shadow.Shadow
+
+::: thinkless.shadow.ShadowStats
+
+::: thinkless.shadow.build_report
+
+::: thinkless.shadow.ShadowReport
+
+::: thinkless.shadow.QuestionReport
+
+::: thinkless.shadow.export_labels
+
+::: thinkless.shadow.agree
+
+## Integrations
+
+::: thinkless.integrations.Router
+
+::: thinkless.integrations.route
+
+::: thinkless.integrations.gate
+
+::: thinkless.integrations.ToolBlockedError
+
+::: thinkless.integrations.last_user_text
+
+::: thinkless.integrations.langgraph.router
+
+::: thinkless.integrations.langgraph.decision_node
+
+::: thinkless.integrations.langgraph.adecision_node
+
+::: thinkless.integrations.openai_agents.input_guardrail
+
+::: thinkless.integrations.openai_agents.tool_input_guardrail
+
+::: thinkless.integrations.openai_agents.route_agent
+
+## Serving
+
+::: thinkless.server.app.create_app
+
+::: thinkless.server.mcp.create_mcp_server
 
 ## Providers
 
@@ -81,6 +136,12 @@ a leading underscore is internal and may change.
 ::: thinkless.tracing.otel.OTelSink
 
 ::: thinkless.tool
+
+::: thinkless.tracing.export.iter_decisions
+
+::: thinkless.tracing.export.export_trace_labels
+
+::: thinkless.tracing.export.drift_report
 
 ## Confidence and pricing
 

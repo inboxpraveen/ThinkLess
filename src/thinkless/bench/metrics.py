@@ -13,6 +13,7 @@ __all__ = [
     "percentile",
     "recommend_threshold",
     "threshold_sweep",
+    "wilson_interval",
 ]
 
 
@@ -113,3 +114,18 @@ def recommend_threshold(
         if point.accuracy is not None and point.accuracy >= target_accuracy and point.coverage > 0:
             return point
     return None
+
+
+def wilson_interval(successes: int, n: int, z: float = 1.96) -> tuple[float, float]:
+    """Wilson score interval for a proportion, 95% by default.
+
+    It stays inside [0, 1] and behaves at small ``n`` and at rates near 0 or
+    1, which is where agreement numbers usually sit.
+    """
+    if n <= 0:
+        return 0.0, 1.0
+    p = successes / n
+    denominator = 1 + z * z / n
+    centre = (p + z * z / (2 * n)) / denominator
+    half = z * math.sqrt(p * (1 - p) / n + z * z / (4 * n * n)) / denominator
+    return max(0.0, centre - half), min(1.0, centre + half)

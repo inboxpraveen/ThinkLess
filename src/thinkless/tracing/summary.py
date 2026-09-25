@@ -112,7 +112,7 @@ def summarize(spans: Iterable[Mapping[str, Any]]) -> TraceSummary:
             inp, out = _usage(attrs)
             summary.llm_input_tokens += inp
             summary.llm_output_tokens += out
-        elif kind == "attempt":
+        elif kind == "attempt" and not attrs.get("skipped"):
             inp, out = _usage(attrs)
             if plane == "llm":
                 summary.llm_calls += 1

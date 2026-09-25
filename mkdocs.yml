@@ -31,6 +31,13 @@ nav:
   - Home: index.md
   - Getting started: getting-started.md
   - Installation: guides/installation.md
+  - Use it in your agent:
+      - Overview: integrations/index.md
+      - LangGraph: integrations/langgraph.md
+      - OpenAI Agents SDK: integrations/openai-agents.md
+      - Any framework: integrations/any-framework.md
+      - Migrating an existing agent: guides/migration.md
+      - Shadow mode: guides/shadow-mode.md
   - Concepts:
       - The four planes: concepts/planes.md
       - Questions: concepts/questions.md
@@ -43,9 +50,12 @@ nav:
       - Providers: guides/providers.md
       - LLM backends: guides/llm-backends.md
       - Production: guides/production.md
+      - Serving decisions: guides/serving.md
+      - Running a pilot: guides/pilot.md
       - Troubleshooting: guides/troubleshooting.md
       - Releasing: guides/releasing.md
   - Benchmarks: benchmarks.md
+  - FAQ: faq.md
   - Reference:
       - Command line: reference/cli.md
       - Python API: reference/api.md
@@ -70,3 +80,7 @@ markdown_extensions:
       permalink: true
   - pymdownx.highlight
   - pymdownx.superfences
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.tasklist:
+      custom_checkbox: true

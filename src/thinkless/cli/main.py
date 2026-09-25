@@ -20,6 +20,10 @@ from rich.table import Table
 from .._version import __version__
 from ..logs import configure_logging
 from ..settings import Settings, load_env
+from .serve import mcp as mcp_command
+from .serve import serve as serve_command
+from .shadow import shadow_app
+from .traces import trace_drift, trace_export
 
 app = typer.Typer(
     name="thinkless",
@@ -589,6 +593,14 @@ def trace_view(
     console.print(f"Viewer: {output}")
     if open_browser:
         webbrowser.open(output.resolve().as_uri())
+
+
+# Commands defined in their own modules, listed after the ones above.
+trace_app.command("export")(trace_export)
+trace_app.command("drift")(trace_drift)
+app.add_typer(shadow_app, name="shadow")
+app.command("serve")(serve_command)
+app.command("mcp")(mcp_command)
 
 
 if __name__ == "__main__":  # pragma: no cover

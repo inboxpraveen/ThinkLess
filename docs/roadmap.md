@@ -1,18 +1,29 @@
 # Roadmap
 
-ThinkLess is at 0.1. The core API (questions, the engine, decisions, traces)
-is intended to stay stable; providers and benchmarks will grow. Plans change
-with what people build, so open a discussion if something here matters to
-you, or if something that is not here should be.
+The core API (questions, the engine, decisions, traces) is intended to stay
+stable; providers, adapters and benchmarks will grow. Plans change with what
+people build, so open a discussion if something here matters to you, or if
+something that is not here should be.
+
+## Done in 0.3
+
+- Shadow mode with agreement, projected savings, fitted thresholds and a
+  verdict per question, and an audit mode for live engines.
+- Adapters for LangGraph and the OpenAI Agents SDK, and framework-neutral
+  `route` and `gate` helpers (tested with LangChain tools and Pydantic AI).
+- Deadlines and spend limits on the engine, and per-run spend caps.
+- A decision server with a System One compatible endpoint, and MCP tools.
+- Traces to labeling rows, and a drift report between two periods.
 
 ## Next
 
-- **Shadow mode.** Run a second provider on a sample of live decisions in the
-  background and record agreement, so a team can measure a small model
-  against its current LLM on real traffic before switching.
-- **Calibration from traces.** Export the decisions of one question from a
-  trace directory as a labeling file, and feed labeled traces back into
-  `thinkless calibrate`.
+- **A neutral decision-model benchmark.** A public, provider-neutral
+  benchmark for decision models (Jev, Kev, OpenJev, Laya, GLiNER, Hugging
+  Face classifiers, LLM deciders) on public multi-domain datasets, with
+  multi-turn cases, that anyone can submit a model to.
+- **Cross-request batching in the server.** Collect the questions of
+  concurrent requests for a few milliseconds and send them to each local
+  model as one batch, which needs a batch entry point on providers.
 - **Calibrated LLM confidence.** Several hosted models expose token log
   probabilities; an `LLMDecider` that reads them would give LLM answers a real
   confidence, so they could be thresholded like every other provider.
@@ -22,9 +33,6 @@ you, or if something that is not here should be.
 
 ## Later
 
-- Framework adapters for LangGraph, Pydantic AI and the OpenAI Agents SDK, so
-  existing agents can route their decisions through an engine without a
-  rewrite.
 - A trace server with search across runs, for teams that outgrow single HTML
   files.
 - Learned routing: pick the provider order per question from calibration data

@@ -143,6 +143,51 @@ No GPU? `pip install thinkless` and run
 [`examples/01_rules_only.py`](https://github.com/inboxpraveen/ThinkLess/blob/main/examples/01_rules_only.py): the API, the cascade
 and the traces with no model downloads.
 
+## Use it in your agent
+
+ThinkLess sits inside the framework you already use, at the points where the
+agent decides something: which path to take, whether an input is safe,
+whether a tool call is inside policy. Uncertain decisions go to the code you
+run today, so nothing gets worse while the routine ones get cheaper.
+
+```python
+from thinkless.integrations.langgraph import router
+
+intent = router(engine, INTENT, {"order_status": "tracking", "refund": "refunds"},
+                default="agent")          # your existing LLM node
+builder.add_conditional_edges(START, intent, intent.destinations)
+```
+
+- [LangGraph](https://github.com/inboxpraveen/ThinkLess/blob/main/docs/integrations/langgraph.md):
+  routers, decision nodes and gated tools.
+- [OpenAI Agents SDK](https://github.com/inboxpraveen/ThinkLess/blob/main/docs/integrations/openai-agents.md):
+  input guardrails, tool guardrails and routing to a specialist agent.
+- [Any framework](https://github.com/inboxpraveen/ThinkLess/blob/main/docs/integrations/any-framework.md):
+  `route` and `gate` for Pydantic AI, a hand-written loop, or anything else.
+
+Before switching anything, measure it. Shadow mode runs ThinkLess next to your
+current code on live traffic and reports, per decision, the agreement with a
+confidence interval and what it would save:
+
+```python
+from thinkless.shadow import Shadow
+
+shadow = Shadow(engine, log="shadow/intent.jsonl", sample=0.2)
+
+@shadow.watch(INTENT, cost_usd=0.0004)    # today's cost per call
+def classify(message: str) -> str:
+    ...                                    # unchanged, and still what users get
+```
+
+```bash
+thinkless shadow report shadow/intent.jsonl --volume 2000000
+```
+
+The [migration guide](https://github.com/inboxpraveen/ThinkLess/blob/main/docs/guides/migration.md)
+walks through it, and the [FAQ](https://github.com/inboxpraveen/ThinkLess/blob/main/docs/faq.md)
+covers the common questions. To share one engine across services, run it as
+a [decision server or MCP tools](https://github.com/inboxpraveen/ThinkLess/blob/main/docs/guides/serving.md).
+
 ## Try the demo agent
 
 A complete customer support agent ships with the package: a mock store with
@@ -213,7 +258,15 @@ Writing your own provider is one class. [Providers](https://github.com/inboxprav
 
 ## Documentation
 
-- [Getting started](https://github.com/inboxpraveen/ThinkLess/blob/main/docs/getting-started.md)
+- [Getting started](https://github.com/inboxpraveen/ThinkLess/blob/main/docs/getting-started.md),
+  [installation](https://github.com/inboxpraveen/ThinkLess/blob/main/docs/guides/installation.md)
+- Use it in your agent: [overview](https://github.com/inboxpraveen/ThinkLess/blob/main/docs/integrations/index.md),
+  [LangGraph](https://github.com/inboxpraveen/ThinkLess/blob/main/docs/integrations/langgraph.md),
+  [OpenAI Agents SDK](https://github.com/inboxpraveen/ThinkLess/blob/main/docs/integrations/openai-agents.md),
+  [any framework](https://github.com/inboxpraveen/ThinkLess/blob/main/docs/integrations/any-framework.md),
+  [migration](https://github.com/inboxpraveen/ThinkLess/blob/main/docs/guides/migration.md),
+  [shadow mode](https://github.com/inboxpraveen/ThinkLess/blob/main/docs/guides/shadow-mode.md),
+  [FAQ](https://github.com/inboxpraveen/ThinkLess/blob/main/docs/faq.md)
 - Concepts: [the four planes](https://github.com/inboxpraveen/ThinkLess/blob/main/docs/concepts/planes.md),
   [questions](https://github.com/inboxpraveen/ThinkLess/blob/main/docs/concepts/questions.md),
   [confidence](https://github.com/inboxpraveen/ThinkLess/blob/main/docs/concepts/confidence.md),
@@ -224,16 +277,19 @@ Writing your own provider is one class. [Providers](https://github.com/inboxprav
   [providers](https://github.com/inboxpraveen/ThinkLess/blob/main/docs/guides/providers.md),
   [LLM backends](https://github.com/inboxpraveen/ThinkLess/blob/main/docs/guides/llm-backends.md),
   [production](https://github.com/inboxpraveen/ThinkLess/blob/main/docs/guides/production.md),
+  [serving](https://github.com/inboxpraveen/ThinkLess/blob/main/docs/guides/serving.md),
+  [running a pilot](https://github.com/inboxpraveen/ThinkLess/blob/main/docs/guides/pilot.md),
   [troubleshooting](https://github.com/inboxpraveen/ThinkLess/blob/main/docs/guides/troubleshooting.md)
 - [Benchmarks](https://github.com/inboxpraveen/ThinkLess/blob/main/docs/benchmarks.md), [CLI reference](https://github.com/inboxpraveen/ThinkLess/blob/main/docs/reference/cli.md),
   [Python API](https://github.com/inboxpraveen/ThinkLess/blob/main/docs/reference/api.md), [roadmap](https://github.com/inboxpraveen/ThinkLess/blob/main/docs/roadmap.md)
 
 ## Status
 
-ThinkLess is at 0.1: the core API (questions, the engine, decisions and
-traces) is meant to stay stable, and providers and benchmarks will grow.
-Next up are shadow mode, calibration from traces, calibrated LLM confidence
-from log probabilities, and live Jev runs. See the [roadmap](https://github.com/inboxpraveen/ThinkLess/blob/main/docs/roadmap.md).
+ThinkLess is pre-1.0: the core API (questions, the engine, decisions and
+traces) is meant to stay stable, and providers, adapters and benchmarks will
+grow. Next up are a neutral benchmark for decision models, cross-request
+batching in the server, calibrated LLM confidence from log probabilities, and
+live Jev runs. See the [roadmap](https://github.com/inboxpraveen/ThinkLess/blob/main/docs/roadmap.md).
 
 ## Contributing
 

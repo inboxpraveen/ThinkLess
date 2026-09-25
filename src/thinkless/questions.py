@@ -19,7 +19,7 @@ from typing import Any, ClassVar
 
 from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
 
-__all__ = ["Choice", "Extract", "Kind", "Question", "Score", "YesNo"]
+__all__ = ["Choice", "Extract", "Kind", "Question", "Score", "YesNo", "question_from_spec"]
 
 
 class Kind(str, Enum):
@@ -244,3 +244,32 @@ class Extract(Question):
     @property
     def key(self) -> str:
         return self.name or "extract_" + "_".join(self.fields)[:40]
+
+
+_KINDS: dict[str, type[Question]] = {
+    Kind.CHOICE.value: Choice,
+    Kind.SCORE.value: Score,
+    Kind.YES_NO.value: YesNo,
+    Kind.EXTRACT.value: Extract,
+}
+
+
+def question_from_spec(spec: Mapping[str, Any], *, name: str | None = None) -> Question:
+    """Rebuild a question from :meth:`Question.spec` output, or from JSON sent by a client.
+
+    Args:
+        spec: A mapping with ``kind`` (``choice``, ``score``, ``yes_no`` or
+            ``extract``) and that kind's fields.
+        name: Overrides ``spec["name"]``.
+
+    Raises:
+        ValueError: If the kind is unknown or the fields do not validate.
+    """
+    data = dict(spec)
+    kind = data.pop("kind", None)
+    cls = _KINDS.get(str(kind))
+    if cls is None:
+        raise ValueError(f"unknown question kind {kind!r}; use one of {', '.join(_KINDS)}")
+    if name is not None:
+        data["name"] = name
+    return cls.model_validate(data)

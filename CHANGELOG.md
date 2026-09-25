@@ -6,6 +6,41 @@ All notable changes are recorded here. The format follows
 
 ## Unreleased
 
+## 0.3.0 - 2026-09-25
+
+Shadow mode, framework adapters, limits, a decision server and MCP tools.
+
+### Added
+
+- Shadow mode (`thinkless.shadow`): run a candidate engine next to existing
+  decision code without changing what it returns, log both answers, and
+  report agreement with a 95% interval, the share settled without an LLM,
+  cost and latency on both sides, thresholds fitted on production traffic,
+  and a verdict per question (`thinkless shadow report`). Disagreements
+  export as labeling rows (`thinkless shadow export`). The same class audits
+  a live engine against an LLM.
+- Framework adapters (`thinkless.integrations`): a LangGraph router, decision
+  node and async decision node; OpenAI Agents SDK input guardrails, tool input
+  guardrails and `route_agent`; and framework-neutral `Router`, `route` and
+  `gate`, tested with LangChain tools and Pydantic AI. Extras `langgraph` and
+  `openai-agents`.
+- Engine deadlines (`deadline_ms` on the engine and per call), spend limits
+  (`SpendLimit`, lifetime or rolling window) and per-run caps
+  (`engine.run(..., max_cost_usd=...)`). Skipped providers are recorded with
+  reason `deadline` or `spend_limit`.
+- A decision server (`thinkless serve`, `thinkless.server.app.create_app`)
+  with `/v1/decide` and a System One compatible `/v1/systemone`, so another
+  engine's `SystemOne` provider, or TypeSafe's SDK, can use it. Extra
+  `server`.
+- MCP tools (`thinkless mcp`, `thinkless.server.mcp.create_mcp_server`): one
+  `decide_<question>` tool per registered question. Extra `mcp`.
+- `thinkless trace export` turns traced decisions into labeling rows, and
+  `thinkless trace drift` compares two periods and exits with 1 when a
+  question drifted.
+- `question_from_spec` rebuilds a question from its spec.
+- Docs: an integrations section, a migration guide, shadow mode, serving,
+  a pilot playbook and a FAQ, published to GitHub Pages by a new workflow.
+
 ## 0.2.0 - 2026-09-25
 
 First release on PyPI.

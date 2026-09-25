@@ -28,6 +28,7 @@ from ._version import __version__
 from .decision import Answer, Attempt, Decision, Plane, Status, Usage
 from .engine import Engine, Run
 from .errors import ConfigurationError, ThinkLessError
+from .limits import SpendLimit, SpendLimitError
 from .logs import configure_logging
 from .questions import Choice, Extract, Kind, Question, Score, YesNo
 from .settings import load_env
@@ -49,6 +50,8 @@ __all__ = [
     "Question",
     "Run",
     "Score",
+    "SpendLimit",
+    "SpendLimitError",
     "Status",
     "ThinkLessError",
     "TraceSummary",

@@ -70,7 +70,13 @@ otel = [
 ]
 # Public dataset benchmarks.
 bench = ["datasets>=3.0"]
-all = ["thinkless[local,openai,anthropic,otel,bench]"]
+# Agent framework adapters (thinkless.integrations).
+langgraph = ["langgraph>=1.0"]
+openai-agents = ["openai-agents>=0.22"]
+# The decision server (thinkless serve) and MCP tools (thinkless mcp).
+server = ["fastapi>=0.115", "uvicorn>=0.30"]
+mcp = ["mcp>=1.10"]
+all = ["thinkless[local,openai,anthropic,otel,bench,langgraph,openai-agents,server,mcp]"]
 dev = [
   "pytest>=8",
   "pytest-cov>=5",
@@ -79,11 +85,16 @@ dev = [
   "typesafe-sdk>=0.7",
   "mkdocs-material>=9.5",
   "mkdocstrings[python]>=0.26",
+  "langgraph>=1.0",
+  "openai-agents>=0.22",
+  "pydantic-ai-slim>=1.0",
+  "fastapi>=0.115",
+  "mcp>=1.10",
 ]
 
 [project.urls]
 Homepage = "https://github.com/inboxpraveen/ThinkLess"
-Documentation = "https://github.com/inboxpraveen/ThinkLess/tree/main/docs"
+Documentation = "https://inboxpraveen.github.io/ThinkLess/"
 Repository = "https://github.com/inboxpraveen/ThinkLess"
 Issues = "https://github.com/inboxpraveen/ThinkLess/issues"
 Changelog = "https://github.com/inboxpraveen/ThinkLess/blob/main/CHANGELOG.md"
