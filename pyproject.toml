@@ -52,12 +52,12 @@ dependencies = [
 # extra shares that bound to keep one resolvable environment.
 gliner = [
   "gliner2[local]>=2.0,<3",
-  "transformers>=4.48,<5",
+  "transformers>=4.48,<6",
   "protobuf>=4.25",
   "sentencepiece>=0.2",
 ]
-laya = ["laya>=0.3.20,<0.4", "transformers>=4.48,<5"]
-local-llm = ["transformers>=4.48,<5", "accelerate>=1.0", "torch>=2.1"]
+laya = ["laya>=0.3.20,<0.4", "transformers>=4.48,<6"]
+local-llm = ["transformers>=4.48,<6", "accelerate>=1.0", "torch>=2.1"]
 local = ["thinkless[gliner,laya,local-llm]"]
 # Hosted reasoning backends.
 openai = ["openai>=2.0"]
