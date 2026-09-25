@@ -6,6 +6,10 @@ All notable changes are recorded here. The format follows
 
 ## Unreleased
 
+## 0.4.0 - 2026-09-25
+
+The decision benchmark.
+
 ### Added
 
 - The decision benchmark 1.0 (`thinkless bench decisions`): eight public

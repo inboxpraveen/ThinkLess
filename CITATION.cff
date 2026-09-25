@@ -11,7 +11,7 @@ authors:
     given-names: Praveen
 repository-code: https://github.com/inboxpraveen/ThinkLess
 license: Apache-2.0
-version: 0.3.0
+version: 0.4.0
 date-released: 2026-09-25
 keywords:
   - agents
