@@ -1,0 +1,300 @@
+{"id": "massive/calibration/0000", "label": "social query", "locale": "hi-IN", "source": "hi-IN/validation:15645", "state": "सामाजिक जानकारी"}
+{"id": "massive/calibration/0001", "label": "general quirky", "locale": "en-US", "source": "en-US/validation:6675", "state": "if you could talk about three things what would they be"}
+{"id": "massive/calibration/0002", "label": "lists remove", "locale": "hi-IN", "source": "hi-IN/validation:10475", "state": "यह देखा पर निर्भर है"}
+{"id": "massive/calibration/0003", "label": "email sendemail", "locale": "ja-JP", "source": "ja-JP/validation:16479", "state": "太郎のメールに返信する"}
+{"id": "massive/calibration/0004", "label": "transport ticket", "locale": "hi-IN", "source": "hi-IN/validation:12470", "state": "सुबह जाने के लिए टिकट बुक करें"}
+{"id": "massive/calibration/0005", "label": "play podcasts", "locale": "en-US", "source": "en-US/validation:11324", "state": "move to the next episode"}
+{"id": "massive/calibration/0006", "label": "social post", "locale": "de-DE", "source": "de-DE/validation:15455", "state": "sende einen tweet an die lufthansa dass ich wütend bin ihr habt mein gepäck verloren"}
+{"id": "massive/calibration/0007", "label": "calendar remove", "locale": "ja-JP", "source": "ja-JP/validation:8463", "state": "カレンダーから今日午後一時の予定を消す"}
+{"id": "massive/calibration/0008", "label": "lists createoradd", "locale": "ja-JP", "source": "ja-JP/validation:11196", "state": "クリスマスリストにお菓子を追加する"}
+{"id": "massive/calibration/0009", "label": "lists query", "locale": "en-US", "source": "en-US/validation:11007", "state": "what is on the list for today"}
+{"id": "massive/calibration/0010", "label": "calendar query", "locale": "de-DE", "source": "de-DE/validation:7720", "state": "zeige mir die ausstehenden erinnerungen"}
+{"id": "massive/calibration/0011", "label": "lists remove", "locale": "ja-JP", "source": "ja-JP/validation:11131", "state": "今日以降の to do リストを削除してください"}
+{"id": "massive/calibration/0012", "label": "general quirky", "locale": "es-ES", "source": "es-ES/validation:13517", "state": "espero que podamos almorzar juntos"}
+{"id": "massive/calibration/0013", "label": "recommendation locations", "locale": "ja-JP", "source": "ja-JP/validation:11608", "state": "一番近くにある居酒屋を教えて"}
+{"id": "massive/calibration/0014", "label": "weather query", "locale": "es-ES", "source": "es-ES/validation:2058", "state": "está nublado hoy"}
+{"id": "massive/calibration/0015", "label": "audio volume down", "locale": "en-US", "source": "en-US/validation:331", "state": "softer"}
+{"id": "massive/calibration/0016", "label": "qa currency", "locale": "hi-IN", "source": "hi-IN/validation:14985", "state": "मुझे यूरो में दस डॉलर की विनिमय दर बताओ"}
+{"id": "massive/calibration/0017", "label": "email query", "locale": "ja-JP", "source": "ja-JP/validation:16615", "state": "恵美がメールを送ったか教えて"}
+{"id": "massive/calibration/0018", "label": "iot coffee", "locale": "hi-IN", "source": "hi-IN/validation:2599", "state": "मुझे अभी कॉफी चाहिए"}
+{"id": "massive/calibration/0019", "label": "news query", "locale": "en-US", "source": "en-US/validation:2598", "state": "what is the latest international news"}
+{"id": "massive/calibration/0020", "label": "qa factoid", "locale": "ja-JP", "source": "ja-JP/validation:14479", "state": "太陽と月の距離はどのぐらいですか"}
+{"id": "massive/calibration/0021", "label": "play game", "locale": "ja-JP", "source": "ja-JP/validation:10351", "state": "ツムツムを開く"}
+{"id": "massive/calibration/0022", "label": "takeaway query", "locale": "es-ES", "source": "es-ES/validation:6071", "state": "está mi orden lista para recoger ya"}
+{"id": "massive/calibration/0023", "label": "play game", "locale": "de-DE", "source": "de-DE/validation:10301", "state": "ich möchte ein wissensspiel spielen"}
+{"id": "massive/calibration/0024", "label": "calendar set", "locale": "de-DE", "source": "de-DE/validation:7136", "state": "erinnere mich an meine verabredung morgen"}
+{"id": "massive/calibration/0025", "label": "general quirky", "locale": "es-ES", "source": "es-ES/validation:6193", "state": "quieres escuchar lo que ha pasado hoy"}
+{"id": "massive/calibration/0026", "label": "iot cleaning", "locale": "es-ES", "source": "es-ES/validation:2518", "state": "hola cómo enciendo el robot aspirador"}
+{"id": "massive/calibration/0027", "label": "qa factoid", "locale": "de-DE", "source": "de-DE/validation:14516", "state": "welches war das beste smartphone in zweitausendsiebzehn"}
+{"id": "massive/calibration/0028", "label": "calendar set", "locale": "de-DE", "source": "de-DE/validation:7517", "state": "plane eine besprechung am dienstag ein"}
+{"id": "massive/calibration/0029", "label": "weather query", "locale": "es-ES", "source": "es-ES/validation:1223", "state": "cuál es la previsión del tiempo para el martes"}
+{"id": "massive/calibration/0030", "label": "email query", "locale": "en-US", "source": "en-US/validation:16303", "state": "can you check to see if i have any recent email alerts"}
+{"id": "massive/calibration/0031", "label": "music settings", "locale": "es-ES", "source": "es-ES/validation:4008", "state": "enciende la repetición"}
+{"id": "massive/calibration/0032", "label": "iot hue lightdim", "locale": "hi-IN", "source": "hi-IN/validation:1888", "state": "मुझे रसोई में कम रोशनी दो"}
+{"id": "massive/calibration/0033", "label": "qa definition", "locale": "en-US", "source": "en-US/validation:14987", "state": "what is computer"}
+{"id": "massive/calibration/0034", "label": "recommendation locations", "locale": "ja-JP", "source": "ja-JP/validation:11654", "state": "近くの中華料理店を検索"}
+{"id": "massive/calibration/0035", "label": "email query", "locale": "en-US", "source": "en-US/validation:17153", "state": "did bert write me today"}
+{"id": "massive/calibration/0036", "label": "calendar set", "locale": "es-ES", "source": "es-ES/validation:6858", "state": "programa el siguiente evento en el calendario con las siguientes personas"}
+{"id": "massive/calibration/0037", "label": "play music", "locale": "es-ES", "source": "es-ES/validation:5832", "state": "alexa pon rock clásico"}
+{"id": "massive/calibration/0038", "label": "general greet", "locale": "hi-IN", "source": "hi-IN/validation:1277", "state": "अरे"}
+{"id": "massive/calibration/0039", "label": "datetime query", "locale": "de-DE", "source": "de-DE/validation:1225", "state": "am fünfzehnten märz wird welcher tag sein"}
+{"id": "massive/calibration/0040", "label": "general quirky", "locale": "ja-JP", "source": "ja-JP/validation:13455", "state": "これに対する答えを得る方法を教えてもらえるか"}
+{"id": "massive/calibration/0041", "label": "weather query", "locale": "ja-JP", "source": "ja-JP/validation:5621", "state": "只今の気温"}
+{"id": "massive/calibration/0042", "label": "calendar set", "locale": "de-DE", "source": "de-DE/validation:7665", "state": "ich möchte eine verabredung zum mittagessen mit michael andi und bernd hinzufügen"}
+{"id": "massive/calibration/0043", "label": "general quirky", "locale": "en-US", "source": "en-US/validation:14541", "state": "get me details of this person"}
+{"id": "massive/calibration/0044", "label": "recommendation locations", "locale": "ja-JP", "source": "ja-JP/validation:12039", "state": "近所のレストランを確認"}
+{"id": "massive/calibration/0045", "label": "calendar set", "locale": "ja-JP", "source": "ja-JP/validation:6771", "state": "花子との会議を予約する"}
+{"id": "massive/calibration/0046", "label": "iot hue lightup", "locale": "de-DE", "source": "de-DE/validation:4573", "state": "drehe die beleuchtung hier drin auf"}
+{"id": "massive/calibration/0047", "label": "play game", "locale": "de-DE", "source": "de-DE/validation:10415", "state": "lass uns tic tac toe spielen"}
+{"id": "massive/calibration/0048", "label": "iot cleaning", "locale": "en-US", "source": "en-US/validation:1925", "state": "start my robot vacuum cleaner"}
+{"id": "massive/calibration/0049", "label": "email query", "locale": "de-DE", "source": "de-DE/validation:15910", "state": "prüfe emails der letzten zwölf stunden"}
+{"id": "massive/calibration/0050", "label": "play podcasts", "locale": "hi-IN", "source": "hi-IN/validation:11500", "state": "एक प्रकरण पीछे"}
+{"id": "massive/calibration/0051", "label": "qa maths", "locale": "hi-IN", "source": "hi-IN/validation:13651", "state": "पांच किलोमीटर में कितने मील"}
+{"id": "massive/calibration/0052", "label": "qa factoid", "locale": "hi-IN", "source": "hi-IN/validation:13231", "state": "सबसे ऊंची इमारत"}
+{"id": "massive/calibration/0053", "label": "calendar remove", "locale": "de-DE", "source": "de-DE/validation:6883", "state": "lösche diese geburtstagsfeier morgen um vierzehn uhr"}
+{"id": "massive/calibration/0054", "label": "email query", "locale": "de-DE", "source": "de-DE/validation:16788", "state": "wem habe ich vor kurzem eine email geschickt"}
+{"id": "massive/calibration/0055", "label": "transport taxi", "locale": "ja-JP", "source": "ja-JP/validation:12205", "state": "十五分後に家までウーバーを手配していただけるでしょうか"}
+{"id": "massive/calibration/0056", "label": "takeaway order", "locale": "en-US", "source": "en-US/validation:5968", "state": "i want to order food"}
+{"id": "massive/calibration/0057", "label": "email querycontact", "locale": "hi-IN", "source": "hi-IN/validation:17102", "state": "राजू के फोन नंबर पर कॉल करें"}
+{"id": "massive/calibration/0058", "label": "music query", "locale": "hi-IN", "source": "hi-IN/validation:3421", "state": "यह कौनसा संगीत है"}
+{"id": "massive/calibration/0059", "label": "play radio", "locale": "ja-JP", "source": "ja-JP/validation:9453", "state": "famosa のラジオを再生する"}
+{"id": "massive/calibration/0060", "label": "play game", "locale": "hi-IN", "source": "hi-IN/validation:10351", "state": "ओपन papa pear saga"}
+{"id": "massive/calibration/0061", "label": "iot hue lightchange", "locale": "hi-IN", "source": "hi-IN/validation:5479", "state": "एक अलग बत्ती के रंग को सक्रिय करें"}
+{"id": "massive/calibration/0062", "label": "iot cleaning", "locale": "de-DE", "source": "de-DE/validation:1599", "state": "kannst du den roomba starten"}
+{"id": "massive/calibration/0063", "label": "qa maths", "locale": "es-ES", "source": "es-ES/validation:12978", "state": "centros de navegación"}
+{"id": "massive/calibration/0064", "label": "play game", "locale": "ja-JP", "source": "ja-JP/validation:10291", "state": "spider を遊び始める"}
+{"id": "massive/calibration/0065", "label": "calendar set", "locale": "en-US", "source": "en-US/validation:8446", "state": "olly remind me i need to be at the library a week from today at five"}
+{"id": "massive/calibration/0066", "label": "lists query", "locale": "hi-IN", "source": "hi-IN/validation:10539", "state": "आखिरी सूची जो अपलोड की थी मुझे भेजो"}
+{"id": "massive/calibration/0067", "label": "iot hue lightdim", "locale": "ja-JP", "source": "ja-JP/validation:2313", "state": "照明を七に落とす"}
+{"id": "massive/calibration/0068", "label": "recommendation movies", "locale": "en-US", "source": "en-US/validation:11851", "state": "what are movies that are playing near me with high reviews"}
+{"id": "massive/calibration/0069", "label": "qa currency", "locale": "de-DE", "source": "de-DE/validation:15090", "state": "bitte schau nach dem wechselkurs zwischen u. s. dollar und mexikanischen pesos"}
+{"id": "massive/calibration/0070", "label": "calendar remove", "locale": "de-DE", "source": "de-DE/validation:8549", "state": "lösche termin im kalender"}
+{"id": "massive/calibration/0071", "label": "news query", "locale": "ja-JP", "source": "ja-JP/validation:3973", "state": "今 j リーグではどのチームがトップにいるか知りたいです"}
+{"id": "massive/calibration/0072", "label": "calendar set", "locale": "ja-JP", "source": "ja-JP/validation:8749", "state": "今日から二日後を休日としてフラグ立ててください"}
+{"id": "massive/calibration/0073", "label": "calendar set", "locale": "de-DE", "source": "de-DE/validation:7769", "state": "füge mein training am vierten februar um vierzehn uhr im schlosspark hinzu"}
+{"id": "massive/calibration/0074", "label": "transport ticket", "locale": "ja-JP", "source": "ja-JP/validation:12748", "state": "電車の切符を買う必要があります"}
+{"id": "massive/calibration/0075", "label": "calendar set", "locale": "ja-JP", "source": "ja-JP/validation:8451", "state": "今度の祝日を教えて"}
+{"id": "massive/calibration/0076", "label": "general quirky", "locale": "en-US", "source": "en-US/validation:6640", "state": "very hectic"}
+{"id": "massive/calibration/0077", "label": "lists query", "locale": "en-US", "source": "en-US/validation:10557", "state": "please show my list"}
+{"id": "massive/calibration/0078", "label": "calendar set", "locale": "es-ES", "source": "es-ES/validation:7474", "state": "recuerda arreglar una reunión entre los jugadores y yo mañana por la tarde noche a las siete"}
+{"id": "massive/calibration/0079", "label": "qa factoid", "locale": "en-US", "source": "en-US/validation:14609", "state": "explain to me how gravity works"}
+{"id": "massive/calibration/0080", "label": "calendar set", "locale": "hi-IN", "source": "hi-IN/validation:7769", "state": "चार फरवरी को दो पी.एम. पर कलिंजी कुंज पार्क में मेरा अभ्यास जोड़ें"}
+{"id": "massive/calibration/0081", "label": "calendar query", "locale": "es-ES", "source": "es-ES/validation:6881", "state": "cuándo es mi próxima cita en calendario"}
+{"id": "massive/calibration/0082", "label": "lists remove", "locale": "es-ES", "source": "es-ES/validation:10732", "state": "eliminar la pimienta de mi lista de la compra"}
+{"id": "massive/calibration/0083", "label": "transport ticket", "locale": "en-US", "source": "en-US/validation:12575", "state": "i need to go to lyon book a train ticket"}
+{"id": "massive/calibration/0084", "label": "qa stock", "locale": "ja-JP", "source": "ja-JP/validation:4942", "state": "今日の株式市場について送ってください"}
+{"id": "massive/calibration/0085", "label": "weather query", "locale": "en-US", "source": "en-US/validation:3340", "state": "ok google what's the weather like"}
+{"id": "massive/calibration/0086", "label": "calendar query", "locale": "ja-JP", "source": "ja-JP/validation:7945", "state": "十一月二十日は何がある"}
+{"id": "massive/calibration/0087", "label": "play music", "locale": "de-DE", "source": "de-DE/validation:1192", "state": "ich muss regenbogen von lena meyer hören"}
+{"id": "massive/calibration/0088", "label": "iot wemo on", "locale": "es-ES", "source": "es-ES/validation:5651", "state": "enciende el enchufe wemo"}
+{"id": "massive/calibration/0089", "label": "lists remove", "locale": "de-DE", "source": "de-DE/validation:11084", "state": "streiche die milch von der einkaufs liste"}
+{"id": "massive/calibration/0090", "label": "alarm set", "locale": "hi-IN", "source": "hi-IN/validation:4694", "state": "रात के दस बजे के लिए अलार्म सेट करो"}
+{"id": "massive/calibration/0091", "label": "general quirky", "locale": "en-US", "source": "en-US/validation:14744", "state": "what kind of implement is a broiler and how do i use it"}
+{"id": "massive/calibration/0092", "label": "recommendation locations", "locale": "de-DE", "source": "de-DE/validation:11945", "state": "kannst du ein preiswertes restaurant in der gegend empfehlen"}
+{"id": "massive/calibration/0093", "label": "audio volume up", "locale": "en-US", "source": "en-US/validation:5726", "state": "can you speak louder"}
+{"id": "massive/calibration/0094", "label": "qa stock", "locale": "hi-IN", "source": "hi-IN/validation:14341", "state": "google के लिए आज का बंद भाव"}
+{"id": "massive/calibration/0095", "label": "weather query", "locale": "es-ES", "source": "es-ES/validation:4681", "state": "se va a suspender por la lluvia mi partido de golf"}
+{"id": "massive/calibration/0096", "label": "calendar query", "locale": "es-ES", "source": "es-ES/validation:7977", "state": "hay algún recordatorio establecido para hoy"}
+{"id": "massive/calibration/0097", "label": "news query", "locale": "hi-IN", "source": "hi-IN/validation:4495", "state": "मुझे दैनिक जागरण का सबसे ताजा ख़बर दो"}
+{"id": "massive/calibration/0098", "label": "play music", "locale": "en-US", "source": "en-US/validation:3712", "state": "play my current playlist from top"}
+{"id": "massive/calibration/0099", "label": "audio volume down", "locale": "ja-JP", "source": "ja-JP/validation:115", "state": "音量を小さく設定する"}
+{"id": "massive/calibration/0100", "label": "email querycontact", "locale": "en-US", "source": "en-US/validation:16818", "state": "please open my contact list"}
+{"id": "massive/calibration/0101", "label": "general quirky", "locale": "es-ES", "source": "es-ES/validation:13227", "state": "resume todas las cosas que podría hacer por mí para ser más feliz"}
+{"id": "massive/calibration/0102", "label": "general quirky", "locale": "de-DE", "source": "de-DE/validation:6905", "state": "es ist sehr schwierig"}
+{"id": "massive/calibration/0103", "label": "email sendemail", "locale": "es-ES", "source": "es-ES/validation:16903", "state": "envía una respuesta a mi último correo electrónico"}
+{"id": "massive/calibration/0104", "label": "calendar set", "locale": "es-ES", "source": "es-ES/validation:8619", "state": "programa y evento para el día quince de cada mes para recordarme que debo pagar mi factura de internet"}
+{"id": "massive/calibration/0105", "label": "qa factoid", "locale": "ja-JP", "source": "ja-JP/validation:14989", "state": "世界最小の島はどれ"}
+{"id": "massive/calibration/0106", "label": "general quirky", "locale": "en-US", "source": "en-US/validation:13517", "state": "i hope we could have lunch together"}
+{"id": "massive/calibration/0107", "label": "calendar query", "locale": "en-US", "source": "en-US/validation:8208", "state": "what time is the evening meeting i have with john"}
+{"id": "massive/calibration/0108", "label": "weather query", "locale": "de-DE", "source": "de-DE/validation:582", "state": "wird es morgen regnen"}
+{"id": "massive/calibration/0109", "label": "weather query", "locale": "hi-IN", "source": "hi-IN/validation:763", "state": "इस सप्ताह मौसम कैसा रहेगा"}
+{"id": "massive/calibration/0110", "label": "weather query", "locale": "hi-IN", "source": "hi-IN/validation:4538", "state": "आपने मुझे जो मौसम की भविष्यवाणियां दी हैं वे गलत शहर के लिए हैं मैं वहां के तापमान को जानना चाहता हूं जहां मैं हूं"}
+{"id": "massive/calibration/0111", "label": "transport taxi", "locale": "ja-JP", "source": "ja-JP/validation:12232", "state": "家に行くためのタクシーを探す"}
+{"id": "massive/calibration/0112", "label": "email query", "locale": "hi-IN", "source": "hi-IN/validation:16090", "state": "पिछले पांच मिनट में कोई भी आने वाली ईमेल"}
+{"id": "massive/calibration/0113", "label": "general quirky", "locale": "en-US", "source": "en-US/validation:6499", "state": "mobile"}
+{"id": "massive/calibration/0114", "label": "qa factoid", "locale": "es-ES", "source": "es-ES/validation:14479", "state": "dime la distancia entre el sol y la luna"}
+{"id": "massive/calibration/0115", "label": "lists createoradd", "locale": "es-ES", "source": "es-ES/validation:10648", "state": "añadir supermercado la lista"}
+{"id": "massive/calibration/0116", "label": "calendar remove", "locale": "de-DE", "source": "de-DE/validation:7035", "state": "leere kalender für diesen monat"}
+{"id": "massive/calibration/0117", "label": "social post", "locale": "hi-IN", "source": "hi-IN/validation:15342", "state": "फेसबुक लाएँ और देश अमेरीका को जन्मदिन की शुभकामनाएँ दें"}
+{"id": "massive/calibration/0118", "label": "email query", "locale": "es-ES", "source": "es-ES/validation:16303", "state": "puede verificar si tiene alguna alerta reciente por correo electrónico"}
+{"id": "massive/calibration/0119", "label": "takeaway query", "locale": "es-ES", "source": "es-ES/validation:6009", "state": "donde puedo recoger mi comida china"}
+{"id": "massive/calibration/0120", "label": "calendar query", "locale": "es-ES", "source": "es-ES/validation:8068", "state": "cuéntame todos los detalles conocidos sobre el torneo del veintidós de marzo"}
+{"id": "massive/calibration/0121", "label": "social query", "locale": "en-US", "source": "en-US/validation:15297", "state": "please inform me of any new status updates"}
+{"id": "massive/calibration/0122", "label": "play music", "locale": "es-ES", "source": "es-ES/validation:5449", "state": "pon canciones de flamenco"}
+{"id": "massive/calibration/0123", "label": "datetime query", "locale": "en-US", "source": "en-US/validation:5744", "state": "what day does my birthday fall on next year"}
+{"id": "massive/calibration/0124", "label": "datetime query", "locale": "en-US", "source": "en-US/validation:2112", "state": "give me the time in london"}
+{"id": "massive/calibration/0125", "label": "email sendemail", "locale": "es-ES", "source": "es-ES/validation:16232", "state": "olly responde al correo electrónico de romina diciendo que su idea es fantastica"}
+{"id": "massive/calibration/0126", "label": "lists remove", "locale": "de-DE", "source": "de-DE/validation:10916", "state": "entfern bitte die erste liste"}
+{"id": "massive/calibration/0127", "label": "takeaway query", "locale": "de-DE", "source": "de-DE/validation:58", "state": "finde meine thai imbisse um den torgauer platz"}
+{"id": "massive/calibration/0128", "label": "general quirky", "locale": "hi-IN", "source": "hi-IN/validation:13228", "state": "अगर खुद को अमीर बनाने के लिए दस आसान उपाय होते तो वे क्या होते"}
+{"id": "massive/calibration/0129", "label": "play podcasts", "locale": "ja-JP", "source": "ja-JP/validation:11364", "state": "次のポッドキャストに進む"}
+{"id": "massive/calibration/0130", "label": "news query", "locale": "de-DE", "source": "de-DE/validation:3868", "state": "was ist die schlagzeile der frankfurter rundschau"}
+{"id": "massive/calibration/0131", "label": "alarm remove", "locale": "en-US", "source": "en-US/validation:3270", "state": "remove alarms set for tomorrow"}
+{"id": "massive/calibration/0132", "label": "weather query", "locale": "es-ES", "source": "es-ES/validation:217", "state": "está lloviendo afuera"}
+{"id": "massive/calibration/0133", "label": "play music", "locale": "es-ES", "source": "es-ES/validation:3713", "state": "toca mi canción country favorita"}
+{"id": "massive/calibration/0134", "label": "qa currency", "locale": "hi-IN", "source": "hi-IN/validation:14952", "state": "मुद्रा विनिमय दर"}
+{"id": "massive/calibration/0135", "label": "datetime query", "locale": "es-ES", "source": "es-ES/validation:2154", "state": "puedes decirme que hora es"}
+{"id": "massive/calibration/0136", "label": "recommendation events", "locale": "ja-JP", "source": "ja-JP/validation:11712", "state": "ローカルイベントをすべて教えてください"}
+{"id": "massive/calibration/0137", "label": "news query", "locale": "ja-JP", "source": "ja-JP/validation:2641", "state": "皇室についてのニュースは何がありますか"}
+{"id": "massive/calibration/0138", "label": "general quirky", "locale": "en-US", "source": "en-US/validation:6262", "state": "hey google i hit a million dollar lottery jackpot"}
+{"id": "massive/calibration/0139", "label": "social post", "locale": "hi-IN", "source": "hi-IN/validation:15588", "state": "gallery खोलो video नाम post करो"}
+{"id": "massive/calibration/0140", "label": "play audiobook", "locale": "hi-IN", "source": "hi-IN/validation:9876", "state": "कृपया मेरी ऑडियोबुक जारी रखें"}
+{"id": "massive/calibration/0141", "label": "transport query", "locale": "en-US", "source": "en-US/validation:12533", "state": "give me directions for the place"}
+{"id": "massive/calibration/0142", "label": "calendar query", "locale": "de-DE", "source": "de-DE/validation:8899", "state": "details"}
+{"id": "massive/calibration/0143", "label": "lists query", "locale": "es-ES", "source": "es-ES/validation:11007", "state": "lo que hay en la lista para hoy"}
+{"id": "massive/calibration/0144", "label": "email query", "locale": "es-ES", "source": "es-ES/validation:15973", "state": "comprobar y ver si he recibido algún correo electrónico de eddie richards que tenga que ver con presupuestos"}
+{"id": "massive/calibration/0145", "label": "play podcasts", "locale": "ja-JP", "source": "ja-JP/validation:11305", "state": "newspicks の最新のポッドキャストを再生する"}
+{"id": "massive/calibration/0146", "label": "play radio", "locale": "ja-JP", "source": "ja-JP/validation:9214", "state": "youtube を開いてロックを再生して"}
+{"id": "massive/calibration/0147", "label": "cooking recipe", "locale": "es-ES", "source": "es-ES/validation:9993", "state": "cómo se cocina la merluza"}
+{"id": "massive/calibration/0148", "label": "calendar query", "locale": "de-DE", "source": "de-DE/validation:7867", "state": "wie sieht morgen mein morgen aus"}
+{"id": "massive/calibration/0149", "label": "recommendation movies", "locale": "en-US", "source": "en-US/validation:11615", "state": "what movies are being shown at the regal cinema"}
+{"id": "massive/calibration/0150", "label": "recommendation locations", "locale": "ja-JP", "source": "ja-JP/validation:11948", "state": "近くのレストランを教えて"}
+{"id": "massive/calibration/0151", "label": "general quirky", "locale": "de-DE", "source": "de-DE/validation:13037", "state": "was soll ich heute abend kochen"}
+{"id": "massive/calibration/0152", "label": "social post", "locale": "es-ES", "source": "es-ES/validation:15460", "state": "enviar queja a través del servicio al consumidor de twitter"}
+{"id": "massive/calibration/0153", "label": "calendar set", "locale": "de-DE", "source": "de-DE/validation:6858", "state": "erstelle eine veranstaltung in meinem kalendar"}
+{"id": "massive/calibration/0154", "label": "calendar query", "locale": "es-ES", "source": "es-ES/validation:8418", "state": "que recordatorios he configurado"}
+{"id": "massive/calibration/0155", "label": "takeaway order", "locale": "hi-IN", "source": "hi-IN/validation:2478", "state": "ऑर्डर टेक-आउट"}
+{"id": "massive/calibration/0156", "label": "social query", "locale": "de-DE", "source": "de-DE/validation:15207", "state": "mein facebook update sollte alle drei stunden zugänglich sein"}
+{"id": "massive/calibration/0157", "label": "social post", "locale": "en-US", "source": "en-US/validation:15381", "state": "tweet lfi and let them know my app crashed"}
+{"id": "massive/calibration/0158", "label": "play music", "locale": "es-ES", "source": "es-ES/validation:406", "state": "me gustaria escuchar música pop por favor"}
+{"id": "massive/calibration/0159", "label": "datetime convert", "locale": "en-US", "source": "en-US/validation:5359", "state": "switch to eastern time zone"}
+{"id": "massive/calibration/0160", "label": "play music", "locale": "en-US", "source": "en-US/validation:5832", "state": "alexa put classic rock on"}
+{"id": "massive/calibration/0161", "label": "qa factoid", "locale": "hi-IN", "source": "hi-IN/validation:14039", "state": "हमारा राज्य सबसे दूर उत्तर है"}
+{"id": "massive/calibration/0162", "label": "play music", "locale": "en-US", "source": "en-US/validation:1545", "state": "play the billboard top ten"}
+{"id": "massive/calibration/0163", "label": "recommendation events", "locale": "ja-JP", "source": "ja-JP/validation:11998", "state": "市内での催し物を教えて"}
+{"id": "massive/calibration/0164", "label": "audio volume mute", "locale": "en-US", "source": "en-US/validation:803", "state": "hey olly mute the speakers"}
+{"id": "massive/calibration/0165", "label": "calendar remove", "locale": "es-ES", "source": "es-ES/validation:9040", "state": "hacer en blanco el tres de julio calendario"}
+{"id": "massive/calibration/0166", "label": "iot hue lightoff", "locale": "en-US", "source": "en-US/validation:1945", "state": "switch off the light"}
+{"id": "massive/calibration/0167", "label": "play podcasts", "locale": "ja-JP", "source": "ja-JP/validation:11372", "state": "お気に入り"}
+{"id": "massive/calibration/0168", "label": "play radio", "locale": "es-ES", "source": "es-ES/validation:9599", "state": "cadena ser"}
+{"id": "massive/calibration/0169", "label": "music query", "locale": "de-DE", "source": "de-DE/validation:2353", "state": "wie ist der titel von der musik die gerade läuft"}
+{"id": "massive/calibration/0170", "label": "general joke", "locale": "de-DE", "source": "de-DE/validation:4911", "state": "erzähl mir einen witz"}
+{"id": "massive/calibration/0171", "label": "recommendation movies", "locale": "ja-JP", "source": "ja-JP/validation:11851", "state": "高いレビューで私の近くで上映されている映画は何ですか"}
+{"id": "massive/calibration/0172", "label": "qa currency", "locale": "en-US", "source": "en-US/validation:14527", "state": "exchange rate i will get with foreign currency"}
+{"id": "massive/calibration/0173", "label": "alarm remove", "locale": "de-DE", "source": "de-DE/validation:5436", "state": "werde den siebzehn uhr wecker los"}
+{"id": "massive/calibration/0174", "label": "takeaway query", "locale": "ja-JP", "source": "ja-JP/validation:3018", "state": "私の料理を探す"}
+{"id": "massive/calibration/0175", "label": "email addcontact", "locale": "ja-JP", "source": "ja-JP/validation:15986", "state": "このメールを連絡先に保存して"}
+{"id": "massive/calibration/0176", "label": "social post", "locale": "hi-IN", "source": "hi-IN/validation:15639", "state": "गन्दा नाला अवरुद्ध होने की शिकायत मेरे लिए ट्वीट करें"}
+{"id": "massive/calibration/0177", "label": "weather query", "locale": "en-US", "source": "en-US/validation:4558", "state": "what is the weather near me this week"}
+{"id": "massive/calibration/0178", "label": "alarm remove", "locale": "ja-JP", "source": "ja-JP/validation:5099", "state": "olly アラームをキャンセルをして"}
+{"id": "massive/calibration/0179", "label": "weather query", "locale": "ja-JP", "source": "ja-JP/validation:1726", "state": "来週の最高気温はどのくらいですか"}
+{"id": "massive/calibration/0180", "label": "lists query", "locale": "hi-IN", "source": "hi-IN/validation:10758", "state": "खरीदारी सूची वस्तु पढ़ें"}
+{"id": "massive/calibration/0181", "label": "weather query", "locale": "de-DE", "source": "de-DE/validation:3620", "state": "wie ist gerade das wetter in münchen"}
+{"id": "massive/calibration/0182", "label": "alarm set", "locale": "en-US", "source": "en-US/validation:4853", "state": "please set my alarm"}
+{"id": "massive/calibration/0183", "label": "email query", "locale": "ja-JP", "source": "ja-JP/validation:16487", "state": "本日のメールは何件"}
+{"id": "massive/calibration/0184", "label": "email query", "locale": "en-US", "source": "en-US/validation:16653", "state": "did i receive any email in the past hour"}
+{"id": "massive/calibration/0185", "label": "recommendation events", "locale": "es-ES", "source": "es-ES/validation:11596", "state": "hay exposiciones caninas cerca de la ciudad de nueva york"}
+{"id": "massive/calibration/0186", "label": "play radio", "locale": "ja-JP", "source": "ja-JP/validation:9215", "state": "radico でロックをかけて"}
+{"id": "massive/calibration/0187", "label": "alarm query", "locale": "en-US", "source": "en-US/validation:1732", "state": "checkout today set alarm of ten am"}
+{"id": "massive/calibration/0188", "label": "qa currency", "locale": "ja-JP", "source": "ja-JP/validation:14985", "state": "十ドルをユーロに換算するといくら"}
+{"id": "massive/calibration/0189", "label": "calendar set", "locale": "hi-IN", "source": "hi-IN/validation:7445", "state": "कृपया केवल इन लोगों के साथ एक कार्यक्रम बनाएं"}
+{"id": "massive/calibration/0190", "label": "qa definition", "locale": "hi-IN", "source": "hi-IN/validation:13935", "state": "वर्चुअल रियलिटी हेडसेट का विवरण क्या है"}
+{"id": "massive/calibration/0191", "label": "weather query", "locale": "de-DE", "source": "de-DE/validation:1051", "state": "wie heiß ist es draußen"}
+{"id": "massive/calibration/0192", "label": "datetime query", "locale": "ja-JP", "source": "ja-JP/validation:3721", "state": "olly ジンバブエの現在の時間は"}
+{"id": "massive/calibration/0193", "label": "weather query", "locale": "ja-JP", "source": "ja-JP/validation:5666", "state": "京都府京都市の天気予報を教えて"}
+{"id": "massive/calibration/0194", "label": "recommendation events", "locale": "ja-JP", "source": "ja-JP/validation:11762", "state": "新宿で何かイベントをやっている"}
+{"id": "massive/calibration/0195", "label": "calendar set", "locale": "es-ES", "source": "es-ES/validation:7703", "state": "hey olly programa un recordatorio para la reunión de mañana a las diez de la mañana"}
+{"id": "massive/calibration/0196", "label": "iot hue lightchange", "locale": "es-ES", "source": "es-ES/validation:5478", "state": "activa solo un color de luz diferente"}
+{"id": "massive/calibration/0197", "label": "datetime convert", "locale": "es-ES", "source": "es-ES/validation:1189", "state": "si son las diez p. m. en madrid qué hora es en tenerife"}
+{"id": "massive/calibration/0198", "label": "play game", "locale": "ja-JP", "source": "ja-JP/validation:10324", "state": "私とツムツムをしようよ"}
+{"id": "massive/calibration/0199", "label": "calendar set", "locale": "es-ES", "source": "es-ES/validation:7421", "state": "crear una reunión con mi amigo"}
+{"id": "massive/calibration/0200", "label": "lists createoradd", "locale": "hi-IN", "source": "hi-IN/validation:11122", "state": "इसको एक सूची में ऐड करो"}
+{"id": "massive/calibration/0201", "label": "play music", "locale": "ja-JP", "source": "ja-JP/validation:2675", "state": "プレイリストを開く"}
+{"id": "massive/calibration/0202", "label": "general quirky", "locale": "en-US", "source": "en-US/validation:6240", "state": "today i got rewards olly"}
+{"id": "massive/calibration/0203", "label": "lists query", "locale": "en-US", "source": "en-US/validation:10865", "state": "olly what else do i have on the list"}
+{"id": "massive/calibration/0204", "label": "play game", "locale": "de-DE", "source": "de-DE/validation:10293", "state": "möchtest du ein spiel mit mir spielen"}
+{"id": "massive/calibration/0205", "label": "qa stock", "locale": "es-ES", "source": "es-ES/validation:14301", "state": "cómo están las acciones de coca-cola hoy"}
+{"id": "massive/calibration/0206", "label": "transport taxi", "locale": "hi-IN", "source": "hi-IN/validation:12712", "state": "कृपया मुझे celebration mall की ride करवाओ"}
+{"id": "massive/calibration/0207", "label": "general quirky", "locale": "es-ES", "source": "es-ES/validation:13455", "state": "me podrias decir como consigo la respuesta a eso"}
+{"id": "massive/calibration/0208", "label": "social query", "locale": "de-DE", "source": "de-DE/validation:15630", "state": "was sind die neuesten fotos auf meinem instagram konto"}
+{"id": "massive/calibration/0209", "label": "calendar query", "locale": "de-DE", "source": "de-DE/validation:8933", "state": "wann ist die party"}
+{"id": "massive/calibration/0210", "label": "email query", "locale": "es-ES", "source": "es-ES/validation:15761", "state": "avíseme si tengo nuevos correos electrónicos"}
+{"id": "massive/calibration/0211", "label": "email query", "locale": "ja-JP", "source": "ja-JP/validation:16214", "state": "最近私にメールを送った送信者とその件名は何ですか"}
+{"id": "massive/calibration/0212", "label": "calendar remove", "locale": "hi-IN", "source": "hi-IN/validation:7341", "state": "कैलेंडर से अगली आयोजन को हटा दें"}
+{"id": "massive/calibration/0213", "label": "lists createoradd", "locale": "en-US", "source": "en-US/validation:10870", "state": "add buy groceries to my to do list for today"}
+{"id": "massive/calibration/0214", "label": "datetime query", "locale": "ja-JP", "source": "ja-JP/validation:617", "state": "ひな祭りは何曜日"}
+{"id": "massive/calibration/0215", "label": "qa factoid", "locale": "es-ES", "source": "es-ES/validation:4822", "state": "cuando es el atardecer"}
+{"id": "massive/calibration/0216", "label": "email query", "locale": "es-ES", "source": "es-ES/validation:17034", "state": "dame todos mis correos electrónicos recientes"}
+{"id": "massive/calibration/0217", "label": "weather query", "locale": "hi-IN", "source": "hi-IN/validation:5142", "state": "क्या आप कृपया मुझे बता सकते हैं कि इस सप्ताह के लिए मौसम की भविष्यवाणी क्या है"}
+{"id": "massive/calibration/0218", "label": "lists remove", "locale": "de-DE", "source": "de-DE/validation:10969", "state": "entferne die letzte zeile"}
+{"id": "massive/calibration/0219", "label": "email query", "locale": "ja-JP", "source": "ja-JP/validation:17048", "state": "文香からの新着メールがあるか教えて"}
+{"id": "massive/calibration/0220", "label": "calendar query", "locale": "en-US", "source": "en-US/validation:7688", "state": "do i have any reminders pending"}
+{"id": "massive/calibration/0221", "label": "email query", "locale": "de-DE", "source": "de-DE/validation:16083", "state": "neueste emails anzeigen olly"}
+{"id": "massive/calibration/0222", "label": "transport ticket", "locale": "hi-IN", "source": "hi-IN/validation:12307", "state": "जयपुर के लिए मंगलवार की train के दो टिकट ढूँढे"}
+{"id": "massive/calibration/0223", "label": "social post", "locale": "es-ES", "source": "es-ES/validation:15269", "state": "está bien que puedas postear esto en mi facebook"}
+{"id": "massive/calibration/0224", "label": "transport traffic", "locale": "hi-IN", "source": "hi-IN/validation:12317", "state": "काम से घर तक यातायात की क्या स्थिति है"}
+{"id": "massive/calibration/0225", "label": "play audiobook", "locale": "hi-IN", "source": "hi-IN/validation:9892", "state": "olly चाणक्य नीति को फिर से शुरू करें"}
+{"id": "massive/calibration/0226", "label": "calendar set", "locale": "de-DE", "source": "de-DE/validation:7424", "state": "besuche party vor dem meeting"}
+{"id": "massive/calibration/0227", "label": "qa maths", "locale": "es-ES", "source": "es-ES/validation:13198", "state": "resolver el cálculo"}
+{"id": "massive/calibration/0228", "label": "email querycontact", "locale": "en-US", "source": "en-US/validation:17102", "state": "call raju phone number"}
+{"id": "massive/calibration/0229", "label": "play radio", "locale": "es-ES", "source": "es-ES/validation:9299", "state": "puedes empezar fm ochocientos noventa canal de radio"}
+{"id": "massive/calibration/0230", "label": "music query", "locale": "es-ES", "source": "es-ES/validation:3421", "state": "que musica es"}
+{"id": "massive/calibration/0231", "label": "email query", "locale": "en-US", "source": "en-US/validation:16144", "state": "show me new email"}
+{"id": "massive/calibration/0232", "label": "iot wemo on", "locale": "hi-IN", "source": "hi-IN/validation:3804", "state": "वेमो प्लग सॉकेट चालू करें"}
+{"id": "massive/calibration/0233", "label": "calendar set", "locale": "en-US", "source": "en-US/validation:8039", "state": "please set a reminder for me to go to work in ten minutes"}
+{"id": "massive/calibration/0234", "label": "qa maths", "locale": "hi-IN", "source": "hi-IN/validation:13462", "state": "गणित का प्रश्न हल करें"}
+{"id": "massive/calibration/0235", "label": "weather query", "locale": "es-ES", "source": "es-ES/validation:4538", "state": "las predicciones meteorológicas que me diste son para la ciudad equivocada quiero saber la temperatura en la que estoy"}
+{"id": "massive/calibration/0236", "label": "cooking recipe", "locale": "es-ES", "source": "es-ES/validation:10058", "state": "cuántas copas en un cuarto de hora"}
+{"id": "massive/calibration/0237", "label": "qa definition", "locale": "en-US", "source": "en-US/validation:14901", "state": "please describe an elephant to me"}
+{"id": "massive/calibration/0238", "label": "iot hue lightdim", "locale": "hi-IN", "source": "hi-IN/validation:4622", "state": "रोशनी को दो स्तर तक कम करें"}
+{"id": "massive/calibration/0239", "label": "general quirky", "locale": "hi-IN", "source": "hi-IN/validation:6638", "state": "कारों"}
+{"id": "massive/calibration/0240", "label": "calendar query", "locale": "hi-IN", "source": "hi-IN/validation:7381", "state": "कृपया बाईस मार्च दो हज़ार सत्रह की तीसरी घटना की जाँच करें"}
+{"id": "massive/calibration/0241", "label": "recommendation events", "locale": "hi-IN", "source": "hi-IN/validation:11906", "state": "मुझे इस सप्ताहांत क्षेत्र की गतिविधियों के बारे में बताएं"}
+{"id": "massive/calibration/0242", "label": "calendar remove", "locale": "de-DE", "source": "de-DE/validation:6898", "state": "lösche alle veranstaltung aus mein kalender"}
+{"id": "massive/calibration/0243", "label": "qa currency", "locale": "hi-IN", "source": "hi-IN/validation:14173", "state": "ऑली ब्राज़ील में डॉलर कम या ज्यादा मूल्य का है"}
+{"id": "massive/calibration/0244", "label": "email querycontact", "locale": "de-DE", "source": "de-DE/validation:16582", "state": "ist das die richtige postleitzahl meiner chefin"}
+{"id": "massive/calibration/0245", "label": "general quirky", "locale": "en-US", "source": "en-US/validation:14872", "state": "if it is a consumer good then what is the customer feedback"}
+{"id": "massive/calibration/0246", "label": "calendar query", "locale": "ja-JP", "source": "ja-JP/validation:8783", "state": "なにか今日はイベントの予定がありますか"}
+{"id": "massive/calibration/0247", "label": "news query", "locale": "hi-IN", "source": "hi-IN/validation:2886", "state": "कृपया सुबह की खबर में बंगाल बाघ पर लेख को ऊपर खींचे"}
+{"id": "massive/calibration/0248", "label": "calendar set", "locale": "en-US", "source": "en-US/validation:9051", "state": "make an event reminder for monas wedding on tuesday"}
+{"id": "massive/calibration/0249", "label": "lists remove", "locale": "es-ES", "source": "es-ES/validation:11079", "state": "borrar una lista"}
+{"id": "massive/calibration/0250", "label": "weather query", "locale": "ja-JP", "source": "ja-JP/validation:657", "state": "今の天気の状況を教えて"}
+{"id": "massive/calibration/0251", "label": "play music", "locale": "en-US", "source": "en-US/validation:1566", "state": "play music from the playlist"}
+{"id": "massive/calibration/0252", "label": "audio volume down", "locale": "de-DE", "source": "de-DE/validation:806", "state": "bitte die lautstärke der lautsprecher verringern"}
+{"id": "massive/calibration/0253", "label": "lists query", "locale": "es-ES", "source": "es-ES/validation:11004", "state": "lee mi lista de compras para hoy"}
+{"id": "massive/calibration/0254", "label": "qa stock", "locale": "es-ES", "source": "es-ES/validation:14195", "state": "pregunta a mi asesor"}
+{"id": "massive/calibration/0255", "label": "general quirky", "locale": "hi-IN", "source": "hi-IN/validation:13367", "state": "शब्दों को परिभाषित करते समय थिसॉरस दें और इसे स्पष्ट करने के लिए वाक्य में उपयोग करें"}
+{"id": "massive/calibration/0256", "label": "play music", "locale": "en-US", "source": "en-US/validation:5236", "state": "play my gym playlist"}
+{"id": "massive/calibration/0257", "label": "lists remove", "locale": "en-US", "source": "en-US/validation:10470", "state": "remove a list of food items purchased last week"}
+{"id": "massive/calibration/0258", "label": "calendar remove", "locale": "hi-IN", "source": "hi-IN/validation:7766", "state": "क्या आगे बढ़ने और महीने के लिए मेरा कैलेंडर साफ़ करने के तरीके हैं"}
+{"id": "massive/calibration/0259", "label": "qa factoid", "locale": "hi-IN", "source": "hi-IN/validation:14617", "state": "निकिता गांधी और बादशाह की शादी कब हुई"}
+{"id": "massive/calibration/0260", "label": "weather query", "locale": "en-US", "source": "en-US/validation:6169", "state": "check on this week's weather report"}
+{"id": "massive/calibration/0261", "label": "iot cleaning", "locale": "en-US", "source": "en-US/validation:2621", "state": "start vacuum cleaner now"}
+{"id": "massive/calibration/0262", "label": "general joke", "locale": "hi-IN", "source": "hi-IN/validation:4745", "state": "मुझे एक बेवकूफ चुटकुला चाहिए"}
+{"id": "massive/calibration/0263", "label": "play audiobook", "locale": "de-DE", "source": "de-DE/validation:9756", "state": "setz mein hörbuch von dort fort wo ich zuletzt aufgehört habe"}
+{"id": "massive/calibration/0264", "label": "email query", "locale": "hi-IN", "source": "hi-IN/validation:16372", "state": "क्या मेरे प्रचार के संबंध में कोई ईमेल है"}
+{"id": "massive/calibration/0265", "label": "social post", "locale": "hi-IN", "source": "hi-IN/validation:15695", "state": "ग्राहक सेवा को ट्वीट करें कि मैं हमारी हालिया बातचीत से बहुत निराश हूं"}
+{"id": "massive/calibration/0266", "label": "qa factoid", "locale": "es-ES", "source": "es-ES/validation:14320", "state": "quien es la esposa de obama"}
+{"id": "massive/calibration/0267", "label": "datetime query", "locale": "de-DE", "source": "de-DE/validation:2112", "state": "gib mir die zeit in hannover"}
+{"id": "massive/calibration/0268", "label": "play music", "locale": "ja-JP", "source": "ja-JP/validation:1558", "state": "何かポップスを流して"}
+{"id": "massive/calibration/0269", "label": "calendar set", "locale": "de-DE", "source": "de-DE/validation:7595", "state": "stelle einen timer auf fünf minuten für die cookies"}
+{"id": "massive/calibration/0270", "label": "social query", "locale": "ja-JP", "source": "ja-JP/validation:15294", "state": "私の最新フィードは何"}
+{"id": "massive/calibration/0271", "label": "music query", "locale": "es-ES", "source": "es-ES/validation:4900", "state": "quién es este"}
+{"id": "massive/calibration/0272", "label": "qa definition", "locale": "de-DE", "source": "de-DE/validation:13139", "state": "was ist wirbelsturm"}
+{"id": "massive/calibration/0273", "label": "qa stock", "locale": "en-US", "source": "en-US/validation:14195", "state": "ask my adviser"}
+{"id": "massive/calibration/0274", "label": "lists remove", "locale": "en-US", "source": "en-US/validation:10526", "state": "please remove a list"}
+{"id": "massive/calibration/0275", "label": "play game", "locale": "es-ES", "source": "es-ES/validation:10273", "state": "jugr solitario"}
+{"id": "massive/calibration/0276", "label": "recommendation movies", "locale": "de-DE", "source": "de-DE/validation:11899", "state": "was ist es wert zu schauen"}
+{"id": "massive/calibration/0277", "label": "play music", "locale": "ja-JP", "source": "ja-JP/validation:5556", "state": "懐かしいスクール系ラップを数曲流して"}
+{"id": "massive/calibration/0278", "label": "qa definition", "locale": "es-ES", "source": "es-ES/validation:14012", "state": "que significa tuit"}
+{"id": "massive/calibration/0279", "label": "transport ticket", "locale": "en-US", "source": "en-US/validation:12706", "state": "book train ticket for this time"}
+{"id": "massive/calibration/0280", "label": "lists query", "locale": "de-DE", "source": "de-DE/validation:10697", "state": "was beinhaltet die liste"}
+{"id": "massive/calibration/0281", "label": "general quirky", "locale": "de-DE", "source": "de-DE/validation:6603", "state": "wann startet die heizung in der wohnung"}
+{"id": "massive/calibration/0282", "label": "calendar remove", "locale": "ja-JP", "source": "ja-JP/validation:8282", "state": "カレンダーを完全にクリアしてください"}
+{"id": "massive/calibration/0283", "label": "news query", "locale": "es-ES", "source": "es-ES/validation:4674", "state": "cuándo es la próxima conferencia de prensa de rajoy"}
+{"id": "massive/calibration/0284", "label": "calendar query", "locale": "de-DE", "source": "de-DE/validation:7134", "state": "nächste veranstaltungen"}
+{"id": "massive/calibration/0285", "label": "play music", "locale": "ja-JP", "source": "ja-JP/validation:778", "state": "福山雅治の桜坂を流して"}
+{"id": "massive/calibration/0286", "label": "datetime query", "locale": "ja-JP", "source": "ja-JP/validation:3652", "state": "フロリダのオーランドの現在の時刻は"}
+{"id": "massive/calibration/0287", "label": "social post", "locale": "hi-IN", "source": "hi-IN/validation:15455", "state": "यूनाइटेड एयरलाइंस को ट्वीट भेजें मैं नाराज़ हूँ आपने मेरा बैग खो दिया"}
+{"id": "massive/calibration/0288", "label": "email query", "locale": "hi-IN", "source": "hi-IN/validation:16745", "state": "क्या समीर ने मुझे एक ईमेल भेजा"}
+{"id": "massive/calibration/0289", "label": "social post", "locale": "es-ES", "source": "es-ES/validation:15583", "state": "tuitea una queja sobre mi frigorífico a l. g."}
+{"id": "massive/calibration/0290", "label": "lists query", "locale": "de-DE", "source": "de-DE/validation:10551", "state": "was steht heute auf meiner to do liste"}
+{"id": "massive/calibration/0291", "label": "iot hue lightoff", "locale": "en-US", "source": "en-US/validation:3094", "state": "turn off lighting"}
+{"id": "massive/calibration/0292", "label": "takeaway query", "locale": "ja-JP", "source": "ja-JP/validation:5770", "state": "レストランロイヤルホストは持ち帰りをやっていますか"}
+{"id": "massive/calibration/0293", "label": "calendar query", "locale": "de-DE", "source": "de-DE/validation:7357", "state": "welche veranstaltungen habe ich im märz in meinem kalender"}
+{"id": "massive/calibration/0294", "label": "iot hue lightdim", "locale": "de-DE", "source": "de-DE/validation:2313", "state": "beleuchtung runter auf sieben"}
+{"id": "massive/calibration/0295", "label": "takeaway order", "locale": "de-DE", "source": "de-DE/validation:2478", "state": "bestelle essen zum mitnehmen"}
+{"id": "massive/calibration/0296", "label": "calendar set", "locale": "hi-IN", "source": "hi-IN/validation:8873", "state": "बिस्ट्रो इटालिया में गुरुवार को रात का खाना याद रखें"}
+{"id": "massive/calibration/0297", "label": "qa factoid", "locale": "hi-IN", "source": "hi-IN/validation:14384", "state": "एम्पायर स्टेट बिल्डिंग कितनी लंबी है"}
+{"id": "massive/calibration/0298", "label": "email query", "locale": "hi-IN", "source": "hi-IN/validation:16774", "state": "मेरा ईमेल लाओ"}
+{"id": "massive/calibration/0299", "label": "social post", "locale": "en-US", "source": "en-US/validation:15538", "state": "customer service complaint tweet the following"}

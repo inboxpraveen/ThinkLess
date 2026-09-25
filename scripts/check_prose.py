@@ -6,9 +6,9 @@ locally before opening a pull request:
 
     python scripts/check_prose.py
 
-It runs in CI on every push. Generated benchmark artifacts under
-benchmarks/results are skipped: they hold model output and dataset text, not
-writing from this project.
+It runs in CI on every push. Benchmark results and the decision benchmark's
+task rows and results are skipped: they hold model output and dataset text,
+not writing from this project. The task NOTICE is checked.
 """
 
 from __future__ import annotations
@@ -35,6 +35,12 @@ CHECKED_SUFFIXES = {
     ".cff",
 }
 SKIPPED = {"LICENSE"}
+# Model output and third-party dataset text, not writing from this project.
+DATA_DIRS = (
+    "benchmarks/results/",
+    "benchmarks/decisions/tasks/",
+    "benchmarks/decisions/results/",
+)
 
 DASHES = {chr(0x2014): "em dash", chr(0x2013): "en dash"}
 
@@ -78,7 +84,7 @@ def tracked_files() -> list[Path]:
         and p.suffix.lower() in CHECKED_SUFFIXES
         and p.name not in SKIPPED
         and "scripts/check_prose.py" not in p.as_posix()
-        and "benchmarks/results/" not in p.as_posix()
+        and not (p.suffix != ".md" and any(part in p.as_posix() for part in DATA_DIRS))
     ]
 
 

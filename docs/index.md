@@ -16,6 +16,9 @@ confidence, latency, tokens and cost.
   walks from a first decision to a traced cascade.
 - **Evaluating the idea:** [Benchmarks](benchmarks.md) has the numbers, the
   method, and what the numbers do not show.
+- **Comparing decision models:** the [decision benchmark](decision-benchmark/index.md)
+  tests intent classifiers, safety checks, raters and extractors on eight
+  public tasks, and anyone can submit a model.
 - **Building an agent:** [The four planes](concepts/planes.md) explains the
   architecture, and [the support agent](guides/support-agent.md) shows it end
   to end.

@@ -1,0 +1,300 @@
+{"id": "clinc150/calibration/0000", "label": "reset settings", "source": "validation:2383", "state": "i want you to reset to factory settings"}
+{"id": "clinc150/calibration/0001", "label": "food last", "source": "validation:1358", "state": "how long can i keep chicken in the freezer for before it goes gross"}
+{"id": "clinc150/calibration/0002", "label": "change volume", "source": "validation:1791", "state": "please turn the volume to 4"}
+{"id": "clinc150/calibration/0003", "label": "min payment", "source": "validation:2205", "state": "what's the least i can pay towards this bill"}
+{"id": "clinc150/calibration/0004", "label": "balance", "source": "validation:500", "state": "do i have more than $100 in my pnc account"}
+{"id": "clinc150/calibration/0005", "label": "pin change", "source": "validation:1915", "state": "so tell me the pin number"}
+{"id": "clinc150/calibration/0006", "label": "oil change how", "source": "validation:472", "state": "what oil do i need for my honda crv and how do i change it"}
+{"id": "clinc150/calibration/0007", "label": "ingredient substitution", "source": "validation:1439", "state": "can i use pepper instead of salt"}
+{"id": "clinc150/calibration/0008", "label": "order checks", "source": "validation:2966", "state": "how do i order more free checkbooks"}
+{"id": "clinc150/calibration/0009", "label": "cancel reservation", "source": "validation:2742", "state": "i need to cancel my reservation for new york to xai varanda"}
+{"id": "clinc150/calibration/0010", "label": "what song", "source": "validation:1964", "state": "is this a song that i dont know"}
+{"id": "clinc150/calibration/0011", "label": "update playlist", "source": "validation:2735", "state": "add what i listen to to my car ride playlist"}
+{"id": "clinc150/calibration/0012", "label": "exchange rate", "source": "validation:1741", "state": "what's the exchange rate betwen usd and euros"}
+{"id": "clinc150/calibration/0013", "label": "text", "source": "validation:2551", "state": "message carl, you suck"}
+{"id": "clinc150/calibration/0014", "label": "change user name", "source": "validation:376", "state": "refer to me as nick"}
+{"id": "clinc150/calibration/0015", "label": "cook time", "source": "validation:1375", "state": "how long should i microwave hot pockets for"}
+{"id": "clinc150/calibration/0016", "label": "roll dice", "source": "validation:1328", "state": "roll an 8 sided dice"}
+{"id": "clinc150/calibration/0017", "label": "meal suggestion", "source": "validation:2878", "state": "suggestions for thai food"}
+{"id": "clinc150/calibration/0018", "label": "income", "source": "validation:2901", "state": "what's my income from work"}
+{"id": "clinc150/calibration/0019", "label": "tire change", "source": "validation:1739", "state": "when should i change my tires"}
+{"id": "clinc150/calibration/0020", "label": "flight status", "source": "validation:324", "state": "when is the expected arrival of flight dl123"}
+{"id": "clinc150/calibration/0021", "label": "greeting", "source": "validation:2366", "state": "how you are"}
+{"id": "clinc150/calibration/0022", "label": "plug type", "source": "validation:1714", "state": "what sort of electrical plug do they use in mainland europe"}
+{"id": "clinc150/calibration/0023", "label": "lost luggage", "source": "validation:846", "state": "what do i do if my luggage is lost"}
+{"id": "clinc150/calibration/0024", "label": "flight status", "source": "validation:336", "state": "when is my flight going to arrive"}
+{"id": "clinc150/calibration/0025", "label": "out of scope", "source": "validation:3094", "state": "you want to know about current time now"}
+{"id": "clinc150/calibration/0026", "label": "confirm reservation", "source": "validation:538", "state": "will you check to see if i am still reserved for 6:30 pm at gusto handcrafted pasta & pizza"}
+{"id": "clinc150/calibration/0027", "label": "pto request", "source": "validation:162", "state": "can you please request pto for march 2 and 3"}
+{"id": "clinc150/calibration/0028", "label": "exchange rate", "source": "validation:1746", "state": "what's 100 dollars in euros"}
+{"id": "clinc150/calibration/0029", "label": "gas type", "source": "validation:1693", "state": "what's the required fuel type for my car"}
+{"id": "clinc150/calibration/0030", "label": "schedule meeting", "source": "validation:1665", "state": "i want you to set a meeting with john at 5 pm"}
+{"id": "clinc150/calibration/0031", "label": "international visa", "source": "validation:2275", "state": "if i go to uganda, do i need an international visa"}
+{"id": "clinc150/calibration/0032", "label": "definition", "source": "validation:67", "state": "what does idiosyncratic mean"}
+{"id": "clinc150/calibration/0033", "label": "cook time", "source": "validation:1368", "state": "how long should i cook roast for"}
+{"id": "clinc150/calibration/0034", "label": "pto balance", "source": "validation:2307", "state": "what number of pto days do i have left"}
+{"id": "clinc150/calibration/0035", "label": "payday", "source": "validation:259", "state": "how much is on my paycheck this week"}
+{"id": "clinc150/calibration/0036", "label": "what can i ask you", "source": "validation:426", "state": "what questions can you answer"}
+{"id": "clinc150/calibration/0037", "label": "calendar", "source": "validation:1124", "state": "what appointments do i have tomorrow after 1:00pm"}
+{"id": "clinc150/calibration/0038", "label": "schedule maintenance", "source": "validation:1250", "state": "can you help me find someone to look at my car's engine because the light is on"}
+{"id": "clinc150/calibration/0039", "label": "ingredients list", "source": "validation:2056", "state": "what ingredients do i need for shrimp scampi"}
+{"id": "clinc150/calibration/0040", "label": "international visa", "source": "validation:2260", "state": "if i plan on travelling to this country, do i need a visa"}
+{"id": "clinc150/calibration/0041", "label": "balance", "source": "validation:503", "state": "how much money do i have in my pnc account"}
+{"id": "clinc150/calibration/0042", "label": "pto request status", "source": "validation:780", "state": "will i be permitted to take my vacation"}
+{"id": "clinc150/calibration/0043", "label": "share location", "source": "validation:2592", "state": "i'd like to send steve my location"}
+{"id": "clinc150/calibration/0044", "label": "calculator", "source": "validation:1170", "state": "what is 87 divided by 4"}
+{"id": "clinc150/calibration/0045", "label": "what is your name", "source": "validation:2408", "state": "what's the name i should use to talk to you"}
+{"id": "clinc150/calibration/0046", "label": "food last", "source": "validation:1355", "state": "how long until my milk expires"}
+{"id": "clinc150/calibration/0047", "label": "timer", "source": "validation:42", "state": "help me set a timer please"}
+{"id": "clinc150/calibration/0048", "label": "schedule meeting", "source": "validation:1675", "state": "is it possible for you to schedule a meeting for 3:00 on wednesday"}
+{"id": "clinc150/calibration/0049", "label": "next holiday", "source": "validation:1767", "state": "is there a holiday this month"}
+{"id": "clinc150/calibration/0050", "label": "calendar", "source": "validation:1131", "state": "does my calendar show anything for thursday the 14th"}
+{"id": "clinc150/calibration/0051", "label": "taxes", "source": "validation:2185", "state": "what's the tax bracket for my income"}
+{"id": "clinc150/calibration/0052", "label": "card declined", "source": "validation:2995", "state": "i was at walmart trying to buy toilet paper and my card got declined"}
+{"id": "clinc150/calibration/0053", "label": "travel notification", "source": "validation:1278", "state": "let my bank know that i am going to tokyo"}
+{"id": "clinc150/calibration/0054", "label": "sync device", "source": "validation:1299", "state": "put a device with my phone"}
+{"id": "clinc150/calibration/0055", "label": "directions", "source": "validation:2337", "state": "how do i get to the court house on foot"}
+{"id": "clinc150/calibration/0056", "label": "calendar update", "source": "validation:2651", "state": "can you add a doctor's appointment to friday's calendar"}
+{"id": "clinc150/calibration/0057", "label": "international fees", "source": "validation:1984", "state": "does my western union card have international transaction fees"}
+{"id": "clinc150/calibration/0058", "label": "calendar", "source": "validation:1125", "state": "what is the date of my next scheduled dentist appointment"}
+{"id": "clinc150/calibration/0059", "label": "flip coin", "source": "validation:347", "state": "please flip a coin"}
+{"id": "clinc150/calibration/0060", "label": "meal suggestion", "source": "validation:2868", "state": "i need an italian dinner idea"}
+{"id": "clinc150/calibration/0061", "label": "plug type", "source": "validation:1717", "state": "how are british plugs"}
+{"id": "clinc150/calibration/0062", "label": "pin change", "source": "validation:1900", "state": "i forgot my pin number for my credit union bank account, can you help"}
+{"id": "clinc150/calibration/0063", "label": "out of scope", "source": "validation:3093", "state": "what is the cheapest electric guitar"}
+{"id": "clinc150/calibration/0064", "label": "nutrition info", "source": "validation:1116", "state": "what is the nutrition information for shrimp scampi"}
+{"id": "clinc150/calibration/0065", "label": "out of scope", "source": "validation:3070", "state": "how many countries in the world are democracies"}
+{"id": "clinc150/calibration/0066", "label": "transactions", "source": "validation:694", "state": "how many paypal transactions did i have last week"}
+{"id": "clinc150/calibration/0067", "label": "rewards balance", "source": "validation:732", "state": "how do i check my rewards for my chase card"}
+{"id": "clinc150/calibration/0068", "label": "out of scope", "source": "validation:3059", "state": "how high does my sat score need to be to get into harvard"}
+{"id": "clinc150/calibration/0069", "label": "out of scope", "source": "validation:3015", "state": "when was the last time the president visited floridau"}
+{"id": "clinc150/calibration/0070", "label": "vaccines", "source": "validation:2292", "state": "do i need to get any shots before i go to brazil"}
+{"id": "clinc150/calibration/0071", "label": "new card", "source": "validation:820", "state": "who has the best credit card offering for a college student"}
+{"id": "clinc150/calibration/0072", "label": "income", "source": "validation:2911", "state": "how much do i make in a year"}
+{"id": "clinc150/calibration/0073", "label": "calendar", "source": "validation:1133", "state": "can you tell me what my calendar is like for thursday the 14th"}
+{"id": "clinc150/calibration/0074", "label": "what are your hobbies", "source": "validation:2499", "state": "what are your interests"}
+{"id": "clinc150/calibration/0075", "label": "book flight", "source": "validation:2500", "state": "can you find me a round trip flight from denver international to new york international on the 3rd through the 7th"}
+{"id": "clinc150/calibration/0076", "label": "pto used", "source": "validation:1233", "state": "how many days have i used"}
+{"id": "clinc150/calibration/0077", "label": "meeting schedule", "source": "validation:2029", "state": "what time am i meeting with john"}
+{"id": "clinc150/calibration/0078", "label": "what are your hobbies", "source": "validation:2498", "state": "which hobbies do you like"}
+{"id": "clinc150/calibration/0079", "label": "share location", "source": "validation:2589", "state": "send mike my exact location"}
+{"id": "clinc150/calibration/0080", "label": "shopping list", "source": "validation:2525", "state": "did i add salt to my shopping list"}
+{"id": "clinc150/calibration/0081", "label": "oil change when", "source": "validation:914", "state": "when should change oil tell me please"}
+{"id": "clinc150/calibration/0082", "label": "traffic", "source": "validation:2952", "state": "how is the traffic on rt 5 towards my work , community bank"}
+{"id": "clinc150/calibration/0083", "label": "confirm reservation", "source": "validation:530", "state": "i want to confirm friday's reservation at 2:00"}
+{"id": "clinc150/calibration/0084", "label": "mpg", "source": "validation:881", "state": "how's my gas mileage in citys"}
+{"id": "clinc150/calibration/0085", "label": "jump start", "source": "validation:2850", "state": "can you tell me how to jump start a car"}
+{"id": "clinc150/calibration/0086", "label": "interest rate", "source": "validation:2449", "state": "what is my interest rate for my scotiabank account"}
+{"id": "clinc150/calibration/0087", "label": "meeting schedule", "source": "validation:2037", "state": "how many meetings do i have today"}
+{"id": "clinc150/calibration/0088", "label": "user name", "source": "validation:635", "state": "do you know what my name is"}
+{"id": "clinc150/calibration/0089", "label": "direct deposit", "source": "validation:2423", "state": "how do i set up direct deposit for my old national account"}
+{"id": "clinc150/calibration/0090", "label": "international visa", "source": "validation:2276", "state": "do i need a travel visa for the uk"}
+{"id": "clinc150/calibration/0091", "label": "book flight", "source": "validation:2501", "state": "can you look for a denver international to new york international round trip flight for the 5th though 8th"}
+{"id": "clinc150/calibration/0092", "label": "change volume", "source": "validation:1789", "state": "i need your volume increased"}
+{"id": "clinc150/calibration/0093", "label": "user name", "source": "validation:633", "state": "how is my name saved aw"}
+{"id": "clinc150/calibration/0094", "label": "todo list update", "source": "validation:990", "state": "clear my to do list"}
+{"id": "clinc150/calibration/0095", "label": "do you have pets", "source": "validation:1657", "state": "do you have a cat or a dog"}
+{"id": "clinc150/calibration/0096", "label": "confirm reservation", "source": "validation:534", "state": "i'd like to confirm the 2:00 reservation for friday"}
+{"id": "clinc150/calibration/0097", "label": "insurance change", "source": "validation:111", "state": "i need to switch insurance plans"}
+{"id": "clinc150/calibration/0098", "label": "reminder update", "source": "validation:1394", "state": "i just put steaks on the grill remind me to check them at the right time"}
+{"id": "clinc150/calibration/0099", "label": "credit limit", "source": "validation:1828", "state": "give me my credit limit"}
+{"id": "clinc150/calibration/0100", "label": "how busy", "source": "validation:1852", "state": "i need to know about how much time i'd have to wait to get a table at dibruno's"}
+{"id": "clinc150/calibration/0101", "label": "cook time", "source": "validation:1366", "state": "how long should i cook pho for"}
+{"id": "clinc150/calibration/0102", "label": "change user name", "source": "validation:365", "state": "please change my name to tom"}
+{"id": "clinc150/calibration/0103", "label": "vaccines", "source": "validation:2291", "state": "should i get shots if i'm going to go to thailand"}
+{"id": "clinc150/calibration/0104", "label": "order", "source": "validation:2930", "state": "i want to buy an iphone7"}
+{"id": "clinc150/calibration/0105", "label": "how old are you", "source": "validation:2807", "state": "how old are you as of today"}
+{"id": "clinc150/calibration/0106", "label": "restaurant reservation", "source": "validation:480", "state": "please reserve a table for 2 at lucky's under the name melissa at 7 pm"}
+{"id": "clinc150/calibration/0107", "label": "current location", "source": "validation:2153", "state": "where exactly am i at the moment"}
+{"id": "clinc150/calibration/0108", "label": "improve credit score", "source": "validation:187", "state": "how can i build my credit score"}
+{"id": "clinc150/calibration/0109", "label": "yes", "source": "validation:927", "state": "that makes sense as well"}
+{"id": "clinc150/calibration/0110", "label": "maybe", "source": "validation:441", "state": "i can't give you an answer to that"}
+{"id": "clinc150/calibration/0111", "label": "roll dice", "source": "validation:1322", "state": "can you roll a dice for me"}
+{"id": "clinc150/calibration/0112", "label": "oil change how", "source": "validation:470", "state": "what kind of oil and how much do i need for my toyota tacoma truck and how do i do it"}
+{"id": "clinc150/calibration/0113", "label": "who made you", "source": "validation:595", "state": "who conjured you"}
+{"id": "clinc150/calibration/0114", "label": "maybe", "source": "validation:444", "state": "possibly either one"}
+{"id": "clinc150/calibration/0115", "label": "rewards balance", "source": "validation:737", "state": "how do i check my rewards for my target card"}
+{"id": "clinc150/calibration/0116", "label": "calculator", "source": "validation:1168", "state": "add up 8 and 7"}
+{"id": "clinc150/calibration/0117", "label": "do you have pets", "source": "validation:1650", "state": "what types of furry companions do you have"}
+{"id": "clinc150/calibration/0118", "label": "update playlist", "source": "validation:2726", "state": "please place this track on my driving mix"}
+{"id": "clinc150/calibration/0119", "label": "travel suggestion", "source": "validation:956", "state": "in seoul, what things can i do"}
+{"id": "clinc150/calibration/0120", "label": "current location", "source": "validation:2152", "state": "what is this place"}
+{"id": "clinc150/calibration/0121", "label": "book hotel", "source": "validation:2131", "state": "find hotels in baltimore that have positive reviews"}
+{"id": "clinc150/calibration/0122", "label": "where are you from", "source": "validation:392", "state": "where are you from oroginally"}
+{"id": "clinc150/calibration/0123", "label": "distance", "source": "validation:602", "state": "how long will the trip to portland be"}
+{"id": "clinc150/calibration/0124", "label": "pay bill", "source": "validation:746", "state": "pay a bill!"}
+{"id": "clinc150/calibration/0125", "label": "order checks", "source": "validation:2969", "state": "i just used my last check and need more now"}
+{"id": "clinc150/calibration/0126", "label": "bill balance", "source": "validation:2569", "state": "how much do i owe on all of my bills"}
+{"id": "clinc150/calibration/0127", "label": "bill balance", "source": "validation:2570", "state": "how much do i have to pay for my shell gas card bill"}
+{"id": "clinc150/calibration/0128", "label": "how old are you", "source": "validation:2814", "state": "in what year were you born"}
+{"id": "clinc150/calibration/0129", "label": "fun fact", "source": "validation:214", "state": "tell me an axolotl fact"}
+{"id": "clinc150/calibration/0130", "label": "change accent", "source": "validation:1515", "state": "i need to switch accounts"}
+{"id": "clinc150/calibration/0131", "label": "what is your name", "source": "validation:2403", "state": "whats your name by the way"}
+{"id": "clinc150/calibration/0132", "label": "restaurant reservation", "source": "validation:482", "state": "help me reserve a table for 3 at lucky's under the name crystal at 8 pm"}
+{"id": "clinc150/calibration/0133", "label": "travel suggestion", "source": "validation:941", "state": "what's the best restaurant in arizona for pizza"}
+{"id": "clinc150/calibration/0134", "label": "how busy", "source": "validation:1840", "state": "how much to wait before dining in the jack in the box at 4 pm"}
+{"id": "clinc150/calibration/0135", "label": "date", "source": "validation:1187", "state": "would you let me know today's date"}
+{"id": "clinc150/calibration/0136", "label": "what song", "source": "validation:1967", "state": "what am i listening to right now"}
+{"id": "clinc150/calibration/0137", "label": "flip coin", "source": "validation:355", "state": "please flip the coin over ai"}
+{"id": "clinc150/calibration/0138", "label": "schedule meeting", "source": "validation:1677", "state": "can you arrange a meeting for 3:00 on wednesday"}
+{"id": "clinc150/calibration/0139", "label": "ingredients list", "source": "validation:2043", "state": "do you know the ingredients used in homemade chicken soup"}
+{"id": "clinc150/calibration/0140", "label": "replacement card duration", "source": "validation:264", "state": "how long does it take a new card to arrive in the mail to me"}
+{"id": "clinc150/calibration/0141", "label": "change language", "source": "validation:239", "state": "change the language to english"}
+{"id": "clinc150/calibration/0142", "label": "text", "source": "validation:2552", "state": "tell carl that he sucks"}
+{"id": "clinc150/calibration/0143", "label": "calories", "source": "validation:1564", "state": "inform me of the calorie content of vanilla ice cream"}
+{"id": "clinc150/calibration/0144", "label": "order", "source": "validation:2929", "state": "order a disney gift card in the amount of five hundred dollars from costco"}
+{"id": "clinc150/calibration/0145", "label": "who made you", "source": "validation:594", "state": "who formed thou"}
+{"id": "clinc150/calibration/0146", "label": "out of scope", "source": "validation:3028", "state": "how long does it take to become an architect"}
+{"id": "clinc150/calibration/0147", "label": "new card", "source": "validation:825", "state": "tell me about the chase credit card application process"}
+{"id": "clinc150/calibration/0148", "label": "exchange rate", "source": "validation:1748", "state": "how much is the exchange between usd and euros"}
+{"id": "clinc150/calibration/0149", "label": "balance", "source": "validation:519", "state": "can you tell me how much money i have i my bank accounts"}
+{"id": "clinc150/calibration/0150", "label": "apr", "source": "validation:1080", "state": "is the apr on my card that ends 1234 what it should be based on my credit score"}
+{"id": "clinc150/calibration/0151", "label": "maybe", "source": "validation:457", "state": "idk"}
+{"id": "clinc150/calibration/0152", "label": "calories", "source": "validation:1573", "state": "what is the amount of calories that scrambled eggs has"}
+{"id": "clinc150/calibration/0153", "label": "reminder update", "source": "validation:1380", "state": "remind me to call my mom"}
+{"id": "clinc150/calibration/0154", "label": "gas type", "source": "validation:1696", "state": "what octaine is recommended for this car"}
+{"id": "clinc150/calibration/0155", "label": "change language", "source": "validation:237", "state": "please change your response language to english"}
+{"id": "clinc150/calibration/0156", "label": "are you a bot", "source": "validation:2673", "state": "would it be accurate to call you a bot"}
+{"id": "clinc150/calibration/0157", "label": "no", "source": "validation:1070", "state": "no, that is not correct"}
+{"id": "clinc150/calibration/0158", "label": "new card", "source": "validation:837", "state": "what do i need to do to apply for a visa card"}
+{"id": "clinc150/calibration/0159", "label": "pto request", "source": "validation:161", "state": "i am requesting pto for march 2 and 3"}
+{"id": "clinc150/calibration/0160", "label": "pto request status", "source": "validation:781", "state": "what's the status of my vacation days"}
+{"id": "clinc150/calibration/0161", "label": "accept reservations", "source": "validation:1870", "state": "is it possible to do a reservation at the bellagio"}
+{"id": "clinc150/calibration/0162", "label": "credit limit change", "source": "validation:2462", "state": "how can i make a change to my credit limit"}
+{"id": "clinc150/calibration/0163", "label": "change speed", "source": "validation:1027", "state": "can you permanently talk faster"}
+{"id": "clinc150/calibration/0164", "label": "restaurant reviews", "source": "validation:1609", "state": "how good are the review for yardhouse"}
+{"id": "clinc150/calibration/0165", "label": "restaurant reservation", "source": "validation:489", "state": "book 3 under the name zebee at xenophobe"}
+{"id": "clinc150/calibration/0166", "label": "exchange rate", "source": "validation:1752", "state": "how much is 1 dollar worth in country b's money"}
+{"id": "clinc150/calibration/0167", "label": "international visa", "source": "validation:2261", "state": "do i need a visa if i go there"}
+{"id": "clinc150/calibration/0168", "label": "definition", "source": "validation:60", "state": "may i please have a definition for the work churlish"}
+{"id": "clinc150/calibration/0169", "label": "change speed", "source": "validation:1034", "state": "go ahead and talk faster now"}
+{"id": "clinc150/calibration/0170", "label": "gas type", "source": "validation:1688", "state": "what kind of fuel does my car use"}
+{"id": "clinc150/calibration/0171", "label": "out of scope", "source": "validation:3063", "state": "what cryptocurrency gained the most in 2018"}
+{"id": "clinc150/calibration/0172", "label": "change user name", "source": "validation:379", "state": "i am camile"}
+{"id": "clinc150/calibration/0173", "label": "play music", "source": "validation:2634", "state": "do you have any of the beatles music"}
+{"id": "clinc150/calibration/0174", "label": "oil change how", "source": "validation:462", "state": "how to change oil of a car"}
+{"id": "clinc150/calibration/0175", "label": "account blocked", "source": "validation:1953", "state": "why can't i log into my bank account"}
+{"id": "clinc150/calibration/0176", "label": "next song", "source": "validation:678", "state": "can you skip this song and go to the next one"}
+{"id": "clinc150/calibration/0177", "label": "mpg", "source": "validation:897", "state": "tell me the mpg of my vehicle"}
+{"id": "clinc150/calibration/0178", "label": "accept reservations", "source": "validation:1879", "state": "i need to make a reservation to long horn's, can i"}
+{"id": "clinc150/calibration/0179", "label": "out of scope", "source": "validation:3073", "state": "how does a democracy work"}
+{"id": "clinc150/calibration/0180", "label": "rewards balance", "source": "validation:721", "state": "for my visa what's my reward balance"}
+{"id": "clinc150/calibration/0181", "label": "out of scope", "source": "validation:3083", "state": "what is the friendliest breed"}
+{"id": "clinc150/calibration/0182", "label": "change accent", "source": "validation:1503", "state": "could you please change your accent to the male british one"}
+{"id": "clinc150/calibration/0183", "label": "improve credit score", "source": "validation:193", "state": "what things can i do to increase my credit score"}
+{"id": "clinc150/calibration/0184", "label": "order status", "source": "validation:1890", "state": "how far along is my purchase"}
+{"id": "clinc150/calibration/0185", "label": "definition", "source": "validation:73", "state": "please define institutional racism"}
+{"id": "clinc150/calibration/0186", "label": "restaurant suggestion", "source": "validation:715", "state": "what are some good ethiopian restaurants in queens"}
+{"id": "clinc150/calibration/0187", "label": "roll dice", "source": "validation:1332", "state": "give a 6 sided dice a roll for me"}
+{"id": "clinc150/calibration/0188", "label": "date", "source": "validation:1192", "state": "what date will it be 8 days from now"}
+{"id": "clinc150/calibration/0189", "label": "taxes", "source": "validation:2183", "state": "what kinds of taxes am i facing"}
+{"id": "clinc150/calibration/0190", "label": "out of scope", "source": "validation:3049", "state": "the birds fly with there wings"}
+{"id": "clinc150/calibration/0191", "label": "taxes", "source": "validation:2199", "state": "what amount do i owe in taxes"}
+{"id": "clinc150/calibration/0192", "label": "order checks", "source": "validation:2961", "state": "can i order new checks since i am out"}
+{"id": "clinc150/calibration/0193", "label": "shopping list update", "source": "validation:403", "state": "can you add apples to my shopping list if they aren't already on there"}
+{"id": "clinc150/calibration/0194", "label": "tire pressure", "source": "validation:1046", "state": "what is the tire pressure of the car"}
+{"id": "clinc150/calibration/0195", "label": "order checks", "source": "validation:2974", "state": "can i order checks online for my checking account"}
+{"id": "clinc150/calibration/0196", "label": "transfer", "source": "validation:30", "state": "make an eft to my savings from my checking account"}
+{"id": "clinc150/calibration/0197", "label": "repeat", "source": "validation:876", "state": "please say that again"}
+{"id": "clinc150/calibration/0198", "label": "nutrition info", "source": "validation:1105", "state": "is chocolate good for you"}
+{"id": "clinc150/calibration/0199", "label": "report fraud", "source": "validation:2061", "state": "i need to talk to someone about a fraudulent activity on my card"}
+{"id": "clinc150/calibration/0200", "label": "flip coin", "source": "validation:358", "state": "i want you to flip a coin now"}
+{"id": "clinc150/calibration/0201", "label": "tire change", "source": "validation:1726", "state": "do you know when the best time for me to change my tires next would be"}
+{"id": "clinc150/calibration/0202", "label": "flight status", "source": "validation:335", "state": "ostensibly when is my flight going to land"}
+{"id": "clinc150/calibration/0203", "label": "pto request", "source": "validation:169", "state": "i would like to know if i can put a pto request in for march 19 to march 20"}
+{"id": "clinc150/calibration/0204", "label": "international fees", "source": "validation:1985", "state": "will i be charged if i use my card in russia"}
+{"id": "clinc150/calibration/0205", "label": "confirm reservation", "source": "validation:539", "state": "please confirm my reservation for dinner at gusto handcrafted pasta & pizza at 6:30 pm"}
+{"id": "clinc150/calibration/0206", "label": "uber", "source": "validation:1159", "state": "can you get uber for two people going to 27 moss lane"}
+{"id": "clinc150/calibration/0207", "label": "gas type", "source": "validation:1687", "state": "what kind of fuel should i put in my car"}
+{"id": "clinc150/calibration/0208", "label": "smart home", "source": "validation:2119", "state": "post the living room lights on"}
+{"id": "clinc150/calibration/0209", "label": "carry on", "source": "validation:1214", "state": "look up carry-on rules for american airlines"}
+{"id": "clinc150/calibration/0210", "label": "card declined", "source": "validation:2982", "state": "was there a problem with my card yesterday"}
+{"id": "clinc150/calibration/0211", "label": "food last", "source": "validation:1346", "state": "will rice be ok in the fridge for 3 days"}
+{"id": "clinc150/calibration/0212", "label": "meal suggestion", "source": "validation:2879", "state": "give recommendations for thai food"}
+{"id": "clinc150/calibration/0213", "label": "calories", "source": "validation:1563", "state": "tell me the calorie content of frosted flakes"}
+{"id": "clinc150/calibration/0214", "label": "out of scope", "source": "validation:3035", "state": "are bad habits closely related with addictions"}
+{"id": "clinc150/calibration/0215", "label": "play music", "source": "validation:2633", "state": "can i hear the beatles"}
+{"id": "clinc150/calibration/0216", "label": "goodbye", "source": "validation:1928", "state": "this was a nice conversation"}
+{"id": "clinc150/calibration/0217", "label": "change ai name", "source": "validation:2783", "state": "can i change you name to gretchen"}
+{"id": "clinc150/calibration/0218", "label": "out of scope", "source": "validation:3010", "state": "can i mix antifreeze with water"}
+{"id": "clinc150/calibration/0219", "label": "reset settings", "source": "validation:2381", "state": "i need you to reset to your factor settings"}
+{"id": "clinc150/calibration/0220", "label": "balance", "source": "validation:506", "state": "is there enough in my savings account to get a new tv"}
+{"id": "clinc150/calibration/0221", "label": "gas type", "source": "validation:1692", "state": "what is the proper fuel type for my car"}
+{"id": "clinc150/calibration/0222", "label": "pto request status", "source": "validation:788", "state": "when will my vacation get okayed"}
+{"id": "clinc150/calibration/0223", "label": "change user name", "source": "validation:367", "state": "i want to be called tom"}
+{"id": "clinc150/calibration/0224", "label": "next holiday", "source": "validation:1762", "state": "the next holiday is when"}
+{"id": "clinc150/calibration/0225", "label": "gas", "source": "validation:2681", "state": "is my gas tank full or empty"}
+{"id": "clinc150/calibration/0226", "label": "meal suggestion", "source": "validation:2874", "state": "what would you suggest having for dinner"}
+{"id": "clinc150/calibration/0227", "label": "traffic", "source": "validation:2948", "state": "how does the traffic look on my way to work right now"}
+{"id": "clinc150/calibration/0228", "label": "restaurant reservation", "source": "validation:484", "state": "could you please reserve a table for 6 at lucille's under the name tom at 5pm"}
+{"id": "clinc150/calibration/0229", "label": "out of scope", "source": "validation:3064", "state": "what's the best crypto to buy in 2019"}
+{"id": "clinc150/calibration/0230", "label": "smart home", "source": "validation:2108", "state": "turn on the tv please"}
+{"id": "clinc150/calibration/0231", "label": "change user name", "source": "validation:360", "state": "will you start calling me chaz"}
+{"id": "clinc150/calibration/0232", "label": "recipe", "source": "validation:2899", "state": "tell me how to make ramen"}
+{"id": "clinc150/calibration/0233", "label": "whisper mode", "source": "validation:2226", "state": "i want to be out of whisper mode"}
+{"id": "clinc150/calibration/0234", "label": "meeting schedule", "source": "validation:2020", "state": "what if any meetings do i have today"}
+{"id": "clinc150/calibration/0235", "label": "current location", "source": "validation:2158", "state": "latitude and longitude please"}
+{"id": "clinc150/calibration/0236", "label": "calculator", "source": "validation:1169", "state": "what is the square root of 888"}
+{"id": "clinc150/calibration/0237", "label": "order", "source": "validation:2924", "state": "make an order of bread because i am out"}
+{"id": "clinc150/calibration/0238", "label": "vaccines", "source": "validation:2290", "state": "do i need to get any shots before travelling to australia"}
+{"id": "clinc150/calibration/0239", "label": "todo list update", "source": "validation:998", "state": "put wash the dog on my to do list please"}
+{"id": "clinc150/calibration/0240", "label": "ingredients list", "source": "validation:2042", "state": "can you tell me the ingredients used in pasta sauce"}
+{"id": "clinc150/calibration/0241", "label": "weather", "source": "validation:2165", "state": "weather forecast please"}
+{"id": "clinc150/calibration/0242", "label": "food last", "source": "validation:1341", "state": "apple cider has been in my fridge for four months so can i still drink it"}
+{"id": "clinc150/calibration/0243", "label": "measurement conversion", "source": "validation:2092", "state": "how many teaspoons in one tablespoon"}
+{"id": "clinc150/calibration/0244", "label": "cancel reservation", "source": "validation:2747", "state": "scrap reservation at 4 for red robin"}
+{"id": "clinc150/calibration/0245", "label": "what is your name", "source": "validation:2405", "state": "what is your name by chance"}
+{"id": "clinc150/calibration/0246", "label": "text", "source": "validation:2544", "state": "text john with the message 'where are you"}
+{"id": "clinc150/calibration/0247", "label": "out of scope", "source": "validation:3022", "state": "am kind of busy now"}
+{"id": "clinc150/calibration/0248", "label": "schedule maintenance", "source": "validation:1256", "state": "i need to get an appointment for car maintenance"}
+{"id": "clinc150/calibration/0249", "label": "how old are you", "source": "validation:2811", "state": "hey how old are you"}
+{"id": "clinc150/calibration/0250", "label": "change volume", "source": "validation:1785", "state": "i want your volume louder"}
+{"id": "clinc150/calibration/0251", "label": "income", "source": "validation:2910", "state": "how much money do i make a week"}
+{"id": "clinc150/calibration/0252", "label": "cook time", "source": "validation:1363", "state": "how long do i need to cook tuna casserole for"}
+{"id": "clinc150/calibration/0253", "label": "what are your hobbies", "source": "validation:2481", "state": "tell me about your hobbies"}
+{"id": "clinc150/calibration/0254", "label": "out of scope", "source": "validation:3046", "state": "what was the final vote count in the brexit referendum"}
+{"id": "clinc150/calibration/0255", "label": "exchange rate", "source": "validation:1759", "state": "how much is usd vs cad"}
+{"id": "clinc150/calibration/0256", "label": "schedule maintenance", "source": "validation:1253", "state": "is there any way to change the date of my oil change"}
+{"id": "clinc150/calibration/0257", "label": "rollover 401k", "source": "validation:577", "state": "assistance in rolling over my 401k"}
+{"id": "clinc150/calibration/0258", "label": "tire change", "source": "validation:1725", "state": "when would it be wise for me to swap out my tires"}
+{"id": "clinc150/calibration/0259", "label": "do you have pets", "source": "validation:1659", "state": "does your family have any pets"}
+{"id": "clinc150/calibration/0260", "label": "schedule meeting", "source": "validation:1663", "state": "what is the process to schedule a meeting"}
+{"id": "clinc150/calibration/0261", "label": "change accent", "source": "validation:1519", "state": "move over to the female voice"}
+{"id": "clinc150/calibration/0262", "label": "goodbye", "source": "validation:1920", "state": "see ya!"}
+{"id": "clinc150/calibration/0263", "label": "calculator", "source": "validation:1179", "state": "is 126 divisible by 8"}
+{"id": "clinc150/calibration/0264", "label": "exchange rate", "source": "validation:1758", "state": "what is the rate for 500 cad in usd"}
+{"id": "clinc150/calibration/0265", "label": "calendar update", "source": "validation:2659", "state": "can you remove this event from my calendar, please"}
+{"id": "clinc150/calibration/0266", "label": "travel alert", "source": "validation:159", "state": "is it safe to travel to mexico"}
+{"id": "clinc150/calibration/0267", "label": "mpg", "source": "validation:894", "state": "i would like to know the mpg for this car"}
+{"id": "clinc150/calibration/0268", "label": "credit score", "source": "validation:807", "state": "who tracks my credit score"}
+{"id": "clinc150/calibration/0269", "label": "greeting", "source": "validation:2362", "state": "hows are ya"}
+{"id": "clinc150/calibration/0270", "label": "pto balance", "source": "validation:2317", "state": "can you let me know how many pto days do i have left"}
+{"id": "clinc150/calibration/0271", "label": "car rental", "source": "validation:2837", "state": "i must procure a car rental for the 10th to the 15th in zimbabwe and i would prefer a bmw"}
+{"id": "clinc150/calibration/0272", "label": "reminder", "source": "validation:1008", "state": "what were those things i wanted to remember"}
+{"id": "clinc150/calibration/0273", "label": "fun fact", "source": "validation:218", "state": "find me cat trivia now please"}
+{"id": "clinc150/calibration/0274", "label": "jump start", "source": "validation:2847", "state": "how do i do a jump start on my car"}
+{"id": "clinc150/calibration/0275", "label": "w2", "source": "validation:1526", "state": "i need to know where to get w2"}
+{"id": "clinc150/calibration/0276", "label": "rollover 401k", "source": "validation:560", "state": "will my 401k rollover"}
+{"id": "clinc150/calibration/0277", "label": "carry on", "source": "validation:1200", "state": "can i take more than one carry on"}
+{"id": "clinc150/calibration/0278", "label": "new card", "source": "validation:835", "state": "where can i apply for a black amex card"}
+{"id": "clinc150/calibration/0279", "label": "change language", "source": "validation:238", "state": "how can i change your response language"}
+{"id": "clinc150/calibration/0280", "label": "taxes", "source": "validation:2190", "state": "how much am i taxed each year"}
+{"id": "clinc150/calibration/0281", "label": "thank you", "source": "validation:1308", "state": "i am glad that you did that"}
+{"id": "clinc150/calibration/0282", "label": "how old are you", "source": "validation:2804", "state": "how old were you on your most recent birthday"}
+{"id": "clinc150/calibration/0283", "label": "distance", "source": "validation:601", "state": "travel time to bend, oregon"}
+{"id": "clinc150/calibration/0284", "label": "change ai name", "source": "validation:2788", "state": "i want to change your name to adam"}
+{"id": "clinc150/calibration/0285", "label": "insurance", "source": "validation:960", "state": "what is covered under my insurance"}
+{"id": "clinc150/calibration/0286", "label": "vaccines", "source": "validation:2285", "state": "what shots are required to visit australia"}
+{"id": "clinc150/calibration/0287", "label": "last maintenance", "source": "validation:2005", "state": "when was my last oil change"}
+{"id": "clinc150/calibration/0288", "label": "pto used", "source": "validation:1228", "state": "can you tell me how much pto have i use"}
+{"id": "clinc150/calibration/0289", "label": "income", "source": "validation:2905", "state": "what was my income last year"}
+{"id": "clinc150/calibration/0290", "label": "pto balance", "source": "validation:2313", "state": "what number of vacation days do i have available"}
+{"id": "clinc150/calibration/0291", "label": "definition", "source": "validation:64", "state": "can you define the word schadenfreude"}
+{"id": "clinc150/calibration/0292", "label": "reminder", "source": "validation:1018", "state": "whats on my reminder list, read back"}
+{"id": "clinc150/calibration/0293", "label": "out of scope", "source": "validation:3030", "state": "find out for me as to why people get autism"}
+{"id": "clinc150/calibration/0294", "label": "change speed", "source": "validation:1033", "state": "speed your speech up"}
+{"id": "clinc150/calibration/0295", "label": "smart home", "source": "validation:2115", "state": "please turn on the hallway lights"}
+{"id": "clinc150/calibration/0296", "label": "pay bill", "source": "validation:756", "state": "use my boa account to pay the cable bill"}
+{"id": "clinc150/calibration/0297", "label": "make call", "source": "validation:1457", "state": "call my friend aj"}
+{"id": "clinc150/calibration/0298", "label": "greeting", "source": "validation:2361", "state": "how ya been"}
+{"id": "clinc150/calibration/0299", "label": "restaurant suggestion", "source": "validation:719", "state": "what are some good southern bbq restaurants in nashville"}

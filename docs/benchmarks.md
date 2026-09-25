@@ -1,5 +1,9 @@
 # Benchmarks
 
+For a provider-neutral comparison of decision models on eight public tasks,
+see the [decision benchmark](decision-benchmark/index.md). This page covers
+ThinkLess as a system.
+
 Two benchmarks ship with ThinkLess. The **support benchmark** runs one
 realistic agent end to end with three different decision planes. The
 **intent benchmarks** measure providers on public datasets and simulate the

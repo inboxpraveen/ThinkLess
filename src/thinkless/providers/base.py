@@ -5,7 +5,7 @@ from __future__ import annotations
 import json
 from abc import ABC, abstractmethod
 from collections.abc import Mapping, Sequence
-from typing import Any, ClassVar
+from typing import Any, ClassVar, TypeGuard
 
 from pydantic import BaseModel, ConfigDict, Field
 
@@ -39,8 +39,25 @@ def render_state(state: State) -> str:
             lines.append(f"{key}: {text}")
         return "\n".join(lines)
     if isinstance(state, Sequence):
+        messages = [item for item in state if _is_message(item)]
+        if messages and len(messages) == len(state):
+            # A conversation: one "role: text" line per message, oldest first.
+            return "\n".join(f"{m['role']}: {_message_text(m['content'])}" for m in messages)
         return "\n".join(render_state(item) for item in state)
     return str(state)
+
+
+def _is_message(item: Any) -> TypeGuard[Mapping[str, Any]]:
+    return isinstance(item, Mapping) and set(item) >= {"role", "content"} and len(item) <= 3
+
+
+def _message_text(content: Any) -> str:
+    if isinstance(content, str):
+        return content
+    if isinstance(content, Sequence):
+        parts = [p.get("text") for p in content if isinstance(p, Mapping)]
+        return " ".join(p for p in parts if isinstance(p, str))
+    return str(content)
 
 
 class ProviderResult(BaseModel):

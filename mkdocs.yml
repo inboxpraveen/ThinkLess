@@ -55,6 +55,10 @@ nav:
       - Troubleshooting: guides/troubleshooting.md
       - Releasing: guides/releasing.md
   - Benchmarks: benchmarks.md
+  - Decision benchmark:
+      - Method: decision-benchmark/index.md
+      - Leaderboard: decision-benchmark/leaderboard.md
+      - Submitting a model: decision-benchmark/submitting.md
   - FAQ: faq.md
   - Reference:
       - Command line: reference/cli.md

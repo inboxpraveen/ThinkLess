@@ -15,12 +15,19 @@ something that is not here should be.
 - A decision server with a System One compatible endpoint, and MCP tools.
 - Traces to labeling rows, and a drift report between two periods.
 
+## Done after 0.3
+
+- The [decision benchmark](decision-benchmark/index.md) 1.0: eight public
+  tasks across the four question kinds, frozen rows with published hashes,
+  result files with every prediction, recomputed metrics and open
+  submissions.
+
 ## Next
 
-- **A neutral decision-model benchmark.** A public, provider-neutral
-  benchmark for decision models (Jev, Kev, OpenJev, Laya, GLiNER, Hugging
-  Face classifiers, LLM deciders) on public multi-domain datasets, with
-  multi-turn cases, that anyone can submit a model to.
+- **More models on the decision benchmark.** Jev and other hosted decision
+  models, frontier LLMs as references, and Hugging Face classifiers.
+  Version 1.0 has eight tasks and open submissions; later versions add
+  multi-turn safety cases, more languages and harder out-of-scope sets.
 - **Cross-request batching in the server.** Collect the questions of
   concurrent requests for a few milliseconds and send them to each local
   model as one batch, which needs a batch entry point on providers.

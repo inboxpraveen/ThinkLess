@@ -6,6 +6,23 @@ All notable changes are recorded here. The format follows
 
 ## Unreleased
 
+### Added
+
+- The decision benchmark 1.0 (`thinkless bench decisions`): eight public
+  tasks across the four question kinds (banking77, clinc150 with out of
+  scope, MASSIVE in five languages, MultiWOZ 2.2 conversations, jailbreaks,
+  Civil Comments toxicity, HelpSteer2 helpfulness ratings and WNUT 2017
+  entities), with frozen rows and published hashes, calibration rows from a
+  separate split, result files that hold every prediction, `verify` that
+  recomputes every metric, a generated leaderboard and open submissions.
+  Baselines for GLiNER 2.5, Laya, Qwen3-1.7B and Qwen 3.7 Flash.
+
+### Changed
+
+- A list of chat messages now renders as `role: text` lines for providers
+  that read text, instead of one `key: value` line per field.
+- README links to the documentation point at the documentation site.
+
 ## 0.3.0 - 2026-09-25
 
 Shadow mode, framework adapters, limits, a decision server and MCP tools.

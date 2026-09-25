@@ -20,6 +20,7 @@ from rich.table import Table
 from .._version import __version__
 from ..logs import configure_logging
 from ..settings import Settings, load_env
+from .decisions import decisions_app
 from .serve import mcp as mcp_command
 from .serve import serve as serve_command
 from .shadow import shadow_app
@@ -599,6 +600,7 @@ def trace_view(
 trace_app.command("export")(trace_export)
 trace_app.command("drift")(trace_drift)
 app.add_typer(shadow_app, name="shadow")
+bench_app.add_typer(decisions_app, name="decisions")
 app.command("serve")(serve_command)
 app.command("mcp")(mcp_command)
 

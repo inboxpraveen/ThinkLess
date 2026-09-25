@@ -1,0 +1,500 @@
+{"id": "banking77/test/0000", "label": "extra charge on statement", "source": "test:178", "state": "Why are there so many fees on my statement?"}
+{"id": "banking77/test/0001", "label": "top up by bank transfer charge", "source": "test:630", "state": "Please tell me about SWIFT transfers at this bank."}
+{"id": "banking77/test/0002", "label": "direct debit payment not recognised", "source": "test:1485", "state": "im so mad right now. theres several charges that I think my x boyfriend made on my card. the companys on the website wouldn't refund me my money, they told me to contact my bank. DO something please."}
+{"id": "banking77/test/0003", "label": "balance not updated after bank transfer", "source": "test:2712", "state": "Hey, I try to make a bank transfer from my UK account a few hours ago, but it haven't show up yet. Please check my account to make sure everything alright with it?"}
+{"id": "banking77/test/0004", "label": "card payment not recognised", "source": "test:1104", "state": "I have a payment listed in error."}
+{"id": "banking77/test/0005", "label": "card payment fee charged", "source": "test:829", "state": "Someone needs to make me aware when there are extra charges for payments. I happened to be looking at the app earlier and noticed a charge associated to a payment that was extra that no one made me aware of before at all."}
+{"id": "banking77/test/0006", "label": "visa or mastercard", "source": "test:1285", "state": "Do you guys accept mastercard or visa?"}
+{"id": "banking77/test/0007", "label": "pending cash withdrawal", "source": "test:205", "state": "Why is it taking so long for my cash withdrawal to no longer show as pending?"}
+{"id": "banking77/test/0008", "label": "verify top up", "source": "test:2386", "state": "How is the top-up card verified?"}
+{"id": "banking77/test/0009", "label": "getting spare card", "source": "test:2439", "state": "my daughter needs a card, how do i add her?"}
+{"id": "banking77/test/0010", "label": "declined cash withdrawal", "source": "test:1581", "state": "I attempted to get cash but was declined."}
+{"id": "banking77/test/0011", "label": "top up limits", "source": "test:734", "state": "I want to know if there is a maximum I can top up."}
+{"id": "banking77/test/0012", "label": "card arrival", "source": "test:38", "state": "What is the tracking number for the card you sent?"}
+{"id": "banking77/test/0013", "label": "change pin", "source": "test:2142", "state": "I need to change my PIN. Can I do that at a cash machine?"}
+{"id": "banking77/test/0014", "label": "get disposable virtual card", "source": "test:2614", "state": "What do I do to get a disposable virtual card?"}
+{"id": "banking77/test/0015", "label": "edit personal details", "source": "test:1150", "state": "how to change name"}
+{"id": "banking77/test/0016", "label": "card not working", "source": "test:381", "state": "Is my card broken?"}
+{"id": "banking77/test/0017", "label": "unable to verify identity", "source": "test:1232", "state": "It doesn't let me verify my identity."}
+{"id": "banking77/test/0018", "label": "card payment wrong exchange rate", "source": "test:154", "state": "Why was the exchange rate incorrect for an item I recently bought?"}
+{"id": "banking77/test/0019", "label": "verify source of funds", "source": "test:2024", "state": "How can I view the source of my available funds?"}
+{"id": "banking77/test/0020", "label": "topping up by card", "source": "test:1320", "state": "How can I top up my account with a card?"}
+{"id": "banking77/test/0021", "label": "card acceptance", "source": "test:963", "state": "It will be fine to use at any establishment that accepts Mastercard."}
+{"id": "banking77/test/0022", "label": "contactless not working", "source": "test:579", "state": "Can you help my fix my contactless?"}
+{"id": "banking77/test/0023", "label": "supported cards and currencies", "source": "test:893", "state": "Will you accept my other card?"}
+{"id": "banking77/test/0024", "label": "receiving money", "source": "test:2278", "state": "Can I get paid in another currency?"}
+{"id": "banking77/test/0025", "label": "card about to expire", "source": "test:2926", "state": "My card is about to expire. What do I need to do?"}
+{"id": "banking77/test/0026", "label": "card payment not recognised", "source": "test:1089", "state": "I don't recall making that payment?"}
+{"id": "banking77/test/0027", "label": "transfer fee charged", "source": "test:2217", "state": "I was charged more when I transferred!"}
+{"id": "banking77/test/0028", "label": "failed transfer", "source": "test:2293", "state": "Why has my transfer failed?"}
+{"id": "banking77/test/0029", "label": "balance not updated after bank transfer", "source": "test:2713", "state": "Where is my transfer from [country]?"}
+{"id": "banking77/test/0030", "label": "Refund not showing up", "source": "test:1791", "state": "Where is my refund? I have been checking my account all day."}
+{"id": "banking77/test/0031", "label": "transfer fee charged", "source": "test:2227", "state": "I was charge a fee for my transfer, why?"}
+{"id": "banking77/test/0032", "label": "virtual card not working", "source": "test:2556", "state": "I need help getting the virtual card to work."}
+{"id": "banking77/test/0033", "label": "card payment not recognised", "source": "test:1105", "state": "What can I do about some payments on my card I didn't make.  Please put a freeze on my card till we can figure this out."}
+{"id": "banking77/test/0034", "label": "exchange charge", "source": "test:2791", "state": "I will need to exchange currencies frequently, will I be able to get a discount?"}
+{"id": "banking77/test/0035", "label": "lost or stolen card", "source": "test:450", "state": "card is lost, please help"}
+{"id": "banking77/test/0036", "label": "failed transfer", "source": "test:2286", "state": "Why was I not able to complete a transfer?"}
+{"id": "banking77/test/0037", "label": "fiat currency support", "source": "test:273", "state": "Can I hold money in multiple currencies?"}
+{"id": "banking77/test/0038", "label": "virtual card not working", "source": "test:2555", "state": "Tell me why my virtual disposable card won't work."}
+{"id": "banking77/test/0039", "label": "request refund", "source": "test:1700", "state": "How do I get refunded?"}
+{"id": "banking77/test/0040", "label": "edit personal details", "source": "test:1125", "state": "My address has changed."}
+{"id": "banking77/test/0041", "label": "card payment fee charged", "source": "test:828", "state": "For the first time I got a fee on my account. How do I know when you charge these fees?"}
+{"id": "banking77/test/0042", "label": "card swallowed", "source": "test:1941", "state": "What happens if the ATM doesn't give me back my card?"}
+{"id": "banking77/test/0043", "label": "declined transfer", "source": "test:1731", "state": "If the transfer details have already but reviewed and confirmed that they are correct, what other reason would cause my transfer to be declined?"}
+{"id": "banking77/test/0044", "label": "automatic top up", "source": "test:355", "state": "What is the auto top up function and where can I find that at?"}
+{"id": "banking77/test/0045", "label": "unable to verify identity", "source": "test:1210", "state": "The app failed to verify my identity."}
+{"id": "banking77/test/0046", "label": "top up failed", "source": "test:2660", "state": "The app denied my top-up"}
+{"id": "banking77/test/0047", "label": "card payment wrong exchange rate", "source": "test:129", "state": "My exchange went wrong. I swapped Russian Ruble for UK pounds and was charged too much."}
+{"id": "banking77/test/0048", "label": "automatic top up", "source": "test:354", "state": "Can you explain where I can find the auto-top option?"}
+{"id": "banking77/test/0049", "label": "unable to verify identity", "source": "test:1236", "state": "The app won't let me log in as myself."}
+{"id": "banking77/test/0050", "label": "pending top up", "source": "test:640", "state": "new customer and filling gas today, it's not working, the thing shows pending half an hour!"}
+{"id": "banking77/test/0051", "label": "country support", "source": "test:3077", "state": "What countries do you do business in?"}
+{"id": "banking77/test/0052", "label": "reverted card payment?", "source": "test:2105", "state": "There must be an issue, why has my card been cancelled?"}
+{"id": "banking77/test/0053", "label": "get disposable virtual card", "source": "test:2620", "state": "I would like to create a disposable virtual card. How do I go about doing that?"}
+{"id": "banking77/test/0054", "label": "fiat currency support", "source": "test:252", "state": "Can I exchange to EUR?"}
+{"id": "banking77/test/0055", "label": "change pin", "source": "test:2154", "state": "I need a new PIN."}
+{"id": "banking77/test/0056", "label": "card about to expire", "source": "test:2947", "state": "How do I order a new card before It expires?"}
+{"id": "banking77/test/0057", "label": "compromised card", "source": "test:1429", "state": "Someone else used my card!"}
+{"id": "banking77/test/0058", "label": "failed transfer", "source": "test:2309", "state": "Please help me as i am continuously facing the issue in transferring money to my friends, as all my transactions are getting failed."}
+{"id": "banking77/test/0059", "label": "virtual card not working", "source": "test:2522", "state": "My disposable virtual card is broken."}
+{"id": "banking77/test/0060", "label": "declined cash withdrawal", "source": "test:1570", "state": "Hi, My card withdrawal was declined this morning. It was working fine till yesterday. Please check and inform me."}
+{"id": "banking77/test/0061", "label": "balance not updated after bank transfer", "source": "test:2707", "state": "I did a transfer to my account but it doesn't show up"}
+{"id": "banking77/test/0062", "label": "card delivery estimate", "source": "test:284", "state": "I'm just wondering when my card will get here."}
+{"id": "banking77/test/0063", "label": "unable to verify identity", "source": "test:1216", "state": "I am having trouble proving my identity."}
+{"id": "banking77/test/0064", "label": "card delivery estimate", "source": "test:295", "state": "May I choose when it's delivered?"}
+{"id": "banking77/test/0065", "label": "terminate account", "source": "test:1898", "state": "Delete this account!"}
+{"id": "banking77/test/0066", "label": "exchange charge", "source": "test:2792", "state": "Is there a charge for a foreign currency exchange?"}
+{"id": "banking77/test/0067", "label": "why verify identity", "source": "test:1178", "state": "May I use my account now, even though the identity verification has not gone through yet?"}
+{"id": "banking77/test/0068", "label": "balance not updated after cheque or cash deposit", "source": "test:1077", "state": "Balance hasn't been updated following a cheque or cash deposit"}
+{"id": "banking77/test/0069", "label": "activate my card", "source": "test:2865", "state": "When will my card be activated?"}
+{"id": "banking77/test/0070", "label": "order physical card", "source": "test:2518", "state": "How do I get an actual card?"}
+{"id": "banking77/test/0071", "label": "pending top up", "source": "test:661", "state": "top up did not complete"}
+{"id": "banking77/test/0072", "label": "declined card payment", "source": "test:1800", "state": "My credit card was declined."}
+{"id": "banking77/test/0073", "label": "card acceptance", "source": "test:994", "state": "Can I use my card anywere?"}
+{"id": "banking77/test/0074", "label": "transfer not received by recipient", "source": "test:861", "state": "The day before yesterday, I performed a transfer which was within this country. It still hasn't gone through. Can you check on that? The account number is definitely correct, as I've checked and double checked."}
+{"id": "banking77/test/0075", "label": "top up by card charge", "source": "test:2800", "state": "Is there a fee for using a European bank card to top up?"}
+{"id": "banking77/test/0076", "label": "card arrival", "source": "test:32", "state": "How do I know when my card will arrive?"}
+{"id": "banking77/test/0077", "label": "pending card payment", "source": "test:1601", "state": "Why is my payment pending?"}
+{"id": "banking77/test/0078", "label": "country support", "source": "test:3044", "state": "i live in the US can i still get a card?"}
+{"id": "banking77/test/0079", "label": "exchange via app", "source": "test:435", "state": "I think I want AUD and not GBP, can you help?"}
+{"id": "banking77/test/0080", "label": "edit personal details", "source": "test:1123", "state": "My address needs to be revised."}
+{"id": "banking77/test/0081", "label": "get disposable virtual card", "source": "test:2611", "state": "Is there anyway, I can get a disposable virtual card?"}
+{"id": "banking77/test/0082", "label": "Refund not showing up", "source": "test:1790", "state": "I did what you told me earlier and contacted the seller for a refund directly, but nothing is happening! It's been a week and I still haven't got anything. Please just give me back my money"}
+{"id": "banking77/test/0083", "label": "getting virtual card", "source": "test:943", "state": "Are virtual cards available to get?"}
+{"id": "banking77/test/0084", "label": "exchange charge", "source": "test:2762", "state": "What are your currency exchange fees?"}
+{"id": "banking77/test/0085", "label": "getting virtual card", "source": "test:948", "state": "How do I order a virtual card?"}
+{"id": "banking77/test/0086", "label": "cash withdrawal charge", "source": "test:2895", "state": "I got a fee for an ATM withdrawal."}
+{"id": "banking77/test/0087", "label": "verify source of funds", "source": "test:2036", "state": "How can I see my source of funds?"}
+{"id": "banking77/test/0088", "label": "wrong exchange rate for cash withdrawal", "source": "test:2586", "state": "My cash withdrawal charged me the wrong exchange rate"}
+{"id": "banking77/test/0089", "label": "supported cards and currencies", "source": "test:905", "state": "Tell me which cards and what currency is supported."}
+{"id": "banking77/test/0090", "label": "transfer not received by recipient", "source": "test:846", "state": "How can the recipient see my money transaction?"}
+{"id": "banking77/test/0091", "label": "verify source of funds", "source": "test:2007", "state": "I would like to see the source of my money."}
+{"id": "banking77/test/0092", "label": "direct debit payment not recognised", "source": "test:1503", "state": "why does the app show a direct debit payment that I did not authorize"}
+{"id": "banking77/test/0093", "label": "transfer into account", "source": "test:2353", "state": "I want to use bank transfer for topping up my account. How is it handled?"}
+{"id": "banking77/test/0094", "label": "beneficiary not allowed", "source": "test:2180", "state": "How come I'm not allowed to transfer funds right now? I just keep getting an error message."}
+{"id": "banking77/test/0095", "label": "supported cards and currencies", "source": "test:919", "state": "Which cards and currencies do you support?"}
+{"id": "banking77/test/0096", "label": "top up by card charge", "source": "test:2820", "state": "I want to use a European bank card for a top up. Must I pay?"}
+{"id": "banking77/test/0097", "label": "passcode forgotten", "source": "test:1559", "state": "What is the code I need to get into the app?"}
+{"id": "banking77/test/0098", "label": "declined card payment", "source": "test:1808", "state": "Can you look at my account ans see why my card was declined"}
+{"id": "banking77/test/0099", "label": "lost or stolen phone", "source": "test:1642", "state": "If my phone is missing, can I block someone from using the app?"}
+{"id": "banking77/test/0100", "label": "pending cash withdrawal", "source": "test:220", "state": "Why do I have a pending cash withdrawal?"}
+{"id": "banking77/test/0101", "label": "declined transfer", "source": "test:1738", "state": "Why could my transfer have been declined?"}
+{"id": "banking77/test/0102", "label": "change pin", "source": "test:2128", "state": "I want to set a new PIN"}
+{"id": "banking77/test/0103", "label": "declined card payment", "source": "test:1818", "state": "Something is wrong with my payment account since it has been declined"}
+{"id": "banking77/test/0104", "label": "transfer not received by recipient", "source": "test:878", "state": "I am still awaiting the completion of the transaction."}
+{"id": "banking77/test/0105", "label": "exchange via app", "source": "test:419", "state": "I need AUD not GBP, how do I change it?"}
+{"id": "banking77/test/0106", "label": "card arrival", "source": "test:16", "state": "I've been waiting longer than expected for my card."}
+{"id": "banking77/test/0107", "label": "edit personal details", "source": "test:1130", "state": "Where can I change my personal information after I move?"}
+{"id": "banking77/test/0108", "label": "top up by cash or cheque", "source": "test:2445", "state": "Is there an option to top up a with cheque?"}
+{"id": "banking77/test/0109", "label": "lost or stolen card", "source": "test:476", "state": "I cannot find my credit card."}
+{"id": "banking77/test/0110", "label": "card payment fee charged", "source": "test:831", "state": "Why was I charged an extra fee when using a card?"}
+{"id": "banking77/test/0111", "label": "cash withdrawal charge", "source": "test:2914", "state": "I took cash and got charged a fee"}
+{"id": "banking77/test/0112", "label": "terminate account", "source": "test:1912", "state": "This company sucks! Can you delete my account?"}
+{"id": "banking77/test/0113", "label": "apple pay or google pay", "source": "test:2985", "state": "How can I top up with Google Pay?"}
+{"id": "banking77/test/0114", "label": "extra charge on statement", "source": "test:188", "state": "What is this €1 fee in my statement?"}
+{"id": "banking77/test/0115", "label": "cash withdrawal not recognised", "source": "test:2729", "state": "My app says that I received cash from an ATM and I didn't."}
+{"id": "banking77/test/0116", "label": "wrong exchange rate for cash withdrawal", "source": "test:2596", "state": "how do you determine your exchange rates because one of yours was off when i got cash"}
+{"id": "banking77/test/0117", "label": "card payment wrong exchange rate", "source": "test:152", "state": "I paid for something in foreign currency but noticed the exchange rate is incorrect."}
+{"id": "banking77/test/0118", "label": "card payment wrong exchange rate", "source": "test:143", "state": "I believe my card payment exchange rate is incorrect."}
+{"id": "banking77/test/0119", "label": "top up by card charge", "source": "test:2819", "state": "Will I be charged if I use European bank card for top up?"}
+{"id": "banking77/test/0120", "label": "card linking", "source": "test:78", "state": "How do I link my replacement card?"}
+{"id": "banking77/test/0121", "label": "getting spare card", "source": "test:2407", "state": "Can I have a card after my first one?"}
+{"id": "banking77/test/0122", "label": "wrong exchange rate for cash withdrawal", "source": "test:2589", "state": "Can you explain your exchange rate policy? I don't think I received the correct amount of cash in my ATM transaction."}
+{"id": "banking77/test/0123", "label": "wrong amount of cash received", "source": "test:768", "state": "The amount of cash I received was different than what I requested."}
+{"id": "banking77/test/0124", "label": "declined card payment", "source": "test:1815", "state": "I'm really stuck. I don't know why but my card payment has not gone through."}
+{"id": "banking77/test/0125", "label": "card swallowed", "source": "test:1926", "state": "Is there a way I can get my ATM card back from the machine?"}
+{"id": "banking77/test/0126", "label": "top up limits", "source": "test:749", "state": "How much can I top-up to my card at a time?"}
+{"id": "banking77/test/0127", "label": "card payment not recognised", "source": "test:1114", "state": "Some of my card payments look different than where I purchased products from. Why is that?"}
+{"id": "banking77/test/0128", "label": "beneficiary not allowed", "source": "test:2194", "state": "I want to transfer money to a beneficiery. Why can't I?"}
+{"id": "banking77/test/0129", "label": "balance not updated after bank transfer", "source": "test:2711", "state": "My transfer is pending."}
+{"id": "banking77/test/0130", "label": "cash withdrawal not recognised", "source": "test:2751", "state": "Help!  My wallet was stolen and someone is taking money out.  I need this money!  What can I do?"}
+{"id": "banking77/test/0131", "label": "top up by card charge", "source": "test:2803", "state": "Any hidden fees associated with the international card if money is added?"}
+{"id": "banking77/test/0132", "label": "get disposable virtual card", "source": "test:2637", "state": "how many transactions can i make with a disposable card"}
+{"id": "banking77/test/0133", "label": "transfer not received by recipient", "source": "test:856", "state": "I transferred the rent payment for my new place a couple days ago but the landlord says it's not there yet, despite showing up as done on my side. I checked the account number I sent it to and it's definitely correct. Can you please verify if the transaction really went through or not?"}
+{"id": "banking77/test/0134", "label": "reverted card payment?", "source": "test:2106", "state": "I bought something and the money appeared back into my account? Why?"}
+{"id": "banking77/test/0135", "label": "pending cash withdrawal", "source": "test:219", "state": "Hey, my card was declined at an ATM in the city centre theatre. My account says the transaction is pending, though. I didn't get the money, though, so what does that mean?"}
+{"id": "banking77/test/0136", "label": "automatic top up", "source": "test:332", "state": "Is there an auto top-up option?"}
+{"id": "banking77/test/0137", "label": "pin blocked", "source": "test:548", "state": "Can you unblock my pin after too many wrong pin attempts?"}
+{"id": "banking77/test/0138", "label": "lost or stolen phone", "source": "test:1663", "state": "I was mugged and everything taken.  What do I do to protect my account?"}
+{"id": "banking77/test/0139", "label": "automatic top up", "source": "test:350", "state": "how do I top up my money automatically"}
+{"id": "banking77/test/0140", "label": "top up limits", "source": "test:753", "state": "Is there an amount limit to my top-up?"}
+{"id": "banking77/test/0141", "label": "wrong amount of cash received", "source": "test:791", "state": "I tried to take out cash but the amount isn't right, so what do I do?"}
+{"id": "banking77/test/0142", "label": "pending top up", "source": "test:660", "state": "Why hasn't my top-up been completed?"}
+{"id": "banking77/test/0143", "label": "declined transfer", "source": "test:1757", "state": "Are there any restrictions causing my transfer to be declined?"}
+{"id": "banking77/test/0144", "label": "getting spare card", "source": "test:2411", "state": "Do you offer multiple cards for the same account?"}
+{"id": "banking77/test/0145", "label": "card arrival", "source": "test:3", "state": "Is there a way to know when my card will arrive?"}
+{"id": "banking77/test/0146", "label": "card payment wrong exchange rate", "source": "test:128", "state": "I bought something in a foreign currency but the rate applied is wrong!"}
+{"id": "banking77/test/0147", "label": "card delivery estimate", "source": "test:315", "state": "What's the U.S. Delivery time?"}
+{"id": "banking77/test/0148", "label": "transfer fee charged", "source": "test:2204", "state": "I had to pay in order to do a transfer"}
+{"id": "banking77/test/0149", "label": "top up by bank transfer charge", "source": "test:605", "state": "Are SWIFT transfers accepted?"}
+{"id": "banking77/test/0150", "label": "verify my identity", "source": "test:3030", "state": "What can I do to verify my identity?"}
+{"id": "banking77/test/0151", "label": "atm support", "source": "test:1448", "state": "Where are the locations of ATMs that accept this card?"}
+{"id": "banking77/test/0152", "label": "card arrival", "source": "test:22", "state": "How long should my new card take to arrive?"}
+{"id": "banking77/test/0153", "label": "card payment fee charged", "source": "test:839", "state": "They charged me for paying with my card."}
+{"id": "banking77/test/0154", "label": "pin blocked", "source": "test:551", "state": "Can I reactivate my PIN?"}
+{"id": "banking77/test/0155", "label": "exchange charge", "source": "test:2771", "state": "Is there a fee to exchange foreign money?"}
+{"id": "banking77/test/0156", "label": "top up by bank transfer charge", "source": "test:612", "state": "Will you deal with SWIFT transfers?"}
+{"id": "banking77/test/0157", "label": "cancel transfer", "source": "test:692", "state": "I want to cancel a transfer right away! Can you help?"}
+{"id": "banking77/test/0158", "label": "age limit", "source": "test:490", "state": "What is the minimum age to open an account?"}
+{"id": "banking77/test/0159", "label": "top up limits", "source": "test:726", "state": "Are the top-ups limited?"}
+{"id": "banking77/test/0160", "label": "declined transfer", "source": "test:1742", "state": "Why was the transfer declined?"}
+{"id": "banking77/test/0161", "label": "card payment not recognised", "source": "test:1083", "state": "There is a payment that is not mine in the app.  Please advise/"}
+{"id": "banking77/test/0162", "label": "virtual card not working", "source": "test:2536", "state": "I cannot make transactions with my virtual card."}
+{"id": "banking77/test/0163", "label": "cash withdrawal charge", "source": "test:2896", "state": "What is the reason for this fee I got after a simple cash withdrawal?"}
+{"id": "banking77/test/0164", "label": "pending transfer", "source": "test:1859", "state": "When will the transfer go through?"}
+{"id": "banking77/test/0165", "label": "topping up by card", "source": "test:1351", "state": "Why is my money gone right when I attempted to top up"}
+{"id": "banking77/test/0166", "label": "visa or mastercard", "source": "test:1316", "state": "Is Visa or Mastercard available?"}
+{"id": "banking77/test/0167", "label": "top up by card charge", "source": "test:2834", "state": "Is their a fee for top ups?"}
+{"id": "banking77/test/0168", "label": "card linking", "source": "test:45", "state": "I received my new card, but I don't see it in the app anywhere.  What do I do?"}
+{"id": "banking77/test/0169", "label": "top up limits", "source": "test:755", "state": "Is there a maximum i can top up?"}
+{"id": "banking77/test/0170", "label": "cash withdrawal not recognised", "source": "test:2748", "state": "Can anyone help me, I lost my wallet and they've started withdrawing from my account."}
+{"id": "banking77/test/0171", "label": "fiat currency support", "source": "test:255", "state": "How do I change currencies to euros?"}
+{"id": "banking77/test/0172", "label": "compromised card", "source": "test:1425", "state": "How do I freeze my account?"}
+{"id": "banking77/test/0173", "label": "get physical card", "source": "test:1243", "state": "Are PIN separately?"}
+{"id": "banking77/test/0174", "label": "card not working", "source": "test:395", "state": "My card doesn't accept any transaction at all. What's wrong??"}
+{"id": "banking77/test/0175", "label": "disposable card limits", "source": "test:1389", "state": "Are there any hindrances to using a disposable virtual card?"}
+{"id": "banking77/test/0176", "label": "cash withdrawal charge", "source": "test:2906", "state": "Using an ATM caused me to incur an additional fee. Why?"}
+{"id": "banking77/test/0177", "label": "fiat currency support", "source": "test:262", "state": "Do you accept exchanges to EUR?"}
+{"id": "banking77/test/0178", "label": "Refund not showing up", "source": "test:1783", "state": "My statement doesn't show that a refund has processed"}
+{"id": "banking77/test/0179", "label": "apple pay or google pay", "source": "test:2996", "state": "How do I top up with Apple Pay?"}
+{"id": "banking77/test/0180", "label": "reverted card payment?", "source": "test:2088", "state": "Please explain to me the circumstances in which my card payment would be reverted?"}
+{"id": "banking77/test/0181", "label": "cancel transfer", "source": "test:712", "state": "I made a mistake and need to cancel a transaction"}
+{"id": "banking77/test/0182", "label": "apple pay or google pay", "source": "test:2980", "state": "Is Apple Pay a possible top up option?"}
+{"id": "banking77/test/0183", "label": "pending top up", "source": "test:657", "state": "top-up is slow to process"}
+{"id": "banking77/test/0184", "label": "card linking", "source": "test:44", "state": "How do I link a card that I already have?"}
+{"id": "banking77/test/0185", "label": "pending transfer", "source": "test:1878", "state": "I am confused as to why my transfer could still be pending."}
+{"id": "banking77/test/0186", "label": "edit personal details", "source": "test:1142", "state": "Where can I go to update my personal profile?"}
+{"id": "banking77/test/0187", "label": "contactless not working", "source": "test:577", "state": "How can I make my contactless work for the metro?"}
+{"id": "banking77/test/0188", "label": "top up failed", "source": "test:2662", "state": "My top up was denied in the app."}
+{"id": "banking77/test/0189", "label": "pending top up", "source": "test:675", "state": "Why is my top-up still pending?"}
+{"id": "banking77/test/0190", "label": "top up limits", "source": "test:757", "state": "Do you have any restrictions to my top-up?"}
+{"id": "banking77/test/0191", "label": "virtual card not working", "source": "test:2550", "state": "How do I get my disposable virtual card to work?"}
+{"id": "banking77/test/0192", "label": "verify my identity", "source": "test:3029", "state": "How do I go forth on verifying my identity?"}
+{"id": "banking77/test/0193", "label": "contactless not working", "source": "test:568", "state": "My contactless payments have not been completed successfully."}
+{"id": "banking77/test/0194", "label": "exchange charge", "source": "test:2772", "state": "Do I have to pay for exchanging currencies?"}
+{"id": "banking77/test/0195", "label": "receiving money", "source": "test:2258", "state": "What do I need to do to transfer my paycheck to my account?"}
+{"id": "banking77/test/0196", "label": "reverted card payment?", "source": "test:2087", "state": "Hello, My money went through for my purchase but now I got contacted from the seller noting that they didn't receive it. Then the money was returned to my account and I'm not sure why this occurred. So if you can resolve this issue please."}
+{"id": "banking77/test/0197", "label": "disposable card limits", "source": "test:1364", "state": "Can I have more than one disposable card?"}
+{"id": "banking77/test/0198", "label": "card not working", "source": "test:371", "state": "Can someone assist me by explaining why my card is not working?"}
+{"id": "banking77/test/0199", "label": "verify source of funds", "source": "test:2006", "state": "I need to verify my source of funds"}
+{"id": "banking77/test/0200", "label": "reverted card payment?", "source": "test:2096", "state": "My credit card cancelled a payment for a purchase."}
+{"id": "banking77/test/0201", "label": "disposable card limits", "source": "test:1392", "state": "What is the limit to disposable cards you can have?"}
+{"id": "banking77/test/0202", "label": "verify source of funds", "source": "test:2001", "state": "I want information about the source of funds."}
+{"id": "banking77/test/0203", "label": "card about to expire", "source": "test:2941", "state": "Will I need to order a new card since mine expires next month?"}
+{"id": "banking77/test/0204", "label": "activate my card", "source": "test:2854", "state": "Would like to use my card and need to activate it first.  Can you help me do this?"}
+{"id": "banking77/test/0205", "label": "transaction charged twice", "source": "test:1974", "state": "I noticed after looking over my transactions that I have been charged twice from an earlier restaurant visit this week. Is it possible that one of these can be removed so I get the money back for the one that is not accurate?"}
+{"id": "banking77/test/0206", "label": "transfer timing", "source": "test:2045", "state": "How long until my transfer goes through?"}
+{"id": "banking77/test/0207", "label": "top up limits", "source": "test:746", "state": "Do you have a top-up limit?"}
+{"id": "banking77/test/0208", "label": "getting virtual card", "source": "test:935", "state": "Is this where I order a virtual card?"}
+{"id": "banking77/test/0209", "label": "declined transfer", "source": "test:1750", "state": "My transfer has been declined and I know it should have went through."}
+{"id": "banking77/test/0210", "label": "edit personal details", "source": "test:1131", "state": "Where can I go to modify my detail?"}
+{"id": "banking77/test/0211", "label": "compromised card", "source": "test:1416", "state": "Can I use app to freeze account and dispute fraud?"}
+{"id": "banking77/test/0212", "label": "cancel transfer", "source": "test:706", "state": "The transfer I just made needs to be cancelled right now. It was my mistake. Please help me cancel it before it goes through!"}
+{"id": "banking77/test/0213", "label": "receiving money", "source": "test:2255", "state": "How do i get my salary in the account?"}
+{"id": "banking77/test/0214", "label": "supported cards and currencies", "source": "test:897", "state": "What cards and currencies do you support?"}
+{"id": "banking77/test/0215", "label": "request refund", "source": "test:1698", "state": "I am unhappy with my purchase, how do I cancel the order?"}
+{"id": "banking77/test/0216", "label": "exchange via app", "source": "test:420", "state": "What is the best way to exchange currency?"}
+{"id": "banking77/test/0217", "label": "edit personal details", "source": "test:1141", "state": "My address has updated and I need to change it."}
+{"id": "banking77/test/0218", "label": "receiving money", "source": "test:2275", "state": "Can I get paid in a different currency?"}
+{"id": "banking77/test/0219", "label": "transaction charged twice", "source": "test:1988", "state": "Can you explain why there is a payment showing twice?"}
+{"id": "banking77/test/0220", "label": "transfer not received by recipient", "source": "test:859", "state": "I sent money.  They haven't received it."}
+{"id": "banking77/test/0221", "label": "visa or mastercard", "source": "test:1314", "state": "Is it possible to receive a Visa and a MasterCard?"}
+{"id": "banking77/test/0222", "label": "pending transfer", "source": "test:1840", "state": "I did transfer, why is it pending"}
+{"id": "banking77/test/0223", "label": "wrong exchange rate for cash withdrawal", "source": "test:2571", "state": "Is there a fee for exchanging cash?"}
+{"id": "banking77/test/0224", "label": "virtual card not working", "source": "test:2539", "state": "How can I fix a problem where my virtual card is rejected?"}
+{"id": "banking77/test/0225", "label": "card linking", "source": "test:59", "state": "I found my card, can I add it to the app?"}
+{"id": "banking77/test/0226", "label": "transfer fee charged", "source": "test:2238", "state": "I got charged and extra fee when I transferred money so why was I charged?"}
+{"id": "banking77/test/0227", "label": "atm support", "source": "test:1444", "state": "Are there any specific ATMs that this card can be used at?"}
+{"id": "banking77/test/0228", "label": "card acceptance", "source": "test:992", "state": "Does every place of business accept this card?"}
+{"id": "banking77/test/0229", "label": "direct debit payment not recognised", "source": "test:1514", "state": "There is a direct debit I do not recognise in my statement"}
+{"id": "banking77/test/0230", "label": "top up reverted", "source": "test:1014", "state": "There appears to have been a reversion in my top up"}
+{"id": "banking77/test/0231", "label": "virtual card not working", "source": "test:2541", "state": "What do I do if my virtual card won't work."}
+{"id": "banking77/test/0232", "label": "top up limits", "source": "test:740", "state": "Can you tell me the limits for top ups?"}
+{"id": "banking77/test/0233", "label": "why verify identity", "source": "test:1174", "state": "What is the purpose for the identity check"}
+{"id": "banking77/test/0234", "label": "pin blocked", "source": "test:525", "state": "I used the wrong ping too many times and now the account is blocked.  How do I unblock?"}
+{"id": "banking77/test/0235", "label": "verify source of funds", "source": "test:2014", "state": "What information do you need to verify my Source of Funds?"}
+{"id": "banking77/test/0236", "label": "topping up by card", "source": "test:1359", "state": "Are my friends able to top up my account?"}
+{"id": "banking77/test/0237", "label": "age limit", "source": "test:519", "state": "How old does one have to be to have an account with the bank?"}
+{"id": "banking77/test/0238", "label": "card payment fee charged", "source": "test:808", "state": "I would appreciate that someone let me know when there is an extra charge for payments. I was checking the app earlier and saying a charge on one of my payments that was additional that no one made me aware of before."}
+{"id": "banking77/test/0239", "label": "fiat currency support", "source": "test:275", "state": "Besides USD what other currencies can I have?"}
+{"id": "banking77/test/0240", "label": "visa or mastercard", "source": "test:1310", "state": "I like Mastercard better."}
+{"id": "banking77/test/0241", "label": "pending top up", "source": "test:651", "state": "So, I am a new customer and attempted to top up for the very first time today. It's already been pending for half an hour and doesn't seem to be working. I need to please get this fixed."}
+{"id": "banking77/test/0242", "label": "pending cash withdrawal", "source": "test:207", "state": "I got some cash of an ATM earlier but this shows up as pending in the app. How can this be still pending, I've got the cash already?"}
+{"id": "banking77/test/0243", "label": "top up by card charge", "source": "test:2808", "state": "Is there an additional charge for topping up using a European card?"}
+{"id": "banking77/test/0244", "label": "cancel transfer", "source": "test:715", "state": "My recent transfer needs to be cancelled immediately; it was a mistake, please can you cancel it before it goes through?"}
+{"id": "banking77/test/0245", "label": "card not working", "source": "test:360", "state": "I've tried my card a bunch of times and it never worked."}
+{"id": "banking77/test/0246", "label": "transfer into account", "source": "test:2347", "state": "How do I send my account money through transfer?"}
+{"id": "banking77/test/0247", "label": "card about to expire", "source": "test:2953", "state": "My card is about to expire."}
+{"id": "banking77/test/0248", "label": "top up by cash or cheque", "source": "test:2469", "state": "What can I pay with? Does cash work?"}
+{"id": "banking77/test/0249", "label": "transfer fee charged", "source": "test:2234", "state": "I know that I am able to make transfers for free.  That was something that I valued.  After I bought something online from abroad I noticed that I got charged a fee?  What is this and can it be removed?"}
+{"id": "banking77/test/0250", "label": "balance not updated after cheque or cash deposit", "source": "test:1079", "state": "I sent you a cheque couple days ago, nothing happened to my account yet! This is unacceptable, where is my money??"}
+{"id": "banking77/test/0251", "label": "receiving money", "source": "test:2240", "state": "Will salary be received through this?"}
+{"id": "banking77/test/0252", "label": "age limit", "source": "test:493", "state": "Could I open an account for my children?"}
+{"id": "banking77/test/0253", "label": "visa or mastercard", "source": "test:1305", "state": "We need both a visa and a Mastercard."}
+{"id": "banking77/test/0254", "label": "cash withdrawal not recognised", "source": "test:2724", "state": "My app shows some cash I didn't get."}
+{"id": "banking77/test/0255", "label": "get disposable virtual card", "source": "test:2632", "state": "Where can I get a disposable virtual card?"}
+{"id": "banking77/test/0256", "label": "beneficiary not allowed", "source": "test:2184", "state": "Explain why I can't do a transfer to a beneficiary."}
+{"id": "banking77/test/0257", "label": "beneficiary not allowed", "source": "test:2174", "state": "What are the rules for transferring to a beneficiary?"}
+{"id": "banking77/test/0258", "label": "card payment fee charged", "source": "test:812", "state": "im not sure what this charge is for"}
+{"id": "banking77/test/0259", "label": "request refund", "source": "test:1717", "state": "How can I process a refund for something I purchased?"}
+{"id": "banking77/test/0260", "label": "unable to verify identity", "source": "test:1228", "state": "I am experiencing difficulty providing my identity."}
+{"id": "banking77/test/0261", "label": "transfer timing", "source": "test:2044", "state": "How many days does it take until funds are in my account?"}
+{"id": "banking77/test/0262", "label": "why verify identity", "source": "test:1168", "state": "Why is identity verification mandatory?"}
+{"id": "banking77/test/0263", "label": "change pin", "source": "test:2120", "state": "What kind of cash machines would allow me to change my PIN?"}
+{"id": "banking77/test/0264", "label": "wrong amount of cash received", "source": "test:790", "state": "What do I do if the ATM didn't give me the correct amount I withdrew? I pulled out 30 pounds and the ATM gave me 10 pounds."}
+{"id": "banking77/test/0265", "label": "transaction charged twice", "source": "test:1962", "state": "Why am I being charged twice fro a restaurant?"}
+{"id": "banking77/test/0266", "label": "unable to verify identity", "source": "test:1223", "state": "The app doesn't believe that I am me"}
+{"id": "banking77/test/0267", "label": "wrong amount of cash received", "source": "test:779", "state": "I tried to get $100 but I just got $20"}
+{"id": "banking77/test/0268", "label": "age limit", "source": "test:494", "state": "What is the age to open an account?"}
+{"id": "banking77/test/0269", "label": "card acceptance", "source": "test:995", "state": "Will any business take this card?"}
+{"id": "banking77/test/0270", "label": "lost or stolen phone", "source": "test:1652", "state": "My phone was stolen so I no longer have access to the app."}
+{"id": "banking77/test/0271", "label": "request refund", "source": "test:1708", "state": "I am not Happy with this product can i get a refund?"}
+{"id": "banking77/test/0272", "label": "balance not updated after bank transfer", "source": "test:2683", "state": "Why didn't my balance change after I transferred some money?"}
+{"id": "banking77/test/0273", "label": "disposable card limits", "source": "test:1367", "state": "Do these virtual cards have any caps on using them?"}
+{"id": "banking77/test/0274", "label": "transaction charged twice", "source": "test:1985", "state": "A transaction is repeated several times on my account."}
+{"id": "banking77/test/0275", "label": "receiving money", "source": "test:2276", "state": "Is my salary eligible for this?"}
+{"id": "banking77/test/0276", "label": "declined transfer", "source": "test:1743", "state": "What is the reason my transfer was declined?"}
+{"id": "banking77/test/0277", "label": "balance not updated after cheque or cash deposit", "source": "test:1056", "state": "Are cheques accepted to my account? Mine didn't seem to work."}
+{"id": "banking77/test/0278", "label": "extra charge on statement", "source": "test:195", "state": "What is the extra  €1 fee in my statement"}
+{"id": "banking77/test/0279", "label": "failed transfer", "source": "test:2305", "state": "What is stopping my money from transferring?"}
+{"id": "banking77/test/0280", "label": "unable to verify identity", "source": "test:1203", "state": "I am having trouble verifying my identity."}
+{"id": "banking77/test/0281", "label": "top up limits", "source": "test:738", "state": "Is there a limit to top-ups?"}
+{"id": "banking77/test/0282", "label": "lost or stolen phone", "source": "test:1650", "state": "lost my phone, dont want others to use it."}
+{"id": "banking77/test/0283", "label": "pin blocked", "source": "test:549", "state": "What can you do to unblock my pin?"}
+{"id": "banking77/test/0284", "label": "transfer into account", "source": "test:2350", "state": "I want to transfer from accounts in order to Top up. What are the steps necessary."}
+{"id": "banking77/test/0285", "label": "transaction charged twice", "source": "test:1998", "state": "I made a payment that got charged twice instead of once."}
+{"id": "banking77/test/0286", "label": "age limit", "source": "test:504", "state": "Can my children have their own account?"}
+{"id": "banking77/test/0287", "label": "age limit", "source": "test:507", "state": "How old do you have to be to be able to open an account?"}
+{"id": "banking77/test/0288", "label": "card payment not recognised", "source": "test:1107", "state": "I have an unauthorized transaction on my statement"}
+{"id": "banking77/test/0289", "label": "card payment fee charged", "source": "test:823", "state": "I paid with card and I think there was a fee applied."}
+{"id": "banking77/test/0290", "label": "cash withdrawal not recognised", "source": "test:2749", "state": "What do I do if I notice a strange withdrawl in my statement?"}
+{"id": "banking77/test/0291", "label": "verify my identity", "source": "test:3017", "state": "Let me know the steps for the identity checks"}
+{"id": "banking77/test/0292", "label": "exchange charge", "source": "test:2787", "state": "When I travel, what will it cost to switch for my currency?"}
+{"id": "banking77/test/0293", "label": "direct debit payment not recognised", "source": "test:1509", "state": "There's a direct debit on my account that I didn't authorize"}
+{"id": "banking77/test/0294", "label": "verify top up", "source": "test:2396", "state": "How can I find the top-up verification code?"}
+{"id": "banking77/test/0295", "label": "exchange via app", "source": "test:426", "state": "Can am I able to exchange currencies?"}
+{"id": "banking77/test/0296", "label": "card arrival", "source": "test:7", "state": "i have not received my card"}
+{"id": "banking77/test/0297", "label": "automatic top up", "source": "test:343", "state": "Can I have a auto top-up when my account is short?"}
+{"id": "banking77/test/0298", "label": "top up by cash or cheque", "source": "test:2473", "state": "Can I top up my account with a cheque?"}
+{"id": "banking77/test/0299", "label": "atm support", "source": "test:1466", "state": "Where can I use this card at an ATM?"}
+{"id": "banking77/test/0300", "label": "card not working", "source": "test:394", "state": "The card I have doesn't work."}
+{"id": "banking77/test/0301", "label": "lost or stolen card", "source": "test:462", "state": "I think I lost my card . I dont know how long it has been missing. Can you see if maybe someone else has been using it?"}
+{"id": "banking77/test/0302", "label": "order physical card", "source": "test:2486", "state": "Send me a physical card"}
+{"id": "banking77/test/0303", "label": "country support", "source": "test:3063", "state": "What countries are you currently in?"}
+{"id": "banking77/test/0304", "label": "balance not updated after bank transfer", "source": "test:2718", "state": "My account balance has not gone up even though I just transferred money into it"}
+{"id": "banking77/test/0305", "label": "supported cards and currencies", "source": "test:885", "state": "What kind of currencies can I use to add money?"}
+{"id": "banking77/test/0306", "label": "pending cash withdrawal", "source": "test:216", "state": "how long til my cash out goes through?"}
+{"id": "banking77/test/0307", "label": "order physical card", "source": "test:2496", "state": "Where are cards delivered to?"}
+{"id": "banking77/test/0308", "label": "card payment wrong exchange rate", "source": "test:130", "state": "You did not apply the correct exchange rate for an item that I bought."}
+{"id": "banking77/test/0309", "label": "failed transfer", "source": "test:2297", "state": "My transfer keeps failing and I just want to transfer the money can you please make it work?"}
+{"id": "banking77/test/0310", "label": "virtual card not working", "source": "test:2548", "state": "My transaction was just declined when I was using my disposable virtual card. What can I do?"}
+{"id": "banking77/test/0311", "label": "terminate account", "source": "test:1913", "state": "I wish to close my account. I do not like the service you provide."}
+{"id": "banking77/test/0312", "label": "get physical card", "source": "test:1257", "state": "I received my card but not my PIN."}
+{"id": "banking77/test/0313", "label": "card delivery estimate", "source": "test:307", "state": "How long does shipping take to get to a US destination?"}
+{"id": "banking77/test/0314", "label": "top up limits", "source": "test:721", "state": "Am I free to top-up as much as I want?"}
+{"id": "banking77/test/0315", "label": "extra charge on statement", "source": "test:166", "state": "Can you explain what this random $1 charge is?"}
+{"id": "banking77/test/0316", "label": "declined cash withdrawal", "source": "test:1588", "state": "Why can't I get cash?"}
+{"id": "banking77/test/0317", "label": "lost or stolen phone", "source": "test:1648", "state": "Can I used my card even if my phone has been stolen?"}
+{"id": "banking77/test/0318", "label": "cash withdrawal not recognised", "source": "test:2741", "state": "Some cash is showing up in my app that I did not get."}
+{"id": "banking77/test/0319", "label": "pending top up", "source": "test:655", "state": "What's going on with the top-up? All it says is pending, pending, pending! I use your service several times a week and have never had a problem before! What's going on here?"}
+{"id": "banking77/test/0320", "label": "card linking", "source": "test:76", "state": "Could you help me reactivate my card? It was previously lost, but I found it this morning in my jacket."}
+{"id": "banking77/test/0321", "label": "pin blocked", "source": "test:557", "state": "Since my pin is blocked, would you help me unblock it?"}
+{"id": "banking77/test/0322", "label": "cash withdrawal charge", "source": "test:2901", "state": "Why is there a charge on my account for taking out cash?"}
+{"id": "banking77/test/0323", "label": "direct debit payment not recognised", "source": "test:1508", "state": "I didn't make this direct debit transaction"}
+{"id": "banking77/test/0324", "label": "reverted card payment?", "source": "test:2084", "state": "Why was my payment cancelled?"}
+{"id": "banking77/test/0325", "label": "cash withdrawal not recognised", "source": "test:2747", "state": "There is an error, the app says I made an ATM withdrawal and I didn't."}
+{"id": "banking77/test/0326", "label": "pending cash withdrawal", "source": "test:204", "state": "How long does the cash withdrawal take to pend?"}
+{"id": "banking77/test/0327", "label": "get disposable virtual card", "source": "test:2603", "state": "I would like to order a disposable virtual card. How can I do this?"}
+{"id": "banking77/test/0328", "label": "wrong exchange rate for cash withdrawal", "source": "test:2568", "state": "Why is the exchange rate wrong for my international withdrawal?"}
+{"id": "banking77/test/0329", "label": "exchange rate", "source": "test:91", "state": "What are the most current exchange rates?"}
+{"id": "banking77/test/0330", "label": "supported cards and currencies", "source": "test:914", "state": "Is my currency okay to add money with?"}
+{"id": "banking77/test/0331", "label": "card payment not recognised", "source": "test:1108", "state": "There is a payment in the App that is not mine."}
+{"id": "banking77/test/0332", "label": "get disposable virtual card", "source": "test:2616", "state": "Can you explain disposable cards?"}
+{"id": "banking77/test/0333", "label": "direct debit payment not recognised", "source": "test:1500", "state": "I found a charge for a direct debit that was not made by me."}
+{"id": "banking77/test/0334", "label": "apple pay or google pay", "source": "test:2974", "state": "Why can't I use my American Express with Apple Pay to top up my account?"}
+{"id": "banking77/test/0335", "label": "apple pay or google pay", "source": "test:2979", "state": "My top up is not working in Apple Pay."}
+{"id": "banking77/test/0336", "label": "card arrival", "source": "test:0", "state": "How do I locate my card?"}
+{"id": "banking77/test/0337", "label": "card swallowed", "source": "test:1946", "state": "Help!  The atm won't give me my card back."}
+{"id": "banking77/test/0338", "label": "get physical card", "source": "test:1250", "state": "Where in the app can I find my PIN?"}
+{"id": "banking77/test/0339", "label": "top up by bank transfer charge", "source": "test:625", "state": "Is there a charge for topping up by transfer?"}
+{"id": "banking77/test/0340", "label": "top up failed", "source": "test:2657", "state": "My funding to my card didn't go through."}
+{"id": "banking77/test/0341", "label": "extra charge on statement", "source": "test:171", "state": "Can you tell me why I noticed a $1 charge on my statement?"}
+{"id": "banking77/test/0342", "label": "exchange charge", "source": "test:2780", "state": "If I need to exchange currency is there an extra fee?"}
+{"id": "banking77/test/0343", "label": "unable to verify identity", "source": "test:1233", "state": "app doesnt think its me"}
+{"id": "banking77/test/0344", "label": "transfer into account", "source": "test:2333", "state": "I need to transfer funds into my account. How can I do this?"}
+{"id": "banking77/test/0345", "label": "beneficiary not allowed", "source": "test:2171", "state": "I am having problems transferring to a beneficiary."}
+{"id": "banking77/test/0346", "label": "transfer into account", "source": "test:2327", "state": "I don't know what to do. Should I transfer funds. My account is out of money."}
+{"id": "banking77/test/0347", "label": "edit personal details", "source": "test:1149", "state": "I want to change my address."}
+{"id": "banking77/test/0348", "label": "wrong exchange rate for cash withdrawal", "source": "test:2599", "state": "Is there a local ATM that will provide British pounds, I have no money for my homeward journey and do not feel comfortable waiting until  I arrive in Britain. Will a withdrawal involve extra charges?"}
+{"id": "banking77/test/0349", "label": "visa or mastercard", "source": "test:1281", "state": "Do I qualify for a visa card?"}
+{"id": "banking77/test/0350", "label": "get physical card", "source": "test:1265", "state": "Where is my PIN number located?"}
+{"id": "banking77/test/0351", "label": "unable to verify identity", "source": "test:1227", "state": "How do I show this stupid system that this is really my identity?"}
+{"id": "banking77/test/0352", "label": "exchange rate", "source": "test:97", "state": "Will I get a curreng foreign exchange rate?"}
+{"id": "banking77/test/0353", "label": "card not working", "source": "test:393", "state": "I have tried to use my card several times and it does not work."}
+{"id": "banking77/test/0354", "label": "cash withdrawal charge", "source": "test:2899", "state": "I've notice I was charged for withdrawing cash, can you explain why?"}
+{"id": "banking77/test/0355", "label": "cancel transfer", "source": "test:719", "state": "Please help me!  I need to cancel a transaction."}
+{"id": "banking77/test/0356", "label": "transfer fee charged", "source": "test:2211", "state": "Why am I being charged a fee for transferring money?"}
+{"id": "banking77/test/0357", "label": "pending transfer", "source": "test:1869", "state": "I made a transfer 12 hours ago. Why is it still listed as pending?"}
+{"id": "banking77/test/0358", "label": "pin blocked", "source": "test:533", "state": "How can I unblock a blocked pin number for my account?"}
+{"id": "banking77/test/0359", "label": "card about to expire", "source": "test:2932", "state": "When my card expires do you send a new card?"}
+{"id": "banking77/test/0360", "label": "card linking", "source": "test:55", "state": "Hello, I found the card I misplaced and I need to reactive it, how do I do that?"}
+{"id": "banking77/test/0361", "label": "supported cards and currencies", "source": "test:915", "state": "What cards and currencies will suffice?"}
+{"id": "banking77/test/0362", "label": "declined cash withdrawal", "source": "test:1574", "state": "The ATM is declining my card. I tried at two different ATMs. Can you tell me if there's anything wrong with my account?"}
+{"id": "banking77/test/0363", "label": "pending cash withdrawal", "source": "test:210", "state": "Hi! I was wondering if you can help me. I used the city centre ATM to get some cash, but the machine declined my card. My account shows that transaction is still pending. I didn't receive the money, so please cancel that transaction."}
+{"id": "banking77/test/0364", "label": "balance not updated after bank transfer", "source": "test:2685", "state": "How long does it take for an international transfer into my account?"}
+{"id": "banking77/test/0365", "label": "disposable card limits", "source": "test:1397", "state": "What are the limits to using disposable virtual cards?"}
+{"id": "banking77/test/0366", "label": "beneficiary not allowed", "source": "test:2164", "state": "I had a transfer blocked"}
+{"id": "banking77/test/0367", "label": "transfer timing", "source": "test:2064", "state": "What is the time frame for a transfer from the US?"}
+{"id": "banking77/test/0368", "label": "country support", "source": "test:3056", "state": "Is my country supported"}
+{"id": "banking77/test/0369", "label": "top up failed", "source": "test:2665", "state": "How did my top-up fail?"}
+{"id": "banking77/test/0370", "label": "pending top up", "source": "test:653", "state": "Can you look into my top up please.  I made it over three hours ago and yet it's still pending."}
+{"id": "banking77/test/0371", "label": "wrong exchange rate for cash withdrawal", "source": "test:2570", "state": "The exchange rate you gave me for my cash withdrawal is wrong"}
+{"id": "banking77/test/0372", "label": "lost or stolen card", "source": "test:465", "state": "My bags were stolen. I need a new card but need to cancel the stolen one."}
+{"id": "banking77/test/0373", "label": "get disposable virtual card", "source": "test:2629", "state": "I need a disposable virtual card, how do I get one?"}
+{"id": "banking77/test/0374", "label": "cancel transfer", "source": "test:713", "state": "I made an error in payment yesterday and I need it fixed asap because it's for my rent tomorrow."}
+{"id": "banking77/test/0375", "label": "disposable card limits", "source": "test:1391", "state": "How many virtual cards do I get?"}
+{"id": "banking77/test/0376", "label": "unable to verify identity", "source": "test:1215", "state": "The app will not let me into my account."}
+{"id": "banking77/test/0377", "label": "top up reverted", "source": "test:1016", "state": "I think my top-up was cancelled."}
+{"id": "banking77/test/0378", "label": "direct debit payment not recognised", "source": "test:1492", "state": "Even though it's late, I wanted to see about disputing a charge. I was just looking through my transactions over the past couple of months and noticed a pretty large amount that was not completed by me. Is this possibly something I can still do."}
+{"id": "banking77/test/0379", "label": "card linking", "source": "test:52", "state": "How do I link one your card if I have one already?"}
+{"id": "banking77/test/0380", "label": "country support", "source": "test:3067", "state": "What countries will my card be supported in?"}
+{"id": "banking77/test/0381", "label": "terminate account", "source": "test:1907", "state": "Please delete my account."}
+{"id": "banking77/test/0382", "label": "passcode forgotten", "source": "test:1533", "state": "I no longer have my passcode."}
+{"id": "banking77/test/0383", "label": "virtual card not working", "source": "test:2552", "state": "Payments from my disposable virtual card don't work"}
+{"id": "banking77/test/0384", "label": "request refund", "source": "test:1695", "state": "I ordered something ages ago online but it's simply not arriving. I've got enough! Give me back my money, I'm not paying these people."}
+{"id": "banking77/test/0385", "label": "card payment not recognised", "source": "test:1110", "state": "I see a charge on my account that I don't recall making. I feel like my account may have been compromised."}
+{"id": "banking77/test/0386", "label": "fiat currency support", "source": "test:271", "state": "Can I exchange currencies?"}
+{"id": "banking77/test/0387", "label": "exchange charge", "source": "test:2773", "state": "Does it cost extra to exchange currencies?"}
+{"id": "banking77/test/0388", "label": "top up failed", "source": "test:2661", "state": "I think my top up did not work"}
+{"id": "banking77/test/0389", "label": "cash withdrawal charge", "source": "test:2882", "state": "Why am I being charged when I withdraw cash?"}
+{"id": "banking77/test/0390", "label": "card payment wrong exchange rate", "source": "test:145", "state": "The exchange rate seems off on this transaction"}
+{"id": "banking77/test/0391", "label": "Refund not showing up", "source": "test:1795", "state": "I keep checking my bank statements but I don't see a refund that I've requested from a seller. Can you ensure that I receive the refund from the seller?"}
+{"id": "banking77/test/0392", "label": "card not working", "source": "test:386", "state": "My card stopped working when I use it"}
+{"id": "banking77/test/0393", "label": "transfer timing", "source": "test:2062", "state": "How many days until the money will be in my account?"}
+{"id": "banking77/test/0394", "label": "transfer timing", "source": "test:2054", "state": "If I need to do a quick transfer from China, how long should I expect the transfer to take?"}
+{"id": "banking77/test/0395", "label": "top up reverted", "source": "test:1036", "state": "Im very upset as my top-up was canceled and I have no idea why."}
+{"id": "banking77/test/0396", "label": "card payment not recognised", "source": "test:1080", "state": "I have a strange payment in my statement"}
+{"id": "banking77/test/0397", "label": "passcode forgotten", "source": "test:1535", "state": "Can I resent my passcode?"}
+{"id": "banking77/test/0398", "label": "pending cash withdrawal", "source": "test:229", "state": "I have a pending transaction in my app. How is it still pending if I pulled the cash out from the ATM earlier?"}
+{"id": "banking77/test/0399", "label": "verify my identity", "source": "test:3009", "state": "Are there any documents needed for the identity check?"}
+{"id": "banking77/test/0400", "label": "edit personal details", "source": "test:1120", "state": "I no longer live at my address on file, how do I change it?"}
+{"id": "banking77/test/0401", "label": "get disposable virtual card", "source": "test:2634", "state": "Hello! I need to order a disposable virtual card. Where can I do that at?"}
+{"id": "banking77/test/0402", "label": "get physical card", "source": "test:1272", "state": "Help me find my card pin!"}
+{"id": "banking77/test/0403", "label": "cancel transfer", "source": "test:707", "state": "I want to go back on what I did this morning"}
+{"id": "banking77/test/0404", "label": "card acceptance", "source": "test:971", "state": "Do you know where my card will be accepted?"}
+{"id": "banking77/test/0405", "label": "top up by bank transfer charge", "source": "test:614", "state": "Will a transfer incur a fee?"}
+{"id": "banking77/test/0406", "label": "top up reverted", "source": "test:1021", "state": "Can you tell me why my top up was reverted?"}
+{"id": "banking77/test/0407", "label": "compromised card", "source": "test:1439", "state": "Someone else is using my card, freeze it."}
+{"id": "banking77/test/0408", "label": "compromised card", "source": "test:1409", "state": "Someone else may be using my card.  There are transactions I don't recognize."}
+{"id": "banking77/test/0409", "label": "lost or stolen card", "source": "test:441", "state": "I can't find my card and think it may have been stolen."}
+{"id": "banking77/test/0410", "label": "card arrival", "source": "test:4", "state": "My card has not arrived yet."}
+{"id": "banking77/test/0411", "label": "supported cards and currencies", "source": "test:912", "state": "Do you accept other currencies besides US Dollars?"}
+{"id": "banking77/test/0412", "label": "get disposable virtual card", "source": "test:2635", "state": "where do I request a disposable virtual card?"}
+{"id": "banking77/test/0413", "label": "card about to expire", "source": "test:2957", "state": "If my card is about to expire, do I need to order a new one?"}
+{"id": "banking77/test/0414", "label": "Refund not showing up", "source": "test:1762", "state": "I requested a refund, and never received it. What can I do?"}
+{"id": "banking77/test/0415", "label": "verify top up", "source": "test:2376", "state": "Is it necessary to verify my top up?"}
+{"id": "banking77/test/0416", "label": "pending card payment", "source": "test:1618", "state": "Why is there a pending transaction on my card?"}
+{"id": "banking77/test/0417", "label": "transfer into account", "source": "test:2357", "state": "I'm trying to transfer money into my account."}
+{"id": "banking77/test/0418", "label": "card acceptance", "source": "test:973", "state": "Is my card accepted everywhere?"}
+{"id": "banking77/test/0419", "label": "pin blocked", "source": "test:553", "state": "Can I unblock my pin?"}
+{"id": "banking77/test/0420", "label": "lost or stolen phone", "source": "test:1672", "state": "Someone stole my cards!"}
+{"id": "banking77/test/0421", "label": "card arrival", "source": "test:15", "state": "I have been waiting longer than expected for my bank card, could you provide information on when it will arrive?"}
+{"id": "banking77/test/0422", "label": "failed transfer", "source": "test:2310", "state": "I am trying to make a transfer and am unsuccessful, can you please tell me why?"}
+{"id": "banking77/test/0423", "label": "transfer timing", "source": "test:2060", "state": "How long do I have to wait for a transfer from the US?"}
+{"id": "banking77/test/0424", "label": "card payment not recognised", "source": "test:1112", "state": "Somebody used my card to make a purchase"}
+{"id": "banking77/test/0425", "label": "extra charge on statement", "source": "test:187", "state": "I am seeing an extra fee on my statement what is that for?"}
+{"id": "banking77/test/0426", "label": "get physical card", "source": "test:1244", "state": "I cannot seem to find my PIN. Where is it?"}
+{"id": "banking77/test/0427", "label": "change pin", "source": "test:2155", "state": "Show me how to change my pin?"}
+{"id": "banking77/test/0428", "label": "verify my identity", "source": "test:3006", "state": "How do you verify an identity?"}
+{"id": "banking77/test/0429", "label": "transfer fee charged", "source": "test:2200", "state": "When I made a transfer, there was a fee.  Why?"}
+{"id": "banking77/test/0430", "label": "verify my identity", "source": "test:3012", "state": "I need to verify my identity"}
+{"id": "banking77/test/0431", "label": "exchange charge", "source": "test:2764", "state": "What is the base amount for cross-currency exchanges?"}
+{"id": "banking77/test/0432", "label": "exchange rate", "source": "test:108", "state": "How do your exchange rates work?"}
+{"id": "banking77/test/0433", "label": "declined cash withdrawal", "source": "test:1578", "state": "What are some reasons that would cause ATM machines to decline my card? It has happened to me multiple times!"}
+{"id": "banking77/test/0434", "label": "card payment fee charged", "source": "test:803", "state": "I show another charge on my card from when I used it, why?"}
+{"id": "banking77/test/0435", "label": "extra charge on statement", "source": "test:197", "state": "What is the €1 fee for?"}
+{"id": "banking77/test/0436", "label": "topping up by card", "source": "test:1332", "state": "how can i top up?"}
+{"id": "banking77/test/0437", "label": "get physical card", "source": "test:1269", "state": "I need my PIN"}
+{"id": "banking77/test/0438", "label": "declined transfer", "source": "test:1732", "state": "Why did I get a transfer declined?"}
+{"id": "banking77/test/0439", "label": "reverted card payment?", "source": "test:2095", "state": "Do you know why my card payment was reverted?"}
+{"id": "banking77/test/0440", "label": "activate my card", "source": "test:2868", "state": "How do I go about activating my new card?"}
+{"id": "banking77/test/0441", "label": "declined transfer", "source": "test:1755", "state": "I tried to buy something online yesterday but it wouldn't stop saying declined. Tried again today but same thing happened. What's Broken?"}
+{"id": "banking77/test/0442", "label": "transfer timing", "source": "test:2057", "state": "How long does it take for funds to come through the US to my account?"}
+{"id": "banking77/test/0443", "label": "card acceptance", "source": "test:961", "state": "Who accepts this card?"}
+{"id": "banking77/test/0444", "label": "passcode forgotten", "source": "test:1525", "state": "My password isn't being accepted and I need to reset it."}
+{"id": "banking77/test/0445", "label": "pending card payment", "source": "test:1629", "state": "Explain what the pending payment means?"}
+{"id": "banking77/test/0446", "label": "atm support", "source": "test:1453", "state": "What kind of ATM's can I use?"}
+{"id": "banking77/test/0447", "label": "reverted card payment?", "source": "test:2089", "state": "Why has my card payment been cancelled?"}
+{"id": "banking77/test/0448", "label": "declined card payment", "source": "test:1833", "state": "I finally got my new card and was very excited to use it today. However, my payment kept declining. What is happening?"}
+{"id": "banking77/test/0449", "label": "cash withdrawal not recognised", "source": "test:2720", "state": "Think someone has took money out with my card. What shall I do?"}
+{"id": "banking77/test/0450", "label": "pin blocked", "source": "test:535", "state": "Can you unlock my pin? I think I entered the wrong pin too many times."}
+{"id": "banking77/test/0451", "label": "transfer timing", "source": "test:2076", "state": "If my transfer is from Europe how long will it take?"}
+{"id": "banking77/test/0452", "label": "activate my card", "source": "test:2843", "state": "Tell me how to go about activating my new card?"}
+{"id": "banking77/test/0453", "label": "virtual card not working", "source": "test:2540", "state": "My virtual card isn't working. What do I do?"}
+{"id": "banking77/test/0454", "label": "pending card payment", "source": "test:1605", "state": "Why has my payment not gone through?"}
+{"id": "banking77/test/0455", "label": "fiat currency support", "source": "test:278", "state": "Do you support the exchange of EUR from my currency."}
+{"id": "banking77/test/0456", "label": "atm support", "source": "test:1457", "state": "Which ATM's will accept my card?"}
+{"id": "banking77/test/0457", "label": "Refund not showing up", "source": "test:1771", "state": "Why is my refund missing from my  statement?"}
+{"id": "banking77/test/0458", "label": "virtual card not working", "source": "test:2534", "state": "Why can't I use my virtual card for subscription services?"}
+{"id": "banking77/test/0459", "label": "declined card payment", "source": "test:1829", "state": "Do you know why my card payment is declined?"}
+{"id": "banking77/test/0460", "label": "transfer timing", "source": "test:2051", "state": "When will a transfer reach my account?"}
+{"id": "banking77/test/0461", "label": "card about to expire", "source": "test:2948", "state": "Can I receive a new card while I am in China?"}
+{"id": "banking77/test/0462", "label": "cancel transfer", "source": "test:694", "state": "This is URGENT, I typed the wrong payment information for a payment I needed to make and have clicked send, I need to reverse the transaction immediately."}
+{"id": "banking77/test/0463", "label": "pending top up", "source": "test:669", "state": "What does it mean when my top up is saying  still pending?"}
+{"id": "banking77/test/0464", "label": "wrong amount of cash received", "source": "test:787", "state": "I didn't receive the right amount of cash back"}
+{"id": "banking77/test/0465", "label": "verify source of funds", "source": "test:2019", "state": "What is the source of my money?"}
+{"id": "banking77/test/0466", "label": "failed transfer", "source": "test:2312", "state": "I've now been trying to do a really standard transfer 5 times already. What's going on, is your system broken or something?!"}
+{"id": "banking77/test/0467", "label": "visa or mastercard", "source": "test:1289", "state": "Can I get a mastercard?"}
+{"id": "banking77/test/0468", "label": "cash withdrawal charge", "source": "test:2884", "state": "Why are fees charged on cash withdrawals? I went to withdraw some money earlier today after shopping. There's a fee that wasn't there before."}
+{"id": "banking77/test/0469", "label": "top up failed", "source": "test:2654", "state": "Why caused my top up to not work?"}
+{"id": "banking77/test/0470", "label": "transfer fee charged", "source": "test:2225", "state": "There was an extra charge when I made a transfer."}
+{"id": "banking77/test/0471", "label": "pin blocked", "source": "test:540", "state": "How can I unlock my pin from too many tries?"}
+{"id": "banking77/test/0472", "label": "contactless not working", "source": "test:582", "state": "When I tried to pay for my bus ride, the contactless payment wouldn't work. How can I prevent this in the future?"}
+{"id": "banking77/test/0473", "label": "verify source of funds", "source": "test:2033", "state": "what is source of my funds, need to verify"}
+{"id": "banking77/test/0474", "label": "direct debit payment not recognised", "source": "test:1480", "state": "Help me.  There is a Direct Debit that I didn't make."}
+{"id": "banking77/test/0475", "label": "unable to verify identity", "source": "test:1237", "state": "Why can't I verify my identity?"}
+{"id": "banking77/test/0476", "label": "supported cards and currencies", "source": "test:899", "state": "How can I use American Express to add money to my account?"}
+{"id": "banking77/test/0477", "label": "reverted card payment?", "source": "test:2119", "state": "Why has payment been returned?"}
+{"id": "banking77/test/0478", "label": "exchange charge", "source": "test:2788", "state": "How much will I pay to exchange foreign currency?"}
+{"id": "banking77/test/0479", "label": "wrong amount of cash received", "source": "test:762", "state": "How come the ATM gave me less cash than what I asked for?"}
+{"id": "banking77/test/0480", "label": "age limit", "source": "test:496", "state": "Can I open a bank account for my newborn baby?"}
+{"id": "banking77/test/0481", "label": "Refund not showing up", "source": "test:1798", "state": "How long will it take to get my refund"}
+{"id": "banking77/test/0482", "label": "getting virtual card", "source": "test:938", "state": "Where is the virtual card located?"}
+{"id": "banking77/test/0483", "label": "visa or mastercard", "source": "test:1306", "state": "Hello. Can you tell me if you use Visa or Mastercard?"}
+{"id": "banking77/test/0484", "label": "top up reverted", "source": "test:1000", "state": "My top-up was cancelled; will I receive a refund?"}
+{"id": "banking77/test/0485", "label": "pin blocked", "source": "test:546", "state": "I entered the wrong pin too many times and now I am blocked.  Help me unblock!"}
+{"id": "banking77/test/0486", "label": "atm support", "source": "test:1463", "state": "Are there any ATM machines near me?"}
+{"id": "banking77/test/0487", "label": "transfer timing", "source": "test:2061", "state": "How long is the wait for a US transfer?"}
+{"id": "banking77/test/0488", "label": "exchange rate", "source": "test:85", "state": "What are your international exchange rates?"}
+{"id": "banking77/test/0489", "label": "disposable card limits", "source": "test:1385", "state": "Are there any limits to how many disposable cards I can use?"}
+{"id": "banking77/test/0490", "label": "topping up by card", "source": "test:1325", "state": "Can friends add to my account"}
+{"id": "banking77/test/0491", "label": "card linking", "source": "test:49", "state": "I have one of your cards already, how do I link it?"}
+{"id": "banking77/test/0492", "label": "transfer timing", "source": "test:2074", "state": "How long does a transfer take from the point it's sent, to the point it arrives in my account?"}
+{"id": "banking77/test/0493", "label": "wrong exchange rate for cash withdrawal", "source": "test:2580", "state": "I took out a foreign currency and the exchange rate is wrong."}
+{"id": "banking77/test/0494", "label": "card payment not recognised", "source": "test:1082", "state": "I saw a payment i did not do"}
+{"id": "banking77/test/0495", "label": "verify top up", "source": "test:2390", "state": "I don't understand why it says I have to verify the top-up."}
+{"id": "banking77/test/0496", "label": "top up reverted", "source": "test:1024", "state": "What happened to where my top-up was canceled?"}
+{"id": "banking77/test/0497", "label": "declined cash withdrawal", "source": "test:1593", "state": "I couldn't get cash at the atm"}
+{"id": "banking77/test/0498", "label": "why verify identity", "source": "test:1165", "state": "What is the need to verify my identity?"}
+{"id": "banking77/test/0499", "label": "getting virtual card", "source": "test:957", "state": "Where can I get a virtual card?"}

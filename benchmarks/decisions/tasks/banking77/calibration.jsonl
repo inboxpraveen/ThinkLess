@@ -1,0 +1,300 @@
+{"id": "banking77/calibration/0000", "label": "balance not updated after cheque or cash deposit", "source": "train:3383", "state": "Why hasn't my cash arrived from a deposited check?"}
+{"id": "banking77/calibration/0001", "label": "apple pay or google pay", "source": "train:9743", "state": "is there a way to do top up with apple pay"}
+{"id": "banking77/calibration/0002", "label": "why verify identity", "source": "train:3861", "state": "Why is verifaction required for my Identity?"}
+{"id": "banking77/calibration/0003", "label": "extra charge on statement", "source": "train:659", "state": "Why did you guys charge me an extra €1?"}
+{"id": "banking77/calibration/0004", "label": "lost or stolen card", "source": "train:1546", "state": "I think my wallet fell out on the Tube today! I realized as soon as I got to my desk. How do I cut off the card?"}
+{"id": "banking77/calibration/0005", "label": "request refund", "source": "train:5433", "state": "What do I need to do for a refund?"}
+{"id": "banking77/calibration/0006", "label": "apple pay or google pay", "source": "train:9686", "state": "is apple pay a top up service?"}
+{"id": "banking77/calibration/0007", "label": "card not working", "source": "train:1297", "state": "What do I do now that I can't use this card?"}
+{"id": "banking77/calibration/0008", "label": "exchange via app", "source": "train:1371", "state": "What do I do to exchange currency?"}
+{"id": "banking77/calibration/0009", "label": "top up by card charge", "source": "train:9103", "state": "Are there going to be fees from adding money with an international card?"}
+{"id": "banking77/calibration/0010", "label": "card about to expire", "source": "train:9530", "state": "What do I do if my card expires soon?"}
+{"id": "banking77/calibration/0011", "label": "top up reverted", "source": "train:3201", "state": "My thoughts were that you offered crypto top up which does not seem to be working. The money has now been taken from my account. What is the problem here?"}
+{"id": "banking77/calibration/0012", "label": "card payment fee charged", "source": "train:2694", "state": "Why am I being charged a fee for using my card? If there is some print out of places that charge me can you please send me that?"}
+{"id": "banking77/calibration/0013", "label": "pending transfer", "source": "train:6024", "state": "How long until transfers complete?"}
+{"id": "banking77/calibration/0014", "label": "card arrival", "source": "train:91", "state": "I'm still waiting for my card."}
+{"id": "banking77/calibration/0015", "label": "card acceptance", "source": "train:3110", "state": "Can I pay online with my card?"}
+{"id": "banking77/calibration/0016", "label": "pending card payment", "source": "train:5221", "state": "I made a payment that's pending. Will it go through?"}
+{"id": "banking77/calibration/0017", "label": "declined cash withdrawal", "source": "train:4960", "state": "I needed cash from the ATM but I couldn't get it."}
+{"id": "banking77/calibration/0018", "label": "transfer fee charged", "source": "train:7248", "state": "Why have I been charged a fee for transferring money?"}
+{"id": "banking77/calibration/0019", "label": "cancel transfer", "source": "train:2207", "state": "Where do I go to cancel a transaction?"}
+{"id": "banking77/calibration/0020", "label": "receiving money", "source": "train:7387", "state": "Can this app take my salary?"}
+{"id": "banking77/calibration/0021", "label": "wrong exchange rate for cash withdrawal", "source": "train:8355", "state": "I tried to use the ATM with foreign currency. The conversion rate applied was wrong."}
+{"id": "banking77/calibration/0022", "label": "transfer timing", "source": "train:6621", "state": "How long will a transfer from the US take?"}
+{"id": "banking77/calibration/0023", "label": "getting virtual card", "source": "train:3093", "state": "Please tell me how I can get a virtual card."}
+{"id": "banking77/calibration/0024", "label": "card payment fee charged", "source": "train:2543", "state": "I bought something with my card and I was charged a fee"}
+{"id": "banking77/calibration/0025", "label": "transfer timing", "source": "train:6694", "state": "When will a transfer from the US post?"}
+{"id": "banking77/calibration/0026", "label": "cash withdrawal charge", "source": "train:9512", "state": "Why was I charged a fee for withdrawing money?"}
+{"id": "banking77/calibration/0027", "label": "activate my card", "source": "train:9192", "state": "Can I have my card activated?"}
+{"id": "banking77/calibration/0028", "label": "visa or mastercard", "source": "train:4189", "state": "Is it possible to get both Visa and Mastercard from you?"}
+{"id": "banking77/calibration/0029", "label": "card swallowed", "source": "train:6287", "state": "An ATM swallowed my credit card!"}
+{"id": "banking77/calibration/0030", "label": "wrong exchange rate for cash withdrawal", "source": "train:8332", "state": "I think that there was an error in calculating the exchange rate.  I recently withdrew cash and received much less than expected."}
+{"id": "banking77/calibration/0031", "label": "direct debit payment not recognised", "source": "train:4663", "state": "What is this direct debit in my statement?"}
+{"id": "banking77/calibration/0032", "label": "cancel transfer", "source": "train:2140", "state": "Is there a way to revert a transaction?"}
+{"id": "banking77/calibration/0033", "label": "automatic top up", "source": "train:1234", "state": "How do I top-up while traveling?"}
+{"id": "banking77/calibration/0034", "label": "fiat currency support", "source": "train:967", "state": "Are you able to make exchanges to EUR?"}
+{"id": "banking77/calibration/0035", "label": "pending top up", "source": "train:1988", "state": "I topped up about half an hour ago and the charge is still pending. I'm a new customer and today is my first time doing this. Can you fix it? It doesn't seem to be working."}
+{"id": "banking77/calibration/0036", "label": "activate my card", "source": "train:9294", "state": "What do I do to activate my new card?"}
+{"id": "banking77/calibration/0037", "label": "automatic top up", "source": "train:1177", "state": "Is auto top up a provided service?"}
+{"id": "banking77/calibration/0038", "label": "lost or stolen phone", "source": "train:5350", "state": "left my phone at hotel, cant use app"}
+{"id": "banking77/calibration/0039", "label": "apple pay or google pay", "source": "train:9700", "state": "Is topping up with Apple Pay possible?"}
+{"id": "banking77/calibration/0040", "label": "pending cash withdrawal", "source": "train:879", "state": "why isnt my cash withdrawal showing"}
+{"id": "banking77/calibration/0041", "label": "cancel transfer", "source": "train:2096", "state": "I need to change a transfer."}
+{"id": "banking77/calibration/0042", "label": "atm support", "source": "train:4604", "state": "Tell me what ATMs take this card."}
+{"id": "banking77/calibration/0043", "label": "verify source of funds", "source": "train:6493", "state": "Can you tell me where my readily available cash has come from?"}
+{"id": "banking77/calibration/0044", "label": "declined cash withdrawal", "source": "train:4954", "state": "Is my card broken? I can't get cash out of the ATM"}
+{"id": "banking77/calibration/0045", "label": "transfer into account", "source": "train:7648", "state": "How can I top up my account by bank transfer?"}
+{"id": "banking77/calibration/0046", "label": "card payment not recognised", "source": "train:3492", "state": "A strange card payment, I do not recognize it."}
+{"id": "banking77/calibration/0047", "label": "country support", "source": "train:9912", "state": "Is it possible for a person who lives in the US to get a card?"}
+{"id": "banking77/calibration/0048", "label": "cash withdrawal charge", "source": "train:9450", "state": "There was an extra fee on my account when I got cash."}
+{"id": "banking77/calibration/0049", "label": "direct debit payment not recognised", "source": "train:4752", "state": "how do i get a refund for a direct debit payment i didn't make"}
+{"id": "banking77/calibration/0050", "label": "request refund", "source": "train:5423", "state": "I purchased this item and would like a refund"}
+{"id": "banking77/calibration/0051", "label": "verify top up", "source": "train:7705", "state": "I'm trying to verify my top-up card, but I can't find the code...?"}
+{"id": "banking77/calibration/0052", "label": "order physical card", "source": "train:8142", "state": "How do i receive a physical card?"}
+{"id": "banking77/calibration/0053", "label": "Refund not showing up", "source": "train:5805", "state": "As advised by you, i requested seller to refund my money. A week has passed but i haven't got any update from seller. Please track the refund with the seller."}
+{"id": "banking77/calibration/0054", "label": "reverted card payment?", "source": "train:6860", "state": "I'm not sure what is going on here. I've received payment back into my account  for an item I've already received, from about 2 weeks ago."}
+{"id": "banking77/calibration/0055", "label": "cash withdrawal not recognised", "source": "train:8796", "state": "My wallet was taken and I see that someone is using my card!   Please help me!"}
+{"id": "banking77/calibration/0056", "label": "wrong amount of cash received", "source": "train:2435", "state": "I haven't received my cash yet."}
+{"id": "banking77/calibration/0057", "label": "getting spare card", "source": "train:7897", "state": "How many active cards can I have?"}
+{"id": "banking77/calibration/0058", "label": "pending top up", "source": "train:1929", "state": "I am under the impression that my top up is still pending"}
+{"id": "banking77/calibration/0059", "label": "unable to verify identity", "source": "train:3900", "state": "I'm having trouble proving my identity"}
+{"id": "banking77/calibration/0060", "label": "get disposable virtual card", "source": "train:8437", "state": "What can you use the disposable cards for?"}
+{"id": "banking77/calibration/0061", "label": "contactless not working", "source": "train:1808", "state": "My contactless stopped working today no matter where I try to use it. How do I get it to start working again?"}
+{"id": "banking77/calibration/0062", "label": "pending cash withdrawal", "source": "train:819", "state": "What is the reason my cash withdrawal is still pending?"}
+{"id": "banking77/calibration/0063", "label": "transfer timing", "source": "train:6689", "state": "I must quickly transfer something from China, and I need to know how long it will take."}
+{"id": "banking77/calibration/0064", "label": "beneficiary not allowed", "source": "train:7047", "state": "Why can't a beneficiary receive a money transfer from me?"}
+{"id": "banking77/calibration/0065", "label": "pending top up", "source": "train:2073", "state": "I have a new card and I can't add money to it.  I tried about 30 minutes ago and it is still pending.  What do I do?"}
+{"id": "banking77/calibration/0066", "label": "age limit", "source": "train:1613", "state": "How old do you need to be to open an account?"}
+{"id": "banking77/calibration/0067", "label": "passcode forgotten", "source": "train:4846", "state": "what is going on, i have entered my passcode and its not working"}
+{"id": "banking77/calibration/0068", "label": "supported cards and currencies", "source": "train:2970", "state": "For adding money, which currencies do you accept?"}
+{"id": "banking77/calibration/0069", "label": "pending cash withdrawal", "source": "train:772", "state": "I got some cash in the ATM but its still pending"}
+{"id": "banking77/calibration/0070", "label": "exchange via app", "source": "train:1368", "state": "How can I exchange AUD for GBP?"}
+{"id": "banking77/calibration/0071", "label": "declined cash withdrawal", "source": "train:5080", "state": "I can't get the ATM to give me any cash"}
+{"id": "banking77/calibration/0072", "label": "pending cash withdrawal", "source": "train:864", "state": "I Withdrew cash from an ATM earlier but it shows up as pending in the app. How can this still be pending, I received the cash already?"}
+{"id": "banking77/calibration/0073", "label": "request refund", "source": "train:5479", "state": "How do I request a refund?"}
+{"id": "banking77/calibration/0074", "label": "pending transfer", "source": "train:6046", "state": "I've been waiting for a pending transfer to go through for a while now, and don't see any reason why I've been waiting this long.  I know that I have the correct account details, so that isn't the problem."}
+{"id": "banking77/calibration/0075", "label": "getting spare card", "source": "train:7914", "state": "I would like to give another card to my daughter, how can I proceed?"}
+{"id": "banking77/calibration/0076", "label": "reverted card payment?", "source": "train:6760", "state": "Why would my card payment get reverted?"}
+{"id": "banking77/calibration/0077", "label": "change pin", "source": "train:6911", "state": "What cash machines will let me change my PIN?"}
+{"id": "banking77/calibration/0078", "label": "card payment not recognised", "source": "train:3602", "state": "Why is there an uknown charge showing on my account?"}
+{"id": "banking77/calibration/0079", "label": "automatic top up", "source": "train:1195", "state": "How do I top-up automatically?"}
+{"id": "banking77/calibration/0080", "label": "cash withdrawal charge", "source": "train:9411", "state": "Please help!  There was an extra fee when I got cash."}
+{"id": "banking77/calibration/0081", "label": "automatic top up", "source": "train:1120", "state": "What are the maximum amount you can do for auto top-up?"}
+{"id": "banking77/calibration/0082", "label": "declined card payment", "source": "train:5863", "state": "I couldn't pay with my card"}
+{"id": "banking77/calibration/0083", "label": "beneficiary not allowed", "source": "train:7051", "state": "I wasn't able to do a transfer to an account"}
+{"id": "banking77/calibration/0084", "label": "virtual card not working", "source": "train:8181", "state": "My disposable virtual card isn't working."}
+{"id": "banking77/calibration/0085", "label": "cash withdrawal charge", "source": "train:9410", "state": "I got cash and was charged a fee that shouldn't be there!"}
+{"id": "banking77/calibration/0086", "label": "top up limits", "source": "train:2243", "state": "How much is ok for me to top up with?"}
+{"id": "banking77/calibration/0087", "label": "card payment wrong exchange rate", "source": "train:412", "state": "The exchange rate you are using is bad.This can't be the official interbank exchange rate."}
+{"id": "banking77/calibration/0088", "label": "top up failed", "source": "train:8537", "state": "Trouble with my top up"}
+{"id": "banking77/calibration/0089", "label": "cash withdrawal not recognised", "source": "train:8816", "state": "Why is there extra cash in my account?"}
+{"id": "banking77/calibration/0090", "label": "balance not updated after bank transfer", "source": "train:8694", "state": "Why hasn't my account updated to reflect my current balance?"}
+{"id": "banking77/calibration/0091", "label": "transfer timing", "source": "train:6651", "state": "I need quickly transfer something from China. About how long will it take?"}
+{"id": "banking77/calibration/0092", "label": "pending transfer", "source": "train:6006", "state": "What am I supposed to do if the funds haven't show up from a transfer completed this morning?"}
+{"id": "banking77/calibration/0093", "label": "transfer not received by recipient", "source": "train:2853", "state": "My recipient hasn't received the money"}
+{"id": "banking77/calibration/0094", "label": "automatic top up", "source": "train:1197", "state": "Where can I find the auto-top up feature?"}
+{"id": "banking77/calibration/0095", "label": "transfer timing", "source": "train:6640", "state": "Can you please tell me how long it takes for the transfer to be available."}
+{"id": "banking77/calibration/0096", "label": "lost or stolen phone", "source": "train:5261", "state": "Help, my phone was stolen, please advise!"}
+{"id": "banking77/calibration/0097", "label": "cash withdrawal not recognised", "source": "train:8808", "state": "I lost my wallet and I think someone is withdrawing cash with my card. Please help. It is urgent."}
+{"id": "banking77/calibration/0098", "label": "card about to expire", "source": "train:9534", "state": "My card's expiring a month from now, should I place an order for the new card?"}
+{"id": "banking77/calibration/0099", "label": "supported cards and currencies", "source": "train:2882", "state": "What types of currencies do you accept?"}
+{"id": "banking77/calibration/0100", "label": "virtual card not working", "source": "train:8180", "state": "I can't seem to get my virtual card to work."}
+{"id": "banking77/calibration/0101", "label": "direct debit payment not recognised", "source": "train:4715", "state": "The app is showing a direct debit payment that I never made"}
+{"id": "banking77/calibration/0102", "label": "transfer timing", "source": "train:6715", "state": "Why hasn't my transfer from Europe gone through?"}
+{"id": "banking77/calibration/0103", "label": "wrong amount of cash received", "source": "train:2387", "state": "Why did I get less from the ATM?"}
+{"id": "banking77/calibration/0104", "label": "cash withdrawal charge", "source": "train:9432", "state": "I have a fee for cash withdrawal"}
+{"id": "banking77/calibration/0105", "label": "exchange charge", "source": "train:9058", "state": "I need to exchange some foreign currency. What's the charge for doing that?"}
+{"id": "banking77/calibration/0106", "label": "pending card payment", "source": "train:5232", "state": "What's the pending length for credit transactions? I've had one in my pending category now for days and it won't move to processed."}
+{"id": "banking77/calibration/0107", "label": "card payment not recognised", "source": "train:3619", "state": "I believe there is a mistake because a payment I didn't make shows in my app."}
+{"id": "banking77/calibration/0108", "label": "card payment fee charged", "source": "train:2582", "state": "What was I charged a fee for card payment?"}
+{"id": "banking77/calibration/0109", "label": "transfer not received by recipient", "source": "train:2768", "state": "My new landlord says he hasn't received the rent payment that I transferred a couple days ago. I've already checked the account numbers and they are correct. Can you tell me what's going on with this transaction that the transfer isn't showing up on my landlord's end?"}
+{"id": "banking77/calibration/0110", "label": "getting spare card", "source": "train:7839", "state": "My daughter need a card from this account. Is that possible?"}
+{"id": "banking77/calibration/0111", "label": "request refund", "source": "train:5533", "state": "I'm cancelling this charge. I still have not received what I bought from these people a while ago."}
+{"id": "banking77/calibration/0112", "label": "lost or stolen phone", "source": "train:5312", "state": "My phone was left behind.  Can I still use my card?"}
+{"id": "banking77/calibration/0113", "label": "exchange via app", "source": "train:1376", "state": "I do not need GBP, I need AUD, how do I convert it?"}
+{"id": "banking77/calibration/0114", "label": "card linking", "source": "train:234", "state": "Can I reactivate my card? I reported it lost and found it this morning in my jacket."}
+{"id": "banking77/calibration/0115", "label": "request refund", "source": "train:5379", "state": "I'm interested in learning more about product refunds."}
+{"id": "banking77/calibration/0116", "label": "card payment not recognised", "source": "train:3640", "state": "What do I do if I see a transaction on my card that I don't recall making?"}
+{"id": "banking77/calibration/0117", "label": "verify my identity", "source": "train:9871", "state": "What form of identification is accepted?"}
+{"id": "banking77/calibration/0118", "label": "declined cash withdrawal", "source": "train:4966", "state": "I have tried using my card for the first time at the ATM of Notting Hill to withdrawal cash but it didn't work. Does this mean my card isn't working?"}
+{"id": "banking77/calibration/0119", "label": "request refund", "source": "train:5388", "state": "Hey I want to get a refund on something I bought, but not sure how to go about it. Can you please just cancel the payment, I have not received the item yet."}
+{"id": "banking77/calibration/0120", "label": "apple pay or google pay", "source": "train:9658", "state": "Is top-up possible with Apple Pay?"}
+{"id": "banking77/calibration/0121", "label": "fiat currency support", "source": "train:939", "state": "What currencies can I exchange?"}
+{"id": "banking77/calibration/0122", "label": "transaction charged twice", "source": "train:6433", "state": "Hi. I noticed I have a duplicate charge which I have not made twice. Who should I talk to take care of this?"}
+{"id": "banking77/calibration/0123", "label": "receiving money", "source": "train:7349", "state": "How can I receive my salary with a different currency?"}
+{"id": "banking77/calibration/0124", "label": "activate my card", "source": "train:9217", "state": "How do I turn on my new card?"}
+{"id": "banking77/calibration/0125", "label": "activate my card", "source": "train:9251", "state": "I couldn't complete card activation."}
+{"id": "banking77/calibration/0126", "label": "activate my card", "source": "train:9193", "state": "i cant seem to activate card"}
+{"id": "banking77/calibration/0127", "label": "atm support", "source": "train:4624", "state": "Are there specific ATM's I can use with this card?"}
+{"id": "banking77/calibration/0128", "label": "edit personal details", "source": "train:3757", "state": "I need to update my phone number."}
+{"id": "banking77/calibration/0129", "label": "exchange rate", "source": "train:348", "state": "Is there an exchange rate?"}
+{"id": "banking77/calibration/0130", "label": "balance not updated after bank transfer", "source": "train:8686", "state": "How long do I need to wait to see an update after I make a bank transfer?"}
+{"id": "banking77/calibration/0131", "label": "cash withdrawal charge", "source": "train:9458", "state": "I saw a fee on my receipt from withdrawing money while shopping earlier.  Is there supposed to be a fee for this type of transaction?"}
+{"id": "banking77/calibration/0132", "label": "pending cash withdrawal", "source": "train:871", "state": "Hello, I tried to take out some money out of the ATM, but it's still showing that it's pending? I really don't want to be charged for this."}
+{"id": "banking77/calibration/0133", "label": "direct debit payment not recognised", "source": "train:4764", "state": "I have an unauthorized direct debit on my account"}
+{"id": "banking77/calibration/0134", "label": "transfer timing", "source": "train:6720", "state": "How long does it take to make an urgent transfer from China?"}
+{"id": "banking77/calibration/0135", "label": "direct debit payment not recognised", "source": "train:4707", "state": "Someone else charged my card!"}
+{"id": "banking77/calibration/0136", "label": "card linking", "source": "train:177", "state": "I got my card now, how do I make it show up in the app?"}
+{"id": "banking77/calibration/0137", "label": "pending transfer", "source": "train:6020", "state": "I bought something on line a and the seller hasn't received the money I sent could you please tell me how long an EU transfer takes?"}
+{"id": "banking77/calibration/0138", "label": "pending top up", "source": "train:1968", "state": "I attempted to top up my account but it's been frozen in a pending state for well over an hour now! Is this normal? I'm a new customer and this is my first time doing this. I assumed it would be done quicker than this."}
+{"id": "banking77/calibration/0139", "label": "receiving money", "source": "train:7382", "state": "Can I get paid for this in another currency?"}
+{"id": "banking77/calibration/0140", "label": "why verify identity", "source": "train:3825", "state": "Why are you asking so many questions about me?"}
+{"id": "banking77/calibration/0141", "label": "change pin", "source": "train:6888", "state": "Can I change my PIN abroad?"}
+{"id": "banking77/calibration/0142", "label": "beneficiary not allowed", "source": "train:7159", "state": "beneficiary transfer problems?"}
+{"id": "banking77/calibration/0143", "label": "top up by card charge", "source": "train:9135", "state": "Is there a fee for topping off a US card?"}
+{"id": "banking77/calibration/0144", "label": "lost or stolen phone", "source": "train:5314", "state": "I just replaced my phone so do I have to make a new account?"}
+{"id": "banking77/calibration/0145", "label": "exchange rate", "source": "train:343", "state": "How is an exchange rate calculated?"}
+{"id": "banking77/calibration/0146", "label": "pin blocked", "source": "train:1739", "state": "I forgot what my pin number is and now am blocked can you help me get in?"}
+{"id": "banking77/calibration/0147", "label": "disposable card limits", "source": "train:4374", "state": "I need several cards per day. And I need to be able to throw away all of the cards I make."}
+{"id": "banking77/calibration/0148", "label": "exchange via app", "source": "train:1408", "state": "I no longer need AUD, I need GBP instead, how can I make this happen?"}
+{"id": "banking77/calibration/0149", "label": "transaction charged twice", "source": "train:6385", "state": "My account is showing a double charge."}
+{"id": "banking77/calibration/0150", "label": "card linking", "source": "train:185", "state": "I received my card, how do I get it to show in the app?"}
+{"id": "banking77/calibration/0151", "label": "balance not updated after bank transfer", "source": "train:8615", "state": "Hello. Can you help figure out why the recent transfer from my UK bank account isn't showing up?"}
+{"id": "banking77/calibration/0152", "label": "balance not updated after bank transfer", "source": "train:8763", "state": "What happened to the transfer I did?"}
+{"id": "banking77/calibration/0153", "label": "transfer timing", "source": "train:6628", "state": "I urgently need to transfer something from China. How long can I expect it to take?"}
+{"id": "banking77/calibration/0154", "label": "transfer into account", "source": "train:7640", "state": "Is a bank transfer acceptable for topping up my account?"}
+{"id": "banking77/calibration/0155", "label": "passcode forgotten", "source": "train:4875", "state": "How can I go about resetting my passcode?"}
+{"id": "banking77/calibration/0156", "label": "top up by bank transfer charge", "source": "train:1869", "state": "If I were to do a transfer, what is the rate for that?"}
+{"id": "banking77/calibration/0157", "label": "country support", "source": "train:9906", "state": "Is it possible to get one of your cards in the European Union?"}
+{"id": "banking77/calibration/0158", "label": "card payment not recognised", "source": "train:3622", "state": "There's a card payment with a name I don't recognize"}
+{"id": "banking77/calibration/0159", "label": "top up by card charge", "source": "train:9167", "state": "If I were to use a European bank card for a top up, will I incur a charge?"}
+{"id": "banking77/calibration/0160", "label": "card linking", "source": "train:239", "state": "How do I add my new card to the app?"}
+{"id": "banking77/calibration/0161", "label": "extra charge on statement", "source": "train:674", "state": "Can you tell me about why the account I have was charged an extra 1$"}
+{"id": "banking77/calibration/0162", "label": "Refund not showing up", "source": "train:5818", "state": "I don't see a refund in my account."}
+{"id": "banking77/calibration/0163", "label": "transfer timing", "source": "train:6665", "state": "How quickly can I transfer something to China?"}
+{"id": "banking77/calibration/0164", "label": "lost or stolen phone", "source": "train:5357", "state": "I'm not sure where my phone is.  Can someone else use the app?"}
+{"id": "banking77/calibration/0165", "label": "wrong exchange rate for cash withdrawal", "source": "train:8357", "state": "I made an ATM withdrawal over the holiday and then later realized I was charged an exorbitant fee!  I never would've made this withdrawal if I'd known I'd be charged so much."}
+{"id": "banking77/calibration/0166", "label": "transfer into account", "source": "train:7672", "state": "I am out of money in my account and I was wondering if I could do a bank transfer is put more in it?"}
+{"id": "banking77/calibration/0167", "label": "top up failed", "source": "train:8575", "state": "Please explain why my top-up didn't go through."}
+{"id": "banking77/calibration/0168", "label": "declined card payment", "source": "train:5948", "state": "I had a decline on my card. Why?"}
+{"id": "banking77/calibration/0169", "label": "declined card payment", "source": "train:5919", "state": "Why does is payment not going through? Did my account get frozen or some other issue I don't know about. What can I do to fix this problem?"}
+{"id": "banking77/calibration/0170", "label": "receiving money", "source": "train:7412", "state": "Can friends send me money?"}
+{"id": "banking77/calibration/0171", "label": "top up failed", "source": "train:8532", "state": "The app has rejected my top up."}
+{"id": "banking77/calibration/0172", "label": "reverted card payment?", "source": "train:6747", "state": "My payment came back for something i'm trying to buy online? it's been doing it for two weeks.  do you know what the issue is?"}
+{"id": "banking77/calibration/0173", "label": "edit personal details", "source": "train:3674", "state": "I have a new phone number and need to edit my contact information."}
+{"id": "banking77/calibration/0174", "label": "card payment not recognised", "source": "train:3552", "state": "Why is this payment on my app"}
+{"id": "banking77/calibration/0175", "label": "top up by bank transfer charge", "source": "train:1887", "state": "Am I able to do a SWIFT transfer?"}
+{"id": "banking77/calibration/0176", "label": "why verify identity", "source": "train:3853", "state": "what are you going to use my identification details for?"}
+{"id": "banking77/calibration/0177", "label": "cancel transfer", "source": "train:2195", "state": "How can I revert a transaction from this morning?"}
+{"id": "banking77/calibration/0178", "label": "balance not updated after cheque or cash deposit", "source": "train:3407", "state": "I put money into my account in the form of a cheque, but my balance did not change."}
+{"id": "banking77/calibration/0179", "label": "pending top up", "source": "train:2041", "state": "I added money to the card but the transaction didn't go through"}
+{"id": "banking77/calibration/0180", "label": "card payment not recognised", "source": "train:3508", "state": "A payment on my statement is wrong."}
+{"id": "banking77/calibration/0181", "label": "card payment fee charged", "source": "train:2634", "state": "Why have i been charged a fee for using my card?"}
+{"id": "banking77/calibration/0182", "label": "automatic top up", "source": "train:1127", "state": "Can I have my account add money automatically in certain intervals?"}
+{"id": "banking77/calibration/0183", "label": "exchange via app", "source": "train:1451", "state": "I would like to exchange currencies, how do I go upon it?"}
+{"id": "banking77/calibration/0184", "label": "top up limits", "source": "train:2319", "state": "What's the amount that I can top-up?"}
+{"id": "banking77/calibration/0185", "label": "change pin", "source": "train:6996", "state": "Is there a way to change my PIN without having to go to the bank?"}
+{"id": "banking77/calibration/0186", "label": "transfer not received by recipient", "source": "train:2863", "state": "How can I the person see my money transaction?"}
+{"id": "banking77/calibration/0187", "label": "getting spare card", "source": "train:7876", "state": "Can I get spare cards?"}
+{"id": "banking77/calibration/0188", "label": "declined cash withdrawal", "source": "train:5065", "state": "I just had my card get declined at the ATM! I need to get money out but I am unable to.  Why has this happened?"}
+{"id": "banking77/calibration/0189", "label": "card about to expire", "source": "train:9608", "state": "What do I do after my card expires?"}
+{"id": "banking77/calibration/0190", "label": "transfer fee charged", "source": "train:7212", "state": "I thought I can make transfers for free, this is not fair. I bought something online from abroad and there was some weird additional fee that I've never seen before?"}
+{"id": "banking77/calibration/0191", "label": "why verify identity", "source": "train:3820", "state": "Do you think you're asking for too much information about me?"}
+{"id": "banking77/calibration/0192", "label": "transaction charged twice", "source": "train:6425", "state": "To many charges on my card how do I go about fixing that?"}
+{"id": "banking77/calibration/0193", "label": "card not working", "source": "train:1356", "state": "The card that I have isn't working. This is the physical card."}
+{"id": "banking77/calibration/0194", "label": "atm support", "source": "train:4612", "state": "Which ATMs accept this circuit board ?"}
+{"id": "banking77/calibration/0195", "label": "exchange rate", "source": "train:333", "state": "How do you find the exchange rate?"}
+{"id": "banking77/calibration/0196", "label": "card delivery estimate", "source": "train:1027", "state": "how long does delivery take?"}
+{"id": "banking77/calibration/0197", "label": "Refund not showing up", "source": "train:5795", "state": "Why isn't my refund on my statement?"}
+{"id": "banking77/calibration/0198", "label": "transfer not received by recipient", "source": "train:2800", "state": "Is there a reason a payment is showing complete on my side but the person who is receiving it has not gotten it?"}
+{"id": "banking77/calibration/0199", "label": "apple pay or google pay", "source": "train:9769", "state": "Is it possible to use my apple watch for topping up?"}
+{"id": "banking77/calibration/0200", "label": "card swallowed", "source": "train:6288", "state": "What do I do if the ATM swallowed my card?"}
+{"id": "banking77/calibration/0201", "label": "cash withdrawal not recognised", "source": "train:8818", "state": "I believe my card has been compromised as there are funds showing that I did not receive."}
+{"id": "banking77/calibration/0202", "label": "card payment not recognised", "source": "train:3496", "state": "Hi something is going on with the app.  I see some payments I didn't make?"}
+{"id": "banking77/calibration/0203", "label": "supported cards and currencies", "source": "train:2972", "state": "Is American Express supported for adding money into my account?"}
+{"id": "banking77/calibration/0204", "label": "cash withdrawal charge", "source": "train:9468", "state": "Are there charges for cash withdrawals?"}
+{"id": "banking77/calibration/0205", "label": "pending cash withdrawal", "source": "train:852", "state": "My withdrawal is pending, why?"}
+{"id": "banking77/calibration/0206", "label": "getting virtual card", "source": "train:3031", "state": "How can I obtain a virtual card?"}
+{"id": "banking77/calibration/0207", "label": "reverted card payment?", "source": "train:6761", "state": "I believe my card payment were reverted"}
+{"id": "banking77/calibration/0208", "label": "visa or mastercard", "source": "train:4141", "state": "Can I choose whether I receive a Visa or a Mastercard card?"}
+{"id": "banking77/calibration/0209", "label": "reverted card payment?", "source": "train:6771", "state": "HELP. My account has been deducted already and the Seller says they haven't received the money yet? When can they expect it?"}
+{"id": "banking77/calibration/0210", "label": "unable to verify identity", "source": "train:3905", "state": "You will hear back from us about your verification results in 10 minutes to a one hour timeframe.  If these verification results do fail, please double-check to make sure your images are clear and have no glare or blur; your photos need to be fully readable.  You need to be 18 years of age or older and a resident of Switzerland or the European Economic Area to create an account."}
+{"id": "banking77/calibration/0211", "label": "verify source of funds", "source": "train:6483", "state": "Can I check to see where the funds came from?"}
+{"id": "banking77/calibration/0212", "label": "why verify identity", "source": "train:3822", "state": "Can I use my account although the identity verification has not been accepted yet?"}
+{"id": "banking77/calibration/0213", "label": "get physical card", "source": "train:4078", "state": "Is the PIN separately delivered?"}
+{"id": "banking77/calibration/0214", "label": "cash withdrawal not recognised", "source": "train:8833", "state": "I got a strange cash withdrawal in my statement"}
+{"id": "banking77/calibration/0215", "label": "country support", "source": "train:9955", "state": "How do I know which countries you provide service in?"}
+{"id": "banking77/calibration/0216", "label": "declined transfer", "source": "train:5651", "state": "My transfer was declined. Why did this happen?"}
+{"id": "banking77/calibration/0217", "label": "get disposable virtual card", "source": "train:8413", "state": "I need to get a disposable virtual card?"}
+{"id": "banking77/calibration/0218", "label": "transfer timing", "source": "train:6600", "state": "I desperately need to transfer something from China, Please give me the wait time."}
+{"id": "banking77/calibration/0219", "label": "edit personal details", "source": "train:3650", "state": "I am interested in changing my personal details."}
+{"id": "banking77/calibration/0220", "label": "card about to expire", "source": "train:9607", "state": "The expiration of my card is near, how do I order a new card?"}
+{"id": "banking77/calibration/0221", "label": "change pin", "source": "train:6975", "state": "Please let me know how to change my PIN?"}
+{"id": "banking77/calibration/0222", "label": "declined cash withdrawal", "source": "train:4974", "state": "Is my card actually working? It's the first time I tried using it"}
+{"id": "banking77/calibration/0223", "label": "request refund", "source": "train:5515", "state": "Hello-Can you please help me get a refund from this merchant?  I ordered a product and would like to return it. I have been unsuccessful in getting the merchant to return my request for the past several days.  I understand it can take up to 45 days to process the dispute and issue a refund, however, if this can be expedited faster it would be very helpful to me."}
+{"id": "banking77/calibration/0224", "label": "declined card payment", "source": "train:5846", "state": "What are the reasons why a card payment would be declined?"}
+{"id": "banking77/calibration/0225", "label": "activate my card", "source": "train:9314", "state": "I need info on activating my card?"}
+{"id": "banking77/calibration/0226", "label": "compromised card", "source": "train:4516", "state": "I noticed my card was used in a small town that I have never been to. Can you stop the card from being used more?"}
+{"id": "banking77/calibration/0227", "label": "unable to verify identity", "source": "train:3943", "state": "I do not have the information to verify my identify."}
+{"id": "banking77/calibration/0228", "label": "Refund not showing up", "source": "train:5732", "state": "I did all that was asked of me and I am rather frustrated. I don't understand why you just won't credit me my money back. I have contacted the seller and nothing has been done. It's been a week!"}
+{"id": "banking77/calibration/0229", "label": "request refund", "source": "train:5477", "state": "is it possible to get a refund for something I purchased?"}
+{"id": "banking77/calibration/0230", "label": "cancel transfer", "source": "train:2083", "state": "How do I revert a transaction?"}
+{"id": "banking77/calibration/0231", "label": "top up by bank transfer charge", "source": "train:1845", "state": "What are the fees associated with top up via transfer?"}
+{"id": "banking77/calibration/0232", "label": "direct debit payment not recognised", "source": "train:4742", "state": "I just went through a old statement and noticed that a very large payment went through and i did not make it. It was from a few months ago, can I still dispute the payment?"}
+{"id": "banking77/calibration/0233", "label": "getting virtual card", "source": "train:3044", "state": "How do I get a virtual card on my device?"}
+{"id": "banking77/calibration/0234", "label": "supported cards and currencies", "source": "train:2917", "state": "why wont my american express work to add money"}
+{"id": "banking77/calibration/0235", "label": "country support", "source": "train:9890", "state": "Can the card be mailed to Europe?"}
+{"id": "banking77/calibration/0236", "label": "declined card payment", "source": "train:5889", "state": "Hi, is everything in good standing with my card? I am receiving multiple \"decline\" messages."}
+{"id": "banking77/calibration/0237", "label": "exchange charge", "source": "train:9040", "state": "Does it cost anything to do currency exchanges?"}
+{"id": "banking77/calibration/0238", "label": "card arrival", "source": "train:59", "state": "I want to find out what happened to my new card?"}
+{"id": "banking77/calibration/0239", "label": "balance not updated after bank transfer", "source": "train:8747", "state": "I did a bank transfer and my balance isn't current."}
+{"id": "banking77/calibration/0240", "label": "getting spare card", "source": "train:7901", "state": "I'm looking to get an additional card."}
+{"id": "banking77/calibration/0241", "label": "verify source of funds", "source": "train:6539", "state": "need to verify source of funds"}
+{"id": "banking77/calibration/0242", "label": "getting spare card", "source": "train:7913", "state": "What is the charge for sending out more cards?"}
+{"id": "banking77/calibration/0243", "label": "get physical card", "source": "train:4059", "state": "Where is my pin? I don't have it yet"}
+{"id": "banking77/calibration/0244", "label": "exchange via app", "source": "train:1378", "state": "Is currency exchange possible?"}
+{"id": "banking77/calibration/0245", "label": "getting spare card", "source": "train:7808", "state": "Am I gonna be charged for sending out more cards?"}
+{"id": "banking77/calibration/0246", "label": "lost or stolen card", "source": "train:1525", "state": "What is the first step that I should take after my card has been stolen?"}
+{"id": "banking77/calibration/0247", "label": "card about to expire", "source": "train:9552", "state": "If my card becomes expired what can I do?"}
+{"id": "banking77/calibration/0248", "label": "cash withdrawal not recognised", "source": "train:8867", "state": "I am seeing in the App a some cash withdrawal that does not belong to me"}
+{"id": "banking77/calibration/0249", "label": "card payment fee charged", "source": "train:2692", "state": "What is the extra fee that was added when I used the card?"}
+{"id": "banking77/calibration/0250", "label": "declined cash withdrawal", "source": "train:4947", "state": "Why did I get declined when trying to get cash?"}
+{"id": "banking77/calibration/0251", "label": "top up failed", "source": "train:8469", "state": "Top-up is not working"}
+{"id": "banking77/calibration/0252", "label": "transfer not received by recipient", "source": "train:2806", "state": "When will I get my money? It's been too long."}
+{"id": "banking77/calibration/0253", "label": "reverted card payment?", "source": "train:6853", "state": "Explain why a card payment would be cancelled?"}
+{"id": "banking77/calibration/0254", "label": "top up by card charge", "source": "train:9177", "state": "How much does top up fees cost?"}
+{"id": "banking77/calibration/0255", "label": "verify top up", "source": "train:7689", "state": "Where is the top-up verification code located?"}
+{"id": "banking77/calibration/0256", "label": "transfer timing", "source": "train:6680", "state": "How long does it take transfers from Europe to complete?"}
+{"id": "banking77/calibration/0257", "label": "verify my identity", "source": "train:9790", "state": "How can I verify my identity?"}
+{"id": "banking77/calibration/0258", "label": "transaction charged twice", "source": "train:6418", "state": "I got double charged from something, what can I do?"}
+{"id": "banking77/calibration/0259", "label": "automatic top up", "source": "train:1198", "state": "If my funds are running low, will the app top up automatically?"}
+{"id": "banking77/calibration/0260", "label": "change pin", "source": "train:6960", "state": "I want to change my pin number from an ATM. Is this possible?"}
+{"id": "banking77/calibration/0261", "label": "card linking", "source": "train:214", "state": "What is the process to link the new card?"}
+{"id": "banking77/calibration/0262", "label": "declined cash withdrawal", "source": "train:5030", "state": "Why am I not able to withdraw cash from this ATM?"}
+{"id": "banking77/calibration/0263", "label": "card swallowed", "source": "train:6282", "state": "The bank machine didn't give my card back how do I get a new one fast?"}
+{"id": "banking77/calibration/0264", "label": "top up reverted", "source": "train:3256", "state": "What if my top up is reverted?"}
+{"id": "banking77/calibration/0265", "label": "top up reverted", "source": "train:3192", "state": "Did you lose my money? I had added funds through top-up not long ago and I know they were in my account, but they seem to have disappeared. What happened?"}
+{"id": "banking77/calibration/0266", "label": "card payment fee charged", "source": "train:2555", "state": "How did the extra charge on my card come in effect?"}
+{"id": "banking77/calibration/0267", "label": "transfer not received by recipient", "source": "train:2845", "state": "I need to verify a payment to my new landlord. I transferred the first rent payment a few days ago. While it shows on my side, the landlord is saying he hasn't received it yet. Can you verify that it has processed?"}
+{"id": "banking77/calibration/0268", "label": "automatic top up", "source": "train:1136", "state": "can you top up your account automatically"}
+{"id": "banking77/calibration/0269", "label": "declined cash withdrawal", "source": "train:4995", "state": "Why can't I withdraw cash from this ATM?"}
+{"id": "banking77/calibration/0270", "label": "card delivery estimate", "source": "train:1068", "state": "When should I expect my card to arrive?"}
+{"id": "banking77/calibration/0271", "label": "top up failed", "source": "train:8586", "state": "Hello, I tried to top up with my card, but it didn't work. I just got it a couple days before and it works fine. What's the deal? Can you check into this?"}
+{"id": "banking77/calibration/0272", "label": "top up failed", "source": "train:8471", "state": "My top-up hasn't gone through, what happened?"}
+{"id": "banking77/calibration/0273", "label": "card not working", "source": "train:1327", "state": "Why won't the machine accept my card anymore?"}
+{"id": "banking77/calibration/0274", "label": "verify my identity", "source": "train:9810", "state": "I'm not sure what I need to verify my identity."}
+{"id": "banking77/calibration/0275", "label": "unable to verify identity", "source": "train:3936", "state": "I'm having problems with ID verification"}
+{"id": "banking77/calibration/0276", "label": "card arrival", "source": "train:57", "state": "I don't have my card after 1 week. What are my next steps?"}
+{"id": "banking77/calibration/0277", "label": "pending top up", "source": "train:1946", "state": "When will my top-up happen?"}
+{"id": "banking77/calibration/0278", "label": "terminate account", "source": "train:6171", "state": "I don't like the services, please close my account"}
+{"id": "banking77/calibration/0279", "label": "card payment fee charged", "source": "train:2534", "state": "Why did I get charged a fee for my card payment?"}
+{"id": "banking77/calibration/0280", "label": "request refund", "source": "train:5485", "state": "How do I get a refund for an item I bought?"}
+{"id": "banking77/calibration/0281", "label": "request refund", "source": "train:5378", "state": "Where do I go for a refund?"}
+{"id": "banking77/calibration/0282", "label": "card about to expire", "source": "train:9529", "state": "My card is due to expire"}
+{"id": "banking77/calibration/0283", "label": "card not working", "source": "train:1286", "state": "I tried to use my card today in the restaurant but it didn't work and just got declined. What's wrong?"}
+{"id": "banking77/calibration/0284", "label": "card about to expire", "source": "train:9564", "state": "The expiration date on my card is very soon, and I need to get a new one.  What are the price and delivery options for my replacement card?"}
+{"id": "banking77/calibration/0285", "label": "transfer into account", "source": "train:7621", "state": "I need to know the process to transfer money into my account."}
+{"id": "banking77/calibration/0286", "label": "declined cash withdrawal", "source": "train:4959", "state": "I was declined when trying to withdrawal cash!"}
+{"id": "banking77/calibration/0287", "label": "edit personal details", "source": "train:3747", "state": "Where do I go to change my account details?"}
+{"id": "banking77/calibration/0288", "label": "get disposable virtual card", "source": "train:8407", "state": "Please can i get a disposable virtual card as well?"}
+{"id": "banking77/calibration/0289", "label": "transfer fee charged", "source": "train:7182", "state": "Why am I being charged to transfer funds?"}
+{"id": "banking77/calibration/0290", "label": "extra charge on statement", "source": "train:633", "state": "I was overcharged one extra pound!"}
+{"id": "banking77/calibration/0291", "label": "pending card payment", "source": "train:5177", "state": "I noticed that there's a payment on my card that's pending."}
+{"id": "banking77/calibration/0292", "label": "direct debit payment not recognised", "source": "train:4676", "state": "There is a direct debit transaction on my statement that I think is not mine. How do I remove?"}
+{"id": "banking77/calibration/0293", "label": "top up limits", "source": "train:2329", "state": "What is the daily limit on my card?"}
+{"id": "banking77/calibration/0294", "label": "card arrival", "source": "train:53", "state": "why hasnt my card come in yet?"}
+{"id": "banking77/calibration/0295", "label": "fiat currency support", "source": "train:911", "state": "Can you tell me how many currencies I can hold?"}
+{"id": "banking77/calibration/0296", "label": "wrong amount of cash received", "source": "train:2355", "state": "The amount of cash I received was not the full amount"}
+{"id": "banking77/calibration/0297", "label": "passcode forgotten", "source": "train:4876", "state": "How can I change my password?"}
+{"id": "banking77/calibration/0298", "label": "Refund not showing up", "source": "train:5814", "state": "Are the funds I requested from a merchant a few days ago in my account? I do not see them."}
+{"id": "banking77/calibration/0299", "label": "lost or stolen phone", "source": "train:5252", "state": "My phone was stolen, what should I do?"}

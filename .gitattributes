@@ -1,0 +1,3 @@
+# Benchmark task files are hashed; keep their bytes exactly as built.
+benchmarks/decisions/tasks/** -text
+src/thinkless/bench/decisions/tasks.json -text

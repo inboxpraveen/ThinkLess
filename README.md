@@ -7,7 +7,7 @@
   <a href="https://github.com/inboxpraveen/ThinkLess/actions/workflows/ci.yml"><img alt="CI" src="https://github.com/inboxpraveen/ThinkLess/actions/workflows/ci.yml/badge.svg"></a>
   <a href="https://github.com/inboxpraveen/ThinkLess/blob/main/LICENSE"><img alt="License: Apache 2.0" src="https://img.shields.io/badge/license-Apache%202.0-blue.svg"></a>
   <img alt="Python 3.10+" src="https://img.shields.io/badge/python-3.10%2B-blue.svg">
-  <a href="https://github.com/inboxpraveen/ThinkLess/blob/main/docs/benchmarks.md"><img alt="Benchmarks" src="https://img.shields.io/badge/benchmarks-reproducible-brightgreen.svg"></a>
+  <a href="https://inboxpraveen.github.io/ThinkLess/benchmarks/"><img alt="Benchmarks" src="https://img.shields.io/badge/benchmarks-reproducible-brightgreen.svg"></a>
 </p>
 
 ThinkLess is an open-source decision plane for AI agents. The routine
@@ -54,7 +54,7 @@ if intent.is_("refund_duplicate_charge"):       # only true when the answer is c
 Same agent, same 53 labeled support tickets, two decision planes: `llm` sends
 every decision to the LLM, `hybrid` asks rules, GLiNER and Laya first. Hosted
 models ran through OpenRouter, and the dollar figures are what OpenRouter
-billed ([full results](https://github.com/inboxpraveen/ThinkLess/blob/main/docs/benchmarks.md)):
+billed ([full results](https://inboxpraveen.github.io/ThinkLess/benchmarks/)):
 
 | Fallback LLM | Success, `llm` | Success, `hybrid` | Billed per 1k tickets, `llm` | Billed per 1k tickets, `hybrid` | Decision time |
 |---|---:|---:|---:|---:|---:|
@@ -80,7 +80,7 @@ billed ([full results](https://github.com/inboxpraveen/ThinkLess/blob/main/docs/
   validated on a separate calibration set first. The baseline is the
   strongest form of the LLM design: all six triage questions in one prompt.
 - The support set is 53 synthetic tickets: evidence of the mechanism and its
-  failure modes, not a leaderboard. The [benchmarks page](https://github.com/inboxpraveen/ThinkLess/blob/main/docs/benchmarks.md)
+  failure modes, not a leaderboard. The [benchmarks page](https://inboxpraveen.github.io/ThinkLess/benchmarks/)
   lists the weak areas found and what was done about each.
 
 ## Quick start
@@ -158,11 +158,11 @@ intent = router(engine, INTENT, {"order_status": "tracking", "refund": "refunds"
 builder.add_conditional_edges(START, intent, intent.destinations)
 ```
 
-- [LangGraph](https://github.com/inboxpraveen/ThinkLess/blob/main/docs/integrations/langgraph.md):
+- [LangGraph](https://inboxpraveen.github.io/ThinkLess/integrations/langgraph/):
   routers, decision nodes and gated tools.
-- [OpenAI Agents SDK](https://github.com/inboxpraveen/ThinkLess/blob/main/docs/integrations/openai-agents.md):
+- [OpenAI Agents SDK](https://inboxpraveen.github.io/ThinkLess/integrations/openai-agents/):
   input guardrails, tool guardrails and routing to a specialist agent.
-- [Any framework](https://github.com/inboxpraveen/ThinkLess/blob/main/docs/integrations/any-framework.md):
+- [Any framework](https://inboxpraveen.github.io/ThinkLess/integrations/any-framework/):
   `route` and `gate` for Pydantic AI, a hand-written loop, or anything else.
 
 Before switching anything, measure it. Shadow mode runs ThinkLess next to your
@@ -183,10 +183,10 @@ def classify(message: str) -> str:
 thinkless shadow report shadow/intent.jsonl --volume 2000000
 ```
 
-The [migration guide](https://github.com/inboxpraveen/ThinkLess/blob/main/docs/guides/migration.md)
-walks through it, and the [FAQ](https://github.com/inboxpraveen/ThinkLess/blob/main/docs/faq.md)
+The [migration guide](https://inboxpraveen.github.io/ThinkLess/guides/migration/)
+walks through it, and the [FAQ](https://inboxpraveen.github.io/ThinkLess/faq/)
 covers the common questions. To share one engine across services, run it as
-a [decision server or MCP tools](https://github.com/inboxpraveen/ThinkLess/blob/main/docs/guides/serving.md).
+a [decision server or MCP tools](https://inboxpraveen.github.io/ThinkLess/guides/serving/).
 
 ## Try the demo agent
 
@@ -209,31 +209,31 @@ thinkless bench intents --dataset banking77
 **Typed questions.** `Choice`, `Score`, `YesNo` and `Extract` declare what you
 want to know and which answers are allowed. They follow the System One wire
 format, so the same question works on every provider.
-[Questions](https://github.com/inboxpraveen/ThinkLess/blob/main/docs/concepts/questions.md)
+[Questions](https://inboxpraveen.github.io/ThinkLess/concepts/questions/)
 
 **A confidence cascade.** Providers are tried cheapest first. Each gets one
 call with every open question it supports; answers that clear their threshold
 close, the rest move on. Unresolved questions come back `uncertain` with the
 best answer seen, and `decision.is_()` never matches an uncertain answer.
-[The cascade](https://github.com/inboxpraveen/ThinkLess/blob/main/docs/concepts/cascade.md)
+[The cascade](https://inboxpraveen.github.io/ThinkLess/concepts/cascade/)
 
 **One meaning of confidence.** Providers disagree about what "confidence"
 means (Laya and TypeSafe compute it differently), so a threshold of 0.8 would
 mean different things per backend. ThinkLess derives a single normalized
 confidence from each provider's probabilities.
-[Confidence](https://github.com/inboxpraveen/ThinkLess/blob/main/docs/concepts/confidence.md)
+[Confidence](https://inboxpraveen.github.io/ThinkLess/concepts/confidence/)
 
 **Thresholds from data.** `thinkless calibrate` sweeps thresholds on labeled
 examples and recommends the lowest one that meets your accuracy target, per
 question and per provider (`thresholds={"intent@gliner": 0.9}`).
-[Calibration](https://github.com/inboxpraveen/ThinkLess/blob/main/docs/guides/calibration.md)
+[Calibration](https://inboxpraveen.github.io/ThinkLess/guides/calibration/)
 
 **Traces for everything.** Decisions, provider attempts, generations, tool
 calls and rule checks are spans with W3C-compatible ids. Write JSONL audit
 files, export to any OpenTelemetry backend with GenAI semantic conventions, or
 open the self-contained HTML viewer. Content capture can be switched off
 without losing structure, timings or confidences.
-[Tracing](https://github.com/inboxpraveen/ThinkLess/blob/main/docs/concepts/tracing.md)
+[Tracing](https://inboxpraveen.github.io/ThinkLess/concepts/tracing/)
 
 ## Providers and backends
 
@@ -253,43 +253,44 @@ without losing structure, timings or confidences.
 | `OpenAICompatibleLLM` | OpenAI, Ollama, vLLM, LM Studio, llama.cpp, Groq |
 | `AnthropicLLM` | Claude, with server-side refusal fallbacks |
 
-Writing your own provider is one class. [Providers](https://github.com/inboxpraveen/ThinkLess/blob/main/docs/guides/providers.md),
-[LLM backends](https://github.com/inboxpraveen/ThinkLess/blob/main/docs/guides/llm-backends.md)
+Writing your own provider is one class. [Providers](https://inboxpraveen.github.io/ThinkLess/guides/providers/),
+[LLM backends](https://inboxpraveen.github.io/ThinkLess/guides/llm-backends/)
 
 ## Documentation
 
-- [Getting started](https://github.com/inboxpraveen/ThinkLess/blob/main/docs/getting-started.md),
-  [installation](https://github.com/inboxpraveen/ThinkLess/blob/main/docs/guides/installation.md)
-- Use it in your agent: [overview](https://github.com/inboxpraveen/ThinkLess/blob/main/docs/integrations/index.md),
-  [LangGraph](https://github.com/inboxpraveen/ThinkLess/blob/main/docs/integrations/langgraph.md),
-  [OpenAI Agents SDK](https://github.com/inboxpraveen/ThinkLess/blob/main/docs/integrations/openai-agents.md),
-  [any framework](https://github.com/inboxpraveen/ThinkLess/blob/main/docs/integrations/any-framework.md),
-  [migration](https://github.com/inboxpraveen/ThinkLess/blob/main/docs/guides/migration.md),
-  [shadow mode](https://github.com/inboxpraveen/ThinkLess/blob/main/docs/guides/shadow-mode.md),
-  [FAQ](https://github.com/inboxpraveen/ThinkLess/blob/main/docs/faq.md)
-- Concepts: [the four planes](https://github.com/inboxpraveen/ThinkLess/blob/main/docs/concepts/planes.md),
-  [questions](https://github.com/inboxpraveen/ThinkLess/blob/main/docs/concepts/questions.md),
-  [confidence](https://github.com/inboxpraveen/ThinkLess/blob/main/docs/concepts/confidence.md),
-  [the cascade](https://github.com/inboxpraveen/ThinkLess/blob/main/docs/concepts/cascade.md),
-  [tracing](https://github.com/inboxpraveen/ThinkLess/blob/main/docs/concepts/tracing.md)
-- Guides: [the support agent](https://github.com/inboxpraveen/ThinkLess/blob/main/docs/guides/support-agent.md),
-  [calibration](https://github.com/inboxpraveen/ThinkLess/blob/main/docs/guides/calibration.md),
-  [providers](https://github.com/inboxpraveen/ThinkLess/blob/main/docs/guides/providers.md),
-  [LLM backends](https://github.com/inboxpraveen/ThinkLess/blob/main/docs/guides/llm-backends.md),
-  [production](https://github.com/inboxpraveen/ThinkLess/blob/main/docs/guides/production.md),
-  [serving](https://github.com/inboxpraveen/ThinkLess/blob/main/docs/guides/serving.md),
-  [running a pilot](https://github.com/inboxpraveen/ThinkLess/blob/main/docs/guides/pilot.md),
-  [troubleshooting](https://github.com/inboxpraveen/ThinkLess/blob/main/docs/guides/troubleshooting.md)
-- [Benchmarks](https://github.com/inboxpraveen/ThinkLess/blob/main/docs/benchmarks.md), [CLI reference](https://github.com/inboxpraveen/ThinkLess/blob/main/docs/reference/cli.md),
-  [Python API](https://github.com/inboxpraveen/ThinkLess/blob/main/docs/reference/api.md), [roadmap](https://github.com/inboxpraveen/ThinkLess/blob/main/docs/roadmap.md)
+- [Getting started](https://inboxpraveen.github.io/ThinkLess/getting-started/),
+  [installation](https://inboxpraveen.github.io/ThinkLess/guides/installation/)
+- Use it in your agent: [overview](https://inboxpraveen.github.io/ThinkLess/integrations/),
+  [LangGraph](https://inboxpraveen.github.io/ThinkLess/integrations/langgraph/),
+  [OpenAI Agents SDK](https://inboxpraveen.github.io/ThinkLess/integrations/openai-agents/),
+  [any framework](https://inboxpraveen.github.io/ThinkLess/integrations/any-framework/),
+  [migration](https://inboxpraveen.github.io/ThinkLess/guides/migration/),
+  [shadow mode](https://inboxpraveen.github.io/ThinkLess/guides/shadow-mode/),
+  [FAQ](https://inboxpraveen.github.io/ThinkLess/faq/)
+- Concepts: [the four planes](https://inboxpraveen.github.io/ThinkLess/concepts/planes/),
+  [questions](https://inboxpraveen.github.io/ThinkLess/concepts/questions/),
+  [confidence](https://inboxpraveen.github.io/ThinkLess/concepts/confidence/),
+  [the cascade](https://inboxpraveen.github.io/ThinkLess/concepts/cascade/),
+  [tracing](https://inboxpraveen.github.io/ThinkLess/concepts/tracing/)
+- Guides: [the support agent](https://inboxpraveen.github.io/ThinkLess/guides/support-agent/),
+  [calibration](https://inboxpraveen.github.io/ThinkLess/guides/calibration/),
+  [providers](https://inboxpraveen.github.io/ThinkLess/guides/providers/),
+  [LLM backends](https://inboxpraveen.github.io/ThinkLess/guides/llm-backends/),
+  [production](https://inboxpraveen.github.io/ThinkLess/guides/production/),
+  [serving](https://inboxpraveen.github.io/ThinkLess/guides/serving/),
+  [running a pilot](https://inboxpraveen.github.io/ThinkLess/guides/pilot/),
+  [troubleshooting](https://inboxpraveen.github.io/ThinkLess/guides/troubleshooting/)
+- [Benchmarks](https://inboxpraveen.github.io/ThinkLess/benchmarks/), [CLI reference](https://inboxpraveen.github.io/ThinkLess/reference/cli/),
+  [Python API](https://inboxpraveen.github.io/ThinkLess/reference/api/), [roadmap](https://inboxpraveen.github.io/ThinkLess/roadmap/)
 
 ## Status
 
 ThinkLess is pre-1.0: the core API (questions, the engine, decisions and
 traces) is meant to stay stable, and providers, adapters and benchmarks will
-grow. Next up are a neutral benchmark for decision models, cross-request
-batching in the server, calibrated LLM confidence from log probabilities, and
-live Jev runs. See the [roadmap](https://github.com/inboxpraveen/ThinkLess/blob/main/docs/roadmap.md).
+grow. The [decision benchmark](https://inboxpraveen.github.io/ThinkLess/decision-benchmark/)
+compares decision models on eight public tasks and is open to submissions.
+Next up are more models on it, cross-request batching in the server, and
+calibrated LLM confidence from log probabilities. See the [roadmap](https://inboxpraveen.github.io/ThinkLess/roadmap/).
 
 ## Contributing
 
@@ -302,8 +303,12 @@ and after from `thinkless bench` or `thinkless calibrate`.
 
 If ThinkLess saves your team time or money, consider
 [sponsoring its development](https://github.com/sponsors/inboxpraveen).
-Sponsorship funds frontier-model benchmark runs, more providers and more
-demos.
+
+Model vendors can sponsor runs of their models on the
+[decision benchmark](https://inboxpraveen.github.io/ThinkLess/decision-benchmark/).
+Sponsored runs are done by the maintainers and published as verified,
+whatever the result: sponsorship buys runs, not rankings. Sponsorship also
+funds more providers and more demos.
 
 ## Citing
 
