@@ -276,3 +276,57 @@ def test_pydantic_ai_tool_keeps_its_schema() -> None:
     result = agent.run_sync("refund please", model=TestModel(call_tools=["refund"]))
     assert "refunded" in result.output
     assert ran == [0.0]
+
+
+def test_crewai_gated_tool_keeps_its_schema() -> None:
+    pytest.importorskip("crewai")
+    from crewai.tools import tool
+
+    @tool
+    def refund(order_id: str, amount: float) -> str:
+        """Refund an order."""
+        return "refunded"
+
+    calls = []
+
+    @tool
+    @gate(_policy_engine(), REFUND_OK, on_block=lambda d: "Needs a person.")
+    def gated_refund(order_id: str, amount: float) -> str:
+        """Refund an order."""
+        calls.append((order_id, amount))
+        return "refunded"
+
+    plain_schema = refund.args_schema.model_json_schema()
+    gated_schema = gated_refund.args_schema.model_json_schema()
+    assert gated_schema["properties"] == plain_schema["properties"]
+    assert gated_schema["required"] == plain_schema["required"]
+    assert gated_refund.run(order_id="4471", amount=40) == "refunded"
+    assert gated_refund.run(order_id="4471", amount=400) == "Needs a person."
+    assert calls == [("4471", 40)]
+
+
+def test_llamaindex_gated_tool_keeps_its_schema() -> None:
+    pytest.importorskip("llama_index.core")
+    from llama_index.core.tools import FunctionTool
+
+    def refund(order_id: str, amount: float) -> str:
+        """Refund an order."""
+        return "refunded"
+
+    calls = []
+
+    @gate(_policy_engine(), REFUND_OK, on_block=lambda d: "Needs a person.")
+    def gated_refund(order_id: str, amount: float) -> str:
+        """Refund an order."""
+        calls.append((order_id, amount))
+        return "refunded"
+
+    plain_tool = FunctionTool.from_defaults(fn=refund)
+    gated_tool = FunctionTool.from_defaults(fn=gated_refund)
+    plain_schema = plain_tool.metadata.get_parameters_dict()
+    gated_schema = gated_tool.metadata.get_parameters_dict()
+    assert gated_schema["properties"] == plain_schema["properties"]
+    assert gated_schema["required"] == plain_schema["required"]
+    assert gated_tool.call(order_id="4471", amount=40).content == "refunded"
+    assert gated_tool.call(order_id="4471", amount=400).content == "Needs a person."
+    assert calls == [("4471", 40)]

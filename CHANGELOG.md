@@ -6,6 +6,10 @@ All notable changes are recorded here. The format follows
 
 ## Unreleased
 
+### Added
+
+- Integration tests and examples for gated CrewAI and LlamaIndex tools.
+
 ## 0.4.1 - 2026-09-25
 
 Project and packaging updates; no change to the library's behavior.
