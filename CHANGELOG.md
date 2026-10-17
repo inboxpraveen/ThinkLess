@@ -54,6 +54,7 @@ proven, with one line under the LLM client it already uses.
 - Replays in `benchmarks/habits/` measure Habits against a real LLM's
   recorded answers.
 - `examples/10_habits.py` runs the whole loop offline.
+- Integration tests and examples for gated CrewAI and LlamaIndex tools.
 
 ### Changed
 

@@ -86,12 +86,35 @@ def refund(order_id: str, amount: float) -> str:
     ...
 ```
 
-With LangChain and LangGraph, under `@tool`, as in the
-[LangGraph guide](langgraph.md#gate-a-tool). Both are tested: the generated
-tool schema is unchanged. Other decorators that build the schema from the
-function signature, such as CrewAI's `@tool` or LlamaIndex's
-`FunctionTool.from_defaults`, follow the same pattern; check the generated
-schema once with your version.
+With LangChain and LangGraph, put `gate` under `@tool`, as in the
+[LangGraph guide](langgraph.md#gate-a-tool). CrewAI uses the same order:
+
+```python
+from crewai.tools import tool
+
+@tool
+@gate(engine, REFUND_OK, on_block=lambda d: "Needs a person.")
+def refund(order_id: str, amount: float) -> str:
+    """Refund an order."""
+    ...
+```
+
+For LlamaIndex, pass the gated function to `FunctionTool.from_defaults`:
+
+```python
+from llama_index.core.tools import FunctionTool
+
+@gate(engine, REFUND_OK, on_block=lambda d: "Needs a person.")
+def refund(order_id: str, amount: float) -> str:
+    """Refund an order."""
+    ...
+
+refund_tool = FunctionTool.from_defaults(fn=refund)
+```
+
+The generated argument schemas and blocked-call results are tested with
+CrewAI 1.15.22 and llama-index-core 0.14.25. These integrations are optional;
+their tests skip when the respective framework is not installed.
 
 ## In a hand-written loop
 
