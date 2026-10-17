@@ -4,12 +4,14 @@ ThinkLess needs Python 3.10 or newer and runs on Linux, macOS and Windows.
 
 ## Pick what you need
 
-The core install is small: `pydantic`, `httpx`, `rich` and `typer`. Everything
-that brings in heavy dependencies is an extra.
+The core install is small: `pydantic`, `httpx`, `numpy`, `rich` and `typer`.
+Everything that brings in heavy dependencies is an extra.
 
 | You want | Install | Pulls in |
 |---|---|---|
 | Rules, tracing, the CLI, Jev or any System One server | `pip install thinkless` | nothing heavy |
+| Habits under your OpenAI or Anthropic client | `pip install thinkless` | nothing heavy (your SDK is already installed) |
+| The Habits proxy (`thinkless habits proxy`) | `pip install "thinkless[server]"` | `fastapi`, `uvicorn` |
 | Hosted LLMs through OpenRouter, OpenAI, Ollama or vLLM | `pip install "thinkless[openai]"` | `openai` |
 | Claude through the Anthropic SDK | `pip install "thinkless[anthropic]"` | `anthropic` |
 | GLiNER 2.5 | `pip install "thinkless[gliner]"` | `gliner2`, `transformers<5`, `torch` |

@@ -96,6 +96,20 @@ default `0.95`), `--min-calls` (default `100`), `--volume` (decisions a month,
 for the monthly projection) and `--json`. `shadow export` options:
 `--question`, `--all` and `--label-from primary|shadow|none`.
 
+## `thinkless habits`
+
+Finds the decisions in recorded LLM calls, learns them, and reports what
+[Habits](../habits.md) answered. Every command takes `--dir` (default
+`.thinkless/habits`).
+
+| Command | |
+|---|---|
+| `habits scan [PATHS...]` | Group calls into sites and show each site's share of calls, cost, answer fields and verdict (`decision`, `mixed`, `generation`). Reads Habits logs, chat fine-tuning files and request and response pairs. `--examples` shows sample inputs; `--price MODEL=INPUT,OUTPUT` (USD per million tokens) estimates cost where the provider reported none; `--json` prints the report |
+| `habits learn` | Train a student per decision site, run the gate and write `plan.json`. `--target` (default `0.97`), `--confidence` (default `0.95`), `--min-calls` (default `100`), `--confirm-calls` (probation size, default `394` at the default target; `0` skips probation), `--calls PATHS` to learn from other logs |
+| `habits status` | Per site: status, calls answered locally, audits that agreed, the evidence behind each activation, and the LLM cost saved. `--price`, `--json` |
+| `habits proxy` | An OpenAI-compatible endpoint with Habits in front of `--upstream` (default `https://api.openai.com/v1`). `--host`, `--port` (default `8787`), `--mode`, `--audit`, `--learn-every`, `--confirm-calls`. Needs the `server` extra |
+| `habits reset` | Delete the plan and the students; `--calls` deletes the recorded calls too |
+
 ## `thinkless serve ENGINE`
 
 Serves an engine over HTTP; see [serving](../guides/serving.md). `ENGINE` is
@@ -126,3 +140,5 @@ each. `--transport stdio` (default) or `streamable-http`.
 | `OPENROUTER_API_KEY` | | For `openrouter:` models |
 | `ANTHROPIC_API_KEY`, `OPENAI_API_KEY` | | For hosted reasoning models |
 | `THINKLESS_API_KEY` | | Bearer token for `thinkless serve` |
+| `THINKLESS_HABITS_DIR` | `.thinkless/habits` | Directory of the process-wide `Habits` runtime used by `habits.wrap(client)` |
+| `THINKLESS_HABITS_MODE` | `auto` | Its mode: `auto`, `shadow`, `record` or `off` |

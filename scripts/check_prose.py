@@ -6,9 +6,10 @@ locally before opening a pull request:
 
     python scripts/check_prose.py
 
-It runs in CI on every push. Benchmark results and the decision benchmark's
-task rows and results are skipped: they hold model output and dataset text,
-not writing from this project. The task NOTICE is checked.
+It runs in CI on every push. Benchmark results, the decision benchmark's
+task rows and results, and the Habits replays' recorded answers and
+results are skipped: they hold model output and dataset text, not writing
+from this project. The task NOTICE is checked.
 """
 
 from __future__ import annotations
@@ -40,6 +41,8 @@ DATA_DIRS = (
     "benchmarks/results/",
     "benchmarks/decisions/tasks/",
     "benchmarks/decisions/results/",
+    "benchmarks/habits/cache/",
+    "benchmarks/habits/results/",
 )
 
 DASHES = {chr(0x2014): "em dash", chr(0x2013): "en dash"}

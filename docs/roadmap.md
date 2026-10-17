@@ -15,14 +15,36 @@ something that is not here should be.
 - A decision server with a System One compatible endpoint, and MCP tools.
 - Traces to labeling rows, and a drift report between two periods.
 
-## Done after 0.3
+## Done in 0.4
 
 - The [decision benchmark](decision-benchmark/index.md) 1.0: eight public
   tasks across the four question kinds, frozen rows with published hashes,
   result files with every prediction, recomputed metrics and open
   submissions.
 
+## Done in 0.5
+
+- [Habits](habits.md): one line under the OpenAI or Anthropic SDK (or
+  an OpenAI-compatible proxy for any language) that records an agent's LLM
+  calls, finds the decision sites, trains local students from the LLM's own
+  answers, answers a site only after a lower confidence bound on agreement
+  clears the target on past calls and again on a probation of new calls,
+  audits itself and suspends a site whose agreement drops.
+- `thinkless habits scan` reports which calls in an existing log are
+  decisions and what they cost.
+
 ## Next
+
+- **Pretrained students on day one.** GLiNER, Laya, Jev and any provider as
+  Habits students, gated the same way, so a site can be answered before it
+  has seen hundreds of calls.
+- **Stronger students.** An optional embedding-based student for sites
+  where hashed n-grams fall short, chosen per site by the same held-out
+  measurement.
+- **More of the wire.** Local answers for streamed Responses and Messages
+  calls, the Gemini API, and Bedrock.
+- **From a site to code.** Generate the engine and questions for a proven
+  site, for teams that want rules and hosted decision models in the loop.
 
 - **More models on the decision benchmark.** Jev and other hosted decision
   models, frontier LLMs as references, and Hugging Face classifiers.

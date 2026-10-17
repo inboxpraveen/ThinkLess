@@ -1,0 +1,223 @@
+[
+  {
+    "source": "civil_comments",
+    "task": "civil_comments",
+    "kind": "yes_no",
+    "teacher": "cache:cache/civil_comments-qwen_qwen3.7-flash.jsonl",
+    "calls": 10000,
+    "local": 0,
+    "local_share": 0.0,
+    "local_agreement": null,
+    "audits": 0,
+    "activated_at": null,
+    "accuracy_teacher": 0.8216,
+    "accuracy_pipeline": 0.8216,
+    "cost_teacher_usd": 0.03749479000000014,
+    "cost_pipeline_usd": 0.03749479000000014,
+    "local_latency_ms_median": null,
+    "learn_seconds": 307.83,
+    "timeline": [
+      {
+        "calls": 500,
+        "local": 0,
+        "agreed_local": 0,
+        "status": [
+          "learning"
+        ]
+      },
+      {
+        "calls": 1000,
+        "local": 0,
+        "agreed_local": 0,
+        "status": [
+          "learning"
+        ]
+      },
+      {
+        "calls": 1500,
+        "local": 0,
+        "agreed_local": 0,
+        "status": [
+          "learning"
+        ]
+      },
+      {
+        "calls": 2000,
+        "local": 0,
+        "agreed_local": 0,
+        "status": [
+          "learning"
+        ]
+      },
+      {
+        "calls": 2500,
+        "local": 0,
+        "agreed_local": 0,
+        "status": [
+          "learning"
+        ]
+      },
+      {
+        "calls": 3000,
+        "local": 0,
+        "agreed_local": 0,
+        "status": [
+          "learning"
+        ]
+      },
+      {
+        "calls": 3500,
+        "local": 0,
+        "agreed_local": 0,
+        "status": [
+          "learning"
+        ]
+      },
+      {
+        "calls": 4000,
+        "local": 0,
+        "agreed_local": 0,
+        "status": [
+          "learning"
+        ]
+      },
+      {
+        "calls": 4500,
+        "local": 0,
+        "agreed_local": 0,
+        "status": [
+          "learning"
+        ]
+      },
+      {
+        "calls": 5000,
+        "local": 0,
+        "agreed_local": 0,
+        "status": [
+          "learning"
+        ]
+      },
+      {
+        "calls": 5500,
+        "local": 0,
+        "agreed_local": 0,
+        "status": [
+          "learning"
+        ]
+      },
+      {
+        "calls": 6000,
+        "local": 0,
+        "agreed_local": 0,
+        "status": [
+          "learning"
+        ]
+      },
+      {
+        "calls": 6500,
+        "local": 0,
+        "agreed_local": 0,
+        "status": [
+          "learning"
+        ]
+      },
+      {
+        "calls": 7000,
+        "local": 0,
+        "agreed_local": 0,
+        "status": [
+          "learning"
+        ]
+      },
+      {
+        "calls": 7500,
+        "local": 0,
+        "agreed_local": 0,
+        "status": [
+          "probation"
+        ]
+      },
+      {
+        "calls": 8000,
+        "local": 0,
+        "agreed_local": 0,
+        "status": [
+          "probation"
+        ]
+      },
+      {
+        "calls": 8500,
+        "local": 0,
+        "agreed_local": 0,
+        "status": [
+          "probation"
+        ]
+      },
+      {
+        "calls": 9000,
+        "local": 0,
+        "agreed_local": 0,
+        "status": [
+          "probation"
+        ]
+      },
+      {
+        "calls": 9500,
+        "local": 0,
+        "agreed_local": 0,
+        "status": [
+          "probation"
+        ]
+      },
+      {
+        "calls": 10000,
+        "local": 0,
+        "agreed_local": 0,
+        "status": [
+          "probation"
+        ]
+      }
+    ],
+    "sites": [
+      {
+        "name": "You are the decision step of a production assistant.",
+        "verdict": "decision",
+        "status": "probation",
+        "threshold": 0.9991740271650555,
+        "evidence": {
+          "calls": 7500,
+          "predictability": 0.8021,
+          "accepted": 394,
+          "agreed": 388,
+          "coverage": 0.0525,
+          "agreement": 0.9848,
+          "lower_bound": 0.9702
+        },
+        "reason": "checking the student in shadow on new calls: 116 of 394 so far, 111 agreed with the LLM"
+      }
+    ],
+    "events": [
+      {
+        "event": "probation",
+        "threshold": 0.9991740271650555,
+        "evidence": {
+          "calls": 7500,
+          "predictability": 0.8021,
+          "accepted": 394,
+          "agreed": 388,
+          "coverage": 0.0525,
+          "agreement": 0.9848,
+          "lower_bound": 0.9702
+        },
+        "audits": null,
+        "agreed": null
+      }
+    ],
+    "settings": {
+      "learn_every": 500,
+      "audit": 0.05,
+      "seed": 0,
+      "target": 0.97
+    }
+  }
+]

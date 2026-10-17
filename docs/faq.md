@@ -1,10 +1,54 @@
 # FAQ
 
+## Habits
+
+**What is the fastest way to try ThinkLess on a real agent?**
+[Habits](habits.md): `client = habits.wrap(OpenAI())`, or the
+`thinkless habits proxy` for clients in any language. Nothing else
+changes. If you already log LLM calls, `thinkless habits scan` on the logs
+shows which calls are decisions before anything is switched on.
+
+**Can it answer something my LLM would have answered differently?**
+Yes, at a bounded rate. A site is answered locally only at confidence levels
+where, on calls the student had not been trained on, it agreed with your LLM
+at least 97% of the time as a 95% lower bound, and a random 5% of local
+answers keep being checked against the LLM. When those audits fall below the
+target, the site goes back to the LLM by itself. Raise the target, or use
+`mode="shadow"` to measure without answering.
+
+**Does it work with LangGraph, LangChain, CrewAI or the OpenAI Agents SDK?**
+ThinkLess sits in the HTTP client, below every framework. It is tested with
+the OpenAI SDK (Chat Completions and Responses), the Anthropic SDK,
+LangChain's `ChatOpenAI` with `with_structured_output` (both the JSON schema
+and the function calling methods) and the OpenAI Agents SDK. Frameworks that
+create their own clients can use the proxy instead.
+
+**Will it take over my agent's tool calls?**
+No. Calls where the model may choose a tool are always sent to the LLM,
+because a wrong local tool call has side effects. A call that forces one tool
+as a way to get structured output is a decision and can be answered locally.
+
+**What does it store?**
+Every call's request and answer, in JSONL files under `.thinkless/habits/`
+on your own disk, plus the students and a plan file. Nothing is sent
+anywhere. Treat the directory like any log that holds user content.
+
+**How many calls does a site need?**
+It depends on how many answers the site has and how consistently the LLM
+gives them. A student first has to pass on past calls, then on a probation of
+394 new calls at the default settings. Only calls the student is confident
+about count toward probation, so its length grows as coverage shrinks: at
+50% coverage it takes about 800 calls, at 5% about 8,000. In the replays, a
+jailbreak check passed the first test after 200 calls, and a 77-intent
+router routed by Qwen 3.7 Flash started answering at call 5,014. `thinkless
+autopilot learn` says, per site, how many calls it has and where it stands.
+
 ## Adopting it
 
 **Do I have to rewrite my agent?**
-No. ThinkLess answers the decisions inside the agent and leaves the agent
-itself alone. The adapters for [LangGraph](integrations/langgraph.md) and the
+No. [Habits](habits.md) take one line and no rewrite. For decisions
+you want to design yourself, ThinkLess answers them inside the agent and
+leaves the agent itself alone. The adapters for [LangGraph](integrations/langgraph.md) and the
 [OpenAI Agents SDK](integrations/openai-agents.md) return the framework's own
 objects (edge functions, nodes, guardrails, agents), and
 [`route` and `gate`](integrations/any-framework.md) work anywhere else. The

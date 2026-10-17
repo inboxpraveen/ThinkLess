@@ -75,6 +75,10 @@ jobs:
           "$BIN/python" examples/07_shadow_mode.py
           "$BIN/thinkless" shadow report .thinkless/shadow/intent.jsonl --min-calls 20
           "$BIN/thinkless" shadow export .thinkless/shadow/intent.jsonl --out smoke-labels.jsonl
+          # Habits under the OpenAI SDK, offline.
+          "$BIN/python" -m pip install openai
+          "$BIN/python" examples/10_habits.py
+          "$BIN/thinkless" habits --help
 
   decision-benchmark:
     name: Decision benchmark results

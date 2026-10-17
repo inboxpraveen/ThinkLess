@@ -30,6 +30,7 @@ theme:
 nav:
   - Home: index.md
   - Getting started: getting-started.md
+  - Habits: habits.md
   - Installation: guides/installation.md
   - Use it in your agent:
       - Overview: integrations/index.md

@@ -1,0 +1,630 @@
+[
+  {
+    "source": "task:jailbreak",
+    "task": "jailbreak",
+    "kind": "yes_no",
+    "teacher": "results:../decisions/results/verified/qwen3.7-flash.json",
+    "calls": 399,
+    "local": 0,
+    "local_share": 0.0,
+    "local_agreement": null,
+    "audits": 0,
+    "activated_at": null,
+    "accuracy_teacher": 0.974937343358396,
+    "accuracy_pipeline": 0.974937343358396,
+    "cost_teacher_usd": 0.004721120000000001,
+    "cost_pipeline_usd": 0.004721120000000001,
+    "local_latency_ms_median": null,
+    "learn_seconds": 2.12,
+    "timeline": [
+      {
+        "calls": 100,
+        "local": 0,
+        "agreed_local": 0,
+        "status": [
+          "learning"
+        ]
+      },
+      {
+        "calls": 200,
+        "local": 0,
+        "agreed_local": 0,
+        "status": [
+          "probation"
+        ]
+      },
+      {
+        "calls": 300,
+        "local": 0,
+        "agreed_local": 0,
+        "status": [
+          "probation"
+        ]
+      }
+    ],
+    "sites": [
+      {
+        "name": "You are the decision step of a production assistant.",
+        "verdict": "decision",
+        "status": "probation",
+        "threshold": 0.9888889950367524,
+        "evidence": {
+          "calls": 200,
+          "predictability": 0.97,
+          "accepted": 165,
+          "agreed": 164,
+          "coverage": 0.825,
+          "agreement": 0.9939,
+          "lower_bound": 0.9716
+        },
+        "reason": "checking the student in shadow on new calls: 89 of 394 so far, 88 agreed with the LLM"
+      }
+    ],
+    "events": [
+      {
+        "event": "probation",
+        "threshold": 0.9888889950367524,
+        "evidence": {
+          "calls": 200,
+          "predictability": 0.97,
+          "accepted": 165,
+          "agreed": 164,
+          "coverage": 0.825,
+          "agreement": 0.9939,
+          "lower_bound": 0.9716
+        },
+        "audits": null,
+        "agreed": null
+      }
+    ],
+    "settings": {
+      "learn_every": 100,
+      "audit": 0.05,
+      "seed": 0,
+      "target": 0.97
+    }
+  },
+  {
+    "source": "task:civil_comments",
+    "task": "civil_comments",
+    "kind": "yes_no",
+    "teacher": "results:../decisions/results/verified/qwen3.7-flash.json",
+    "calls": 500,
+    "local": 0,
+    "local_share": 0.0,
+    "local_agreement": null,
+    "audits": 0,
+    "activated_at": null,
+    "accuracy_teacher": 0.772,
+    "accuracy_pipeline": 0.772,
+    "cost_teacher_usd": 0.003012240000000001,
+    "cost_pipeline_usd": 0.003012240000000001,
+    "local_latency_ms_median": null,
+    "learn_seconds": 5.51,
+    "timeline": [
+      {
+        "calls": 100,
+        "local": 0,
+        "agreed_local": 0,
+        "status": [
+          "learning"
+        ]
+      },
+      {
+        "calls": 200,
+        "local": 0,
+        "agreed_local": 0,
+        "status": [
+          "learning"
+        ]
+      },
+      {
+        "calls": 300,
+        "local": 0,
+        "agreed_local": 0,
+        "status": [
+          "learning"
+        ]
+      },
+      {
+        "calls": 400,
+        "local": 0,
+        "agreed_local": 0,
+        "status": [
+          "learning"
+        ]
+      },
+      {
+        "calls": 500,
+        "local": 0,
+        "agreed_local": 0,
+        "status": [
+          "learning"
+        ]
+      }
+    ],
+    "sites": [
+      {
+        "name": "You are the decision step of a production assistant.",
+        "verdict": "decision",
+        "status": "learning",
+        "threshold": null,
+        "evidence": {
+          "calls": 500,
+          "predictability": 0.652
+        },
+        "reason": "agreement with the LLM has not reached 97% at 95% confidence yet"
+      }
+    ],
+    "events": [],
+    "settings": {
+      "learn_every": 100,
+      "audit": 0.05,
+      "seed": 0,
+      "target": 0.97
+    }
+  },
+  {
+    "source": "task:multiwoz",
+    "task": "multiwoz",
+    "kind": "choice",
+    "teacher": "results:../decisions/results/verified/qwen3.7-flash.json",
+    "calls": 493,
+    "local": 0,
+    "local_share": 0.0,
+    "local_agreement": null,
+    "audits": 0,
+    "activated_at": null,
+    "accuracy_teacher": 0.7322515212981744,
+    "accuracy_pipeline": 0.7322515212981744,
+    "cost_teacher_usd": 0.00582081,
+    "cost_pipeline_usd": 0.00582081,
+    "local_latency_ms_median": null,
+    "learn_seconds": 9.08,
+    "timeline": [
+      {
+        "calls": 100,
+        "local": 0,
+        "agreed_local": 0,
+        "status": [
+          "learning"
+        ]
+      },
+      {
+        "calls": 200,
+        "local": 0,
+        "agreed_local": 0,
+        "status": [
+          "learning"
+        ]
+      },
+      {
+        "calls": 300,
+        "local": 0,
+        "agreed_local": 0,
+        "status": [
+          "learning"
+        ]
+      },
+      {
+        "calls": 400,
+        "local": 0,
+        "agreed_local": 0,
+        "status": [
+          "learning"
+        ]
+      }
+    ],
+    "sites": [
+      {
+        "name": "Decision",
+        "verdict": "decision",
+        "status": "learning",
+        "threshold": null,
+        "evidence": {
+          "calls": 400,
+          "predictability": 0.46
+        },
+        "reason": "agreement with the LLM has not reached 97% at 95% confidence yet"
+      }
+    ],
+    "events": [],
+    "settings": {
+      "learn_every": 100,
+      "audit": 0.05,
+      "seed": 0,
+      "target": 0.97
+    }
+  },
+  {
+    "source": "task:banking77",
+    "task": "banking77",
+    "kind": "choice",
+    "teacher": "results:../decisions/results/verified/qwen3.7-flash.json",
+    "calls": 499,
+    "local": 0,
+    "local_share": 0.0,
+    "local_agreement": null,
+    "audits": 0,
+    "activated_at": null,
+    "accuracy_teacher": 0.7535070140280561,
+    "accuracy_pipeline": 0.7535070140280561,
+    "cost_teacher_usd": 0.009791690000000004,
+    "cost_pipeline_usd": 0.009791690000000004,
+    "local_latency_ms_median": null,
+    "learn_seconds": 3.89,
+    "timeline": [
+      {
+        "calls": 100,
+        "local": 0,
+        "agreed_local": 0,
+        "status": [
+          "learning"
+        ]
+      },
+      {
+        "calls": 200,
+        "local": 0,
+        "agreed_local": 0,
+        "status": [
+          "learning"
+        ]
+      },
+      {
+        "calls": 300,
+        "local": 0,
+        "agreed_local": 0,
+        "status": [
+          "learning"
+        ]
+      },
+      {
+        "calls": 400,
+        "local": 0,
+        "agreed_local": 0,
+        "status": [
+          "learning"
+        ]
+      }
+    ],
+    "sites": [
+      {
+        "name": "Decision",
+        "verdict": "decision",
+        "status": "learning",
+        "threshold": null,
+        "evidence": {
+          "calls": 400,
+          "predictability": 0.5275
+        },
+        "reason": "agreement with the LLM has not reached 97% at 95% confidence yet"
+      }
+    ],
+    "events": [],
+    "settings": {
+      "learn_every": 100,
+      "audit": 0.05,
+      "seed": 0,
+      "target": 0.97
+    }
+  },
+  {
+    "source": "task:clinc150",
+    "task": "clinc150",
+    "kind": "choice",
+    "teacher": "results:../decisions/results/verified/qwen3.7-flash.json",
+    "calls": 500,
+    "local": 0,
+    "local_share": 0.0,
+    "local_agreement": null,
+    "audits": 0,
+    "activated_at": null,
+    "accuracy_teacher": 0.874,
+    "accuracy_pipeline": 0.874,
+    "cost_teacher_usd": 0.013724099999999998,
+    "cost_pipeline_usd": 0.013724099999999998,
+    "local_latency_ms_median": null,
+    "learn_seconds": 7.32,
+    "timeline": [
+      {
+        "calls": 100,
+        "local": 0,
+        "agreed_local": 0,
+        "status": [
+          "learning"
+        ]
+      },
+      {
+        "calls": 200,
+        "local": 0,
+        "agreed_local": 0,
+        "status": [
+          "learning"
+        ]
+      },
+      {
+        "calls": 300,
+        "local": 0,
+        "agreed_local": 0,
+        "status": [
+          "learning"
+        ]
+      },
+      {
+        "calls": 400,
+        "local": 0,
+        "agreed_local": 0,
+        "status": [
+          "learning"
+        ]
+      },
+      {
+        "calls": 500,
+        "local": 0,
+        "agreed_local": 0,
+        "status": [
+          "learning"
+        ]
+      }
+    ],
+    "sites": [
+      {
+        "name": "Decision",
+        "verdict": "decision",
+        "status": "learning",
+        "threshold": null,
+        "evidence": {
+          "calls": 500,
+          "predictability": 0.396
+        },
+        "reason": "agreement with the LLM has not reached 97% at 95% confidence yet"
+      }
+    ],
+    "events": [],
+    "settings": {
+      "learn_every": 100,
+      "audit": 0.05,
+      "seed": 0,
+      "target": 0.97
+    }
+  },
+  {
+    "source": "task:massive",
+    "task": "massive",
+    "kind": "choice",
+    "teacher": "results:../decisions/results/verified/qwen3.7-flash.json",
+    "calls": 500,
+    "local": 0,
+    "local_share": 0.0,
+    "local_agreement": null,
+    "audits": 0,
+    "activated_at": null,
+    "accuracy_teacher": 0.734,
+    "accuracy_pipeline": 0.734,
+    "cost_teacher_usd": 0.007206119999999997,
+    "cost_pipeline_usd": 0.007206119999999997,
+    "local_latency_ms_median": null,
+    "learn_seconds": 3.3,
+    "timeline": [
+      {
+        "calls": 100,
+        "local": 0,
+        "agreed_local": 0,
+        "status": [
+          "learning"
+        ]
+      },
+      {
+        "calls": 200,
+        "local": 0,
+        "agreed_local": 0,
+        "status": [
+          "learning"
+        ]
+      },
+      {
+        "calls": 300,
+        "local": 0,
+        "agreed_local": 0,
+        "status": [
+          "learning"
+        ]
+      },
+      {
+        "calls": 400,
+        "local": 0,
+        "agreed_local": 0,
+        "status": [
+          "learning"
+        ]
+      },
+      {
+        "calls": 500,
+        "local": 0,
+        "agreed_local": 0,
+        "status": [
+          "learning"
+        ]
+      }
+    ],
+    "sites": [
+      {
+        "name": "Decision",
+        "verdict": "decision",
+        "status": "learning",
+        "threshold": null,
+        "evidence": {
+          "calls": 500,
+          "predictability": 0.258
+        },
+        "reason": "agreement with the LLM has not reached 97% at 95% confidence yet"
+      }
+    ],
+    "events": [],
+    "settings": {
+      "learn_every": 100,
+      "audit": 0.05,
+      "seed": 0,
+      "target": 0.97
+    }
+  },
+  {
+    "source": "task:helpsteer2",
+    "task": "helpsteer2",
+    "kind": "score",
+    "teacher": "results:../decisions/results/verified/qwen3.7-flash.json",
+    "calls": 500,
+    "local": 0,
+    "local_share": 0.0,
+    "local_agreement": null,
+    "audits": 0,
+    "activated_at": null,
+    "accuracy_teacher": 0.306,
+    "accuracy_pipeline": 0.306,
+    "cost_teacher_usd": 0.009800636000000001,
+    "cost_pipeline_usd": 0.009800636000000001,
+    "local_latency_ms_median": null,
+    "learn_seconds": 31.41,
+    "timeline": [
+      {
+        "calls": 100,
+        "local": 0,
+        "agreed_local": 0,
+        "status": [
+          "learning"
+        ]
+      },
+      {
+        "calls": 200,
+        "local": 0,
+        "agreed_local": 0,
+        "status": [
+          "learning"
+        ]
+      },
+      {
+        "calls": 300,
+        "local": 0,
+        "agreed_local": 0,
+        "status": [
+          "learning"
+        ]
+      },
+      {
+        "calls": 400,
+        "local": 0,
+        "agreed_local": 0,
+        "status": [
+          "learning"
+        ]
+      },
+      {
+        "calls": 500,
+        "local": 0,
+        "agreed_local": 0,
+        "status": [
+          "learning"
+        ]
+      }
+    ],
+    "sites": [
+      {
+        "name": "Rating",
+        "verdict": "decision",
+        "status": "learning",
+        "threshold": null,
+        "evidence": {
+          "calls": 500,
+          "predictability": 0.516
+        },
+        "reason": "agreement with the LLM has not reached 97% at 95% confidence yet"
+      }
+    ],
+    "events": [],
+    "settings": {
+      "learn_every": 100,
+      "audit": 0.05,
+      "seed": 0,
+      "target": 0.97
+    }
+  },
+  {
+    "source": "task:wnut17",
+    "task": "wnut17",
+    "kind": "extract",
+    "teacher": "results:../decisions/results/verified/qwen3.7-flash.json",
+    "calls": 500,
+    "local": 0,
+    "local_share": 0.0,
+    "local_agreement": null,
+    "audits": 0,
+    "activated_at": null,
+    "accuracy_teacher": 0.488,
+    "accuracy_pipeline": 0.488,
+    "cost_teacher_usd": 0.007400260000000001,
+    "cost_pipeline_usd": 0.007400260000000001,
+    "local_latency_ms_median": null,
+    "learn_seconds": 0.53,
+    "timeline": [
+      {
+        "calls": 100,
+        "local": 0,
+        "agreed_local": 0,
+        "status": [
+          "llm"
+        ]
+      },
+      {
+        "calls": 200,
+        "local": 0,
+        "agreed_local": 0,
+        "status": [
+          "llm"
+        ]
+      },
+      {
+        "calls": 300,
+        "local": 0,
+        "agreed_local": 0,
+        "status": [
+          "llm"
+        ]
+      },
+      {
+        "calls": 400,
+        "local": 0,
+        "agreed_local": 0,
+        "status": [
+          "llm"
+        ]
+      },
+      {
+        "calls": 500,
+        "local": 0,
+        "agreed_local": 0,
+        "status": [
+          "llm"
+        ]
+      }
+    ],
+    "sites": [
+      {
+        "name": "Entities",
+        "verdict": "generation",
+        "status": "llm",
+        "threshold": null,
+        "evidence": {
+          "calls": 0
+        },
+        "reason": "the answers are free text"
+      }
+    ],
+    "events": [],
+    "settings": {
+      "learn_every": 100,
+      "audit": 0.05,
+      "seed": 0,
+      "target": 0.97
+    }
+  }
+]

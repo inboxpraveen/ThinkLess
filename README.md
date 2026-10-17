@@ -13,6 +13,8 @@
   <a href="https://github.com/inboxpraveen/ThinkLess/blob/main/LICENSE"><img alt="License: Apache 2.0" src="https://img.shields.io/badge/license-Apache%202.0-blue.svg"></a>
 </p>
 
+<!-- mcp-name: io.github.inboxpraveen/thinkless -->
+
 ThinkLess is an open-source decision plane for AI agents. The routine
 judgments an agent makes (what the user wants, whether they asked for a
 person, which order they mean, whether a message is trying to manipulate the
@@ -21,7 +23,72 @@ LLM is kept for the steps that need it: writing, planning, and the decisions
 the small models are not sure about. Every step is traced with the plane that
 handled it, its confidence, latency, tokens and cost.
 
-It is model-neutral. Rules, [GLiNER 2.5](https://github.com/fastino-ai/GLiNER2),
+There are two ways in. With **Habits**, ThinkLess goes under the LLM client
+you already use, with one line, and the decisions your agent keeps making
+become local habits once they are proven. With **typed decisions**, you
+declare the questions and choose the models that answer them.
+
+## Habits: one line under the agent you already have
+
+```python
+from openai import OpenAI
+from thinkless import habits
+
+client = habits.wrap(OpenAI())      # the only change
+```
+
+ThinkLess sits in the HTTP client under your agent. It records each LLM call,
+finds the call sites whose answers are decisions (a route, a yes or no, a
+label, a value copied from the input), and trains a small local model for
+each from your LLM's own answers. A site is answered locally only after that
+model has matched your LLM at least 97% of the time (as a 95% lower
+confidence bound) twice: on past calls it was not trained on, and then on a
+probation of new calls it answers in shadow while the LLM still answers them.
+A site that passes both becomes a habit. A random 5% of local answers keeps
+being checked against the LLM, and a habit that stops agreeing goes back to
+the LLM by itself. Responses keep the exact
+shape the LLM returns, so Pydantic parsing, `with_structured_output` and the
+OpenAI Agents SDK see nothing different.
+
+- **Works under** the OpenAI SDK (Chat Completions and Responses), the
+  Anthropic SDK, LangChain and LangGraph, the OpenAI Agents SDK, and any
+  OpenAI-compatible provider. `thinkless habits proxy` does the same for
+  clients in any language.
+- **Costs nothing extra.** No API, no model download, no GPU: the students
+  are linear models over hashed text features, trained on a CPU in the
+  background. A local answer takes about half a millisecond inside
+  ThinkLess, and about 4 ms for the whole SDK call.
+- **Fails open.** Tool calls in agent loops, images, and anything ThinkLess
+  has not proven go to the LLM unchanged, and so does every call if
+  ThinkLess itself hits an error.
+- **Statistically gated on agreement, with continuous audits.** The bound is
+  on agreement with your LLM, not on correctness: when your LLM is wrong, a
+  habit that agrees with it is wrong too. Prior work and how this differs
+  (Cache & Distil, Jevstiller) are on the
+  [docs page](https://inboxpraveen.github.io/ThinkLess/habits/#compared-with-a-cache-and-prior-work).
+
+**Measured on a replay of real queries.** On 13,083 real banking queries
+routed by Qwen 3.7 Flash across 77 intents, ThinkLess answered 26% of the
+calls locally (44% of the last 500), its answers matched Qwen's 98.3% of the
+time, accuracy against the true labels did not move (73.2%), and the billed
+LLM cost fell 26%. On a toxicity check where Qwen's own answers were no more
+predictable than always saying no, it answered nothing and said why.
+[Results and method](https://inboxpraveen.github.io/ThinkLess/habits/#results)
+
+Scan the logs you already have before switching anything on; it shows which
+calls are decisions and what they cost:
+
+```bash
+thinkless habits scan logs/        # JSONL exports; nothing is sent anywhere
+```
+
+[Habits documentation](https://inboxpraveen.github.io/ThinkLess/habits/)
+
+## Typed decisions
+
+When you want to design a decision yourself, ThinkLess answers typed
+questions with a cascade of providers. It is model-neutral. Rules,
+[GLiNER 2.5](https://github.com/fastino-ai/GLiNER2),
 [Laya](https://github.com/NandhaKishorM/laya), TypeSafe's
 [Jev](https://typesafe.ai) (and any server speaking its System One API, such as
 Kev and OpenJev), any Hugging Face classifier, and any LLM (local through
@@ -148,6 +215,8 @@ and the traces with no model downloads.
 
 ## Use it in your agent
 
+The quickest way in is [Habits](https://inboxpraveen.github.io/ThinkLess/habits/),
+which needs no change to the agent at all. To design decisions yourself,
 ThinkLess sits inside the framework you already use, at the points where the
 agent decides something: which path to take, whether an input is safe,
 whether a tool call is inside policy. Uncertain decisions go to the code you
@@ -292,8 +361,9 @@ ThinkLess is pre-1.0: the core API (questions, the engine, decisions and
 traces) is meant to stay stable, and providers, adapters and benchmarks will
 grow. The [decision benchmark](https://inboxpraveen.github.io/ThinkLess/decision-benchmark/)
 compares decision models on eight public tasks and is open to submissions.
-Next up are more models on it, cross-request batching in the server, and
-calibrated LLM confidence from log probabilities. See the [roadmap](https://inboxpraveen.github.io/ThinkLess/roadmap/).
+Next up are pretrained students (GLiNER, Laya, Jev) for Habits so sites
+can be answered from day one, more models on the benchmark, and cross-request
+batching in the server. See the [roadmap](https://inboxpraveen.github.io/ThinkLess/roadmap/).
 
 ## Contributing
 

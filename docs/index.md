@@ -12,6 +12,10 @@ confidence, latency, tokens and cost.
 
 ## Where to start
 
+- **Five minutes, no code changes:** with [Habits](habits.md), ThinkLess
+  goes under the LLM client your agent already uses (`habits.wrap(OpenAI())`),
+  learns the decisions from your LLM's own answers, and answers them locally
+  once it has shown that it agrees with your LLM.
 - **New here:** [Getting started](getting-started.md) installs ThinkLess and
   walks from a first decision to a traced cascade.
 - **Evaluating the idea:** [Benchmarks](benchmarks.md) has the numbers, the
@@ -56,5 +60,5 @@ confident it was, and what it cost are in the decision and in the trace.
   actions belong behind deterministic checks in code, not behind a model.
 - **Observable.** Every decision is a span with its plane, confidence, latency
   and cost, exportable to OpenTelemetry.
-- **Small core.** The base install needs `pydantic`, `httpx`, `rich` and
-  `typer`. Model libraries are optional extras.
+- **Small core.** The base install needs `pydantic`, `httpx`, `numpy`,
+  `rich` and `typer`. Model libraries are optional extras.

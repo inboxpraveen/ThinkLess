@@ -2,8 +2,9 @@
 
 The public API is everything importable from `thinkless`,
 `thinkless.providers`, `thinkless.llm`, `thinkless.tracing`,
-`thinkless.shadow`, `thinkless.integrations` and `thinkless.server`. Anything
-with a leading underscore is internal and may change.
+`thinkless.shadow`, `thinkless.habits`, `thinkless.integrations` and
+`thinkless.server`. Anything with a leading underscore is internal and may
+change.
 
 ## Engine
 
@@ -38,6 +39,30 @@ with a leading underscore is internal and may change.
 ::: thinkless.SpendLimit
 
 ::: thinkless.SpendLimitError
+
+## Habits
+
+::: thinkless.habits.wrap
+
+::: thinkless.habits.Habits
+
+::: thinkless.habits.http_client
+
+::: thinkless.habits.async_http_client
+
+::: thinkless.habits.learn
+
+::: thinkless.habits.LearnOptions
+
+::: thinkless.habits.select_threshold
+
+::: thinkless.habits.GateResult
+
+::: thinkless.habits.discover
+
+::: thinkless.habits.read_calls
+
+::: thinkless.habits.proxy.create_proxy
 
 ## Shadow mode
 

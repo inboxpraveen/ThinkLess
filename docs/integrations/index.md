@@ -5,6 +5,14 @@ points where the agent makes a decision, and answers those decisions with
 rules and small models when they are confident and with your LLM when they
 are not.
 
+!!! tip "No code changes: Habits"
+    With [Habits](../habits.md), ThinkLess works one level lower, under the
+    LLM client (`habits.wrap(OpenAI())`, or the proxy), so it fits under every
+    framework without touching the graph or the agents. It finds the calls
+    that are decisions and learns them from your LLM's own answers. The
+    adapters on these pages are for decisions you want to design yourself,
+    with rules, GLiNER, Laya or a hosted decision model in the loop.
+
 ## Where it gets more powerful
 
 A typical agent spends most of its LLM calls on judgments that are not

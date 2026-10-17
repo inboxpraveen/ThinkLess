@@ -1,0 +1,243 @@
+[
+  {
+    "source": "civil_comments",
+    "task": "civil_comments",
+    "kind": "yes_no",
+    "teacher": "labels",
+    "calls": 10000,
+    "local": 1872,
+    "local_share": 0.1872,
+    "local_agreement": 0.9818376068376068,
+    "audits": 130,
+    "activated_at": 6001,
+    "accuracy_teacher": 1.0,
+    "accuracy_pipeline": 0.9966,
+    "cost_teacher_usd": 0.0,
+    "cost_pipeline_usd": 0.0,
+    "local_latency_ms_median": 3.1655000057071447,
+    "learn_seconds": 386.29,
+    "timeline": [
+      {
+        "calls": 500,
+        "local": 0,
+        "agreed_local": 0,
+        "status": [
+          "learning"
+        ]
+      },
+      {
+        "calls": 1000,
+        "local": 0,
+        "agreed_local": 0,
+        "status": [
+          "learning"
+        ]
+      },
+      {
+        "calls": 1500,
+        "local": 0,
+        "agreed_local": 0,
+        "status": [
+          "learning"
+        ]
+      },
+      {
+        "calls": 2000,
+        "local": 0,
+        "agreed_local": 0,
+        "status": [
+          "learning"
+        ]
+      },
+      {
+        "calls": 2500,
+        "local": 0,
+        "agreed_local": 0,
+        "status": [
+          "learning"
+        ]
+      },
+      {
+        "calls": 3000,
+        "local": 0,
+        "agreed_local": 0,
+        "status": [
+          "learning"
+        ]
+      },
+      {
+        "calls": 3500,
+        "local": 0,
+        "agreed_local": 0,
+        "status": [
+          "probation"
+        ]
+      },
+      {
+        "calls": 4000,
+        "local": 0,
+        "agreed_local": 0,
+        "status": [
+          "probation"
+        ]
+      },
+      {
+        "calls": 4500,
+        "local": 0,
+        "agreed_local": 0,
+        "status": [
+          "probation"
+        ]
+      },
+      {
+        "calls": 5000,
+        "local": 0,
+        "agreed_local": 0,
+        "status": [
+          "probation"
+        ]
+      },
+      {
+        "calls": 5500,
+        "local": 0,
+        "agreed_local": 0,
+        "status": [
+          "probation"
+        ]
+      },
+      {
+        "calls": 6000,
+        "local": 0,
+        "agreed_local": 0,
+        "status": [
+          "active"
+        ]
+      },
+      {
+        "calls": 6500,
+        "local": 192,
+        "agreed_local": 183,
+        "status": [
+          "active"
+        ]
+      },
+      {
+        "calls": 7000,
+        "local": 421,
+        "agreed_local": 406,
+        "status": [
+          "active"
+        ]
+      },
+      {
+        "calls": 7500,
+        "local": 617,
+        "agreed_local": 600,
+        "status": [
+          "active"
+        ]
+      },
+      {
+        "calls": 8000,
+        "local": 876,
+        "agreed_local": 854,
+        "status": [
+          "active"
+        ]
+      },
+      {
+        "calls": 8500,
+        "local": 1097,
+        "agreed_local": 1072,
+        "status": [
+          "active"
+        ]
+      },
+      {
+        "calls": 9000,
+        "local": 1341,
+        "agreed_local": 1314,
+        "status": [
+          "active"
+        ]
+      },
+      {
+        "calls": 9500,
+        "local": 1591,
+        "agreed_local": 1561,
+        "status": [
+          "active"
+        ]
+      },
+      {
+        "calls": 10000,
+        "local": 1872,
+        "agreed_local": 1838,
+        "status": [
+          "active"
+        ]
+      }
+    ],
+    "sites": [
+      {
+        "name": "You are the decision step of a production assistant.",
+        "verdict": "decision",
+        "status": "active",
+        "threshold": 0.9908646064625406,
+        "evidence": {
+          "calls": 8128,
+          "predictability": 0.9172,
+          "accepted": 4319,
+          "agreed": 4210,
+          "coverage": 0.5314,
+          "agreement": 0.9748,
+          "lower_bound": 0.9705
+        },
+        "reason": "4210 of 4319 held-out answers agreed with the LLM; lower bound 97.0%"
+      }
+    ],
+    "events": [
+      {
+        "event": "probation",
+        "threshold": 0.9982474356380883,
+        "evidence": {
+          "calls": 3500,
+          "predictability": 0.9191,
+          "accepted": 1247,
+          "agreed": 1222,
+          "coverage": 0.3563,
+          "agreement": 0.98,
+          "lower_bound": 0.9721
+        },
+        "audits": null,
+        "agreed": null
+      },
+      {
+        "event": "activated",
+        "threshold": 0.9969991899002741,
+        "evidence": {
+          "calls": 5000,
+          "predictability": 0.921,
+          "accepted": 2012,
+          "agreed": 1969,
+          "coverage": 0.4024,
+          "agreement": 0.9786,
+          "lower_bound": 0.9725,
+          "confirmation": {
+            "calls": 394,
+            "agreed": 388,
+            "lower_bound": 0.9702
+          }
+        },
+        "audits": null,
+        "agreed": null
+      }
+    ],
+    "settings": {
+      "learn_every": 500,
+      "audit": 0.05,
+      "seed": 0,
+      "target": 0.97
+    }
+  }
+]

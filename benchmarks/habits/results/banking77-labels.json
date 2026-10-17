@@ -1,0 +1,291 @@
+[
+  {
+    "source": "banking77",
+    "task": "banking77",
+    "kind": "choice",
+    "teacher": "labels",
+    "calls": 13083,
+    "local": 5648,
+    "local_share": 0.4317052663762134,
+    "local_agreement": 0.9815864022662889,
+    "audits": 333,
+    "activated_at": 4502,
+    "accuracy_teacher": 1.0,
+    "accuracy_pipeline": 0.9920507528854239,
+    "cost_teacher_usd": 0.0,
+    "cost_pipeline_usd": 0.0,
+    "local_latency_ms_median": 4.20179998036474,
+    "learn_seconds": 546.43,
+    "timeline": [
+      {
+        "calls": 500,
+        "local": 0,
+        "agreed_local": 0,
+        "status": [
+          "learning"
+        ]
+      },
+      {
+        "calls": 1000,
+        "local": 0,
+        "agreed_local": 0,
+        "status": [
+          "learning"
+        ]
+      },
+      {
+        "calls": 1500,
+        "local": 0,
+        "agreed_local": 0,
+        "status": [
+          "probation"
+        ]
+      },
+      {
+        "calls": 2000,
+        "local": 0,
+        "agreed_local": 0,
+        "status": [
+          "probation"
+        ]
+      },
+      {
+        "calls": 2500,
+        "local": 0,
+        "agreed_local": 0,
+        "status": [
+          "probation"
+        ]
+      },
+      {
+        "calls": 3000,
+        "local": 0,
+        "agreed_local": 0,
+        "status": [
+          "probation"
+        ]
+      },
+      {
+        "calls": 3500,
+        "local": 0,
+        "agreed_local": 0,
+        "status": [
+          "probation"
+        ]
+      },
+      {
+        "calls": 4000,
+        "local": 0,
+        "agreed_local": 0,
+        "status": [
+          "probation"
+        ]
+      },
+      {
+        "calls": 4500,
+        "local": 0,
+        "agreed_local": 0,
+        "status": [
+          "active"
+        ]
+      },
+      {
+        "calls": 5000,
+        "local": 298,
+        "agreed_local": 289,
+        "status": [
+          "active"
+        ]
+      },
+      {
+        "calls": 5500,
+        "local": 616,
+        "agreed_local": 602,
+        "status": [
+          "active"
+        ]
+      },
+      {
+        "calls": 6000,
+        "local": 957,
+        "agreed_local": 935,
+        "status": [
+          "active"
+        ]
+      },
+      {
+        "calls": 6500,
+        "local": 1276,
+        "agreed_local": 1248,
+        "status": [
+          "active"
+        ]
+      },
+      {
+        "calls": 7000,
+        "local": 1594,
+        "agreed_local": 1557,
+        "status": [
+          "active"
+        ]
+      },
+      {
+        "calls": 7500,
+        "local": 1939,
+        "agreed_local": 1900,
+        "status": [
+          "active"
+        ]
+      },
+      {
+        "calls": 8000,
+        "local": 2250,
+        "agreed_local": 2208,
+        "status": [
+          "active"
+        ]
+      },
+      {
+        "calls": 8500,
+        "local": 2574,
+        "agreed_local": 2526,
+        "status": [
+          "active"
+        ]
+      },
+      {
+        "calls": 9000,
+        "local": 2903,
+        "agreed_local": 2848,
+        "status": [
+          "active"
+        ]
+      },
+      {
+        "calls": 9500,
+        "local": 3226,
+        "agreed_local": 3167,
+        "status": [
+          "active"
+        ]
+      },
+      {
+        "calls": 10000,
+        "local": 3560,
+        "agreed_local": 3491,
+        "status": [
+          "active"
+        ]
+      },
+      {
+        "calls": 10500,
+        "local": 3882,
+        "agreed_local": 3809,
+        "status": [
+          "active"
+        ]
+      },
+      {
+        "calls": 11000,
+        "local": 4234,
+        "agreed_local": 4152,
+        "status": [
+          "active"
+        ]
+      },
+      {
+        "calls": 11500,
+        "local": 4582,
+        "agreed_local": 4493,
+        "status": [
+          "active"
+        ]
+      },
+      {
+        "calls": 12000,
+        "local": 4913,
+        "agreed_local": 4818,
+        "status": [
+          "active"
+        ]
+      },
+      {
+        "calls": 12500,
+        "local": 5256,
+        "agreed_local": 5154,
+        "status": [
+          "active"
+        ]
+      },
+      {
+        "calls": 13000,
+        "local": 5590,
+        "agreed_local": 5487,
+        "status": [
+          "active"
+        ]
+      }
+    ],
+    "sites": [
+      {
+        "name": "Decision",
+        "verdict": "decision",
+        "status": "active",
+        "threshold": 0.849635072016135,
+        "evidence": {
+          "calls": 7410,
+          "predictability": 0.8351,
+          "accepted": 3926,
+          "agreed": 3833,
+          "coverage": 0.5298,
+          "agreement": 0.9763,
+          "lower_bound": 0.9719
+        },
+        "reason": "3833 of 3926 held-out answers agreed with the LLM; lower bound 97.2%"
+      }
+    ],
+    "events": [
+      {
+        "event": "probation",
+        "threshold": 0.8825299459920304,
+        "evidence": {
+          "calls": 1500,
+          "predictability": 0.7487,
+          "accepted": 526,
+          "agreed": 518,
+          "coverage": 0.3507,
+          "agreement": 0.9848,
+          "lower_bound": 0.9727
+        },
+        "audits": null,
+        "agreed": null
+      },
+      {
+        "event": "activated",
+        "threshold": 0.8371831319538195,
+        "evidence": {
+          "calls": 3500,
+          "predictability": 0.8334,
+          "accepted": 2012,
+          "agreed": 1968,
+          "coverage": 0.5749,
+          "agreement": 0.9781,
+          "lower_bound": 0.972,
+          "confirmation": {
+            "calls": 394,
+            "agreed": 388,
+            "lower_bound": 0.9702
+          }
+        },
+        "audits": null,
+        "agreed": null
+      }
+    ],
+    "settings": {
+      "learn_every": 500,
+      "audit": 0.05,
+      "seed": 0,
+      "target": 0.97
+    }
+  }
+]
