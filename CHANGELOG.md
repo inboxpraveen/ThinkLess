@@ -6,6 +6,59 @@ All notable changes are recorded here. The format follows
 
 ## Unreleased
 
+## 0.5.0 - 2026-10-17
+
+Habits: the decisions an agent keeps making become local habits, once
+proven, with one line under the LLM client it already uses.
+
+### Added
+
+- `thinkless.habits`: `wrap(client)` puts ThinkLess under an OpenAI or
+  Anthropic SDK client, LangChain's `ChatOpenAI`, or any `httpx` or `httpx2`
+  client, in place. It records every Chat Completions, Responses and
+  Messages call, groups calls into sites by model, output contract and prompt
+  template, and trains a local student per decision site from the LLM's own
+  answers (a logistic regression over hashed words and character n-grams for
+  closed answers, a learned value shape for values copied from the input).
+- The gate: a site is answered locally only at confidence levels where
+  cross-fitted students agreed with the LLM at the target rate as a one-sided
+  Clopper-Pearson lower bound, with thresholds tested in fixed sequence.
+- Probation: passing the gate only starts a trial. The student answers new
+  calls in shadow while the LLM keeps answering them, and it answers nothing
+  until it passes one more test, of a size fixed in advance, on those new
+  calls (`confirm_calls`, 394 at the defaults; `0` skips probation).
+- Audits and suspension: a random share of local answers still goes to the
+  LLM; a site whose audited agreement falls below the target goes back to the
+  LLM until calls made after the suspension clear the gate again.
+- A student that passed the gate keeps serving until a newer one passes or
+  audits suspend the site, so a site does not switch off and on as its
+  confident calls stop reaching the LLM. Students are versioned files; old
+  ones are removed.
+- Predictability: the plan records how often a student matches the LLM's
+  next answers on all held-out calls, and `learn` warns about sites where
+  the LLM answers similar inputs differently.
+- Fails open: an error inside ThinkLess sends the call to the LLM unchanged.
+- Modes `auto`, `shadow`, `record` and `off`; site names through the
+  `x-thinkless-site` header; learning in a background thread, at most once a
+  minute, one process at a time per directory, over the most recent calls.
+  Calls answered locally are logged as compact records, so the log grows
+  with LLM calls only.
+- Local answers keep the exact response shape: JSON schema and JSON mode
+  answers, forced tool calls, plain text and streamed Chat Completions.
+- `thinkless habits scan`, `learn`, `status`, `proxy` and `reset`. The
+  scan reads Habits logs, chat fine-tuning files and request and response
+  pairs, and reports each site's share of calls and cost and whether its
+  answers are decisions.
+- `thinkless habits proxy`: an OpenAI-compatible endpoint with Habits
+  in front of any upstream, for clients in any language.
+- Replays in `benchmarks/habits/` measure Habits against a real LLM's
+  recorded answers.
+- `examples/10_habits.py` runs the whole loop offline.
+
+### Changed
+
+- NumPy is a dependency (for the students).
+
 ## 0.4.1 - 2026-09-25
 
 Project and packaging updates; no change to the library's behavior.

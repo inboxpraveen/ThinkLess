@@ -11,8 +11,8 @@ authors:
     given-names: Praveen
 repository-code: https://github.com/inboxpraveen/ThinkLess
 license: Apache-2.0
-version: 0.4.1
-date-released: 2026-09-25
+version: 0.5.0
+date-released: 2026-10-17
 keywords:
   - agents
   - large language models
