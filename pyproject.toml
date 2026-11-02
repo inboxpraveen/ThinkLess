@@ -5,7 +5,7 @@ build-backend = "hatchling.build"
 [project]
 name = "thinkless"
 dynamic = ["version"]
-description = "The decision plane for AI agents. Rules and small calibrated models make the routine decisions, the LLM is reserved for the steps that need thought, and every step is traced."
+description = "Stop using an LLM for every decision. Rules and small local models answer an AI agent's routine decisions, including ones learned from its own LLM once proven; the LLM keeps the steps that need it, and every step is traced."
 readme = "README.md"
 requires-python = ">=3.10"
 license = "Apache-2.0"
@@ -16,6 +16,12 @@ keywords = [
   "ai-agents",
   "llm",
   "llm-routing",
+  "llm-cost",
+  "cost-optimization",
+  "knowledge-distillation",
+  "openai",
+  "anthropic",
+  "langchain",
   "decision-models",
   "guardrails",
   "langgraph",

@@ -29,6 +29,15 @@ confidence, latency, tokens and cost.
 - **Going to production:** [Calibration](guides/calibration.md) and the
   [production checklist](guides/production.md).
 
+## How it works
+
+[![How ThinkLess works: Habits under the LLM client, typed decisions through a cascade of providers, and traces for every step](assets/architecture.svg)](assets/architecture.svg)
+
+With Habits, ThinkLess learns each decision from your LLM's own answers and
+takes it over only after passing a test of agreement twice; everything else
+goes to the LLM unchanged. With typed decisions, you declare the question and
+a cascade of providers answers it, cheapest first. Both write the same traces.
+
 ## In one example
 
 ```python

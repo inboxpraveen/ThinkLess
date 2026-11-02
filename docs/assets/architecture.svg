@@ -1,0 +1,138 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 780" width="1200" height="780" role="img" aria-labelledby="arch-title arch-desc">
+  <title id="arch-title">How ThinkLess works</title>
+  <desc id="arch-desc">Two ways in. Habits wraps the LLM client: a call site that is a proven habit is answered locally, every other call goes to the LLM unchanged and is recorded; in the background ThinkLess finds decision sites, trains a small student per site, and promotes it only after it agrees with the LLM at least 97 percent of the time on past calls and again on new calls, with audits after. Typed decisions send a question through a cascade of rules, GLiNER, Laya, System One models and an LLM, cheapest first. Every step is traced.</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#8C8AA8"/>
+    </marker>
+    <style>
+      text { font-family: "Segoe UI", -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif; }
+      .lane { fill: #F6F6FB; stroke: #E6E5F0; }
+      .box { fill: #FFFFFF; stroke: #D6D5E6; stroke-width: 1.5; }
+      .key { fill: #FFFFFF; stroke: #6F6DD8; stroke-width: 1.5; }
+      .h { font-size: 19px; font-weight: 700; fill: #3F3DB5; }
+      .hs { font-size: 16px; fill: #5A5878; }
+      .t { font-size: 16px; font-weight: 700; fill: #17153F; }
+      .s { font-size: 12.5px; fill: #6A6888; }
+      .note { font-size: 13.5px; fill: #4A4870; }
+      .b { font-weight: 700; fill: #17153F; }
+      .cap { font-size: 12px; letter-spacing: 1.2px; font-weight: 600; fill: #8A88A6; }
+      .mono { font-family: "Cascadia Code", SFMono-Regular, Menlo, Consolas, monospace; }
+      .edge { fill: none; stroke: #8C8AA8; stroke-width: 2; }
+      .lbl { font-size: 12.5px; font-weight: 600; fill: #6A6888; }
+    </style>
+  </defs>
+
+  <rect width="1200" height="780" rx="24" fill="#FFFFFF"/>
+
+  <!-- Habits -->
+  <rect class="lane" x="24" y="24" width="1152" height="392" rx="18"/>
+  <text x="48" y="62"><tspan class="h">Habits</tspan><tspan class="hs" dx="12">one line under the LLM client your agent already uses</tspan></text>
+
+  <rect class="box" x="48" y="114" width="150" height="72" rx="12"/>
+  <text class="t" x="123" y="145" text-anchor="middle">Your agent</text>
+  <text class="s" x="123" y="166" text-anchor="middle">code unchanged</text>
+  <line class="edge" x1="198" y1="150" x2="226" y2="150" marker-end="url(#arrow)"/>
+
+  <rect x="228" y="114" width="210" height="72" rx="12" fill="#191744"/>
+  <text class="mono" x="333" y="146" text-anchor="middle" font-size="15" fill="#FFFFFF">habits.wrap(client)</text>
+  <text class="s" x="333" y="166" text-anchor="middle" fill="#B9B8E0" style="fill:#B9B8E0">inside the HTTP client</text>
+  <line class="edge" x1="438" y1="150" x2="466" y2="150" marker-end="url(#arrow)"/>
+
+  <rect x="468" y="114" width="210" height="72" rx="12" fill="#FFFFFF" stroke="#3F3DB5" stroke-width="1.5" stroke-dasharray="6 4"/>
+  <text class="t" x="573" y="145" text-anchor="middle">A proven habit</text>
+  <text class="s" x="573" y="166" text-anchor="middle">for this call site?</text>
+
+  <path class="edge" d="M678 150 H714 V112 H756" marker-end="url(#arrow)"/>
+  <text class="lbl" x="724" y="105">yes</text>
+  <path class="edge" d="M678 150 H714 V188 H756" marker-end="url(#arrow)"/>
+  <text class="lbl" x="724" y="206">no</text>
+
+  <rect x="760" y="84" width="392" height="56" rx="12" fill="#E7EEFD" stroke="#9DB8F5" stroke-width="1.5"/>
+  <text x="780" y="108" font-size="15" font-weight="700" fill="#1D4ED8">Answered locally, about 4 ms per call</text>
+  <text x="780" y="128" font-size="12.5" fill="#3A4B7A">a small local model, in the exact response shape</text>
+
+  <rect x="760" y="160" width="392" height="56" rx="12" fill="#F0E9FD" stroke="#C9B2F5" stroke-width="1.5"/>
+  <text x="780" y="184" font-size="15" font-weight="700" fill="#6D28D9">Your LLM answers, as it does today</text>
+  <text x="780" y="204" font-size="12.5" fill="#4F3A7A">the call and its answer are recorded</text>
+
+  <text class="cap" x="48" y="250">IN THE BACKGROUND, FROM THE CALLS IT RECORDS</text>
+  <path class="edge" d="M1054 262 V238 H573 V190" marker-end="url(#arrow)"/>
+  <text class="lbl" x="600" y="230">passes both tests: becomes a habit</text>
+
+  <rect class="box" x="48" y="262" width="196" height="72" rx="12"/>
+  <text class="t" x="146" y="293" text-anchor="middle">Record</text>
+  <text class="s" x="146" y="314" text-anchor="middle">every call and its answer</text>
+  <line class="edge" x1="244" y1="298" x2="273" y2="298" marker-end="url(#arrow)"/>
+
+  <rect class="box" x="275" y="262" width="196" height="72" rx="12"/>
+  <text class="t" x="373" y="293" text-anchor="middle">Find decision sites</text>
+  <text class="s" x="373" y="314" text-anchor="middle">routes, labels, yes or no</text>
+  <line class="edge" x1="471" y1="298" x2="500" y2="298" marker-end="url(#arrow)"/>
+
+  <rect class="box" x="502" y="262" width="196" height="72" rx="12"/>
+  <text class="t" x="600" y="293" text-anchor="middle">Train a student</text>
+  <text class="s" x="600" y="314" text-anchor="middle">on your LLM's answers, CPU</text>
+  <line class="edge" x1="698" y1="298" x2="727" y2="298" marker-end="url(#arrow)"/>
+
+  <rect class="key" x="729" y="262" width="196" height="72" rx="12"/>
+  <text class="t" x="827" y="293" text-anchor="middle">Gate</text>
+  <text class="s" x="827" y="314" text-anchor="middle">97% agreement on past calls</text>
+  <line class="edge" x1="925" y1="298" x2="954" y2="298" marker-end="url(#arrow)"/>
+
+  <rect class="key" x="956" y="262" width="196" height="72" rx="12"/>
+  <text class="t" x="1054" y="293" text-anchor="middle">Probation</text>
+  <text class="s" x="1054" y="314" text-anchor="middle">97% again, on new calls</text>
+
+  <text class="note" x="48" y="374"><tspan class="b">Audits.</tspan> A random 5% of local answers still go to the LLM. A habit that stops agreeing goes back to the LLM by itself.</text>
+  <text class="note" x="48" y="398"><tspan class="b">Fails open.</tspan> Tool calls, images, sites not yet proven, and any error inside ThinkLess go to the LLM unchanged.</text>
+
+  <!-- Typed decisions -->
+  <rect class="lane" x="24" y="436" width="1152" height="228" rx="18"/>
+  <text x="48" y="474"><tspan class="h">Typed decisions</tspan><tspan class="hs" dx="12">you declare the questions, a cascade answers them, cheapest first</tspan></text>
+
+  <rect class="box" x="48" y="500" width="190" height="72" rx="12"/>
+  <text class="t" x="143" y="531" text-anchor="middle">A typed question</text>
+  <text class="s" x="143" y="552" text-anchor="middle">Choice, YesNo, Score, Extract</text>
+  <line class="edge" x1="238" y1="536" x2="262" y2="536" marker-end="url(#arrow)"/>
+
+  <rect x="264" y="492" width="676" height="88" rx="14" fill="#FFFFFF" stroke="#C9C7E0" stroke-width="1.5" stroke-dasharray="6 4"/>
+
+  <rect x="274" y="506" width="120" height="60" rx="10" fill="#E3F5F2" stroke="#8FD3C7" stroke-width="1.5"/>
+  <text x="334" y="532" text-anchor="middle" font-size="15" font-weight="700" fill="#0B7A6B">Rules</text>
+  <text class="s" x="334" y="552" text-anchor="middle">under 1 ms</text>
+  <text x="401" y="542" text-anchor="middle" font-size="20" fill="#8C8AA8">›</text>
+
+  <rect x="408" y="506" width="120" height="60" rx="10" fill="#E7EEFD" stroke="#9DB8F5" stroke-width="1.5"/>
+  <text x="468" y="532" text-anchor="middle" font-size="15" font-weight="700" fill="#1D4ED8">GLiNER 2.5</text>
+  <text class="s" x="468" y="552" text-anchor="middle">16 to 38 ms</text>
+  <text x="535" y="542" text-anchor="middle" font-size="20" fill="#8C8AA8">›</text>
+
+  <rect x="542" y="506" width="120" height="60" rx="10" fill="#E7EEFD" stroke="#9DB8F5" stroke-width="1.5"/>
+  <text x="602" y="532" text-anchor="middle" font-size="15" font-weight="700" fill="#1D4ED8">Laya</text>
+  <text class="s" x="602" y="552" text-anchor="middle">about 30 ms</text>
+  <text x="669" y="542" text-anchor="middle" font-size="20" fill="#8C8AA8">›</text>
+
+  <rect x="676" y="506" width="120" height="60" rx="10" fill="#E7EEFD" stroke="#9DB8F5" stroke-width="1.5"/>
+  <text x="736" y="532" text-anchor="middle" font-size="15" font-weight="700" fill="#1D4ED8">System One</text>
+  <text class="s" x="736" y="552" text-anchor="middle">Jev, Kev, OpenJev</text>
+  <text x="803" y="542" text-anchor="middle" font-size="20" fill="#8C8AA8">›</text>
+
+  <rect x="810" y="506" width="120" height="60" rx="10" fill="#F0E9FD" stroke="#C9B2F5" stroke-width="1.5"/>
+  <text x="870" y="532" text-anchor="middle" font-size="15" font-weight="700" fill="#6D28D9">LLM decider</text>
+  <text class="s" x="870" y="552" text-anchor="middle">the last resort</text>
+
+  <line class="edge" x1="940" y1="536" x2="966" y2="536" marker-end="url(#arrow)"/>
+  <rect class="box" x="968" y="500" width="184" height="72" rx="12"/>
+  <text class="t" x="1060" y="531" text-anchor="middle">A typed decision</text>
+  <text class="s" x="1060" y="552" text-anchor="middle">value, confidence, provider</text>
+
+  <text class="note" x="600" y="612" text-anchor="middle">Each provider answers only the questions it is confident about, at thresholds calibrated on labeled data; the rest move on.</text>
+  <text class="note" x="600" y="636" text-anchor="middle">An answer that stays uncertain never matches <tspan class="mono" font-size="13">decision.is_()</tspan>, so it cannot trigger an action by accident.</text>
+
+  <!-- Traces -->
+  <rect x="24" y="684" width="1152" height="72" rx="18" fill="#191744"/>
+  <text x="48" y="715" font-size="16" font-weight="700" fill="#FFFFFF">Traces</text>
+  <text x="122" y="715" font-size="13.5" fill="#D9D8F2">Every decision, provider attempt, LLM call and tool call, with its plane, confidence, latency, tokens and cost.</text>
+  <text x="122" y="737" font-size="13" fill="#A9A7D6">JSONL audit files, OpenTelemetry with GenAI conventions, and a self-contained HTML viewer.</text>
+</svg>

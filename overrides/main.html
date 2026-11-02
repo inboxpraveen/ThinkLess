@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{#- Link previews for shared docs pages: the same 1280x640 card as the GitHub repository. -#}
+{% block extrahead %}
+  {%- set description = page.meta.description if page and page.meta and page.meta.description else config.site_description -%}
+  {%- set title = config.site_name if not page or page.is_homepage else page.title ~ " - " ~ config.site_name -%}
+  {%- set image = config.site_url ~ "assets/social-preview.png" -%}
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="{{ config.site_name }}">
+  <meta property="og:title" content="{{ title | striptags }}">
+  <meta property="og:description" content="{{ description }}">
+  {%- if page and page.canonical_url %}
+  <meta property="og:url" content="{{ page.canonical_url }}">
+  {%- endif %}
+  <meta property="og:image" content="{{ image }}">
+  <meta property="og:image:width" content="1280">
+  <meta property="og:image:height" content="640">
+  <meta property="og:image:alt" content="ThinkLess: stop using an LLM for every decision">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="{{ title | striptags }}">
+  <meta name="twitter:description" content="{{ description }}">
+  <meta name="twitter:image" content="{{ image }}">
+{% endblock %}

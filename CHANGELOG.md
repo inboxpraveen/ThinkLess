@@ -6,6 +6,17 @@ All notable changes are recorded here. The format follows
 
 ## Unreleased
 
+### Added
+
+- A logo, an architecture diagram of Habits and typed decisions (in the
+  README, the docs home page and the four planes page), and a social preview
+  image. The docs site uses the logo and gives every page a link preview.
+
+### Fixed
+
+- A Habits student test compared a tuple holding a dict with
+  `pytest.approx`, which pytest 9.2 rejects; CI failed on every new run.
+
 ## 0.5.0 - 2026-10-17
 
 Habits: the decisions an agent keeps making become local habits, once

@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256" role="img" aria-label="ThinkLess logo: most decisions take the short local path, a few go on to the LLM">
+  <title>ThinkLess</title>
+  <defs>
+    <linearGradient id="thinkless-bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#5B5BEF"/>
+      <stop offset="1" stop-color="#26246E"/>
+    </linearGradient>
+  </defs>
+  <rect width="256" height="256" rx="56" fill="url(#thinkless-bg)"/>
+  <!-- the longer way, to the LLM, taken only when the small models are unsure -->
+  <path d="M60 170 C104 170 102 84 144 84" fill="none" stroke="#FFFFFF" stroke-opacity="0.42" stroke-width="10" stroke-linecap="round"/>
+  <circle cx="182" cy="84" r="31" fill="none" stroke="#FFFFFF" stroke-opacity="0.42" stroke-width="10"/>
+  <circle cx="168" cy="84" r="5.5" fill="#FFFFFF" fill-opacity="0.6"/>
+  <circle cx="182" cy="84" r="5.5" fill="#FFFFFF" fill-opacity="0.6"/>
+  <circle cx="196" cy="84" r="5.5" fill="#FFFFFF" fill-opacity="0.6"/>
+  <!-- the short way most decisions take, to an answer -->
+  <path d="M60 170 H152" stroke="#FFFFFF" stroke-width="16" stroke-linecap="round"/>
+  <circle cx="60" cy="170" r="20" fill="#FFFFFF"/>
+  <circle cx="182" cy="170" r="33" fill="#FFC24B"/>
+  <path d="M166 171 l11 11 l21 -23" fill="none" stroke="#26246E" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

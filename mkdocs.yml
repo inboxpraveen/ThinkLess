@@ -1,5 +1,5 @@
 site_name: ThinkLess
-site_description: The decision plane for AI agents. Rules and small calibrated models make the routine decisions, the LLM is reserved for the steps that need thought.
+site_description: Stop using an LLM for every decision. ThinkLess answers an AI agent's routine decisions with rules and small local models, including ones it learns from your own LLM once they are proven, and traces every step.
 site_url: https://inboxpraveen.github.io/ThinkLess/
 repo_url: https://github.com/inboxpraveen/ThinkLess
 repo_name: inboxpraveen/ThinkLess
@@ -8,6 +8,9 @@ copyright: Copyright 2026 Praveen Kumar. Apache License 2.0.
 
 theme:
   name: material
+  custom_dir: overrides
+  logo: assets/logo.svg
+  favicon: assets/logo.svg
   features:
     - navigation.sections
     - navigation.top

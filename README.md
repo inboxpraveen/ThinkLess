@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="https://raw.githubusercontent.com/inboxpraveen/ThinkLess/main/docs/assets/logo.svg" alt="ThinkLess logo" width="96" height="96">
+</p>
+
 <h1 align="center">ThinkLess</h1>
 
 <p align="center"><b>Stop using an LLM for every decision.</b></p>
@@ -27,6 +31,10 @@ There are two ways in. With **Habits**, ThinkLess goes under the LLM client
 you already use, with one line, and the decisions your agent keeps making
 become local habits once they are proven. With **typed decisions**, you
 declare the questions and choose the models that answer them.
+
+<p align="center">
+  <img src="https://raw.githubusercontent.com/inboxpraveen/ThinkLess/main/docs/assets/architecture.svg" alt="How ThinkLess works. Habits: habits.wrap(client) answers a call locally in about 4 ms when its call site is a proven habit, and otherwise sends it to your LLM unchanged and records it; in the background ThinkLess finds decision sites, trains a student per site on the LLM's answers, and makes it a habit only after 97% agreement on past calls and again on new calls, with 5% audits after. Typed decisions: a question goes through rules, GLiNER 2.5, Laya, System One models and an LLM decider, cheapest first, and comes back as a typed decision. Everything is traced to JSONL, OpenTelemetry and an HTML viewer." width="100%">
+</p>
 
 ## Habits: one line under the agent you already have
 
@@ -235,7 +243,8 @@ builder.add_conditional_edges(START, intent, intent.destinations)
 - [OpenAI Agents SDK](https://inboxpraveen.github.io/ThinkLess/integrations/openai-agents/):
   input guardrails, tool guardrails and routing to a specialist agent.
 - [Any framework](https://inboxpraveen.github.io/ThinkLess/integrations/any-framework/):
-  `route` and `gate` for Pydantic AI, a hand-written loop, or anything else.
+  `route` and `gate` for CrewAI, LlamaIndex, Pydantic AI, a hand-written
+  loop, or anything else.
 
 Before switching anything, measure it. Shadow mode runs ThinkLess next to your
 current code on live traffic and reports, per decision, the agreement with a
@@ -331,7 +340,8 @@ Writing your own provider is one class. [Providers](https://inboxpraveen.github.
 ## Documentation
 
 - [Getting started](https://inboxpraveen.github.io/ThinkLess/getting-started/),
-  [installation](https://inboxpraveen.github.io/ThinkLess/guides/installation/)
+  [installation](https://inboxpraveen.github.io/ThinkLess/guides/installation/),
+  [Habits](https://inboxpraveen.github.io/ThinkLess/habits/)
 - Use it in your agent: [overview](https://inboxpraveen.github.io/ThinkLess/integrations/),
   [LangGraph](https://inboxpraveen.github.io/ThinkLess/integrations/langgraph/),
   [OpenAI Agents SDK](https://inboxpraveen.github.io/ThinkLess/integrations/openai-agents/),

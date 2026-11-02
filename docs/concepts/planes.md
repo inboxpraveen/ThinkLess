@@ -22,6 +22,12 @@ handled each step.
 | Execution | Your tools and APIs | depends | refunds, lookups, tickets |
 | Observability | Traces, summaries, cost | none on the hot path | JSONL audit files, OpenTelemetry, the viewer |
 
+There are two ways to give an agent a decision plane. [Habits](../habits.md)
+learns it from the LLM calls the agent already makes; with typed decisions,
+you declare the questions yourself:
+
+[![How ThinkLess works: Habits under the LLM client, typed decisions through a cascade of providers, and traces for every step](../assets/architecture.svg)](../assets/architecture.svg)
+
 ## The decision plane
 
 The decision plane answers typed questions: a `Choice` among options, a
