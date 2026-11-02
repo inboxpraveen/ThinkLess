@@ -417,7 +417,10 @@ def test_linear_student_learns_and_round_trips(tmp_path: Path) -> None:
     model.save(tmp_path / "site")
     loaded = SiteModel.load(tmp_path / "site")
     for text, _ in held[:10]:
-        assert loaded.predict(text) == pytest.approx(model.predict(text))
+        answer, confidence = loaded.predict(text)
+        expected_answer, expected_confidence = model.predict(text)
+        assert answer == expected_answer
+        assert confidence == pytest.approx(expected_confidence)
 
 
 def test_shape_extractor_finds_order_numbers() -> None:
