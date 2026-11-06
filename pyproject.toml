@@ -73,7 +73,7 @@ gliner = [
   "sentencepiece>=0.2",
 ]
 laya = ["laya>=0.4.17,<0.5", "transformers>=4.48,<5"]
-local-llm = ["transformers>=4.48,<5", "accelerate>=1.0", "torch>=2.1"]
+local-llm = ["transformers>=4.48,<5", "accelerate>=1.15.0", "torch>=2.1"]
 local = ["thinkless[gliner,laya,local-llm]"]
 # Hosted reasoning backends.
 openai = ["openai>=2.0"]
