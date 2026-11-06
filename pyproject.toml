@@ -95,7 +95,7 @@ mcp = ["mcp>=1.10"]
 all = ["thinkless[local,openai,anthropic,otel,bench,langgraph,openai-agents,server,mcp]"]
 dev = [
   "pytest>=8",
-  "pytest-cov>=5",
+  "pytest-cov>=7.1.0",
   "ruff>=0.6",
   "mypy>=1.10",
   "typesafe-sdk>=0.7",
