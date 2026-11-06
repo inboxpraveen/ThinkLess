@@ -90,7 +90,7 @@ bench = ["datasets>=3.0"]
 langgraph = ["langgraph>=1.0"]
 openai-agents = ["openai-agents>=0.22"]
 # The decision server (thinkless serve) and MCP tools (thinkless mcp).
-server = ["fastapi>=0.115", "uvicorn>=0.30"]
+server = ["fastapi>=0.115", "uvicorn>=0.54.0"]
 mcp = ["mcp>=1.10"]
 all = ["thinkless[local,openai,anthropic,otel,bench,langgraph,openai-agents,server,mcp]"]
 dev = [
