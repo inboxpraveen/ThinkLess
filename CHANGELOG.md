@@ -4,7 +4,13 @@ All notable changes are recorded here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the project uses
 [semantic versioning](https://semver.org/).
 
-## Unreleased
+## 0.6.0 - 2026-11-22
+
+A review of the whole package. Habits gets fixes for streams cut short,
+several processes sharing one directory, and the Responses API's stored
+state; typed decisions get fixes for rules that never fired, spend caps,
+cost reporting and the System One wire. A demo anyone can run right after
+`pip install thinkless`, and CI that holds every lower bound to its promise.
 
 ### Added
 
@@ -22,6 +28,29 @@ All notable changes are recorded here. The format follows
 
 ### Fixed
 
+- A rule registered for a question never fired when the question had no
+  `name` and was asked through `decide_many({"intent": Choice(...)})`: rules
+  and Hugging Face classifiers looked it up by a name derived from its
+  instructions, so it went on to the next provider, often the paid LLM. An
+  unnamed question now takes the name it is given in the mapping, which
+  thresholds and traces already used. A LangGraph `router` also finds a
+  decision a `decision_node` stored under that name instead of asking again.
+- A nested `engine.run()` without `max_cost_usd` lifted the spend cap of the
+  run around it. Every open run's cap now applies. `run(max_cost_usd=-1)`
+  also left a trace sink behind.
+- `/v1/decide` and `/v1/systemone` counted a batched call's cost and tokens
+  once per question it answered, and left out paid attempts that were not
+  accepted. Both now report the run's total.
+- `/v1/systemone` sent uncertain answers from providers without
+  probabilities at probability 1, so a ThinkLess client accepted answers the
+  server was not sure of. They are left out, like abstentions.
+- Shadow mode counted only the cost of the accepted attempt, which
+  overstated savings and let spending pass `max_cost_usd`.
+- One malformed entry in a System One reply, a `NaN` score from an LLM, or a
+  negative `Retry-After` header failed the whole call; each now spoils only
+  its own answer, or falls back to the normal backoff.
+- `thinkless shadow report --min-calls 0` divided by zero when nothing had
+  been compared.
 - Habits recorded a streamed answer the caller stopped reading, or that
   broke off, as the LLM's complete answer. Truncated answers became training
   data and, in an audit, counted as disagreement. A Chat Completions stream

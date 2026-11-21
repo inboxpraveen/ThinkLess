@@ -6,12 +6,16 @@ ThinkLess needs Python 3.10 or newer. The core package is small and pulls in
 no model libraries; decision models and LLM backends are extras.
 
 ```bash
-pip install thinkless                          # core: rules, tracing, the HTTP System One provider
+pip install thinkless                          # core: rules, Habits, tracing, the HTTP System One provider
 pip install "thinkless[local]"                 # GLiNER, Laya and a local LLM (needs torch)
 pip install "thinkless[anthropic]"             # Claude as the reasoning plane
 pip install "thinkless[openai]"                # OpenRouter, OpenAI, Ollama, vLLM and compatible servers
 pip install "thinkless[all]"                   # everything, including OpenTelemetry and benchmarks
 ```
+
+To see [Habits](habits.md) at work right after the core install, run
+`thinkless habits demo`: it learns a support agent's routing decision from a
+stand-in LLM and answers it locally, offline, in about a second.
 
 For local models on a GPU, install PyTorch first; the
 [installation guide](guides/installation.md) has the command for each

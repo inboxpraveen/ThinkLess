@@ -12,7 +12,8 @@ The workflow is `.github/workflows/release.yml`. Pushing a tag such as
 2. builds the wheel and the source distribution,
 3. runs `twine check --strict` on both,
 4. installs the wheel into a clean virtual environment and runs
-   `thinkless --version`, `thinkless doctor` and `examples/01_rules_only.py`,
+   `thinkless --version`, `thinkless doctor`, `examples/01_rules_only.py`
+   and `thinkless habits demo`,
 5. uploads to PyPI from a job bound to the `pypi` environment.
 
 The CI workflow runs the same wheel install and smoke test on Linux, macOS and
