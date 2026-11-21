@@ -568,8 +568,18 @@ def test_other_requests_pass_through(tmp_path: Path) -> None:
 
 
 def test_background_learning(tmp_path: Path) -> None:
+    # One background run, started by the last call, so it sees every call
+    # whatever the thread timing.
     llm = FakeLLM()
-    habits = Habits(tmp_path, confirm_calls=0, learn_every=120, audit=0.0, seed=0, min_calls=100)
+    habits = Habits(
+        tmp_path,
+        confirm_calls=0,
+        learn_every=240,
+        min_learn_interval_s=0,
+        audit=0.0,
+        seed=0,
+        min_calls=100,
+    )
     client = client_for(habits, llm)
     _run(client, random.Random(8), 240)
     habits.wait(60)

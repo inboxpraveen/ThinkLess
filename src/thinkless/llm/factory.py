@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from typing import Any
+
 from .base import LLM
 
 __all__ = ["DEFAULT_LOCAL_MODEL", "from_spec"]
@@ -65,7 +67,7 @@ def from_spec(
                 "the openrouter backend needs a model slug, for example "
                 "openrouter:qwen/qwen3.7-flash"
             )
-        options = (
+        options: dict[str, Any] | None = (
             None if level is None else {"enabled": False} if level == "off" else {"effort": level}
         )
         return OpenRouterLLM(model, reasoning=options)
