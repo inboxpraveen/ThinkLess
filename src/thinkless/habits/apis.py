@@ -163,6 +163,8 @@ class ResponsesApi:
         extra = ""
         if body.get("previous_response_id"):
             extra = "the conversation continues a stored response ThinkLess cannot see"
+        elif body.get("conversation"):
+            extra = "the call belongs to a stored conversation ThinkLess cannot see"
         reason = _reason(has_media, contract, extra) or ("no input" if not messages else "")
         return Call(
             model=str(body.get("model") or ""),
@@ -458,9 +460,12 @@ class MessagesApi:
         message: dict[str, Any] | None = None
         blocks: dict[int, dict[str, Any]] = {}
         partial: dict[int, list[str]] = {}
+        stopped = False
         for event in _events(chunks):
             kind = event.get("type")
-            if kind == "message_start" and isinstance(event.get("message"), dict):
+            if kind == "message_stop":
+                stopped = True
+            elif kind == "message_start" and isinstance(event.get("message"), dict):
                 message = dict(event["message"])
                 message["content"] = []
             elif kind == "content_block_start":
@@ -482,7 +487,8 @@ class MessagesApi:
                 usage = event.get("usage")
                 if isinstance(usage, Mapping):
                     message.setdefault("usage", {}).update(usage)
-        if message is None:
+        # A stream the caller stopped reading, or that broke off, is not an answer.
+        if message is None or not stopped:
             return None
         for index in sorted(blocks):
             block = blocks[index]

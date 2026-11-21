@@ -22,7 +22,7 @@ import os
 import random
 import threading
 import time
-from collections import deque
+from collections import OrderedDict, deque
 from collections.abc import Mapping
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
@@ -30,13 +30,13 @@ from pathlib import Path
 from typing import Any
 
 from ..logs import get_logger
-from .apis import APIS, CHAT, Api
+from .apis import APIS, CHAT, RESPONSES, Api
 from .calls import CallLog
 from .gate import binomial_upper_bound
 from .learn import LearningInProgressError, LearnOptions, learn, load_plan, save_plan
 from .sites import base_key, call_lines, variable_text
 from .student import SiteModel
-from .wire import MISSING, Call
+from .wire import Call, agrees
 
 __all__ = ["MODES", "Habits", "Ticket", "default_habits"]
 
@@ -46,6 +46,7 @@ MODES = ("auto", "shadow", "record", "off")
 AUDIT_WINDOW = 200
 MIN_AUDITS = 20
 PLAN_CHECK_S = 2.0
+CHAINS_KEPT = 2048
 
 
 def _now() -> str:
@@ -149,7 +150,9 @@ class Habits:
         self._by_base: dict[str, list[dict[str, Any]]] = {}
         self._audits: dict[str, deque[bool]] = {}
         self._suspended: dict[str, str] = {}
+        self._suspended_student: dict[str, Any] = {}
         self._serving: dict[str, Any] = {}
+        self._chains: OrderedDict[str, list[Any]] = OrderedDict()
         self._since_learn = 0
         self._learning: threading.Thread | None = None
         self.counts: dict[str, int] = {"local": 0, "llm": 0, "audit": 0, "passthrough": 0}
@@ -185,6 +188,15 @@ class Habits:
                 if self._serving.get(entry["id"]) != entry.get("student"):
                     self._audits.pop(entry["id"], None)
                     self._serving[entry["id"]] = entry.get("student")
+                # Another process retrained a site this one suspended: the new
+                # student passed its own gate, so the old suspension is over.
+                if (
+                    entry["id"] in self._suspended
+                    and entry.get("status") == "active"
+                    and entry.get("student") != self._suspended_student.get(entry["id"])
+                ):
+                    self._suspended.pop(entry["id"], None)
+                    self._suspended_student.pop(entry["id"], None)
 
     def _model(self, entry: Mapping[str, Any]) -> SiteModel | None:
         stem = entry.get("student")
@@ -270,6 +282,8 @@ class Habits:
         assert ticket.response is not None
         with self._lock:
             self.counts["local"] += 1
+            if ticket.call.api == RESPONSES.name:
+                self._remember_chain(ticket)
         local = {"fields": ticket.local[0], "confidence": ticket.local[1]} if ticket.local else None
         full = self.record_local_calls
         self._log.write(
@@ -294,11 +308,7 @@ class Habits:
         output = APIS[ticket.call.api].parse_response(ticket.call, response)
         agreed: bool | None = None
         if ticket.local is not None and output is not None:
-            fields = ticket.local[0]
-            agreed = all(
-                output.fields.get(name, MISSING) == label for name, label in fields.items()
-            )
-            agreed = agreed and set(output.fields) <= set(fields)
+            agreed = agrees(ticket.local[0], output.fields)
         local = (
             {
                 "fields": ticket.local[0],
@@ -329,6 +339,53 @@ class Habits:
             self._record_audit(ticket.site, agreed)
         self._maybe_learn()
 
+    # Responses answered locally
+
+    def _remember_chain(self, ticket: Ticket) -> None:
+        """Keep what a local Responses answer saw and said, for a follow-up call."""
+        items = ticket.body.get("input")
+        if isinstance(items, str):
+            items = [{"role": "user", "content": items}]
+        assert ticket.response is not None
+        output = [
+            {k: v for k, v in item.items() if k != "id"}
+            for item in ticket.response.get("output") or []
+            if isinstance(item, Mapping)
+        ]
+        self._chains[str(ticket.response["id"])] = [*list(items or []), *output]
+        while len(self._chains) > CHAINS_KEPT:
+            self._chains.popitem(last=False)
+
+    def continue_chain(self, body: Any) -> dict[str, Any] | None:
+        """Rewrite a Responses call that continues a response ThinkLess answered.
+
+        A local answer is never stored by the provider, so a follow-up that
+        names it in ``previous_response_id`` would be rejected. This returns
+        the same request with that id replaced by what the local response saw
+        and said, or ``None`` when the request needs no change.
+        """
+        if not isinstance(body, Mapping):
+            return None
+        previous = body.get("previous_response_id")
+        if not isinstance(previous, str):
+            return None
+        with self._lock:
+            earlier = self._chains.get(previous)
+        if earlier is None:
+            if previous.startswith("resp_thinkless_"):
+                logger.warning(
+                    "a call continues the local response %s, which this process no longer "
+                    "holds; the provider will reject it",
+                    previous,
+                )
+            return None
+        items = body.get("input")
+        if isinstance(items, str):
+            items = [{"role": "user", "content": items}]
+        rewritten = {k: v for k, v in body.items() if k != "previous_response_id"}
+        rewritten["input"] = [*earlier, *list(items or [])]
+        return rewritten
+
     # Audits and suspension
 
     def _record_audit(self, site_id: str, agreed: bool) -> None:
@@ -346,6 +403,7 @@ class Habits:
     def _suspend(self, site_id: str, audits: int, agreed: int, upper: float) -> None:
         stamp = _now()
         self._suspended[site_id] = stamp
+        self._suspended_student[site_id] = self._serving.get(site_id)
         self._audits.pop(site_id, None)
         logger.warning(
             "suspended site %s: %d of %d audits agreed with the LLM "
@@ -428,6 +486,7 @@ class Habits:
                     changed = True
                 elif entry.get("status") == "active":
                     del self._suspended[site_id]
+                    self._suspended_student.pop(site_id, None)
             if changed:
                 save_plan(plan, self.directory)
         for site_id, entry in plan["sites"].items():

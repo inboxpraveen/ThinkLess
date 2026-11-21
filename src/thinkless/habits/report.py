@@ -16,6 +16,7 @@ from ..decision import Usage
 from ..pricing import PriceTable, default_prices
 from .calls import Observation
 from .sites import SiteProfile, discover
+from .wire import agrees
 
 __all__ = ["FieldSummary", "Report", "SiteSummary", "build_report", "estimate_cost"]
 
@@ -235,10 +236,7 @@ def _summary(
         if observation.answered_by == "audit":
             summary.audits += 1
         if local and observation.output is not None:
-            fields_local = local.get("fields") or {}
-            agreed = all(
-                observation.output.fields.get(name) == label for name, label in fields_local.items()
-            )
+            agreed = agrees(local.get("fields") or {}, observation.output.fields)
             if observation.answered_by == "audit":
                 summary.audit_agreed += agreed
             else:

@@ -81,16 +81,20 @@ class CallLog:
         self._lock = threading.Lock()
         self._handle: Any = None
         self._day: str | None = None
+        self._pid: int | None = None
 
     def _file(self) -> Any:
         day = datetime.now(timezone.utc).strftime("%Y-%m-%d")
-        if self._handle is None or day != self._day:
+        pid = os.getpid()
+        # A forked worker gets a file of its own, not the parent's.
+        if self._handle is None or day != self._day or pid != self._pid:
             if self._handle is not None:
                 self._handle.close()
             self.directory.mkdir(parents=True, exist_ok=True)
-            path = self.directory / f"{day}-{os.getpid()}.jsonl"
+            path = self.directory / f"{day}-{pid}.jsonl"
             self._handle = path.open("a", encoding="utf-8")
             self._day = day
+            self._pid = pid
         return self._handle
 
     def write(

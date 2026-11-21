@@ -47,6 +47,17 @@ site clears both, it behaves exactly as it did before.
 
 ## Get started
 
+To watch the whole cycle before touching your own agent, run the demo. It
+needs no API key and no extra packages, and takes about a second: a support
+agent routes messages through a stand-in LLM, ThinkLess records the calls,
+puts a student on probation, then answers most new calls locally while a 5%
+sample is still audited.
+
+```bash
+pip install thinkless
+thinkless habits demo
+```
+
 ### 1. See what your calls are, with no risk
 
 If you already log LLM calls, scan the logs first. Nothing is changed or sent
@@ -266,13 +277,25 @@ It always sends to the LLM:
   step), since a wrong local tool call would have side effects;
 - inputs with images, audio or files;
 - requests for several choices or for log probabilities;
-- Responses API calls that continue a stored conversation
-  (`previous_response_id`), since the conversation is not in the request;
+- Responses API calls that continue a stored response or belong to a
+  stored conversation (`previous_response_id`, `conversation`), since that
+  context is not in the request;
 - Anthropic calls with extended thinking;
 - streamed Responses and Messages calls (recorded and learned from, but
   answered by the model; streamed Chat Completions calls are answered
   locally);
 - sites whose answers are free text.
+
+A streamed answer is recorded only when the stream finished. A stream the
+caller stopped reading, or that broke off, teaches the students nothing and
+counts as neither agreement nor disagreement in an audit.
+
+A Responses API answer ThinkLess gives is not stored by the provider. When a
+later call continues it with `previous_response_id`, ThinkLess sends that call
+on with the earlier input and answer written out in `input` instead, so the
+chain keeps working. This needs the same process (or proxy) that gave the
+answer; it keeps the last 2,048 local answers. Fetching a local answer by id
+from the provider (`client.responses.retrieve`) does not work.
 
 ## Modes
 

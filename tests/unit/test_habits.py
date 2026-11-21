@@ -792,10 +792,12 @@ def test_openai_responses_api(tmp_path: Path) -> None:
 
     lib = _library_of(openai)
     calls = {"n": 0}
+    bodies: list[dict[str, Any]] = []
 
     def handler(request: Any) -> Any:
         calls["n"] += 1
         body = json.loads(request.content)
+        bodies.append(body)
         assert request.url.path.endswith("/responses")
         assert body["text"]["format"]["type"] == "json_schema"
         text = body["input"][-1]["content"]
@@ -852,6 +854,23 @@ def test_openai_responses_api(tmp_path: Path) -> None:
     answers = [ask() for _ in range(20)]
     assert calls["n"] - before < 20
     assert all(isinstance(a.output_parsed, Route) for a in answers)
+
+    # The provider never stored a local answer, so a follow-up that chains on
+    # it is sent with the conversation written out instead.
+    local = next(a for a in answers if a.id.startswith("resp_thinkless_"))
+    habits.mode = "shadow"
+    client.responses.parse(
+        model="gpt-test",
+        instructions=SYSTEM,
+        previous_response_id=local.id,
+        input=[{"role": "user", "content": "and where is my order 12345"}],
+        text_format=Route,
+    )
+    sent = bodies[-1]
+    assert "previous_response_id" not in sent
+    assert [item.get("role") for item in sent["input"]] == ["user", "assistant", "user"]
+    assert "id" not in sent["input"][1]
+    assert sent["input"][1]["content"][0]["text"] == local.output_text
     habits.close()
 
 
@@ -986,6 +1005,9 @@ def test_api_specific_requests_are_not_answered_when_unsafe() -> None:
     )
     assert stored is not None
     assert not stored.answerable
+    conversation = RESPONSES.parse_request({"model": "m", "input": "hi", "conversation": "conv_1"})
+    assert conversation is not None
+    assert not conversation.answerable
     thinking = MESSAGES.parse_request(
         {
             "model": "c",
@@ -1325,3 +1347,195 @@ def test_confirm_calls_zero_skips_probation(tmp_path: Path) -> None:
     (site,) = habits.learn()["sites"].values()
     assert site["status"] == "active"
     habits.close()
+
+
+# Regressions from the 0.5.1 review
+
+
+def test_unfinished_streams_are_not_answers() -> None:
+    from thinkless.habits.apis import MESSAGES
+
+    first = {"choices": [{"index": 0, "delta": {"role": "assistant", "content": "yes, bec"}}]}
+    cut = f"data: {json.dumps(first)}\n\n".encode()
+    assert collect_stream([cut]) is None
+    assert collect_stream([cut, b"data: [DONE]\n\n"]) is not None
+    last = {"choices": [{"index": 0, "delta": {"content": "ause"}, "finish_reason": "stop"}]}
+    finished = collect_stream([cut, f"data: {json.dumps(last)}\n\n".encode()])
+    assert finished is not None
+    assert finished["choices"][0]["message"]["content"] == "yes, because"
+
+    events = [
+        {
+            "type": "message_start",
+            "message": {"id": "m", "type": "message", "role": "assistant", "content": []},
+        },
+        {"type": "content_block_start", "index": 0, "content_block": {"type": "text"}},
+        {"type": "content_block_delta", "index": 0, "delta": {"type": "text_delta", "text": "y"}},
+    ]
+    stream = "".join(f"event: {e['type']}\ndata: {json.dumps(e)}\n\n" for e in events)
+    assert MESSAGES.collect_stream([stream.encode()]) is None
+
+
+def test_an_abandoned_stream_teaches_nothing(tmp_path: Path) -> None:
+    llm = FakeLLM()
+    habits = Habits(tmp_path, learn_every=None, audit=0.0, seed=0)
+
+    def partial(request: httpx.Request) -> httpx.Response:
+        full = llm(request)
+        events = full.content.split(b"\n\n")
+        # The connection breaks after the first event.
+        return httpx.Response(
+            200, content=events[0] + b"\n\n", headers={"content-type": "text/event-stream"}
+        )
+
+    client = httpx.Client(
+        base_url="https://api.example.com/v1",
+        transport=transport_classes("httpx")[0](habits, inner=httpx.MockTransport(partial)),
+    )
+    with client.stream(
+        "POST", "/chat/completions", json=request_body("refund please", stream=True)
+    ) as response:
+        response.read()
+    habits.close()
+    assert habits.counts["llm"] == 0
+    assert habits.counts["passthrough"] == 1
+    assert list(read_calls([tmp_path / "calls"])) == []
+
+
+def test_agreement_is_one_rule() -> None:
+    from thinkless.habits.wire import agrees
+
+    assert agrees({"intent": '"refund"', "note": MISSING}, {"intent": '"refund"'})
+    assert not agrees({"intent": '"refund"'}, {"intent": '"refund"', "extra": "1"})
+    assert not agrees({"intent": '"refund"'}, {"intent": '"cancel"'})
+
+
+def test_tools_answers_with_broken_arguments_are_still_recorded() -> None:
+    body = {
+        "model": "m",
+        "messages": [{"role": "user", "content": "find order 4471"}],
+        "tools": [{"type": "function", "function": {"name": "lookup", "parameters": {}}}],
+    }
+    call = parse_request(body)
+    assert call is not None
+    assert call.contract == "tools"
+    broken = completion(
+        None,
+        tool_calls=[
+            {"id": "c1", "type": "function", "function": {"name": "lookup", "arguments": '{"q": '}}
+        ],
+    )
+    assert parse_response(call, broken) is not None
+
+
+def test_gate_tests_every_answer_last() -> None:
+    scores = [1.0 - i / 2000 for i in range(1000)]
+    gate = select_threshold(scores, [True] * 1000, target=0.97, confidence=0.95)
+    assert gate is not None
+    assert gate.accepted == 1000
+
+
+def test_options_reject_impossible_targets() -> None:
+    for bad in ({"target": 1.0}, {"target": 0.0}, {"confidence": 1.0}, {"folds": 1}):
+        with pytest.raises(ValueError):
+            LearnOptions(**bad)  # type: ignore[arg-type]
+    with pytest.raises(ValueError):
+        Habits(".unused", target=1.0)
+
+
+def test_concurrent_plan_writes_stay_whole(tmp_path: Path) -> None:
+    import threading
+
+    from thinkless.habits.learn import PLAN_SCHEMA, save_plan
+
+    def writer(tag: str) -> None:
+        for i in range(50):
+            save_plan({"schema": PLAN_SCHEMA, "sites": {}, "tag": tag, "n": i}, tmp_path)
+
+    threads = [threading.Thread(target=writer, args=(str(t),)) for t in range(4)]
+    for thread in threads:
+        thread.start()
+    for thread in threads:
+        thread.join()
+    plan = load_plan(tmp_path)
+    assert plan is not None
+    assert plan["n"] == 49
+    assert not list(tmp_path.glob("*.tmp"))
+
+
+def test_a_suspension_written_during_learning_is_kept() -> None:
+    from thinkless.habits.learn import _keep_suspensions
+
+    def plan(status: str, student: str, stamp: str | None = None) -> dict[str, Any]:
+        entry: dict[str, Any] = {"status": status, "student": student}
+        if stamp:
+            entry["suspended_at"] = stamp
+        return {"sites": {"s1": entry}}
+
+    since = "2026-11-22T10:00:00.000+00:00"
+    during = "2026-11-22T10:00:05.000+00:00"
+    before = "2026-11-22T09:00:00.000+00:00"
+    learned = plan("active", "v1")
+    _keep_suspensions(learned, plan("suspended", "v1", during), since)
+    assert learned["sites"]["s1"]["status"] == "suspended"
+    # A newer student passed its own gate, or the run already saw the suspension.
+    for current in (plan("suspended", "v0", during), plan("suspended", "v1", before)):
+        learned = plan("active", "v1")
+        _keep_suspensions(learned, current, since)
+        assert learned["sites"]["s1"]["status"] == "active"
+
+
+def test_a_site_retrained_elsewhere_is_served_again(tmp_path: Path) -> None:
+    from thinkless.habits.learn import save_plan
+
+    llm = FakeLLM()
+    habits = Habits(tmp_path, confirm_calls=0, learn_every=None, audit=0.0, seed=0)
+    _run(client_for(habits, llm), random.Random(3), 220)
+    plan = habits.learn()
+    site_id, entry = next(iter(plan["sites"].items()))
+    assert entry["status"] == "active"
+    habits._suspend(site_id, 40, 30, 0.8)
+    assert site_id in habits._suspended
+    # Another process retrains the site and its new student passes.
+    retrained = load_plan(tmp_path)
+    assert retrained is not None
+    retrained["sites"][site_id].update(status="active", student="newer-student")
+    retrained["sites"][site_id].pop("suspended_at", None)
+    save_plan(retrained, tmp_path)
+    habits._refresh_plan(force=True)
+    assert site_id not in habits._suspended
+    habits.close()
+
+
+def test_a_forked_worker_writes_its_own_log(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    from thinkless.habits import calls as calls_module
+
+    log = calls_module.CallLog(tmp_path)
+    log.write(None, None, answered_by="llm", site=None, latency_ms=1.0, host=None)
+    monkeypatch.setattr(calls_module.os, "getpid", lambda: 424242)
+    log.write(None, None, answered_by="llm", site=None, latency_ms=1.0, host=None)
+    log.close()
+    names = sorted(path.name for path in tmp_path.glob("*.jsonl"))
+    assert len(names) == 2
+    assert any(name.endswith("-424242.jsonl") for name in names)
+
+
+def test_demo_takes_over_the_decision(tmp_path: Path) -> None:
+    from io import StringIO
+
+    from rich.console import Console
+    from typer.testing import CliRunner
+
+    from thinkless.cli.main import app
+    from thinkless.habits.demo import run_demo
+
+    numbers = run_demo(Console(file=StringIO()), directory=tmp_path)
+    assert numbers["status"] == "active"
+    assert numbers["local"] > numbers["live"] * 0.8
+    assert numbers["matched"] == numbers["local"]
+    assert numbers["local"] + numbers["sent"] == numbers["live"]
+    result = CliRunner().invoke(app, ["habits", "demo"])
+    assert result.exit_code == 0, result.output
+    assert "answered locally" in result.output

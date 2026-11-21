@@ -21,7 +21,7 @@ from types import ModuleType
 from typing import Any
 
 from ..logs import get_logger
-from .apis import APIS, Api, api_for_path
+from .apis import APIS, RESPONSES, Api, api_for_path
 from .runtime import Habits, Ticket, default_habits
 
 logger = get_logger("habits.transport")
@@ -50,12 +50,23 @@ def _headers(response: Any) -> list[tuple[str, str]]:
     return [(k, v) for k, v in response.headers.items() if k.lower() not in DROPPED]
 
 
-def _begin(habits: Habits, request: Any, api: Api) -> Ticket | None:
+def _begin(habits: Habits, request: Any, api: Api, body: Any) -> Ticket | None:
     """``habits.begin``, failing open: any error sends the call to the LLM unchanged."""
     try:
-        return habits.begin(_body(request), request.headers, request.url.host, api)
+        return habits.begin(body, request.headers, request.url.host, api)
     except Exception:
         logger.exception("ThinkLess failed on a request; it goes to the LLM unchanged")
+        return None
+
+
+def _continued(habits: Habits, api: Api, body: Any) -> Any:
+    """A Responses call that continues a local answer, rewritten; otherwise ``None``."""
+    if api is not RESPONSES:
+        return None
+    try:
+        return habits.continue_chain(body)
+    except Exception:
+        logger.exception("ThinkLess could not continue a local response")
         return None
 
 
@@ -101,8 +112,9 @@ def transport_classes(module_name: str = "httpx") -> tuple[type, type]:
     lib: ModuleType = importlib.import_module(module_name)
 
     def upstream(request: Any, content: bytes) -> Any:
-        headers = [(k, v) for k, v in request.headers.items() if k.lower() != SITE_HEADER]
-        headers = [(k, v) for k, v in headers if k.lower() != "accept-encoding"]
+        # The body may have been rewritten, so the length is computed again.
+        dropped = (SITE_HEADER, "accept-encoding", "content-length")
+        headers = [(k, v) for k, v in request.headers.items() if k.lower() not in dropped]
         # Uncompressed bodies let ThinkLess read the answer without decoding twice.
         headers.append(("accept-encoding", "identity"))
         return lib.Request(
@@ -172,9 +184,16 @@ def transport_classes(module_name: str = "httpx") -> tuple[type, type]:
             if api is None:
                 return self.inner.handle_request(request)
             content = request.read()
-            ticket = _begin(self.habits, request, api)
+            body = _body(request)
+            forward = request
+            rewritten = _continued(self.habits, api, body)
+            if rewritten is not None:
+                body = rewritten
+                content = json.dumps(rewritten, ensure_ascii=False).encode("utf-8")
+                forward = upstream(request, content)
+            ticket = _begin(self.habits, request, api, body)
             if ticket is None:
-                return self.inner.handle_request(request)
+                return self.inner.handle_request(forward)
             if ticket.answered_locally:
                 parts = _answer(self.habits, ticket)
                 if parts is not None:
@@ -220,9 +239,16 @@ def transport_classes(module_name: str = "httpx") -> tuple[type, type]:
             if api is None:
                 return await self.inner.handle_async_request(request)
             content = await request.aread()
-            ticket = _begin(self.habits, request, api)
+            body = _body(request)
+            forward = request
+            rewritten = _continued(self.habits, api, body)
+            if rewritten is not None:
+                body = rewritten
+                content = json.dumps(rewritten, ensure_ascii=False).encode("utf-8")
+                forward = upstream(request, content)
+            ticket = _begin(self.habits, request, api, body)
             if ticket is None:
-                return await self.inner.handle_async_request(request)
+                return await self.inner.handle_async_request(forward)
             if ticket.answered_locally:
                 parts = _answer(self.habits, ticket)
                 if parts is not None:

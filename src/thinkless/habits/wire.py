@@ -32,6 +32,7 @@ __all__ = [
     "MISSING",
     "Call",
     "Output",
+    "agrees",
     "answer_payload",
     "build_response",
     "build_stream",
@@ -47,6 +48,20 @@ __all__ = [
 
 MISSING = "~missing"
 """Label for a JSON key the model left out. It cannot collide with a JSON value."""
+
+
+def agrees(local: Mapping[str, str], llm: Mapping[str, str]) -> bool:
+    """Whether a student's answer matches the LLM's, field by field.
+
+    Every field the student answered must hold the same label in the LLM's
+    answer (a key the LLM left out counts as :data:`MISSING`), and the LLM
+    must not have answered a field the student did not. The runtime, the
+    probation check and the reports all use this one rule.
+    """
+    return all(llm.get(name, MISSING) == label for name, label in local.items()) and set(
+        llm
+    ) <= set(local)
+
 
 TEXT_FIELD = "$text"
 TOOLS_FIELD = "$tools"
@@ -346,10 +361,14 @@ def make_output(
                 return Output(fields=fields, key_order=order, **common)
         return None
     if call.contract == "tools":
-        rendered = sorted(
-            f"{name}:{json.dumps(decoded(arguments), sort_keys=True)}"
-            for name, arguments in tool_calls
-        )
+
+        def canonical(arguments: Any) -> str:
+            try:
+                return json.dumps(decoded(arguments), sort_keys=True)
+            except json.JSONDecodeError:
+                return str(arguments)
+
+        rendered = sorted(f"{name}:{canonical(arguments)}" for name, arguments in tool_calls)
         if rendered:
             return Output(fields={TOOLS_FIELD: label_of(rendered)}, **common)
         return Output(fields={TEXT_FIELD: label_of(normalize_text(text))}, text=text, **common)
@@ -510,7 +529,11 @@ def build_stream(call: Call, response: Mapping[str, Any]) -> bytes:
 
 
 def collect_stream(chunks: Iterable[bytes]) -> dict[str, Any] | None:
-    """Rebuild a response body from the server-sent events of a streamed completion."""
+    """Rebuild a response body from the server-sent events of a streamed completion.
+
+    ``None`` unless the stream finished (a finish reason or ``[DONE]``): a
+    stream the caller stopped reading, or that broke off, is not an answer.
+    """
     buffer = b"".join(chunks).decode("utf-8", errors="replace")
     content: list[str] = []
     tool_calls: dict[int, dict[str, Any]] = {}
@@ -518,11 +541,15 @@ def collect_stream(chunks: Iterable[bytes]) -> dict[str, Any] | None:
     model = None
     usage: dict[str, Any] | None = None
     seen = False
+    done = False
     for line in buffer.splitlines():
         if not line.startswith("data:"):
             continue
         data = line[5:].strip()
-        if not data or data == "[DONE]":
+        if data == "[DONE]":
+            done = True
+            continue
+        if not data:
             continue
         try:
             event = json.loads(data)
@@ -551,7 +578,7 @@ def collect_stream(chunks: Iterable[bytes]) -> dict[str, Any] | None:
                 if function.get("arguments"):
                     slot["function"]["arguments"] += function["arguments"]
             finish_reason = choice.get("finish_reason") or finish_reason
-    if not seen:
+    if not seen or (finish_reason is None and not done):
         return None
     message: dict[str, Any] = {"role": "assistant", "content": "".join(content) or None}
     if tool_calls:

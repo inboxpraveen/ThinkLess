@@ -181,5 +181,7 @@ def select_threshold(
         best = GateResult(threshold, end, prefix[end], n, bound)
         if end == n:
             break
-        k = max(end + 1, math.ceil(end * step))
+        # The last candidate is always all n answers, so the sequence still
+        # depends only on n and the scores.
+        k = min(n, max(end + 1, math.ceil(end * step)))
     return best

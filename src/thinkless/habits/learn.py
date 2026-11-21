@@ -18,6 +18,7 @@ from __future__ import annotations
 import json
 import os
 import random
+import tempfile
 import time
 from collections import Counter
 from collections.abc import Iterable, Iterator, Mapping, Sequence
@@ -40,7 +41,7 @@ from .gate import (
 )
 from .sites import SiteProfile, discover
 from .student import SiteModel
-from .wire import MISSING
+from .wire import agrees
 
 __all__ = [
     "PLAN_SCHEMA",
@@ -54,6 +55,7 @@ __all__ = [
 
 PLAN_SCHEMA = "thinkless-habits-plan/1"
 LOCK_STALE_S = 1800.0
+PLAN_REPLACE_TRIES = 40
 
 
 class LearningInProgressError(ThinkLessError):
@@ -119,6 +121,14 @@ class LearnOptions:
     max_observations: int = 50000
     confirm_calls: int | None = None
     seed: int = 0
+
+    def __post_init__(self) -> None:
+        if not 0.0 < self.target < 1.0:
+            raise ValueError("target must be between 0 and 1, for example 0.97")
+        if not 0.0 < self.confidence < 1.0:
+            raise ValueError("confidence must be between 0 and 1, for example 0.95")
+        if self.folds < 2:
+            raise ValueError("folds must be at least 2")
 
 
 def _now() -> str:
@@ -330,11 +340,7 @@ def _confirm(
             continue
         if local.get("student") != student or not local.get("confident"):
             continue
-        fields = local.get("fields") or {}
-        outcomes.append(
-            all(output.fields.get(name, MISSING) == label for name, label in fields.items())
-            and set(output.fields) <= set(fields)
-        )
+        outcomes.append(agrees(local.get("fields") or {}, output.fields))
     needed = _confirm_size(options)
     kept = ("student", "threshold", "evidence", "probation_since", "trained_on", "learned_at")
     if len(outcomes) < needed:
@@ -448,12 +454,49 @@ def _text(site: SiteProfile, observation: Observation) -> str:
 
 
 def save_plan(plan: Mapping[str, Any], directory: str | Path) -> Path:
+    """Write the plan atomically.
+
+    Each writer uses its own temporary file, so a learning run and a
+    suspension saving at the same moment cannot interleave their bytes. On
+    Windows, replacing a file another process is reading fails for a moment,
+    so the replace is retried briefly.
+    """
     path = Path(directory) / "plan.json"
     path.parent.mkdir(parents=True, exist_ok=True)
-    tmp = path.with_suffix(".tmp")
-    tmp.write_text(json.dumps(plan, indent=2, ensure_ascii=False), encoding="utf-8")
-    tmp.replace(path)
+    handle, name = tempfile.mkstemp(dir=path.parent, prefix=".plan-", suffix=".tmp")
+    tmp = Path(name)
+    try:
+        with os.fdopen(handle, "w", encoding="utf-8") as out:
+            out.write(json.dumps(plan, indent=2, ensure_ascii=False))
+        for attempt in range(PLAN_REPLACE_TRIES):
+            try:
+                tmp.replace(path)
+                break
+            except PermissionError:
+                if attempt == PLAN_REPLACE_TRIES - 1:
+                    raise
+                time.sleep(0.05)
+    finally:
+        tmp.unlink(missing_ok=True)
     return path
+
+
+def _keep_suspensions(plan: dict[str, Any], current: Mapping[str, Any] | None, since: str) -> None:
+    """Carry over suspensions written while a learning run was busy.
+
+    A process whose audits fail writes ``suspended`` into the plan without
+    waiting for a learning run elsewhere. A run that read the plan before
+    that must not save the site as active again with the same student.
+    """
+    for site_id, now in ((current or {}).get("sites") or {}).items():
+        entry = plan["sites"].get(site_id)
+        stamp = str(now.get("suspended_at") or "")
+        if entry is None or now.get("status") != "suspended" or stamp < since:
+            continue
+        if entry.get("status") == "active" and entry.get("student") == now.get("student"):
+            entry["status"] = "suspended"
+            entry["suspended_at"] = now["suspended_at"]
+            entry["reason"] = now.get("reason") or entry.get("reason")
 
 
 def load_plan(directory: str | Path) -> dict[str, Any] | None:
@@ -506,6 +549,8 @@ def learn(
             if len(observations) >= options.max_observations:
                 break
         observations = observations[-options.max_observations :]
+        started = datetime.now(timezone.utc).isoformat(timespec="milliseconds")
         plan = learn_sites(discover(observations), root, options, previous=load_plan(root))
+        _keep_suspensions(plan, load_plan(root), started)
         save_plan(plan, root)
     return plan
