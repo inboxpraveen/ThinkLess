@@ -32,6 +32,29 @@ you already use, with one line, and the decisions your agent keeps making
 become local habits once they are proven. With **typed decisions**, you
 declare the questions and choose the models that answer them.
 
+See it work first. This runs in about a second, offline, with no API key,
+GPU or model download:
+
+```bash
+pip install thinkless
+thinkless habits demo
+```
+
+The output, shortened (timings depend on the machine):
+
+```text
+1. Recording. 300 messages went to the LLM and were recorded.
+2. Probation. 450 more messages, 450 sent to the LLM: the student answered each in shadow only.
+3. Live. 300 messages: 281 answered locally (median 0.4 ms for the whole HTTP call);
+   the other 19 went to the LLM as random audits, so agreement keeps being measured.
+   Local answers that match what the LLM would have said: 281 of 281.
+```
+
+The demo's LLM is a stand-in that always answers the same way, so agreement
+is perfect. On real traffic it is lower, and the
+[measured results](https://inboxpraveen.github.io/ThinkLess/habits/#results)
+say by how much.
+
 <p align="center">
   <img src="https://raw.githubusercontent.com/inboxpraveen/ThinkLess/main/docs/assets/architecture.svg" alt="How ThinkLess works. Habits: habits.wrap(client) answers a call locally in about 4 ms when its call site is a proven habit, and otherwise sends it to your LLM unchanged and records it; in the background ThinkLess finds decision sites, trains a student per site on the LLM's answers, and makes it a habit only after 97% agreement on past calls and again on new calls, with 5% audits after. Typed decisions: a question goes through rules, GLiNER 2.5, Laya, System One models and an LLM decider, cheapest first, and comes back as a typed decision. Everything is traced to JSONL, OpenTelemetry and an HTML viewer." width="100%">
 </p>
@@ -164,9 +187,14 @@ billed ([full results](https://inboxpraveen.github.io/ThinkLess/benchmarks/)):
 ## Quick start
 
 ```bash
-pip install "thinkless[local]"        # GLiNER, Laya and a local LLM
+pip install thinkless                 # rules, Habits, tracing; no model downloads
+pip install "thinkless[local]"        # adds GLiNER, Laya and a local LLM (PyTorch)
 thinkless doctor                      # check the environment
 ```
+
+The example below uses the local models. Without them, start from
+[`examples/01_rules_only.py`](https://github.com/inboxpraveen/ThinkLess/blob/main/examples/01_rules_only.py),
+which shows the same API, cascade and traces with rules alone.
 
 ```python
 from thinkless import Choice, Engine, Extract, JSONLSink, Tracer, YesNo
@@ -217,9 +245,8 @@ Then open the trace:
 thinkless trace view
 ```
 
-No GPU? `pip install thinkless` and run
-[`examples/01_rules_only.py`](https://github.com/inboxpraveen/ThinkLess/blob/main/examples/01_rules_only.py): the API, the cascade
-and the traces with no model downloads.
+No GPU? The local models also run on a CPU, more slowly (see the provider
+table below), and a hosted LLM through OpenRouter works as the fallback.
 
 ## Use it in your agent
 

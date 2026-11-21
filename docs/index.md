@@ -15,7 +15,8 @@ confidence, latency, tokens and cost.
 - **Five minutes, no code changes:** with [Habits](habits.md), ThinkLess
   goes under the LLM client your agent already uses (`habits.wrap(OpenAI())`),
   learns the decisions from your LLM's own answers, and answers them locally
-  once it has shown that it agrees with your LLM.
+  once it has shown that it agrees with your LLM. `pip install thinkless`
+  then `thinkless habits demo` shows the whole cycle offline in a second.
 - **New here:** [Getting started](getting-started.md) installs ThinkLess and
   walks from a first decision to a traced cascade.
 - **Evaluating the idea:** [Benchmarks](benchmarks.md) has the numbers, the

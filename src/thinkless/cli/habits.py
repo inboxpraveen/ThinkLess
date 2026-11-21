@@ -135,6 +135,19 @@ def _print_report(report, *, with_plan: bool) -> None:  # type: ignore[no-untype
     console.print(table)
 
 
+@habits_app.command("demo")
+def demo(
+    directory: Annotated[
+        Path | None,
+        typer.Option("--dir", help="Keep the demo's calls and plan here to inspect them."),
+    ] = None,
+) -> None:
+    """Watch ThinkLess learn a decision and take it over, offline, in a few seconds."""
+    from ..habits.demo import run_demo
+
+    run_demo(console, directory=directory)
+
+
 @habits_app.command("scan")
 def scan(
     paths: Annotated[
