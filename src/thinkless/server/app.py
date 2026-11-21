@@ -161,7 +161,9 @@ def create_app(
                 name: d.model_dump(mode="json", exclude={"raw", "span_id"})
                 for name, d in decisions.items()
             },
-            "cost_usd": sum(d.cost_usd for d in decisions.values()),
+            # Every paid call of the cascade, counted once: a batched call that
+            # answered several questions is not repeated per decision.
+            "cost_usd": run.summary().cost_usd,
             "latency_ms": round((time.perf_counter() - started) * 1000, 3),
             "trace_id": run.trace_id,
         }
@@ -178,14 +180,15 @@ def create_app(
             batch = questions_from_wire(request.questions)
         except ValueError as exc:
             raise HTTPException(status_code=422, detail=str(exc)) from exc
-        with engine.run("systemone", source="http"):
+        with engine.run("systemone", source="http") as run:
             decisions = engine.decide_many(request.state, batch)
+        spent = run.summary()
         return {
             "model": request.model or model_name,
             "answers": decisions_to_wire(decisions, batch),
             "usage": {
-                "input_tokens": sum(d.usage.input_tokens for d in decisions.values()),
-                "output_tokens": sum(d.usage.output_tokens for d in decisions.values()),
+                "input_tokens": spent.llm_input_tokens + spent.model_input_tokens,
+                "output_tokens": spent.llm_output_tokens,
             },
             # Ignored by System One clients; ThinkLess clients can read it.
             "thinkless": {"decisions": {k: d.summary() for k, d in decisions.items()}},

@@ -330,3 +330,17 @@ def test_llamaindex_gated_tool_keeps_its_schema() -> None:
     assert gated_tool.call(order_id="4471", amount=40).content == "refunded"
     assert gated_tool.call(order_id="4471", amount=400).content == "Needs a person."
     assert calls == [("4471", 40)]
+
+
+def test_router_finds_a_decision_stored_under_another_name() -> None:
+    pytest.importorskip("langgraph")
+    from thinkless.integrations.langgraph import decision_node, router
+
+    unnamed = INTENT.model_copy(update={"name": None})
+    engine = _intent_engine()
+    triage = decision_node(engine, {"intent": unnamed})
+    state = {"messages": [{"role": "user", "content": "Where is my order?"}]}
+    state.update(triage(state))
+    route_to = router(engine, unnamed, {"order_status": "tracking"}, default="agent")
+    assert route_to(state) == "tracking"
+    assert len(engine.providers[0].calls) == 1

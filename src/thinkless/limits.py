@@ -84,5 +84,5 @@ class SpendLimit:
         return f"SpendLimit(${self.spent_usd:.4f} of ${self.max_usd:.4f}, {window})"
 
 
-# The limit of the run that is open on this thread or task, if it has one.
-_run_limit: ContextVar[SpendLimit | None] = ContextVar("thinkless_run_limit", default=None)
+# The limits of the runs open on this thread or task, outermost first.
+_run_limit: ContextVar[tuple[SpendLimit, ...]] = ContextVar("thinkless_run_limit", default=())

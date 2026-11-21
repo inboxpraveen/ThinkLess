@@ -49,7 +49,18 @@ class GraphRouter(Router[str]):
     def _stored(self, graph_state: Any) -> Mapping[str, Any] | None:
         if self.key is None or not isinstance(graph_state, Mapping):
             return None
-        stored = (graph_state.get(self.key) or {}).get(self.question.key)
+        entries = graph_state.get(self.key) or {}
+        stored = entries.get(self.question.key)
+        if stored is None:
+            # A decision node may know the question under another name.
+            stored = next(
+                (
+                    entry
+                    for entry in entries.values()
+                    if isinstance(entry, Mapping) and entry.get("question") == self.question.key
+                ),
+                None,
+            )
         return stored if isinstance(stored, Mapping) and "accepted" in stored else None
 
     def __call__(self, graph_state: Any) -> str:
@@ -120,8 +131,9 @@ def decision_node(
     """A node that answers several questions and writes them to ``state[key]``.
 
     Each entry holds ``value``, ``status``, ``accepted``, ``confidence``,
-    ``plane``, ``provider`` and ``level``. Declare the key in the state
-    schema, for example ``decisions: dict[str, dict]``.
+    ``plane``, ``provider``, ``level`` and ``question`` (the question's own
+    name, which a :func:`router` on the same question looks for). Declare
+    the key in the state schema, for example ``decisions: dict[str, dict]``.
 
     Args:
         engine: The engine that answers.
@@ -134,7 +146,11 @@ def decision_node(
 
     def decide(graph_state: Any) -> dict[str, Any]:
         decisions = engine.decide_many(extract(graph_state), questions)
-        return {key: decisions_update(decisions)}
+        update = decisions_update(decisions)
+        named = questions.items() if isinstance(questions, Mapping) else ()
+        for name, question in named:
+            update[name]["question"] = question.key
+        return {key: update}
 
     decide.__name__ = f"decide_{key}"
     return decide

@@ -9,6 +9,7 @@ same questions answered two ways.
 from __future__ import annotations
 
 import json
+import math
 import re
 from collections.abc import Mapping
 from typing import Any, ClassVar
@@ -171,6 +172,8 @@ def _coerce(question: Question, value: Any) -> Answer | None:
     if isinstance(question, Score):
         levels = list(question.levels)
         if isinstance(value, (int, float)) and not isinstance(value, bool):
+            if not math.isfinite(value):
+                return None
             index = round(float(value))
             return (
                 Answer(value=float(index), raw={"level": levels[index]})

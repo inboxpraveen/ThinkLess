@@ -58,54 +58,58 @@ def _score_probabilities(raw: Mapping[str, Any], levels: list[str]) -> dict[str,
 def from_wire(
     answers: Mapping[str, Any], questions: Mapping[str, Question]
 ) -> dict[str, Answer | None]:
-    """Decode a System One ``answers`` map. Missing or malformed entries become ``None``."""
+    """Decode a System One ``answers`` map. Missing or malformed entries become ``None``.
+
+    A malformed entry spoils only its own answer, never the rest of the batch.
+    """
     decoded: dict[str, Answer | None] = {}
     for key, question in questions.items():
         raw = answers.get(key)
-        if not isinstance(raw, Mapping):
-            decoded[key] = None
-            continue
-        raw_dict = dict(raw)
-        if isinstance(question, Choice):
-            choice = raw.get("choice")
-            probs = raw.get("probabilities")
-            if choice not in question.options:
-                decoded[key] = None
-                continue
-            decoded[key] = Answer(
-                value=choice,
-                probabilities={str(k): float(v) for k, v in probs.items()}
-                if isinstance(probs, Mapping)
-                else None,
-                confidence=raw.get("confidence"),
-                raw=raw_dict,
-            )
-        elif isinstance(question, Score):
-            score = raw.get("score")
-            if score is None:
-                decoded[key] = None
-                continue
-            decoded[key] = Answer(
-                value=float(score),
-                probabilities=_score_probabilities(raw, list(question.levels)),
-                confidence=raw.get("confidence"),
-                raw=raw_dict,
-            )
-        elif isinstance(question, YesNo):
-            p_yes = raw.get("noul")
-            if p_yes is None:
-                decoded[key] = None
-                continue
-            p = float(p_yes)
-            decoded[key] = Answer(
-                value=p >= 0.5,
-                probabilities={"yes": p, "no": 1.0 - p},
-                confidence=raw.get("confidence"),
-                raw=raw_dict,
-            )
-        else:
+        try:
+            decoded[key] = _answer_from_wire(raw, question) if isinstance(raw, Mapping) else None
+        except (TypeError, ValueError, OverflowError):
             decoded[key] = None
     return decoded
+
+
+def _answer_from_wire(raw: Mapping[str, Any], question: Question) -> Answer | None:
+    """One System One answer. Raises on values of the wrong type."""
+    raw_dict = dict(raw)
+    if isinstance(question, Choice):
+        choice = raw.get("choice")
+        probs = raw.get("probabilities")
+        if not isinstance(choice, str) or choice not in question.options:
+            return None
+        return Answer(
+            value=choice,
+            probabilities={str(k): float(v) for k, v in probs.items()}
+            if isinstance(probs, Mapping)
+            else None,
+            confidence=raw.get("confidence"),
+            raw=raw_dict,
+        )
+    if isinstance(question, Score):
+        score = raw.get("score")
+        if score is None:
+            return None
+        return Answer(
+            value=float(score),
+            probabilities=_score_probabilities(raw, list(question.levels)),
+            confidence=raw.get("confidence"),
+            raw=raw_dict,
+        )
+    if isinstance(question, YesNo):
+        p_yes = raw.get("noul")
+        if p_yes is None:
+            return None
+        p = float(p_yes)
+        return Answer(
+            value=p >= 0.5,
+            probabilities={"yes": p, "no": 1.0 - p},
+            confidence=raw.get("confidence"),
+            raw=raw_dict,
+        )
+    return None
 
 
 # ------------------------------------------------------------- server side
@@ -159,13 +163,17 @@ def decisions_to_wire(
     """Encode decisions as a System One ``answers`` map.
 
     Abstained decisions are left out, as a System One server leaves out
-    questions it cannot answer. Answers from providers without probabilities
-    get the chosen answer at probability 1.
+    questions it cannot answer. Accepted answers from providers without
+    probabilities get the chosen answer at probability 1. Uncertain answers
+    without probabilities are left out too: probability 1 would make a client
+    accept an answer this engine was not sure of.
     """
     answers: dict[str, dict[str, Any]] = {}
     for key, decision in decisions.items():
         question = questions[key]
         if decision.value is None:
+            continue
+        if decision.status is not Status.ACCEPTED and not decision.probabilities:
             continue
         probs = decision.probabilities or {}
         if isinstance(question, Choice):

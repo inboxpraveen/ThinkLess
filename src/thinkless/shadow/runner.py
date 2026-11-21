@@ -479,8 +479,10 @@ class Shadow:
             "primary": primary,
         }
         try:
-            with self.engine.run(self.name, shadow=True, question=key):
+            with self.engine.run(self.name, shadow=True, question=key) as run:
                 decision = self.engine.decide(state, question, name=key)
+            # The whole cascade, including paid attempts that were not accepted.
+            spent = run.summary().cost_usd
         except Exception as exc:
             logger.warning("shadow run for %s failed: %s", key, exc)
             record["shadow"] = {"source": "engine", "error": f"{type(exc).__name__}: {exc}"}
@@ -490,6 +492,7 @@ class Shadow:
             self._write(record)
             return
         side = side_from_decision(decision)
+        side["cost_usd"] = spent
         agreed, fields = agree(
             question, _comparable_value(question, primary), _comparable_value(question, side)
         )
@@ -504,7 +507,7 @@ class Shadow:
         if fields is not None:
             record["fields"] = fields
         with self._lock:
-            self._stats.spent_usd += decision.cost_usd
+            self._stats.spent_usd += spent
             self._stats.recorded += 1
         self._write(record)
 

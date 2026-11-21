@@ -190,9 +190,12 @@ class Engine:
                 ``spend_limit``.
             attributes: Recorded on the root span.
         """
+        # A nested run keeps the limits of the runs around it, and adds its own.
+        outer = _run_limit.get()
+        limits = (*outer, SpendLimit(max_cost_usd)) if max_cost_usd is not None else outer
         collector = _RunCollector()
         self.tracer.add_sink(collector)
-        token = _run_limit.set(SpendLimit(max_cost_usd) if max_cost_usd is not None else None)
+        token = _run_limit.set(limits)
         try:
             with self.tracer.span("run", name, **attributes) as span:
                 collector.trace_id = span.trace_id
@@ -420,7 +423,12 @@ class Engine:
     @staticmethod
     def _as_mapping(questions: Mapping[str, Question] | Sequence[Question]) -> dict[str, Question]:
         if isinstance(questions, Mapping):
-            batch = dict(questions)
+            # An unnamed question takes the name it was given here, so rules,
+            # classifiers, thresholds and traces all know it by that name.
+            batch = {
+                key: q if q.name is not None or q.key == key else q.model_copy(update={"name": key})
+                for key, q in questions.items()
+            }
         else:
             batch = {}
             for question in questions:
@@ -445,8 +453,8 @@ class Engine:
         return cost, "price_table" if known else "unknown"
 
     def _limits(self) -> list[SpendLimit]:
-        run_limit = _run_limit.get()
-        return [lim for lim in (self.spend_limit, run_limit) if lim is not None]
+        engine_limit = [self.spend_limit] if self.spend_limit is not None else []
+        return [*engine_limit, *_run_limit.get()]
 
     def _exhausted_limit(self) -> SpendLimit | None:
         return next((lim for lim in self._limits() if lim.exhausted), None)

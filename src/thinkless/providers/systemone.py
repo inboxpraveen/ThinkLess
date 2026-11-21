@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import math
 import os
 import random
 import time
@@ -138,9 +139,11 @@ class SystemOne(DecisionProvider):
     def _backoff(attempt: int, retry_after: str | None) -> float:
         if retry_after:
             try:
-                return min(float(retry_after), 30.0)
+                wait = float(retry_after)
             except ValueError:
-                pass
+                wait = math.nan
+            if math.isfinite(wait):
+                return min(max(wait, 0.0), 30.0)
         return min(0.5 * (2**attempt), 8.0) * (0.75 + random.random() * 0.5)
 
     def close(self) -> None:

@@ -291,8 +291,9 @@ def _question_report(
         if primary_stats.cost_per_1k_usd > 0:
             share = savings / primary_stats.cost_per_1k_usd
 
-    if compared < min_calls:
-        verdict, ready = f"collect more: {compared} of {min_calls} compared calls", False
+    if compared < min_calls or compared == 0:
+        verdict = f"collect more: {compared} of {max(min_calls, 1)} compared calls"
+        ready = False
     elif low is not None and low >= target:
         verdict, ready = f"ready: agreement is at least {low * 100:.1f}% at 95% confidence", True
     else:
