@@ -7,7 +7,7 @@ from collections import Counter, defaultdict
 from collections.abc import Iterable, Mapping
 from typing import Any
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict, Field
 
 __all__ = ["TraceSummary", "summarize"]
 
@@ -34,6 +34,9 @@ class TraceSummary(BaseModel):
         time_by_plane_ms: Time inside leaf work (provider attempts, generations,
             tools and rules) grouped by plane.
     """
+
+    # `model_input_tokens` is a field, not pydantic API; older pydantic warns otherwise.
+    model_config = ConfigDict(protected_namespaces=())
 
     trace_id: str
     name: str

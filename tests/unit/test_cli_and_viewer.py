@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import json
 
+import pytest
 from typer.testing import CliRunner
 
 from tests.conftest import FakeProvider, choice_answer
@@ -100,6 +101,7 @@ def test_calibrate_command(tmp_path, monkeypatch) -> None:
 
 
 def test_otel_sink_exports_spans() -> None:
+    pytest.importorskip("opentelemetry.sdk")
     from opentelemetry.sdk.trace import TracerProvider
     from opentelemetry.sdk.trace.export import SimpleSpanProcessor
     from opentelemetry.sdk.trace.export.in_memory_span_exporter import InMemorySpanExporter

@@ -41,6 +41,7 @@ class _BadRequestError(Exception):
 
 
 def test_spec_builds_openrouter_client(monkeypatch) -> None:
+    pytest.importorskip("openai")
     monkeypatch.setenv("OPENROUTER_API_KEY", "sk-or-test")
     llm = from_spec("openrouter:qwen/qwen3.7-flash")
     assert isinstance(llm, OpenRouterLLM)
@@ -164,6 +165,7 @@ def test_load_env(tmp_path, monkeypatch) -> None:
 
 
 def test_reasoning_maps_to_each_backend(monkeypatch) -> None:
+    pytest.importorskip("openai")
     monkeypatch.setenv("OPENROUTER_API_KEY", "sk-or-test")
     off = from_spec("openrouter:qwen/qwen3.7-flash", reasoning="off")
     low = from_spec("openrouter:openai/gpt-5.6-luna", reasoning="low")

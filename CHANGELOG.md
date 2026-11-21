@@ -8,14 +8,67 @@ All notable changes are recorded here. The format follows
 
 ### Added
 
+- `thinkless habits demo`: a support agent's routing decision goes from
+  recording to probation to being answered locally, offline, with a stand-in
+  LLM, in about a second. It needs nothing beyond `pip install thinkless`,
+  and the README now starts with it.
+- A Responses API call that continues a locally answered response
+  (`previous_response_id` naming a `resp_thinkless_` id) is sent on with the
+  earlier input and answer written out, since the provider never stored the
+  local answer. The process keeps the last 2,048 local answers for this.
 - A logo, an architecture diagram of Habits and typed decisions (in the
   README, the docs home page and the four planes page), and a social preview
   image. The docs site uses the logo and gives every page a link preview.
 
 ### Fixed
 
+- Habits recorded a streamed answer the caller stopped reading, or that
+  broke off, as the LLM's complete answer. Truncated answers became training
+  data and, in an audit, counted as disagreement. A Chat Completions stream
+  now counts only with a finish reason or `[DONE]`, and a Messages stream
+  only with `message_stop`.
+- A site suspended by one process could be switched back on by a learning
+  run in another process that had read the plan before the suspension. The
+  run now keeps a suspension written while it was busy. A process also stops
+  holding a suspension once another process has retrained the site and the
+  new student passed its own checks.
+- Two writers saving the plan at once could leave a half-written
+  `plan.json`. Each write now uses its own temporary file, and the replace
+  is retried while a reader on Windows holds the file.
+- The gate could stop one step short of testing every held-out answer, so a
+  student good enough to answer all of them kept up to about 9% of them
+  going to the LLM.
+- Responses API calls in a stored `conversation` were treated as
+  answerable, although part of their context is on the provider's side.
+- A tool-calling answer with malformed arguments raised inside Habits and
+  the call was not recorded.
+- A forked worker kept writing into its parent's call log; each process now
+  writes its own file, as documented.
+- `habits status` and `scan` counted audit and shadow agreement with a
+  slightly different rule from the one that drives suspension; all three now
+  share one.
+- `Habits(target=1.0)` and other impossible settings were accepted and
+  failed later in every learning run; they are now rejected up front.
+- The CLI failed to start with typer 0.12, which the requirements allowed
+  (it cannot read `str | None` options on Python 3.10). ThinkLess now needs
+  typer 0.13, and a new CI job runs the tests with every direct dependency
+  at its lowest allowed version.
+- Older pydantic versions warned on import about the `model_input_tokens`
+  field of `TraceSummary`.
+- Tests that need an optional extra (the OpenAI SDK, OpenTelemetry) now skip
+  when it is missing instead of failing.
+- A Habits background learning test depended on thread timing and failed on
+  Windows; a mypy error in `llm/factory.py` under older mypy versions.
 - A Habits student test compared a tuple holding a dict with
   `pytest.approx`, which pytest 9.2 rejects; CI failed on every new run.
+
+### Changed
+
+- The `laya` extra needs Laya 0.4.17 or newer (below 0.5). Laya releases
+  after 0.4.22 need transformers 5, which GLiNER2 does not support yet, so a
+  shared environment resolves to Laya 0.4.22.
+- Dependabot opens a pull request only when a release falls outside the
+  supported range, instead of raising lower bounds, and CI runs weekly.
 
 ## 0.5.0 - 2026-10-17
 

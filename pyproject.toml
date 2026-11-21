@@ -59,7 +59,8 @@ dependencies = [
   "httpx>=0.27,<1",
   "numpy>=1.24",
   "rich>=13.7",
-  "typer>=0.12",
+  # 0.13 is the first typer that reads `str | None` options on Python 3.10.
+  "typer>=0.13",
   "tomli>=2.0; python_version < '3.11'",
 ]
 
@@ -72,6 +73,8 @@ gliner = [
   "protobuf>=4.25",
   "sentencepiece>=0.2",
 ]
+# Laya releases after 0.4.22 need transformers 5 (through vegaml), so with the
+# shared bound pip resolves to 0.4.22 until GLiNER2 supports transformers 5.
 laya = ["laya>=0.4.17,<0.5", "transformers>=4.48,<5"]
 local-llm = ["transformers>=4.48,<5", "accelerate>=1.0", "torch>=2.1"]
 local = ["thinkless[gliner,laya,local-llm]"]
