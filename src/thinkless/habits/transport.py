@@ -434,6 +434,7 @@ def wrap(client: Any, habits: Habits | None = None) -> Any:
     Works with ``openai.OpenAI`` and ``openai.AsyncOpenAI`` (and anything
     built on them, such as OpenRouter, Azure, Groq, vLLM or Ollama clients),
     ``anthropic.Anthropic``, ``google.genai.Client`` (sync and ``.aio``),
+    boto3's ``bedrock-runtime`` client (``converse`` calls),
     LangChain's ``ChatOpenAI``, and a bare ``httpx`` or ``httpx2`` client.
 
     Args:
@@ -443,6 +444,10 @@ def wrap(client: Any, habits: Habits | None = None) -> Any:
     Raises:
         TypeError: If the client does not expose an httpx transport.
     """
+    from .bedrock import is_bedrock_client, wrap_bedrock
+
+    if is_bedrock_client(client):
+        return wrap_bedrock(client, habits)
     if _wrap_genai(client, habits):
         return client
     wrapped = False

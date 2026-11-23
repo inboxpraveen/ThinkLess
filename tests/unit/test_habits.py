@@ -1415,6 +1415,89 @@ def test_gemini_api_through_the_genai_sdk(tmp_path: Path) -> None:
     habits.close()
 
 
+def test_bedrock_converse_through_boto3(tmp_path: Path) -> None:
+    """``wrap(boto3.client("bedrock-runtime"))``: botocore signs, sends and parses as usual."""
+    boto3 = pytest.importorskip("boto3")
+    from botocore.awsrequest import AWSResponse
+
+    sent: list[dict[str, Any]] = []
+
+    class Raw:
+        def __init__(self, data: bytes) -> None:
+            self.data = data
+
+        def stream(self, **_: Any) -> Any:
+            yield self.data
+
+    def send(request: Any, **_: Any) -> Any:
+        assert request.url.endswith("/converse")
+        assert request.headers["Authorization"].startswith(b"AWS4-HMAC-SHA256")
+        body = json.loads(request.body)
+        sent.append(body)
+        text = body["messages"][-1]["content"][0]["text"]
+        answer = {"intent": teacher_intent(text), "wants_human": "person" in text}
+        payload = {
+            "output": {
+                "message": {
+                    "role": "assistant",
+                    "content": [{"toolUse": {"toolUseId": "t1", "name": "route", "input": answer}}],
+                }
+            },
+            "stopReason": "tool_use",
+            "usage": {"inputTokens": 120, "outputTokens": 20, "totalTokens": 140},
+            "metrics": {"latencyMs": 300},
+        }
+        data = json.dumps(payload).encode()
+        return AWSResponse(request.url, 200, {"content-type": "application/json"}, Raw(data))
+
+    client = boto3.client(
+        "bedrock-runtime",
+        region_name="us-east-1",
+        aws_access_key_id="AKIDEXAMPLE",
+        aws_secret_access_key="secret",
+    )
+    habits = Habits(tmp_path, confirm_calls=0, learn_every=None, audit=0.0, seed=0)
+    assert wrap(client, habits) is client
+    assert wrap(client, habits) is client  # wrapping twice registers once
+    client.meta.events.register("before-send.bedrock-runtime.Converse", send)
+    tool = {
+        "toolSpec": {"name": "route", "description": "Route it.", "inputSchema": {"json": SCHEMA}}
+    }
+    rng = random.Random(17)
+
+    def ask() -> Any:
+        return client.converse(
+            modelId="anthropic.claude-test-v1:0",
+            system=[{"text": SYSTEM}],
+            messages=[{"role": "user", "content": [{"text": ticket(rng)[0]}]}],
+            toolConfig={"tools": [tool], "toolChoice": {"tool": {"name": "route"}}},
+        )
+
+    for _ in range(220):
+        ask()
+    observations = list(read_calls([tmp_path / "calls"]))
+    assert len(observations) == 220
+    assert observations[0].call.api == "converse"
+    assert observations[0].call.model == "anthropic.claude-test-v1:0"
+    assert observations[0].call.contract == "tool"
+    assert "modelId" not in sent[0]  # the request went out unchanged
+    plan = habits.learn()
+    assert next(iter(plan["sites"].values()))["status"] == "active"
+
+    before = len(sent)
+    replies = [ask() for _ in range(20)]
+    assert len(sent) - before < 20
+    local = [r for r in replies if r["ResponseMetadata"]["HTTPHeaders"].get("x-thinkless-habit")]
+    assert local
+    for reply in local:
+        use = reply["output"]["message"]["content"][0]["toolUse"]
+        assert use["name"] == "route"
+        assert set(use["input"]) == {"intent", "wants_human"}
+        assert reply["stopReason"] == "tool_use"
+    assert habits.counts["local"] == len(local)
+    habits.close()
+
+
 def test_gemini_forced_function_calls() -> None:
     from thinkless.habits.apis import GEMINI, api_for_path
 

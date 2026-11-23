@@ -35,6 +35,12 @@ All notable changes are recorded here. The format follows
   which Gemini puts in the URL, is recorded with the call; the request sent
   to Google is unchanged. Tested against google-genai 3.6 with recorded
   responses.
+- `habits.wrap(boto3.client("bedrock-runtime"))` puts Habits under Amazon
+  Bedrock's Converse API. boto3 signs its requests and does not use httpx,
+  so Habits joins through botocore's `before-call` and `after-call` events:
+  a confident call is answered without being signed or sent, and the rest
+  are recorded as boto3 parsed them. `converse_stream` and other operations
+  pass through. Tested against boto3 1.44 with recorded responses.
 - `thinkless habits eject SITE --out route.py` (and
   `thinkless.habits.eject.eject`) moves a proven site into code: it writes a
   module with the site's typed questions and an engine whose first provider

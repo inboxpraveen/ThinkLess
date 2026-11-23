@@ -123,6 +123,22 @@ its answers look like (`intent: 4 options`, `wants_human: yes/no`,
     output or a forced function call. Tested against google-genai 3.6 with
     recorded responses; it has not yet been run against Google's servers.
 
+=== "Amazon Bedrock (boto3)"
+
+    ```python
+    import boto3
+    from thinkless import habits
+
+    client = habits.wrap(boto3.client("bedrock-runtime"))
+    ```
+
+    `converse` calls, with a forced tool or a text answer. boto3 signs its
+    requests and does not use httpx, so Habits joins through botocore's
+    events instead of a transport: a local answer is returned without a
+    request being signed or sent. `converse_stream`, `invoke_model` and
+    other operations pass through untouched. Tested against boto3 1.44 with
+    recorded responses; it has not yet been run against AWS.
+
 === "LangChain and LangGraph"
 
     ```python

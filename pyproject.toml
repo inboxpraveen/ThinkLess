@@ -109,6 +109,7 @@ dev = [
   "pydantic-ai-slim>=1.0",
   "langchain-openai>=0.3",
   "google-genai>=1.40",
+  "boto3>=1.35",
   "fastapi>=0.115",
   "mcp>=1.10",
 ]

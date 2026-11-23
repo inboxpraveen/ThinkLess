@@ -64,6 +64,8 @@ change.
 
 ::: thinkless.habits.proxy.create_proxy
 
+::: thinkless.habits.bedrock.wrap_bedrock
+
 ::: thinkless.habits.eject.eject
 
 ::: thinkless.habits.eject.SiteStudent

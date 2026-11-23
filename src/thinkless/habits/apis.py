@@ -8,6 +8,8 @@
 * ``messages``: the Anthropic Messages API (``POST .../v1/messages``).
 * ``gemini``: the Gemini API (``POST .../models/<model>:generateContent``
   and ``:streamGenerateContent``), on Google AI and Vertex AI.
+* ``converse``: the Amazon Bedrock Converse API, through boto3's events
+  rather than HTTP (see :mod:`thinkless.habits.bedrock`).
 
 Each API turns request and response bodies into the same :class:`Call` and
 :class:`Output`, so sites, students and the gate work the same way for all
@@ -840,15 +842,188 @@ def _gemini_parts(parts: Any) -> tuple[str, bool]:
     return "\n".join(texts), other
 
 
+class ConverseApi:
+    """The Amazon Bedrock Converse API, through boto3.
+
+    boto3 signs and sends requests itself, not through httpx, so Habits
+    joins it through botocore's events instead of a transport; see
+    :func:`thinkless.habits.bedrock.wrap_bedrock`. Request and response
+    bodies are the dictionaries boto3 sends and returns, with the model id
+    added to the request ThinkLess parses and records.
+    """
+
+    name = "converse"
+    streams_locally = False
+
+    def matches(self, path: str) -> bool:
+        return False
+
+    def parse_request(self, body: Any, headers: Mapping[str, str] | None = None) -> Call | None:
+        if not isinstance(body, Mapping):
+            return None
+        raw = body.get("messages")
+        if not isinstance(raw, Sequence) or isinstance(raw, str):
+            return None
+        messages: list[Message] = []
+        has_media = False
+        system = body.get("system")
+        if system:
+            text, other = _converse_blocks(system)
+            has_media = has_media or other
+            messages.append(Message("system", text))
+        for item in raw:
+            if not isinstance(item, Mapping):
+                return None
+            blocks = item.get("content") or []
+            role = str(item.get("role") or "user")
+            if role == "user" and any(isinstance(b, Mapping) and "toolResult" in b for b in blocks):
+                role = "tool"
+            text, other = _converse_blocks(blocks)
+            has_media = has_media or other
+            messages.append(Message(role, text))
+        contract, definition, schema, name = self._contract(body)
+        extra = ""
+        fields = _mapping(body.get("additionalModelRequestFields"))
+        if fields.get("thinking") or fields.get("reasoning_config"):
+            extra = "reasoning was requested"
+        elif body.get("promptVariables"):
+            extra = "the prompt comes from a prompt template that is not in the request"
+        reason = _reason(has_media, contract, extra) or ("no messages" if not messages else "")
+        return Call(
+            model=str(body.get("modelId") or ""),
+            messages=tuple(messages),
+            contract=contract,
+            contract_id=fingerprint([self.name, contract, definition]),
+            schema=schema,
+            schema_name=str(name) if name else None,
+            stream=False,
+            answerable=not reason,
+            reason=reason,
+            site_name=_site_name(headers),
+            body=body,
+            api=self.name,
+        )
+
+    @staticmethod
+    def _contract(body: Mapping[str, Any]) -> tuple[str, Any, dict[str, Any] | None, str | None]:
+        config = _mapping(body.get("toolConfig"))
+        specs = [
+            _mapping(t.get("toolSpec"))
+            for t in config.get("tools") or []
+            if isinstance(t, Mapping) and "toolSpec" in t
+        ]
+        choice = _mapping(config.get("toolChoice"))
+        forced = None
+        if isinstance(choice.get("tool"), Mapping) and choice["tool"].get("name"):
+            forced = str(choice["tool"]["name"])
+        elif "any" in choice and len(specs) == 1:
+            forced = str(specs[0].get("name"))
+        if forced is not None:
+            for spec in specs:
+                if spec.get("name") == forced:
+                    schema = _mapping(spec.get("inputSchema")).get("json")
+                    return "tool", spec, schema if isinstance(schema, dict) else None, forced
+            return "tool", {"name": forced}, None, forced
+        if specs:
+            return "tools", {"tools": specs, "choice": choice}, None, None
+        return "text", "text", None, None
+
+    def parse_response(self, call: Call, body: Any) -> Output | None:
+        if not isinstance(body, Mapping):
+            return None
+        stop = body.get("stopReason")
+        if stop in ("guardrail_intervened", "content_filtered"):
+            return None
+        texts: list[str] = []
+        tool_calls: list[tuple[str, Any]] = []
+        message = _mapping(_mapping(body.get("output")).get("message"))
+        for block in message.get("content") or []:
+            if not isinstance(block, Mapping):
+                continue
+            if isinstance(block.get("text"), str):
+                texts.append(block["text"])
+            elif isinstance(block.get("toolUse"), Mapping):
+                use = block["toolUse"]
+                tool_calls.append((str(use.get("name")), use.get("input") or {}))
+        usage = _mapping(body.get("usage"))
+        return make_output(
+            call,
+            text="".join(texts),
+            tool_calls=tool_calls,
+            finish_reason=stop,
+            model=call.model,
+            usage=(int(usage.get("inputTokens") or 0), int(usage.get("outputTokens") or 0), None),
+            raw={k: v for k, v in body.items() if k != "ResponseMetadata"},
+        )
+
+    def build_response(
+        self, call: Call, fields: Mapping[str, str], template: Mapping[str, Any]
+    ) -> dict[str, Any]:
+        text, arguments = answer_payload(call, fields, template)
+        if call.contract == "tool":
+            block: dict[str, Any] = {
+                "toolUse": {
+                    "toolUseId": f"tooluse_thinkless_{uuid.uuid4().hex[:16]}",
+                    "name": call.schema_name,
+                    "input": arguments,
+                }
+            }
+            stop = "tool_use"
+        else:
+            block = {"text": text or ""}
+            stop = "end_turn"
+        return {
+            "output": {"message": {"role": "assistant", "content": [block]}},
+            "stopReason": stop,
+            "usage": {"inputTokens": 0, "outputTokens": 0, "totalTokens": 0},
+            "metrics": {"latencyMs": 0},
+        }
+
+    def build_stream(self, call: Call, response: Mapping[str, Any]) -> bytes:
+        raise NotImplementedError("streamed Converse calls are always sent to the model")
+
+    def collect_stream(self, chunks: Iterable[bytes]) -> dict[str, Any] | None:
+        return None
+
+
+def _converse_blocks(blocks: Any) -> tuple[str, bool]:
+    """Text of Converse content blocks, and whether they held anything else."""
+    if isinstance(blocks, Mapping):
+        blocks = [blocks]
+    texts: list[str] = []
+    other = False
+    for block in blocks or []:
+        if not isinstance(block, Mapping):
+            continue
+        if isinstance(block.get("text"), str):
+            texts.append(block["text"])
+        elif isinstance(block.get("toolUse"), Mapping):
+            use = block["toolUse"]
+            texts.append(f"{use.get('name')}({json.dumps(use.get('input'), sort_keys=True)})")
+        elif isinstance(block.get("toolResult"), Mapping):
+            inner, nested = _converse_blocks(block["toolResult"].get("content"))
+            texts.append(inner)
+            other = other or nested
+        elif isinstance(block.get("json"), (Mapping, list)):
+            texts.append(json.dumps(block["json"], sort_keys=True, ensure_ascii=False))
+        elif any(k in block for k in ("reasoningContent", "cachePoint", "guardContent")):
+            continue
+        else:
+            other = True  # images, documents, video
+    return "\n".join(texts), other
+
+
 CHAT = ChatApi()
 RESPONSES = ResponsesApi()
 MESSAGES = MessagesApi()
 GEMINI = GeminiApi()
+CONVERSE = ConverseApi()
 APIS: dict[str, Api] = {
     "chat": CHAT,
     "responses": RESPONSES,
     "messages": MESSAGES,
     "gemini": GEMINI,
+    "converse": CONVERSE,
 }
 
 
