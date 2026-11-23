@@ -44,9 +44,11 @@ All notable changes are recorded here. The format follows
 - `thinkless habits eject SITE --out route.py` (and
   `thinkless.habits.eject.eject`) moves a proven site into code: it writes a
   module with the site's typed questions and an engine whose first provider
-  is the site's student, `SiteStudent`, at the gate's threshold. The engine
-  accepts exactly the answers Habits would have served; the LLM or any other
-  provider can follow it in the cascade.
+  is the site's student, `SiteStudent`, at the gate's threshold. Given the
+  call's user message, the engine accepts exactly the answers Habits would
+  have served; the LLM or any other provider can follow it in the cascade.
+  A site whose input is more than its last user message (few-shot turns, for
+  example) is refused, since the engine could not see what the student saw.
 - Habits answers streamed Responses and Anthropic Messages calls locally, as
   it already did for Chat Completions. The local answer is sent as the event
   stream each API defines, text or tool call, and tests read it back through

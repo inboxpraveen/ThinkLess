@@ -24,7 +24,9 @@ from typing import Any, ClassVar
 from ..decision import Answer, Plane
 from ..providers.base import DecisionProvider, ProviderResult, State
 from ..questions import Choice, Extract, Kind, Question, Score, YesNo
+from .calls import read_calls
 from .learn import load_plan
+from .sites import discover, variable_text
 from .student import SiteModel
 from .wire import MISSING, ROOT_FIELD, TEXT_FIELD, TOOLS_FIELD, value_of
 
@@ -180,6 +182,14 @@ def eject(
             f"site {entry['id']} is {entry.get('status')!r}, not active: it has not passed "
             "its gate (pass allow_unproven to eject it anyway)"
         )
+    mismatch = _input_mismatch(root, entry)
+    if mismatch is not None:
+        raise ValueError(
+            f"site {entry['id']}'s student reads more than the last user message (for "
+            f"example {mismatch!r}), so an engine given that message would not see what "
+            "the student saw. Keep the call in Habits, or rebuild the site's questions "
+            "on an engine with your own providers."
+        )
     stem = entry.get("student")
     threshold = entry.get("threshold")
     if not stem or threshold is None:
@@ -201,6 +211,35 @@ def eject(
         )
     target.write_text(_source(entry, questions, student.name, float(threshold)), encoding="utf-8")
     return target
+
+
+CHECKED_CALLS = 500
+
+
+def _input_mismatch(root: Path, entry: Mapping[str, Any]) -> str | None:
+    """A recorded input of the site that its last user message does not reproduce.
+
+    The ejected engine is given one text, the last user message, while the
+    student was trained on every line of a call outside the site's template.
+    The two are the same for a fixed prompt around one user message; few-shot
+    turns or template lines inside the user message make them differ.
+    """
+    calls = root / "calls"
+    if not calls.exists():
+        return None
+    template = frozenset(entry.get("template") or [])
+    for site in discover(read_calls([calls])):
+        if site.id != entry["id"]:
+            continue
+        for observation in site.observations[-CHECKED_CALLS:]:
+            call = observation.call
+            users = [m.text for m in call.messages if m.role == "user"]
+            if not users:
+                return "a call with no user message"
+            expected = variable_text(call, template)
+            if _input_text(users[-1]) != expected:
+                return expected[:80]
+    return None
 
 
 def _source(

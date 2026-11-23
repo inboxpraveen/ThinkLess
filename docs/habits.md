@@ -476,7 +476,10 @@ decisions = engine.decide_many(message, QUESTIONS)
 Pass the text the LLM was given as the user message. The student gives every
 question the site's joint score as its confidence, and the engine's
 threshold is the gate's, so it accepts exactly the answers Habits would have
-served; a test checks this call by call. From there, add rules, GLiNER,
+served; a test checks this call by call. That holds when the site's input
+is the last user message alone, a fixed prompt around one message. Eject
+checks the site's recorded calls and refuses a site whose student also read
+other turns, such as few-shot examples. From there, add rules, GLiNER,
 Laya or a hosted decision model to the cascade like any other engine.
 `--unproven` ejects a site still on probation. Sites whose decision is which
 tools to call cannot be ejected.

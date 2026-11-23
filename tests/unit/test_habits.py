@@ -789,6 +789,25 @@ def test_eject_refuses_unproven_sites(tmp_path: Path) -> None:
         eject(tmp_path, "nope", tmp_path / "y.py")
     habits.close()
 
+    # A site whose calls carry earlier turns besides the last user message.
+    shots = tmp_path / "shots"
+    few = Habits(shots, confirm_calls=0, learn_every=None, seed=0)
+    client = client_for(few, llm)
+    rng = random.Random(4)
+    for _ in range(250):
+        text, _ = ticket(rng)
+        body = request_body(text)
+        earlier, _ = ticket(rng)
+        body["messages"][1:1] = [
+            {"role": "user", "content": earlier},
+            {"role": "assistant", "content": "noted"},
+        ]
+        client.post("/chat/completions", json=body)
+    (site,) = few.learn()["sites"].values()
+    with pytest.raises(ValueError, match="more than the last user message"):
+        eject(shots, site["id"], tmp_path / "s.py", allow_unproven=True)
+    few.close()
+
     from typer.testing import CliRunner
 
     from thinkless.cli.main import app
