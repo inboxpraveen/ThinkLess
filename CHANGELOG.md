@@ -4,6 +4,17 @@ All notable changes are recorded here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the project uses
 [semantic versioning](https://semver.org/).
 
+## Unreleased
+
+### Added
+
+- A majority-class baseline on the decision benchmark
+  (`thinkless bench decisions run --provider majority`), and a verified
+  result for it on the leaderboard, so every table shows the no-skill floor.
+- The leaderboard lists, under each choice task, the five classes each
+  provider gets wrong most often, computed from the predictions in the result
+  files.
+
 ## 0.6.0 - 2026-11-22
 
 A review of the whole package. Habits gets fixes for streams cut short,

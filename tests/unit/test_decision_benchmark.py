@@ -257,3 +257,80 @@ def test_transient_errors_are_retried(monkeypatch) -> None:
     rows = result.tasks["jailbreak"].predictions["test"]
     assert all(r["error"] is None for r in rows)
     assert result.tasks["jailbreak"].metrics.accuracy == 1.0
+
+
+def test_majority_baseline_answers_every_kind() -> None:
+    from thinkless import Engine
+    from thinkless.bench.decisions import Majority, build_submission_provider
+    from thinkless.decision import Status
+
+    provider = build_submission_provider("majority")
+    assert isinstance(provider, Majority)
+
+    jailbreak = question_for(load_tasks(["jailbreak"])[0])
+    labels = [r["label"] for r in load_rows(load_tasks(["jailbreak"])[0], "calibration")]
+    engine = Engine([provider], threshold=0.0)
+    decision = engine.decide("anything at all", jailbreak)
+    assert decision.value is (labels.count(True) > labels.count(False))
+    assert decision.status is Status.ACCEPTED
+
+    # Explicit labels: ties go to the option listed first, never to row order.
+    intent = Choice("Which?", options=["a", "b", "c"], name="intent")
+    level = Score("How good?", levels=["low", "mid", "high"], name="level")
+    fields = Extract("Find", fields={"person": "a name", "place": "a place"}, name="fields")
+    baseline = Majority(
+        {
+            "intent": ["c", "b", "b", "c"],
+            "level": ["high", "high", "low"],
+            "fields": [{"person": None, "place": None}, {"person": "Ann", "place": None}],
+        }
+    )
+    assert baseline.supports(intent)
+    assert not baseline.supports(Choice("Unknown?", options=["x", "y"], name="not_a_task"))
+    answers = baseline.answer("ignored", {"intent": intent, "level": level, "fields": fields})
+    assert answers.answers["intent"].value == "b"
+    assert answers.answers["intent"].probabilities == {"a": 0.0, "b": 0.5, "c": 0.5}
+    assert answers.answers["level"].value == 2.0
+    assert answers.answers["fields"].value == {"person": None, "place": None}
+    assert answers.answers["fields"].confidence == 0.5
+    # The same answer whatever the input.
+    assert baseline.answer("different", {"intent": intent}).answers["intent"].value == "b"
+
+
+def test_majority_baseline_runs_on_the_benchmark() -> None:
+    from thinkless.bench.decisions import Majority
+
+    result = run_benchmark(Majority(), name="Majority", spec="majority", limit=20)
+    assert all(t.supported for t in result.tasks.values())
+    extract = result.tasks["wnut17"].predictions["test"]
+    assert all(set(r["value"].values()) == {None} for r in extract)
+
+
+def test_hardest_classes_come_from_predictions(tmp_path) -> None:
+    from thinkless.bench.decisions.score import class_f1
+
+    pairs = [("a", "a"), ("a", "b"), ("b", "b"), ("c", "a")]
+    scores = class_f1(pairs)
+    assert scores == {"a": 0.5, "b": 2 / 3, "c": 0.0}
+
+    task = load_tasks(["banking77"])[0]
+    question = question_for(task)
+    rows = load_rows(task, "test")
+    first = question.labels[0]
+
+    def answer(state, q):
+        return Answer(value=first, probabilities={first: 1.0})
+
+    provider = FakeProvider("one-label", {"banking77": answer}, kinds=frozenset({Kind.CHOICE}))
+    result = run_benchmark(provider, name="One label", spec="test")
+    check = verify_result(result.write(tmp_path / "verified" / "one.json"))
+    text = leaderboard_markdown([check])
+    assert "Hardest classes" in text
+    row = next(
+        line for line in text.splitlines() if line.startswith("| One label | ") and ";" in line
+    )
+    # Every class but the one always predicted scores 0; ties are broken by name.
+    others = sorted(
+        label for label in question.labels if label != first and label in {r["label"] for r in rows}
+    )
+    assert row.split("| ")[2].startswith(f"{others[0]} 0")

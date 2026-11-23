@@ -9,6 +9,7 @@ by :func:`verify_result`, so a result can be checked without trusting who
 produced it.
 """
 
+from .baseline import Majority
 from .leaderboard import collect, leaderboard_markdown
 from .run import BenchmarkResult, Submission, TaskResult, build_submission_provider, run_benchmark
 from .score import TaskMetrics, score_task
@@ -17,6 +18,7 @@ from .verify import Verification, verify_result
 
 __all__ = [
     "BenchmarkResult",
+    "Majority",
     "Submission",
     "TaskMetrics",
     "TaskResult",

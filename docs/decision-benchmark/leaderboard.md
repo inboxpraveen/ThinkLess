@@ -8,6 +8,7 @@ Each task's main metric on its test rows, in percent: accuracy for choice questi
 |---|---|---:|---:|---:|---:|---:|---:|---:|---:|
 | GLiNER 2.5 base | verified | 75.8 (35) | 58.8 (3) | 34.6 (0) | 40.6 (3) | n/a | n/a | n/a | 22.7 (0) |
 | Laya | verified | 40.2 (0) | 48.4 (0) | 19.4 (0) | 32.8 (0) | 99.8 (100) | 77.0 (51) | 64.8 (1) | n/a |
+| Majority class | verified | 2.2 (0) | 18.8 (0) | 9.4 (0) | 17.8 (0) | 50.0 (0) | 50.0 (0) | 65.8 (0) | 0.0 (0) |
 | Qwen 3.7 Flash (reasoning off) | verified | 75.2 | 87.4 | 73.4 | 72.2 | 96.4 | 77.2 | 61.2 | 55.3 |
 | Qwen3-1.7B (local, reasoning off) | verified | 53.0 | 57.8 | 52.2 | 51.8 | 82.2 | 66.8 | 53.4 | 37.4 |
 
@@ -21,6 +22,16 @@ Banking77: fine-grained banking support intents. 77 intents. Test rows from the 
 | Qwen 3.7 Flash (reasoning off) | 75.2 (71.2 to 78.8) | macro-F1 72.4 | n/a | n/a | n/a | n/a | 569 ms | $0.020 |
 | Qwen3-1.7B (local, reasoning off) | 53.0 (48.6 to 57.3) | macro-F1 50.0 | n/a | n/a | n/a | n/a | 548 ms | $0 |
 | Laya | 40.2 (36.0 to 44.6) | macro-F1 36.8 | 0.197 | 0.0 | n/a | 0.466 | 88 ms | $0 |
+| Majority class | 2.2 (1.2 to 3.9) | macro-F1 0.1 | 0.002 | 0.0 | n/a | 0.994 | 0 ms | $0 |
+
+Hardest classes: the 5 with the lowest F1 for each provider, in percent.
+
+| Provider | Classes |
+|---|---|
+| GLiNER 2.5 base | get physical card 0; getting spare card 0; top up by bank transfer charge 25; transfer not received by recipient 25; fiat currency support 35 |
+| Laya | balance not updated after cheque or cash deposit 0; card about to expire 0; card delivery estimate 0; card payment not recognised 0; card payment wrong exchange rate 0 |
+| Qwen 3.7 Flash (reasoning off) | get physical card 0; order physical card 0; cash withdrawal not recognised 22; receiving money 25; top up by bank transfer charge 25 |
+| Qwen3-1.7B (local, reasoning off) | card arrival 0; card swallowed 0; compromised card 0; exchange via app 0; get physical card 0 |
 
 ## clinc150
 
@@ -32,6 +43,16 @@ CLINC150 plus: 150 intents across 10 domains, and out of scope. The 'out of scop
 | GLiNER 2.5 base | 58.8 (54.4 to 63.0) | macro-F1 64.0 | 0.078 | 3.2 | 87.5 | 0.211 | 57 ms | $0 |
 | Qwen3-1.7B (local, reasoning off) | 57.8 (53.4 to 62.1) | macro-F1 62.4 | n/a | n/a | n/a | n/a | 610 ms | $0 |
 | Laya | 48.4 (44.0 to 52.8) | macro-F1 39.2 | 0.265 | 0.0 | n/a | 0.339 | 92 ms | $0 |
+| Majority class | 18.8 (15.6 to 22.5) | macro-F1 0.2 | 0.141 | 0.0 | n/a | 0.782 | 0 ms | $0 |
+
+Hardest classes: the 5 with the lowest F1 for each provider, in percent.
+
+| Provider | Classes |
+|---|---|
+| GLiNER 2.5 base | balance 0; calendar update 0; change ai name 0; change speed 0; change volume 0 |
+| Laya | account blocked 0; are you a bot 0; balance 0; bill balance 0; bill due 0 |
+| Qwen 3.7 Flash (reasoning off) | accept reservations 0; distance 0; income 0; maybe 0; reminder update 0 |
+| Qwen3-1.7B (local, reasoning off) | accept reservations 0; calendar update 0; change ai name 0; change speed 0; goodbye 0 |
 
 ## massive
 
@@ -43,6 +64,7 @@ MASSIVE: 60 assistant intents in five languages. 100 test rows each from en-US, 
 | Qwen3-1.7B (local, reasoning off) | 52.2 (47.8 to 56.5) | macro-F1 50.6 | n/a | n/a | n/a | n/a | 389 ms | $0 |
 | GLiNER 2.5 base | 34.6 (30.6 to 38.9) | macro-F1 32.4 | 0.275 | 0.0 | n/a | 0.463 | 33 ms | $0 |
 | Laya | 19.4 (16.2 to 23.1) | macro-F1 15.4 | 0.238 | 0.0 | n/a | 0.642 | 88 ms | $0 |
+| Majority class | 9.4 (7.1 to 12.3) | macro-F1 0.3 | 0.040 | 0.0 | n/a | 0.911 | 0 ms | $0 |
 
 Accuracy by language:
 
@@ -50,8 +72,18 @@ Accuracy by language:
 |---|---:|---:|---:|---:|---:|
 | GLiNER 2.5 base | 30.0 | 50.0 | 45.0 | 5.0 | 43.0 |
 | Laya | 13.0 | 37.0 | 20.0 | 7.0 | 20.0 |
+| Majority class | 5.0 | 11.0 | 10.0 | 11.0 | 10.0 |
 | Qwen 3.7 Flash (reasoning off) | 73.0 | 74.0 | 77.0 | 70.0 | 73.0 |
 | Qwen3-1.7B (local, reasoning off) | 54.0 | 55.0 | 56.0 | 46.0 | 50.0 |
+
+Hardest classes: the 5 with the lowest F1 for each provider, in percent.
+
+| Provider | Classes |
+|---|---|
+| GLiNER 2.5 base | audio volume down 0; audio volume other 0; datetime convert 0; email querycontact 0; general greet 0 |
+| Laya | alarm remove 0; audio volume down 0; audio volume mute 0; audio volume other 0; audio volume up 0 |
+| Qwen 3.7 Flash (reasoning off) | audio volume other 0; iot hue lightup 29; general quirky 33; general greet 33; recommendation events 36 |
+| Qwen3-1.7B (local, reasoning off) | audio volume other 0; general greet 0; iot coffee 0; iot hue lightdim 0; iot hue lightup 0 |
 
 ## multiwoz
 
@@ -63,6 +95,16 @@ MultiWOZ 2.2: the user's intent at a turn of a conversation. The input is the co
 | Qwen3-1.7B (local, reasoning off) | 51.8 (47.4 to 56.1) | macro-F1 44.4 | n/a | n/a | n/a | n/a | 391 ms | $0 |
 | GLiNER 2.5 base | 40.6 (36.4 to 45.0) | macro-F1 34.7 | 0.116 | 2.6 | 100.0 | 0.433 | 29 ms | $0 |
 | Laya | 32.8 (28.8 to 37.0) | macro-F1 29.1 | 0.379 | 0.0 | n/a | 0.546 | 82 ms | $0 |
+| Majority class | 17.8 (14.7 to 21.4) | macro-F1 3.0 | 0.063 | 0.0 | n/a | 0.833 | 0 ms | $0 |
+
+Hardest classes: the 5 with the lowest F1 for each provider, in percent.
+
+| Provider | Classes |
+|---|---|
+| GLiNER 2.5 base | find police 0; none 2; find taxi 30; find train 32; book hotel 39 |
+| Laya | find police 0; none 6; find train 22; find attraction 32; find taxi 32 |
+| Qwen 3.7 Flash (reasoning off) | find police 0; none 52; book train 61; find taxi 62; find train 63 |
+| Qwen3-1.7B (local, reasoning off) | find police 0; none 6; book hotel 27; find train 37; book train 45 |
 
 ## jailbreak
 
@@ -73,6 +115,7 @@ Jailbreak classification: prompts that try to override an assistant's rules. The
 | Laya | 99.7 (98.6 to 100.0) | balanced 99.8 | 0.003 | 100.0 | 99.7 | 0.000 | 72 ms | $0 |
 | Qwen 3.7 Flash (reasoning off) | 97.5 (95.4 to 98.6) | balanced 96.4 | n/a | n/a | n/a | n/a | 589 ms | $0.012 |
 | Qwen3-1.7B (local, reasoning off) | 86.7 (83.0 to 89.7) | balanced 82.2 | n/a | n/a | n/a | n/a | 314 ms | $0 |
+| Majority class | 64.9 (60.1 to 69.4) | balanced 50.0 | 0.242 | 0.0 | n/a | 0.373 | 0 ms | $0 |
 
 Not answered (question kind unsupported): GLiNER 2.5 base.
 
@@ -85,6 +128,7 @@ Civil Comments: toxic comments. Toxic means a toxicity score of 0.5 or more. Sam
 | Qwen 3.7 Flash (reasoning off) | 77.2 (73.3 to 80.7) | balanced 77.2 | n/a | n/a | n/a | n/a | 572 ms | $0.006 |
 | Laya | 77.0 (73.1 to 80.5) | balanced 77.0 | 0.394 | 51.2 | 94.5 | 0.080 | 48 ms | $0 |
 | Qwen3-1.7B (local, reasoning off) | 66.8 (62.6 to 70.8) | balanced 66.8 | n/a | n/a | n/a | n/a | 310 ms | $0 |
+| Majority class | 50.0 (45.6 to 54.4) | balanced 50.0 | 0.487 | 0.0 | n/a | 0.496 | 0 ms | $0 |
 
 Not answered (question kind unsupported): GLiNER 2.5 base.
 
@@ -97,6 +141,7 @@ HelpSteer2: how helpful an assistant's reply is. Human helpfulness ratings 0 to 
 | Qwen 3.7 Flash (reasoning off) | 30.6 (26.7 to 34.8) | MAE 1.28, within one 61.2 | n/a | n/a | n/a | n/a | 633 ms | $0.020 |
 | Laya | 26.0 (22.3 to 30.0) | MAE 1.34, within one 64.8 | 0.099 | 0.8 | 75.0 | 0.665 | 80 ms | $0 |
 | Qwen3-1.7B (local, reasoning off) | 25.4 (21.8 to 29.4) | MAE 1.56, within one 53.4 | n/a | n/a | n/a | n/a | 491 ms | $0 |
+| Majority class | 21.8 (18.4 to 25.6) | MAE 1.28, within one 65.8 | 0.205 | 0.0 | n/a | 0.796 | 0 ms | $0 |
 
 Not answered (question kind unsupported): GLiNER 2.5 base.
 
@@ -108,6 +153,7 @@ WNUT 2017: emerging entities in social media text. Rows with at most one entity 
 |---|---:|---:|---:|---:|---:|---:|---:|---:|
 | Qwen 3.7 Flash (reasoning off) | 48.8 (44.4 to 53.2) | field F1 55.3 | n/a | n/a | n/a | n/a | 1010 ms | $0.015 |
 | Qwen3-1.7B (local, reasoning off) | 35.0 (30.9 to 39.3) | field F1 37.4 | n/a | n/a | n/a | n/a | 1502 ms | $0 |
+| Majority class | 20.0 (16.7 to 23.7) | field F1 0.0 | 0.003 | 0.0 | n/a | 0.829 | 0 ms | $0 |
 | GLiNER 2.5 base | 16.2 (13.2 to 19.7) | field F1 22.7 | 0.442 | 0.0 | n/a | 0.770 | 43 ms | $0 |
 
 Not answered (question kind unsupported): Laya.
@@ -118,5 +164,6 @@ Not answered (question kind unsupported): Laya.
 |---|---|---|---|---|---|---|
 | GLiNER 2.5 base | `gliner` | fastino/gliner2.5-base-v1 | NVIDIA GeForce RTX 5060 Laptop GPU | 0.3.0 | 2026-09-25 | fastino/gliner2.5-base-v1 at default settings on an RTX 5060 laptop GPU. Training data not published; overlap with these sources unknown. |
 | Laya | `laya` | laya-rl-agent | NVIDIA GeForce RTX 5060 Laptop GPU | 0.3.0 | 2026-09-25 | convaiinnovations/laya at default settings (label budget of 256 tokens) on an RTX 5060 laptop GPU. Training data not published; overlap with these sources unknown. |
+| Majority class | `majority` | majority-class | NVIDIA GeForce RTX 5060 Laptop GPU | 0.6.0 | 2026-11-23 | Answers every row with the most common label of the task's calibration rows and never reads the input: the no-skill floor. |
 | Qwen 3.7 Flash (reasoning off) | `llm:openrouter:qwen/qwen3.7-flash --reasoning off` | qwen/qwen3.7-flash | NVIDIA GeForce RTX 5060 Laptop GPU | 0.3.0 | 2026-09-25 | Through OpenRouter with reasoning off, 4 requests in parallel, rate-limited rows retried; cost is what OpenRouter billed. |
 | Qwen3-1.7B (local, reasoning off) | `llm:local:Qwen/Qwen3-1.7B --reasoning off` | Qwen/Qwen3-1.7B | NVIDIA GeForce RTX 5060 Laptop GPU | 0.3.0 | 2026-09-25 | Qwen/Qwen3-1.7B through transformers with thinking off, on an RTX 5060 laptop GPU. Training data not published; overlap with these sources unknown. |

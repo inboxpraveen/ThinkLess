@@ -16,7 +16,7 @@ from ...questions import Question, Score
 from ...shadow.compare import comparable
 from ..metrics import expected_calibration_error, percentile, threshold_sweep, wilson_interval
 
-__all__ = ["TaskMetrics", "correct_rows", "score_task"]
+__all__ = ["TaskMetrics", "class_f1", "correct_rows", "score_task"]
 
 
 class TaskMetrics(BaseModel):
@@ -88,16 +88,21 @@ def correct_rows(
     return out
 
 
-def _macro_f1(pairs: Sequence[tuple[Any, Any]]) -> float:
-    classes = {t for t, _ in pairs}
-    scores = []
-    for label in classes:
+def class_f1(pairs: Sequence[tuple[Any, Any]]) -> dict[Any, float]:
+    """F1 of every class present among the labels, from (label, prediction) pairs."""
+    scores = {}
+    for label in {t for t, _ in pairs}:
         tp = sum(1 for t, p in pairs if t == label and p == label)
         fp = sum(1 for t, p in pairs if t != label and p == label)
         fn = sum(1 for t, p in pairs if t == label and p != label)
         denominator = 2 * tp + fp + fn
-        scores.append(2 * tp / denominator if denominator else 0.0)
-    return sum(scores) / len(scores) if scores else 0.0
+        scores[label] = 2 * tp / denominator if denominator else 0.0
+    return scores
+
+
+def _macro_f1(pairs: Sequence[tuple[Any, Any]]) -> float:
+    scores = class_f1(pairs)
+    return sum(scores.values()) / len(scores) if scores else 0.0
 
 
 def _aurc(confidences: Sequence[float], correct: Sequence[bool]) -> float:

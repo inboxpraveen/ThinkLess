@@ -121,6 +121,12 @@ report one, so for them only the accuracy metrics apply; they are the
 reference an agent falls back to. Labels are compared after trimming and case
 folding, and a score given as a number counts as the nearest level.
 
+Two more aids to reading the numbers: a **Majority class** row answers every
+row with the most common label of the task's calibration rows without reading
+the input, so it shows what no skill scores (65 percent accuracy on
+`jailbreak`, 50 percent balanced). Under each choice task, a table lists the
+five classes each provider gets wrong most, by F1 on the test rows.
+
 There is no single combined score. How much accuracy is worth a millisecond
 or a dollar depends on the agent, so the table shows each number and leaves
 the weighting to the reader.

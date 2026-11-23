@@ -54,7 +54,8 @@ def run_command(
     provider: Annotated[
         str,
         typer.Option(
-            help="gliner, laya, llm, jev, systemone:<url>, or module:attribute for your own provider."
+            help="majority, gliner, laya, llm, jev, systemone:<url>, "
+            "or module:attribute for your own provider."
         ),
     ],
     name: Annotated[str | None, typer.Option(help="Name on the leaderboard.")] = None,

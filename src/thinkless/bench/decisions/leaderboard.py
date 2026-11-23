@@ -5,7 +5,8 @@ from __future__ import annotations
 from collections.abc import Iterable, Sequence
 from pathlib import Path
 
-from .score import TaskMetrics, correct_rows
+from ...shadow.compare import comparable
+from .score import TaskMetrics, class_f1, correct_rows
 from .tasks import TaskSpec, benchmark_version, load_rows, load_tasks, question_for
 from .verify import Verification, verify_result
 
@@ -88,6 +89,51 @@ def _locale_breakdown(task: TaskSpec, ranked: Sequence[Verification]) -> list[st
     return [*header, "|---|" + "---:|" * len(order), *body]
 
 
+HARDEST = 5
+
+
+def _hardest_classes(task: TaskSpec, ranked: Sequence[Verification]) -> list[str]:
+    """The classes each provider gets wrong most, by F1 on the test rows.
+
+    Computed from the predictions in each result file, like every other
+    number on the page. Ties are broken by class name so the page is stable.
+    """
+    if task.kind != "choice":
+        return []
+    rows = load_rows(task, "test")
+    question = question_for(task)
+    truth = {row["id"]: comparable(question, row["label"]) for row in rows}
+    # Comparison is case-insensitive; the table shows each option as written.
+    display = {comparable(question, option): option for option in question.labels}  # type: ignore[attr-defined]
+    body = []
+    for v in sorted(ranked, key=lambda v: v.name.lower()):
+        if v.result is None or v.result.submission.spec == "majority":
+            continue
+        entry = v.result.tasks.get(task.name)
+        if entry is None or not entry.supported:
+            continue
+        pairs = [
+            (truth[p["id"]], comparable(question, p.get("value")))
+            for p in entry.predictions["test"]
+        ]
+        scores = class_f1(pairs)
+        worst = sorted(scores, key=lambda label: (scores[label], str(label)))[:HARDEST]
+        cells = "; ".join(
+            f"{display.get(label, label)} {_pct(scores[label], 0)}" for label in worst
+        )
+        body.append(f"| {v.name} | {cells} |")
+    if not body:
+        return []
+    return [
+        "",
+        f"Hardest classes: the {HARDEST} with the lowest F1 for each provider, in percent.",
+        "",
+        "| Provider | Classes |",
+        "|---|---|",
+        *body,
+    ]
+
+
 def leaderboard_markdown(
     verifications: Sequence[Verification], *, verified_dirs: Sequence[str] = ("verified",)
 ) -> str:
@@ -161,6 +207,7 @@ def leaderboard_markdown(
                 f"| {_ms(m.latency_p50_ms)} | {_cost(m.cost_per_1k_usd)} |"
             )
         lines += _locale_breakdown(t, ranked)
+        lines += _hardest_classes(t, ranked)
         missing = [v.name for v in ranked if t.name not in v.metrics]
         if missing:
             lines += [
