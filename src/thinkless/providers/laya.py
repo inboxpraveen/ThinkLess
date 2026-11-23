@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import threading
 import time
-from collections.abc import Mapping
+from collections.abc import Mapping, Sequence
 from typing import Any, ClassVar
 
 from .._hub import ensure_downloaded
@@ -12,7 +12,7 @@ from ..decision import Plane, Usage
 from ..logs import get_logger
 from ..questions import Kind, Question
 from ..settings import resolve_device
-from .base import DecisionProvider, ProviderResult, State
+from .base import BatchItem, DecisionProvider, ProviderResult, State, group_by_questions
 from .wire import from_wire, to_wire
 
 __all__ = ["Laya"]
@@ -109,12 +109,40 @@ class Laya(DecisionProvider):
             kwargs["max_len"] = self._max_len
         with self._lock:
             result = agent.predict(state, to_wire(questions), **kwargs)
+        return self._result(result, questions)
+
+    def answer_batch(self, items: Sequence[BatchItem]) -> list[ProviderResult]:
+        """Answer many states through Laya's ``predict_batch``, which shares forward passes."""
+        agent = self._load()
+        if not hasattr(agent, "predict_batch"):
+            return super().answer_batch(items)
+        kwargs: dict[str, Any] = {}
+        if self._max_len is not None:
+            kwargs["max_len"] = self._max_len
+        out: list[ProviderResult | None] = [None] * len(items)
+        for group in group_by_questions(items):
+            questions = items[group[0]][1]
+            states = [items[i][0] for i in group]
+            with self._lock:
+                results = agent.predict_batch(states, to_wire(questions), **kwargs)
+            if len(results) != len(group):
+                raise RuntimeError(f"Laya returned {len(results)} results for {len(group)} states")
+            for index, result in zip(group, results, strict=True):
+                out[index] = self._result(result, questions, batch=len(group))
+        return [r for r in out if r is not None]
+
+    def _result(
+        self, result: Mapping[str, Any], questions: Mapping[str, Question], batch: int = 1
+    ) -> ProviderResult:
         usage = result.get("usage") or {}
+        meta: dict[str, Any] = {"device": self.device, "checkpoint": self.model}
+        if batch > 1:
+            meta["batch"] = batch
         return ProviderResult(
             answers=from_wire(result.get("answers") or {}, questions),
             model=result.get("model") or self.model,
             usage=Usage(input_tokens=int(usage.get("input_tokens") or 0)),
-            meta={"device": self.device, "checkpoint": self.model},
+            meta=meta,
         )
 
     def close(self) -> None:

@@ -33,6 +33,16 @@ something that is not here should be.
 - `thinkless habits scan` reports which calls in an existing log are
   decisions and what they cost.
 
+## Done in 0.7
+
+- Batched decisions: `Engine.decide_batch` for bulk work, a batch entry
+  point on providers with real batching in GLiNER, Laya and the Hugging Face
+  providers, and cross-request batching in the decision server.
+- `HFZeroShot`, a zero-shot NLI provider, and a majority-class baseline and
+  the hardest classes per provider on the decision benchmark.
+- A [student test page](student-test.md) that runs a Habits student in the
+  browser.
+
 ## Next
 
 - **Pretrained students on day one.** GLiNER, Laya, Jev and any provider as
@@ -50,9 +60,6 @@ something that is not here should be.
   models, frontier LLMs as references, and Hugging Face classifiers.
   Version 1.0 has eight tasks and open submissions; later versions add
   multi-turn safety cases, more languages and harder out-of-scope sets.
-- **Cross-request batching in the server.** Collect the questions of
-  concurrent requests for a few milliseconds and send them to each local
-  model as one batch, which needs a batch entry point on providers.
 - **Calibrated LLM confidence.** Several hosted models expose token log
   probabilities; an `LLMDecider` that reads them would give LLM answers a real
   confidence, so they could be thresholded like every other provider.

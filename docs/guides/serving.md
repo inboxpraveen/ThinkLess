@@ -111,14 +111,39 @@ plane and provider, which System One clients ignore.
 - **One worker per GPU.** Each worker process loads its own copy of every
   model. Scale out with more processes on more machines, not with more
   workers on one GPU.
-- **Requests run concurrently on a thread pool.** Each local model provider
-  runs one inference at a time behind a lock, so concurrency helps the
-  hosted providers and the I/O around them. Questions within one request are
-  batched into one call per provider. Batching across concurrent requests is
-  on the [roadmap](../roadmap.md).
+- **Requests run concurrently and share the GPU.** Questions within one
+  request go to each provider in one call. Across requests, the server wraps
+  every local model that batches (GLiNER, Laya, `HFClassifier`,
+  `HFZeroShot`) in `Batched`: calls that arrive while the model is busy wait
+  for the current pass and then go through together, up to `--max-batch`
+  (32). A request that arrives alone is not held back. `--batch-wait-ms`
+  holds the first call of a batch for company when throughput matters more
+  than latency; `--no-batching` turns it off. Hosted providers are left
+  alone: their calls already run concurrently.
 - **Health checks** should hit `/healthz`, which does not touch the models.
 - **Traces** go wherever the engine's tracer sends them; every request is one
   root span named `decide` or `systemone`.
+- **Shutdown.** On Ctrl+C or SIGTERM the server stops accepting requests,
+  lets running ones finish for up to 10 seconds, stops the batch workers
+  (calls still queued get an error rather than hanging), then closes the
+  models and flushes the traces.
+
+What batching buys depends on the model and the question:
+
+| Provider, task | One at a time | `decide_batch` | Server, 16 callers | Answers that changed |
+|---|---:|---:|---:|---|
+| Laya, Banking77 (77 options) | 22 | 69 | 57 | 2 of 200 |
+| Laya, jailbreak (yes or no) | 23 | 45 | 42 | none |
+| HFZeroShot, jailbreak | 55 | 86 | 82 | none |
+| GLiNER, wnut17 (extraction) | 31 | 56 | 51 | none |
+| GLiNER, Banking77 | 36 | 44 | 44 | none |
+
+Decisions per second on an RTX 5060 laptop GPU, measured with
+`benchmarks/batching.py`. Batching pads inputs of different lengths into one
+pass, which can move a score slightly: Laya's batched path changed 2 close
+calls out of 200 on Banking77 (the largest confidence change was 0.14), and
+the other providers gave the same answers. If a decision must not depend on
+which requests it shared a pass with, turn batching off for that provider.
 
 A container image only needs the package and your module:
 

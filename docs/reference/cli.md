@@ -122,6 +122,9 @@ Serves an engine over HTTP; see [serving](../guides/serving.md). `ENGINE` is
 | `--host`, `--port` | `127.0.0.1`, `8080` | Where to listen |
 | `--api-key-env` | `THINKLESS_API_KEY` | Variable holding the bearer token clients must send |
 | `--registered-only` | off | Refuse question specs that are not registered |
+| `--batching/--no-batching` | on | Let concurrent requests share the forward passes of local models |
+| `--max-batch` | `32` | Most calls per batch |
+| `--batch-wait-ms` | `0` | How long the first call of a batch waits for others; `0` adds no latency |
 
 ## `thinkless mcp ENGINE`
 

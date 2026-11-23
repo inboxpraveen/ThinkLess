@@ -8,7 +8,8 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Any
 
-from .base import DecisionProvider, ProviderResult, State, render_state
+from .base import BatchItem, DecisionProvider, ProviderResult, State, render_state
+from .batching import Batched
 from .llm import LLMDecider
 from .rules import Rules
 from .systemone import SystemOne, SystemOneError
@@ -19,6 +20,8 @@ if TYPE_CHECKING:
     from .laya import Laya
 
 __all__ = [
+    "BatchItem",
+    "Batched",
     "DecisionProvider",
     "GLiNER",
     "HFClassifier",

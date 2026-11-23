@@ -12,10 +12,38 @@ from pydantic import BaseModel, ConfigDict, Field
 from ..decision import Answer, Plane, Usage
 from ..questions import Kind, Question
 
-__all__ = ["DecisionProvider", "ProviderResult", "State", "render_state"]
+__all__ = [
+    "BatchItem",
+    "DecisionProvider",
+    "ProviderResult",
+    "State",
+    "group_by_questions",
+    "render_state",
+]
 
 State = str | Mapping[str, Any] | Sequence[Any]
 """What a question is asked about: text, a JSON-like object, or a list of either."""
+
+
+BatchItem = tuple[State, Mapping[str, Question]]
+"""One entry of a batched call: a state and the questions asked about it."""
+
+
+def group_by_questions(items: Sequence[BatchItem]) -> list[list[int]]:
+    """Indexes of ``items`` grouped by identical question sets, in first-seen order.
+
+    Batched providers run one forward pass per group: the states differ, the
+    questions (and so the labels or schema) are shared.
+    """
+    groups: dict[str, list[int]] = {}
+    for index, (_, questions) in enumerate(items):
+        key = json.dumps(
+            [[name, q.kind.value, q.spec()] for name, q in questions.items()],
+            sort_keys=True,
+            default=str,
+        )
+        groups.setdefault(key, []).append(index)
+    return list(groups.values())
 
 
 def render_state(state: State) -> str:
@@ -114,6 +142,21 @@ class DecisionProvider(ABC):
     def answer(self, state: State, questions: Mapping[str, Question]) -> ProviderResult:
         """Answer every question in one call where the backend allows it."""
         raise NotImplementedError
+
+    def answer_batch(self, items: Sequence[BatchItem]) -> list[ProviderResult]:
+        """Answer several states, one result per item, in order.
+
+        The default asks :meth:`answer` once per item. Local models override
+        it to put many states through one forward pass, which is several
+        times faster per decision on a GPU. An exception fails the whole
+        batch; the engine then records an error for every item in it.
+        """
+        return [self.answer(state, questions) for state, questions in items]
+
+    @property
+    def batches(self) -> bool:
+        """Whether :meth:`answer_batch` does more than loop over :meth:`answer`."""
+        return type(self).answer_batch is not DecisionProvider.answer_batch
 
     def warmup(self) -> None:  # noqa: B027 - optional hook
         """Load weights ahead of the first call."""

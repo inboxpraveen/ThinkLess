@@ -10,6 +10,10 @@ Endpoints:
 * ``GET /v1/questions``: the questions registered on the server.
 * ``GET /healthz``: liveness, version and the provider cascade.
 
+Concurrent requests share the forward passes of local models that batch
+(see :class:`~thinkless.providers.Batched`), and shutdown stops the batch
+workers, then closes the engine and flushes its traces.
+
 Needs ``pip install "thinkless[server]"``.
 """
 
@@ -27,6 +31,8 @@ from pydantic import BaseModel, Field
 from .._version import __version__
 from ..engine import Engine
 from ..errors import ConfigurationError
+from ..providers.base import DecisionProvider
+from ..providers.batching import Batched, batch_local_providers
 from ..providers.wire import decisions_to_wire, questions_from_wire
 from ..questions import Question, question_from_spec
 
@@ -69,6 +75,9 @@ def create_app(
     max_questions: int = 64,
     warmup: bool = True,
     model_name: str = "thinkless",
+    batching: bool = True,
+    max_batch: int = 32,
+    batch_wait_ms: float = 0.0,
 ) -> FastAPI:
     """Build the FastAPI app around an engine.
 
@@ -83,6 +92,13 @@ def create_app(
         warmup: Load local models (and warm them on the registered
             questions) at startup rather than on the first request.
         model_name: The ``model`` reported in System One responses.
+        batching: Let concurrent requests share the calls of local models that
+            batch. While the server runs, those providers are wrapped in
+            :class:`~thinkless.providers.Batched`; the engine gets its own
+            providers back at shutdown.
+        max_batch: Most calls per batch.
+        batch_wait_ms: How long the first call of a batch waits for others.
+            ``0`` adds no latency: only calls already waiting are batched.
 
     Example:
         >>> app = create_app(engine, [INTENT, URGENCY], api_key=os.environ["THINKLESS_API_KEY"])
@@ -92,10 +108,23 @@ def create_app(
 
     @asynccontextmanager
     async def lifespan(app: FastAPI) -> AsyncIterator[None]:
-        if warmup:
-            engine.warmup(registry or None)
-        yield
-        engine.close()
+        original: list[DecisionProvider] = list(engine.providers)
+        if batching:
+            engine.providers = batch_local_providers(
+                original, max_batch=max_batch, max_wait_ms=batch_wait_ms
+            )
+        try:
+            if warmup:
+                engine.warmup(registry or None)
+            yield
+        finally:
+            # Stop the batch workers first, so no request is left waiting on a
+            # model that is being closed, then close the models once.
+            for provider in engine.providers:
+                if isinstance(provider, Batched) and provider not in original:
+                    provider.stop()
+            engine.providers = original
+            engine.close()
 
     app = FastAPI(
         title="ThinkLess decision server",
@@ -137,7 +166,10 @@ def create_app(
         return {
             "status": "ok",
             "version": __version__,
-            "providers": [{"name": p.name, "plane": p.plane.value} for p in engine.providers],
+            "providers": [
+                {"name": p.name, "plane": p.plane.value, "batched": isinstance(p, Batched)}
+                for p in engine.providers
+            ],
             "questions": list(registry),
         }
 

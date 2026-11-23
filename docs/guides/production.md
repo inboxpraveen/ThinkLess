@@ -62,6 +62,14 @@ worker threads.
 Qwen3-1.7B loaded together: 6.7 GB. On CPU-only hosts, GLiNER stays fast
 (about 85 ms) while Laya slows to about 650 ms per call.
 
+**Batch bulk work.** For backfills, evaluations and queues, pass many
+inputs to `engine.decide_batch(states, questions)`. The cascade runs one
+provider level at a time across all of them, and local models that batch
+answer every input still open at their level in one call: 2 to 3 times the
+throughput of a loop over `decide_many` on a GPU, with the same answers apart
+from rare close calls (see [serving](serving.md#running-it) for measurements).
+Hosted providers are still asked once per input.
+
 **Serve one engine to many agents.** `thinkless serve` puts an engine behind
 HTTP, with a System One compatible endpoint, and `thinkless mcp` exposes its
 questions as MCP tools; see [serving](serving.md).

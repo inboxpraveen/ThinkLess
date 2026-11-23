@@ -11,13 +11,13 @@ from contextlib import contextmanager
 from typing import Any, Literal
 
 from .confidence import from_distribution, from_yes_probability
-from .decision import Answer, Attempt, Decision, Plane, Status
+from .decision import Answer, Attempt, Decision, Plane, Status, Usage
 from .errors import ConfigurationError
 from .limits import SpendLimit, SpendLimitError, _run_limit
 from .llm.base import LLM, Completion, Message, as_messages
 from .logs import get_logger
 from .pricing import LOCAL_PROVIDERS, PriceTable, default_prices
-from .providers.base import DecisionProvider, ProviderResult, State
+from .providers.base import BatchItem, DecisionProvider, ProviderResult, State
 from .questions import Extract, Kind, Question, Score
 from .tracing.span import Span
 from .tracing.summary import TraceSummary, summarize
@@ -46,6 +46,20 @@ class _RunCollector:
         if span.trace_id == self.trace_id:
             with self._lock:
                 self.spans.append(span.to_dict())
+
+
+class _Item:
+    """The cascade's bookkeeping for one state."""
+
+    __slots__ = ("attempts", "best", "latency", "pending", "resolved", "state")
+
+    def __init__(self, state: State, batch: Mapping[str, Question]) -> None:
+        self.state = state
+        self.pending: dict[str, Question] = dict(batch)
+        self.resolved: dict[str, Decision] = {}
+        self.best: dict[str, Decision] = {}
+        self.attempts: dict[str, list[Attempt]] = defaultdict(list)
+        self.latency: dict[str, float] = defaultdict(float)
 
 
 class Run:
@@ -280,6 +294,72 @@ class Engine:
                 decision.span_id = span.span_id
             span.set(decisions=[self._trace_summary(d) for d in decisions.values()])
         return decisions
+
+    def decide_batch(
+        self,
+        states: Sequence[State],
+        questions: Mapping[str, Question] | Sequence[Question],
+        *,
+        label: str | None = None,
+        deadline_ms: float | None = None,
+    ) -> list[dict[str, Decision]]:
+        """Answer the same questions about many states, sharing each provider's calls.
+
+        The cascade runs one provider level at a time across every state.
+        Providers that batch (GLiNER, Laya, the Hugging Face providers) answer
+        all the states still open at their level in one call, which on a GPU
+        is several times faster per decision than asking one state at a time.
+        Other providers are asked once per state, as with :meth:`decide_many`.
+        Every state gets the decisions it would have got alone, apart from
+        the small numeric differences batching can make in a model's scores.
+
+        Use it for bulk work: backfills, evaluations, queues. For concurrent
+        requests in a server, wrap local providers in
+        :class:`~thinkless.providers.Batched` instead.
+
+        Args:
+            states: The inputs, each text, a JSON-like object, or a list.
+            questions: As for :meth:`decide_many`.
+            label: Span name. Defaults to the joined question names.
+            deadline_ms: Time budget for the whole batch. Defaults to the
+                engine's ``deadline_ms``.
+
+        Returns:
+            One mapping of decisions per state, in the order of ``states``.
+        """
+        states = list(states)
+        if not states:
+            return []
+        batch = self._as_mapping(questions)
+        deadline = deadline_ms if deadline_ms is not None else self.deadline_ms
+        with self.tracer.span("decide", label or ", ".join(batch)[:80]) as span:
+            span.set(
+                items=len(states),
+                questions={
+                    k: {"kind": q.kind.value, "threshold": self._threshold(k, q)}
+                    for k, q in batch.items()
+                },
+            )
+            results = self._cascade_items(states, batch, deadline)
+            summaries = []
+            for index, decisions in enumerate(results):
+                for decision in decisions.values():
+                    decision.span_id = span.span_id
+                    summaries.append({"item": index, **self._trace_summary(decision)})
+            span.set(decisions=summaries)
+        return results
+
+    async def adecide_batch(
+        self,
+        states: Sequence[State],
+        questions: Mapping[str, Question] | Sequence[Question],
+        *,
+        label: str | None = None,
+        deadline_ms: float | None = None,
+    ) -> list[dict[str, Decision]]:
+        return await asyncio.to_thread(
+            self.decide_batch, states, questions, label=label, deadline_ms=deadline_ms
+        )
 
     def extract(
         self,
@@ -562,158 +642,252 @@ class Engine:
     def _cascade(
         self, state: State, batch: dict[str, Question], deadline_ms: float | None = None
     ) -> dict[str, Decision]:
-        pending = dict(batch)
-        resolved: dict[str, Decision] = {}
-        best: dict[str, Decision] = {}
-        attempts: dict[str, list[Attempt]] = defaultdict(list)
-        latency: dict[str, float] = defaultdict(float)
+        return self._cascade_items([state], batch, deadline_ms)[0]
+
+    def _cascade_items(
+        self, states: Sequence[State], batch: dict[str, Question], deadline_ms: float | None = None
+    ) -> list[dict[str, Decision]]:
+        """Run the cascade for every state at once, one provider level at a time.
+
+        Each provider is asked once per level for every state that still has
+        open questions it supports: in one ``answer_batch`` call when it
+        batches, otherwise one call per state. With one state this is exactly
+        the cascade of ``decide_many``.
+        """
+        items = [_Item(state, batch) for state in states]
+        many = len(items) > 1
         cascade_started = time.perf_counter()
 
         for provider in self.providers:
-            if not pending:
+            if all(not item.pending for item in items):
                 break
-            asked = {k: q for k, q in pending.items() if provider.supports(q)}
-            if not asked:
+            active = []
+            for index, item in enumerate(items):
+                asked = {k: q for k, q in item.pending.items() if provider.supports(q)}
+                if asked:
+                    active.append((index, item, asked))
+            if not active:
                 continue
+            names = list(dict.fromkeys(k for _, _, asked in active for k in asked))
+            extra = {"items": len(active)} if many else {}
             skip = self._skip_reason(provider, cascade_started, deadline_ms)
             if skip is not None:
-                logger.info("skipping %s for %s: %s", provider.name, list(asked), skip)
+                logger.info("skipping %s for %s: %s", provider.name, names, skip)
                 with self.tracer.span(
                     "attempt",
                     provider.name,
                     plane=provider.plane.value,
                     provider=provider.name,
-                    questions=list(asked),
+                    questions=names,
                     skipped=skip,
+                    **extra,
                 ):
                     pass
-                for key in asked:
-                    attempts[key].append(
-                        Attempt(provider=provider.name, plane=provider.plane, reason=skip)
-                    )
+                for _, item, asked in active:
+                    for key in asked:
+                        item.attempts[key].append(
+                            Attempt(provider=provider.name, plane=provider.plane, reason=skip)
+                        )
                 continue
             with self.tracer.span(
                 "attempt",
                 provider.name,
                 plane=provider.plane.value,
                 provider=provider.name,
-                questions=list(asked),
+                questions=names,
+                **extra,
             ) as span:
-                started = time.perf_counter()
-                try:
-                    if self.escalation_context and provider.accepts_context and resolved:
-                        settled = {k: (batch[k], d) for k, d in resolved.items()}
-                        span.set(context_from=list(settled))
-                        result = provider.answer(state, asked, context=settled)  # type: ignore[call-arg]
-                    else:
-                        result = provider.answer(state, asked)
-                except Exception as exc:
-                    elapsed = (time.perf_counter() - started) * 1000.0
-                    span.fail(exc)
-                    logger.warning("provider %s failed: %s", provider.name, exc)
-                    for key in asked:
-                        latency[key] += elapsed
-                        attempts[key].append(
-                            Attempt(
-                                provider=provider.name,
-                                plane=provider.plane,
-                                latency_ms=elapsed,
-                                reason=f"error: {type(exc).__name__}",
-                            )
+                calls = self._ask(
+                    provider, [(item, asked) for _, item, asked in active], batch, span
+                )
+                failures = [error for _, error, _ in calls if error is not None]
+                if failures:
+                    span.fail(failures[0])
+                    for failure in dict.fromkeys(failures):
+                        logger.warning("provider %s failed: %s", provider.name, failure)
+                costs: list[float] = []
+                sources: list[str] = []
+                for result, _, _ in calls:
+                    if result is None:
+                        costs.append(0.0)
+                        continue
+                    cost, source = self._cost(
+                        provider.price_key, result.model, result.usage, result.cost_usd
+                    )
+                    self._charge(cost)
+                    costs.append(cost)
+                    sources.append(source)
+                results = [r for r, _, _ in calls if r is not None]
+                if results:
+                    usage = results[0].usage
+                    if len(results) > 1:
+                        usage = Usage(
+                            input_tokens=sum(r.usage.input_tokens for r in results),
+                            output_tokens=sum(r.usage.output_tokens for r in results),
                         )
-                    if self.on_error == "raise":
-                        raise
-                    continue
-                elapsed = (time.perf_counter() - started) * 1000.0
-                cost, source = self._cost(
-                    provider.price_key, result.model, result.usage, result.cost_usd
-                )
-                self._charge(cost)
-                span.set(
-                    model=result.model,
-                    usage=result.usage.model_dump(),
-                    cost_usd=cost,
-                    cost_known=source != "unknown",
-                    cost_source=source,
-                    **result.meta,
-                )
-                if self.tracer.capture_content and result.content:
-                    span.set(**{k: self.tracer.content(v) for k, v in result.content.items()})
+                    span.set(
+                        model=results[0].model,
+                        usage=usage.model_dump(),
+                        cost_usd=sum(costs),
+                        cost_known=all(src != "unknown" for src in sources),
+                        cost_source=sources[0] if len(set(sources)) == 1 else "mixed",
+                        **results[0].meta,
+                    )
+                    if self.tracer.capture_content and results[0].content and not many:
+                        span.set(
+                            **{k: self.tracer.content(v) for k, v in results[0].content.items()}
+                        )
 
                 accepted: list[str] = []
                 outcomes: list[dict[str, Any]] = []
-                for key, question in asked.items():
-                    latency[key] += elapsed
-                    answer = result.answers.get(key)
-                    if answer is None:
-                        attempts[key].append(
+                for (index, item, asked), (result, error, elapsed), cost in zip(
+                    active, calls, costs, strict=True
+                ):
+                    tag: dict[str, Any] = {"item": index} if many else {}
+                    if result is None:
+                        for key in asked:
+                            item.latency[key] += elapsed
+                            item.attempts[key].append(
+                                Attempt(
+                                    provider=provider.name,
+                                    plane=provider.plane,
+                                    latency_ms=elapsed,
+                                    reason=f"error: {type(error).__name__}",
+                                )
+                            )
+                        continue
+                    for key, question in asked.items():
+                        item.latency[key] += elapsed
+                        answer = result.answers.get(key)
+                        if answer is None:
+                            item.attempts[key].append(
+                                Attempt(
+                                    provider=provider.name,
+                                    plane=provider.plane,
+                                    latency_ms=elapsed,
+                                    reason="abstained",
+                                )
+                            )
+                            outcomes.append(
+                                {"name": key, **tag, "accepted": False, "reason": "abstained"}
+                            )
+                            continue
+                        confidence = self._confidence(question, answer)
+                        threshold = self._threshold(key, question, provider.name)
+                        if confidence is not None:
+                            ok = confidence >= threshold
+                            reason = "met_threshold" if ok else "below_threshold"
+                        else:
+                            ok = (not provider.calibrated) and self.trust_uncalibrated
+                            reason = "trusted_uncalibrated" if ok else "no_confidence"
+                        item.attempts[key].append(
                             Attempt(
                                 provider=provider.name,
                                 plane=provider.plane,
+                                value=self._trace_value(question.kind, answer.value),
+                                confidence=confidence,
                                 latency_ms=elapsed,
-                                reason="abstained",
+                                accepted=ok,
+                                reason=reason,
                             )
                         )
-                        outcomes.append({"name": key, "accepted": False, "reason": "abstained"})
-                        continue
-                    confidence = self._confidence(question, answer)
-                    threshold = self._threshold(key, question, provider.name)
-                    if confidence is not None:
-                        ok = confidence >= threshold
-                        reason = "met_threshold" if ok else "below_threshold"
-                    else:
-                        ok = (not provider.calibrated) and self.trust_uncalibrated
-                        reason = "trusted_uncalibrated" if ok else "no_confidence"
-                    attempts[key].append(
-                        Attempt(
-                            provider=provider.name,
-                            plane=provider.plane,
-                            value=self._trace_value(question.kind, answer.value),
-                            confidence=confidence,
-                            latency_ms=elapsed,
-                            accepted=ok,
-                            reason=reason,
+                        outcomes.append(
+                            {
+                                "name": key,
+                                **tag,
+                                "value": self._trace_value(question.kind, answer.value),
+                                "confidence": None if confidence is None else round(confidence, 4),
+                                "threshold": threshold,
+                                "accepted": ok,
+                                "reason": reason,
+                            }
                         )
-                    )
-                    outcomes.append(
-                        {
-                            "name": key,
-                            "value": self._trace_value(question.kind, answer.value),
-                            "confidence": None if confidence is None else round(confidence, 4),
-                            "threshold": threshold,
-                            "accepted": ok,
-                            "reason": reason,
-                        }
-                    )
-                    candidate = self._build(
-                        key,
-                        question,
-                        answer,
-                        confidence,
-                        threshold,
-                        provider,
-                        result,
-                        cost,
-                        Status.ACCEPTED if ok else Status.UNCERTAIN,
-                    )
-                    if ok:
-                        resolved[key] = candidate
-                        del pending[key]
-                        accepted.append(key)
-                    else:
-                        previous = best.get(key)
-                        if previous is None or (confidence or 0.0) > (previous.confidence or 0.0):
-                            best[key] = candidate
+                        candidate = self._build(
+                            key,
+                            question,
+                            answer,
+                            confidence,
+                            threshold,
+                            provider,
+                            result,
+                            cost,
+                            Status.ACCEPTED if ok else Status.UNCERTAIN,
+                        )
+                        if ok:
+                            item.resolved[key] = candidate
+                            del item.pending[key]
+                            accepted.append(f"{key}#{index}" if many else key)
+                        else:
+                            previous = item.best.get(key)
+                            if previous is None or (confidence or 0.0) > (
+                                previous.confidence or 0.0
+                            ):
+                                item.best[key] = candidate
                 span.set(accepted=accepted, results=outcomes)
+                if failures and self.on_error == "raise":
+                    raise failures[0]
 
-        for key, question in pending.items():
-            resolved[key] = best.get(key) or Decision(
-                name=key,
-                kind=question.kind,
-                status=Status.ABSTAINED,
-                threshold=self._threshold(key, question),
-            )
-        for key, decision in resolved.items():
-            decision.attempts = attempts[key]
-            decision.latency_ms = latency[key]
-        return {key: resolved[key] for key in batch}
+        out = []
+        for item in items:
+            for key, question in item.pending.items():
+                item.resolved[key] = item.best.get(key) or Decision(
+                    name=key,
+                    kind=question.kind,
+                    status=Status.ABSTAINED,
+                    threshold=self._threshold(key, question),
+                )
+            for key, decision in item.resolved.items():
+                decision.attempts = item.attempts[key]
+                decision.latency_ms = item.latency[key]
+            out.append({key: item.resolved[key] for key in batch})
+        return out
+
+    def _ask(
+        self,
+        provider: DecisionProvider,
+        active: Sequence[tuple[_Item, dict[str, Question]]],
+        batch: Mapping[str, Question],
+        span: Span,
+    ) -> list[tuple[ProviderResult | None, Exception | None, float]]:
+        """Ask one provider for every active item: a result or an error, and the wall time."""
+        calls: list[tuple[ProviderResult | None, Exception | None, float]] = [
+            (None, None, 0.0)
+        ] * len(active)
+        shared: list[int] = []
+        for position, (item, asked) in enumerate(active):
+            context = bool(self.escalation_context and provider.accepts_context and item.resolved)
+            if len(active) > 1 and provider.batches and not context:
+                shared.append(position)
+                continue
+            started = time.perf_counter()
+            try:
+                if context:
+                    settled = {k: (batch[k], d) for k, d in item.resolved.items()}
+                    if len(active) == 1:
+                        span.set(context_from=list(settled))
+                    result = provider.answer(item.state, asked, context=settled)  # type: ignore[call-arg]
+                else:
+                    result = provider.answer(item.state, asked)
+                calls[position] = (result, None, (time.perf_counter() - started) * 1000.0)
+            except Exception as exc:
+                calls[position] = (None, exc, (time.perf_counter() - started) * 1000.0)
+                if self.on_error == "raise":
+                    break
+        if shared:
+            requests: list[BatchItem] = [(active[p][0].state, active[p][1]) for p in shared]
+            started = time.perf_counter()
+            try:
+                results = provider.answer_batch(requests)
+                if len(results) != len(requests):
+                    raise RuntimeError(
+                        f"{provider.name}.answer_batch returned {len(results)} results "
+                        f"for {len(requests)} items"
+                    )
+                elapsed = (time.perf_counter() - started) * 1000.0
+                for position, result in zip(shared, results, strict=True):
+                    calls[position] = (result, None, elapsed)
+            except Exception as exc:
+                elapsed = (time.perf_counter() - started) * 1000.0
+                for position in shared:
+                    calls[position] = (None, exc, elapsed)
+        return calls

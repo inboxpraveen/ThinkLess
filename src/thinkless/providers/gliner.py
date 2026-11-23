@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import threading
 import time
-from collections.abc import Mapping
+from collections.abc import Mapping, Sequence
 from typing import Any, ClassVar
 
 from .._hub import ensure_downloaded
@@ -13,7 +13,14 @@ from ..decision import Answer, Plane
 from ..logs import get_logger
 from ..questions import Choice, Extract, Kind, Question
 from ..settings import resolve_device
-from .base import DecisionProvider, ProviderResult, State, render_state
+from .base import (
+    BatchItem,
+    DecisionProvider,
+    ProviderResult,
+    State,
+    group_by_questions,
+    render_state,
+)
 
 __all__ = ["GLiNER"]
 
@@ -62,8 +69,10 @@ class GLiNER(DecisionProvider):
         device: str = "auto",
         name: str = "gliner",
         extract_threshold: float = 0.5,
+        batch_size: int = 16,
     ) -> None:
         self.name = name
+        self.batch_size = batch_size
         self.model = model
         self._device_request = device
         self._extract_threshold = extract_threshold
@@ -118,9 +127,29 @@ class GLiNER(DecisionProvider):
         return self._model
 
     def answer(self, state: State, questions: Mapping[str, Question]) -> ProviderResult:
+        answers = self._answer_texts([render_state(state)], questions)[0]
+        return ProviderResult(answers=answers, model=self.model, meta={"device": self.device})
+
+    def answer_batch(self, items: Sequence[BatchItem]) -> list[ProviderResult]:
+        """Answer many states, ``batch_size`` texts per forward pass."""
+        out: list[ProviderResult | None] = [None] * len(items)
+        for group in group_by_questions(items):
+            questions = items[group[0]][1]
+            texts = [render_state(items[i][0]) for i in group]
+            for index, answers in zip(group, self._answer_texts(texts, questions), strict=True):
+                out[index] = ProviderResult(
+                    answers=answers,
+                    model=self.model,
+                    meta={"device": self.device, "batch": len(group)},
+                )
+        return [r for r in out if r is not None]
+
+    def _answer_texts(
+        self, texts: list[str], questions: Mapping[str, Question]
+    ) -> list[dict[str, Answer | None]]:
         model = self._load()
-        text = render_state(state)
-        answers: dict[str, Answer | None] = {}
+        answers: list[dict[str, Answer | None]] = [{} for _ in texts]
+        single = len(texts) == 1
 
         choices = {k: q for k, q in questions.items() if isinstance(q, Choice)}
         extracts = {k: q for k, q in questions.items() if isinstance(q, Extract)}
@@ -132,9 +161,15 @@ class GLiNER(DecisionProvider):
                 labels: Any = dict(question.options) if has_descriptions else question.labels
                 tasks[key] = {"labels": labels, "multi_label": True, "cls_threshold": 0.0}
             with self._lock:
-                result = model.classify_text(text, tasks, include_confidence=True)
-            for key, question in choices.items():
-                answers[key] = self._choice_answer(result.get(key), question)
+                if single:
+                    results = [model.classify_text(texts[0], tasks, include_confidence=True)]
+                else:
+                    results = model.batch_classify_text(
+                        texts, tasks, batch_size=self.batch_size, include_confidence=True
+                    )
+            for answer, result in zip(answers, results, strict=True):
+                for key, question in choices.items():
+                    answer[key] = self._choice_answer(result.get(key), question)
 
         if extracts:
             schema = {
@@ -142,13 +177,28 @@ class GLiNER(DecisionProvider):
                 for key, q in extracts.items()
             }
             with self._lock:
-                result = model.extract_json(
-                    text, schema, threshold=self._extract_threshold, include_confidence=True
-                )
-            for key, extract in extracts.items():
-                answers[key] = self._extract_answer(result.get(key), extract)
+                if single:
+                    results = [
+                        model.extract_json(
+                            texts[0],
+                            schema,
+                            threshold=self._extract_threshold,
+                            include_confidence=True,
+                        )
+                    ]
+                else:
+                    results = model.batch_extract_json(
+                        texts,
+                        schema,
+                        batch_size=self.batch_size,
+                        threshold=self._extract_threshold,
+                        include_confidence=True,
+                    )
+            for answer, result in zip(answers, results, strict=True):
+                for key, extract in extracts.items():
+                    answer[key] = self._extract_answer(result.get(key), extract)
 
-        return ProviderResult(answers=answers, model=self.model, meta={"device": self.device})
+        return [{k: a.get(k) for k in questions} for a in answers]
 
     @staticmethod
     def _choice_answer(raw: Any, question: Choice) -> Answer | None:

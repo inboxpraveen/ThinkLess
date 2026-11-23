@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import threading
 import time
-from collections.abc import Collection, Mapping
+from collections.abc import Collection, Mapping, Sequence
 from typing import Any, ClassVar
 
 from .._hub import ensure_downloaded
@@ -13,7 +13,14 @@ from ..decision import Answer, Plane
 from ..logs import get_logger
 from ..questions import Choice, Kind, Question, YesNo
 from ..settings import resolve_device
-from .base import DecisionProvider, ProviderResult, State, render_state
+from .base import (
+    BatchItem,
+    DecisionProvider,
+    ProviderResult,
+    State,
+    group_by_questions,
+    render_state,
+)
 
 __all__ = ["HFClassifier", "HFZeroShot"]
 
@@ -66,6 +73,7 @@ class HFClassifier(DecisionProvider):
         field: str | None = None,
         device: str = "auto",
         max_length: int = 512,
+        batch_size: int = 32,
         pipeline: Any | None = None,
     ) -> None:
         if not answers:
@@ -76,6 +84,7 @@ class HFClassifier(DecisionProvider):
         self._field = field
         self._device_request = device
         self._max_length = max_length
+        self._batch_size = batch_size
         self._pipeline = pipeline
         self._lock = threading.Lock()
         self.device: str | None = None
@@ -126,6 +135,24 @@ class HFClassifier(DecisionProvider):
             raw = pipe(self._text(state), top_k=None, truncation=True)
         # Pipelines return a list of {"label", "score"}, sometimes nested once.
         items = raw[0] if raw and isinstance(raw[0], list) else raw
+        return self._result(items, questions)
+
+    def answer_batch(self, items: Sequence[BatchItem]) -> list[ProviderResult]:
+        """Classify every state in one pipeline call, ``batch_size`` texts per pass."""
+        pipe = self._load()
+        with self._lock:
+            raw = pipe(
+                [self._text(state) for state, _ in items],
+                top_k=None,
+                truncation=True,
+                batch_size=self._batch_size,
+            )
+        return [
+            self._result(scored, questions)
+            for scored, (_, questions) in zip(raw, items, strict=True)
+        ]
+
+    def _result(self, items: Any, questions: Mapping[str, Question]) -> ProviderResult:
         scores = {str(item["label"]): float(item["score"]) for item in items}
         answers: dict[str, Answer | None] = {}
         for key, question in questions.items():
@@ -298,41 +325,59 @@ class HFZeroShot(DecisionProvider):
         return question.yes_means or question.instructions
 
     def answer(self, state: State, questions: Mapping[str, Question]) -> ProviderResult:
+        answers = self._answer_texts([self._text(state)], questions)[0]
+        return ProviderResult(answers=answers, model=self.model)
+
+    def answer_batch(self, items: Sequence[BatchItem]) -> list[ProviderResult]:
+        """Score every state against the same hypotheses in one pipeline call per question."""
+        out: list[ProviderResult | None] = [None] * len(items)
+        for group in group_by_questions(items):
+            questions = items[group[0]][1]
+            texts = [self._text(items[i][0]) for i in group]
+            for index, answers in zip(group, self._answer_texts(texts, questions), strict=True):
+                out[index] = ProviderResult(
+                    answers=answers, model=self.model, meta={"batch": len(group)}
+                )
+        return [r for r in out if r is not None]
+
+    def _score(self, texts: list[str], hypotheses: list[str], multi_label: bool) -> list[Any]:
         pipe = self._load()
-        text = self._text(state)
-        answers: dict[str, Answer | None] = {}
+        with self._lock:
+            # Whole hypotheses go in as labels, so the template is a pass-through.
+            raw = pipe(
+                texts if len(texts) > 1 else texts[0],
+                candidate_labels=hypotheses,
+                hypothesis_template="{}",
+                multi_label=multi_label,
+            )
+        return list(raw) if len(texts) > 1 else [raw]
+
+    def _answer_texts(
+        self, texts: list[str], questions: Mapping[str, Question]
+    ) -> list[dict[str, Answer | None]]:
+        answers: list[dict[str, Answer | None]] = [{} for _ in texts]
         for key, question in questions.items():
             if isinstance(question, Choice):
                 by_option = self._choice_hypotheses(question)
-                # Whole hypotheses go in as labels, so the template is a pass-through.
-                with self._lock:
-                    raw = pipe(
-                        text,
-                        candidate_labels=list(dict.fromkeys(by_option.values())),
-                        hypothesis_template="{}",
-                        multi_label=False,
+                scored = self._score(texts, list(dict.fromkeys(by_option.values())), False)
+                for answer, raw in zip(answers, scored, strict=True):
+                    by_hypothesis = dict(zip(raw["labels"], raw["scores"], strict=True))
+                    probabilities = normalize_distribution(
+                        {option: float(by_hypothesis[h]) for option, h in by_option.items()}
                     )
-                by_hypothesis = dict(zip(raw["labels"], raw["scores"], strict=True))
-                probabilities = normalize_distribution(
-                    {option: float(by_hypothesis[h]) for option, h in by_option.items()}
-                )
-                best = max(probabilities, key=probabilities.__getitem__)
-                answers[key] = Answer(value=best, probabilities=probabilities)
+                    best = max(probabilities, key=probabilities.__getitem__)
+                    answer[key] = Answer(value=best, probabilities=probabilities)
             elif isinstance(question, YesNo):
-                with self._lock:
-                    raw = pipe(
-                        text,
-                        candidate_labels=[self._yes_hypothesis(question)],
-                        hypothesis_template="{}",
-                        multi_label=True,
+                scored = self._score(texts, [self._yes_hypothesis(question)], True)
+                for answer, raw in zip(answers, scored, strict=True):
+                    p_yes = float(raw["scores"][0])
+                    answer[key] = Answer(
+                        value=p_yes >= 0.5, probabilities={"yes": p_yes, "no": 1.0 - p_yes}
                     )
-                p_yes = float(raw["scores"][0])
-                answers[key] = Answer(
-                    value=p_yes >= 0.5, probabilities={"yes": p_yes, "no": 1.0 - p_yes}
-                )
             else:
-                answers[key] = None
-        return ProviderResult(answers=answers, model=self.model)
+                for answer in answers:
+                    answer[key] = None
+        return answers
 
     def close(self) -> None:
         self._pipeline = None

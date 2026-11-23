@@ -116,11 +116,17 @@ change.
 
 ::: thinkless.providers.ProviderResult
 
+::: thinkless.providers.Batched
+
 ::: thinkless.providers.Rules
 
 ::: thinkless.providers.gliner.GLiNER
 
 ::: thinkless.providers.laya.Laya
+
+::: thinkless.providers.hf.HFClassifier
+
+::: thinkless.providers.hf.HFZeroShot
 
 ::: thinkless.providers.SystemOne
 

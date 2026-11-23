@@ -81,6 +81,21 @@ def serve(
             "--registered-only", help="Refuse questions that are not registered on the server."
         ),
     ] = False,
+    batching: Annotated[
+        bool,
+        typer.Option(
+            "--batching/--no-batching",
+            help="Let concurrent requests share the forward passes of local models.",
+        ),
+    ] = True,
+    max_batch: Annotated[int, typer.Option(help="Most calls per batch.", min=1)] = 32,
+    batch_wait_ms: Annotated[
+        float,
+        typer.Option(
+            help="How long the first call of a batch waits for others. 0 adds no latency.",
+            min=0.0,
+        ),
+    ] = 0.0,
 ) -> None:
     """Serve an engine over HTTP: /v1/decide, /v1/systemone, /v1/questions, /healthz."""
     try:
@@ -97,8 +112,19 @@ def serve(
             f"[yellow]Serving on {host} without authentication. Set {api_key_env} to require "
             "a bearer token.[/]"
         )
-    app = create_app(built, registered, api_key=api_key, allow_ad_hoc=not registered_only)
-    uvicorn.run(app, host=host, port=port)
+    app = create_app(
+        built,
+        registered,
+        api_key=api_key,
+        allow_ad_hoc=not registered_only,
+        batching=batching,
+        max_batch=max_batch,
+        batch_wait_ms=batch_wait_ms,
+    )
+    # Ctrl+C or SIGTERM: uvicorn stops accepting requests, lets running ones
+    # finish for up to 10 s, then runs the app's shutdown (batch workers, the
+    # engine's models, trace flush).
+    uvicorn.run(app, host=host, port=port, timeout_graceful_shutdown=10)
 
 
 def mcp(

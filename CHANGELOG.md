@@ -8,6 +8,20 @@ All notable changes are recorded here. The format follows
 
 ### Added
 
+- `Engine.decide_batch(states, questions)` answers the same questions about
+  many inputs, one provider level at a time, and `adecide_batch` is its async
+  form. Providers have a batch entry point, `answer_batch`; GLiNER, Laya,
+  `HFClassifier` and `HFZeroShot` put many inputs through one forward pass.
+  On an RTX 5060 this is 1.2 to 3 times the throughput of one call per input.
+- The decision server batches across concurrent requests: local models that
+  batch are wrapped in the new `Batched` provider while it runs, so requests
+  that arrive while a model is busy share its next pass. A lone request is
+  not delayed. `thinkless serve` has `--no-batching`, `--max-batch` and
+  `--batch-wait-ms`, and `/healthz` shows which providers are batched.
+- Shutdown of the decision server stops the batch workers, fails calls still
+  queued instead of leaving them waiting, and gives running requests 10
+  seconds to finish.
+
 - A [student test page](https://inboxpraveen.github.io/ThinkLess/student-test/)
   on the docs site: a Habits student trained on 8,000 of Qwen 3.7 Flash's
   answers to Banking77 messages runs in the browser, answers what the visitor
