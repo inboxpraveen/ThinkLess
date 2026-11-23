@@ -126,7 +126,7 @@ class ResponsesApi:
     """The OpenAI Responses API."""
 
     name = "responses"
-    streams_locally = False
+    streams_locally = True
 
     def matches(self, path: str) -> bool:
         return path.rstrip("/").endswith("/responses")
@@ -283,7 +283,54 @@ class ResponsesApi:
         }
 
     def build_stream(self, call: Call, response: Mapping[str, Any]) -> bytes:
-        raise NotImplementedError("streaming Responses calls are always sent to the model")
+        """The events a streaming Responses client expects, for a finished response."""
+        events: list[dict[str, Any]] = []
+
+        def emit(kind: str, **fields: Any) -> None:
+            events.append({"type": kind, "sequence_number": len(events), **fields})
+
+        started = {**response, "status": "in_progress", "output": [], "usage": None}
+        emit("response.created", response=started)
+        emit("response.in_progress", response=started)
+        for index, item in enumerate(response.get("output") or []):
+            if item.get("type") == "function_call":
+                emit(
+                    "response.output_item.added",
+                    output_index=index,
+                    item={**item, "arguments": "", "status": "in_progress"},
+                )
+                emit(
+                    "response.function_call_arguments.delta",
+                    item_id=item["id"],
+                    output_index=index,
+                    delta=item["arguments"],
+                )
+                emit(
+                    "response.function_call_arguments.done",
+                    item_id=item["id"],
+                    output_index=index,
+                    name=item.get("name"),
+                    arguments=item["arguments"],
+                )
+            else:
+                emit(
+                    "response.output_item.added",
+                    output_index=index,
+                    item={**item, "content": [], "status": "in_progress"},
+                )
+                for part_index, part in enumerate(item.get("content") or []):
+                    where = {
+                        "item_id": item["id"],
+                        "output_index": index,
+                        "content_index": part_index,
+                    }
+                    emit("response.content_part.added", **where, part={**part, "text": ""})
+                    emit("response.output_text.delta", **where, delta=part["text"], logprobs=[])
+                    emit("response.output_text.done", **where, text=part["text"], logprobs=[])
+                    emit("response.content_part.done", **where, part=part)
+            emit("response.output_item.done", output_index=index, item=item)
+        emit("response.completed", response=dict(response))
+        return _sse(events)
 
     def collect_stream(self, chunks: Iterable[bytes]) -> dict[str, Any] | None:
         for event in reversed(_events(chunks)):
@@ -292,6 +339,14 @@ class ResponsesApi:
             ):
                 return dict(event["response"])
         return None
+
+
+def _sse(events: Sequence[Mapping[str, Any]]) -> bytes:
+    """Server-sent events, each named by its type, as both APIs send them."""
+    return "".join(
+        f"event: {event['type']}\ndata: {json.dumps(event, ensure_ascii=False)}\n\n"
+        for event in events
+    ).encode("utf-8")
 
 
 def _parts(content: Any) -> tuple[str, bool]:
@@ -325,7 +380,7 @@ class MessagesApi:
     """The Anthropic Messages API."""
 
     name = "messages"
-    streams_locally = False
+    streams_locally = True
 
     def matches(self, path: str) -> bool:
         return path.rstrip("/").endswith("/messages")
@@ -454,7 +509,43 @@ class MessagesApi:
         }
 
     def build_stream(self, call: Call, response: Mapping[str, Any]) -> bytes:
-        raise NotImplementedError("streaming Messages calls are always sent to the model")
+        """The events a streaming Messages client expects, for a finished message."""
+        events: list[dict[str, Any]] = [
+            {
+                "type": "message_start",
+                "message": {
+                    **response,
+                    "content": [],
+                    "stop_reason": None,
+                    "stop_sequence": None,
+                },
+            }
+        ]
+        for index, block in enumerate(response.get("content") or []):
+            if block.get("type") == "tool_use":
+                start = {**block, "input": {}}
+                delta = {
+                    "type": "input_json_delta",
+                    "partial_json": json.dumps(block.get("input") or {}, ensure_ascii=False),
+                }
+            else:
+                start = {**block, "text": ""}
+                delta = {"type": "text_delta", "text": block.get("text") or ""}
+            events.append({"type": "content_block_start", "index": index, "content_block": start})
+            events.append({"type": "content_block_delta", "index": index, "delta": delta})
+            events.append({"type": "content_block_stop", "index": index})
+        events.append(
+            {
+                "type": "message_delta",
+                "delta": {
+                    "stop_reason": response.get("stop_reason"),
+                    "stop_sequence": response.get("stop_sequence"),
+                },
+                "usage": {"output_tokens": (response.get("usage") or {}).get("output_tokens", 0)},
+            }
+        )
+        events.append({"type": "message_stop"})
+        return _sse(events)
 
     def collect_stream(self, chunks: Iterable[bytes]) -> dict[str, Any] | None:
         message: dict[str, Any] | None = None

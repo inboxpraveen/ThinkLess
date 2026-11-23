@@ -286,12 +286,12 @@ It always sends to the LLM:
   stored conversation (`previous_response_id`, `conversation`), since that
   context is not in the request;
 - Anthropic calls with extended thinking;
-- streamed Responses and Messages calls (recorded and learned from, but
-  answered by the model; streamed Chat Completions calls are answered
-  locally);
 - sites whose answers are free text.
 
-A streamed answer is recorded only when the stream finished. A stream the
+Streamed calls are answered locally on all three APIs: the answer arrives as
+the event stream the SDK expects, in one piece, so `responses.stream(...)`
+and `messages.stream(...)` return it like any other. A streamed answer is
+recorded only when the stream finished. A stream the
 caller stopped reading, or that broke off, teaches the students nothing and
 counts as neither agreement nor disagreement in an audit.
 

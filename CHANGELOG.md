@@ -26,6 +26,10 @@ All notable changes are recorded here. The format follows
   form. Providers have a batch entry point, `answer_batch`; GLiNER, Laya,
   `HFClassifier` and `HFZeroShot` put many inputs through one forward pass.
   On an RTX 5060 this is 1.2 to 3 times the throughput of one call per input.
+- Habits answers streamed Responses and Anthropic Messages calls locally, as
+  it already did for Chat Completions. The local answer is sent as the event
+  stream each API defines, text or tool call, and tests read it back through
+  the OpenAI and Anthropic SDKs' stream helpers.
 - `decide_batch(..., concurrency=n)` asks providers that do not batch, such
   as a hosted LLM, about up to `n` inputs at once. Calls run in copies of the
   caller's context, so their spans nest as before. The default, 1, keeps the

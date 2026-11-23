@@ -992,29 +992,35 @@ def test_openai_responses_api(tmp_path: Path) -> None:
         assert body["text"]["format"]["type"] == "json_schema"
         text = body["input"][-1]["content"]
         content = json.dumps({"intent": teacher_intent(text), "wants_human": "person" in text})
-        return lib.Response(
-            200,
-            json={
-                "id": "resp_1",
-                "object": "response",
-                "created_at": 1,
-                "status": "completed",
-                "model": "gpt-test",
-                "output": [
-                    {
-                        "type": "message",
-                        "id": "msg_1",
-                        "role": "assistant",
-                        "status": "completed",
-                        "content": [{"type": "output_text", "text": content, "annotations": []}],
-                    }
-                ],
-                "parallel_tool_calls": True,
-                "tool_choice": "auto",
-                "tools": [],
-                "usage": {"input_tokens": 90, "output_tokens": 11, "total_tokens": 101},
-            },
-        )
+        reply = {
+            "id": "resp_1",
+            "object": "response",
+            "created_at": 1,
+            "status": "completed",
+            "model": "gpt-test",
+            "output": [
+                {
+                    "type": "message",
+                    "id": "msg_1",
+                    "role": "assistant",
+                    "status": "completed",
+                    "content": [{"type": "output_text", "text": content, "annotations": []}],
+                }
+            ],
+            "parallel_tool_calls": True,
+            "tool_choice": "auto",
+            "tools": [],
+            "usage": {"input_tokens": 90, "output_tokens": 11, "total_tokens": 101},
+        }
+        if body.get("stream"):
+            from thinkless.habits.apis import RESPONSES
+
+            return lib.Response(
+                200,
+                content=RESPONSES.build_stream(None, reply),  # type: ignore[arg-type]
+                headers={"content-type": "text/event-stream"},
+            )
+        return lib.Response(200, json=reply)
 
     class Route(pydantic.BaseModel):
         intent: Literal["refund", "order_status", "cancel", "other"]
@@ -1044,6 +1050,21 @@ def test_openai_responses_api(tmp_path: Path) -> None:
     answers = [ask() for _ in range(20)]
     assert calls["n"] - before < 20
     assert all(isinstance(a.output_parsed, Route) for a in answers)
+
+    # Streamed calls are answered locally too, through the SDK's stream helper.
+    before = calls["n"]
+    streamed = []
+    for _ in range(10):
+        with client.responses.stream(
+            model="gpt-test",
+            instructions=SYSTEM,
+            input=[{"role": "user", "content": ticket(rng)[0]}],
+            text_format=Route,
+        ) as stream:
+            streamed.append(stream.get_final_response())
+    assert calls["n"] - before < 10
+    assert all(isinstance(r.output_parsed, Route) for r in streamed)
+    assert any(r.id.startswith("resp_thinkless_") for r in streamed)
 
     # The provider never stored a local answer, so a follow-up that chains on
     # it is sent with the conversation written out instead.
@@ -1131,7 +1152,106 @@ def test_anthropic_messages_api(tmp_path: Path) -> None:
         assert block.type == "tool_use"
         assert block.name == "route"
         assert set(block.input) == {"intent", "wants_human"}
+
+    # Streamed through the SDK's helper, a confident call never reaches the model.
+    before = calls["n"]
+    finals = []
+    for _ in range(10):
+        with client.messages.stream(
+            model="claude-test",
+            max_tokens=200,
+            system=SYSTEM,
+            messages=[{"role": "user", "content": ticket(rng)[0]}],
+            tools=[tool],
+            tool_choice={"type": "tool", "name": "route"},
+        ) as stream:
+            finals.append(stream.get_final_message())
+    local = [m for m in finals if m.id.startswith("msg_thinkless_")]
+    assert len(local) == 10 - (calls["n"] - before)
+    assert local
+    for message in local:
+        assert message.content[0].type == "tool_use"
+        assert set(message.content[0].input) == {"intent", "wants_human"}
+        assert message.stop_reason == "tool_use"
     habits.close()
+
+
+def _sse_client(sdk: Any, payload: bytes) -> Any:
+    lib = _library_of(sdk)
+    cls = sdk.OpenAI if hasattr(sdk, "OpenAI") else sdk.Anthropic
+
+    def handler(request: Any) -> Any:
+        return lib.Response(200, content=payload, headers={"content-type": "text/event-stream"})
+
+    return cls(api_key="k", http_client=lib.Client(transport=lib.MockTransport(handler)))
+
+
+@pytest.mark.parametrize("kind", ["text", "tool"])
+def test_local_streams_parse_in_the_sdks(kind: str) -> None:
+    """The streams built for local answers read back, through each SDK, as the answer."""
+    from thinkless.habits.apis import MESSAGES, RESPONSES
+
+    openai = pytest.importorskip("openai")
+    anthropic = pytest.importorskip("anthropic")
+    fields = {"intent": json.dumps("refund"), "wants_human": "true"}
+    expected = {"intent": "refund", "wants_human": True}
+    if kind == "tool":
+        responses_body: dict[str, Any] = {
+            "model": "gpt-test",
+            "input": "x",
+            "tools": [{"type": "function", "name": "route", "parameters": SCHEMA}],
+            "tool_choice": {"type": "function", "name": "route"},
+        }
+        messages_body: dict[str, Any] = {
+            "model": "claude-test",
+            "max_tokens": 50,
+            "messages": [{"role": "user", "content": "x"}],
+            "tools": [{"name": "route", "input_schema": SCHEMA}],
+            "tool_choice": {"type": "tool", "name": "route"},
+        }
+    else:
+        responses_body = {
+            "model": "gpt-test",
+            "input": "x",
+            "text": {
+                "format": {"type": "json_schema", "name": "route", "schema": SCHEMA, "strict": True}
+            },
+        }
+        messages_body = {
+            "model": "claude-test",
+            "max_tokens": 50,
+            "messages": [{"role": "user", "content": "x"}],
+        }
+
+    call = RESPONSES.parse_request(responses_body)
+    assert call is not None
+    built = RESPONSES.build_response(call, fields, {})
+    client = _sse_client(openai, RESPONSES.build_stream(call, built))
+    with client.responses.stream(**responses_body) as stream:
+        final = stream.get_final_response()
+    assert final.id == built["id"]
+    if kind == "tool":
+        assert final.output[0].type == "function_call"
+        assert json.loads(final.output[0].arguments) == expected
+    else:
+        assert json.loads(final.output_text) == expected
+
+    call = MESSAGES.parse_request(messages_body)
+    assert call is not None
+    if kind == "text":
+        fields = {"$text": json.dumps("All sorted.")}
+    built = MESSAGES.build_response(call, fields, {})
+    aclient = _sse_client(anthropic, MESSAGES.build_stream(call, built))
+    with aclient.messages.stream(**messages_body) as stream:
+        message = stream.get_final_message()
+    assert message.id == built["id"]
+    assert message.stop_reason == built["stop_reason"]
+    if kind == "tool":
+        assert message.content[0].type == "tool_use"
+        assert message.content[0].input == expected
+    else:
+        assert message.content[0].type == "text"
+        assert message.content[0].text == built["content"][0]["text"]
 
 
 def test_streamed_messages_and_responses_are_recorded() -> None:
