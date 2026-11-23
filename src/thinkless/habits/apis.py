@@ -6,17 +6,19 @@
 * ``responses``: the OpenAI Responses API (``POST .../responses``), the
   default of the OpenAI Agents SDK.
 * ``messages``: the Anthropic Messages API (``POST .../v1/messages``).
+* ``gemini``: the Gemini API (``POST .../models/<model>:generateContent``
+  and ``:streamGenerateContent``), on Google AI and Vertex AI.
 
 Each API turns request and response bodies into the same :class:`Call` and
 :class:`Output`, so sites, students and the gate work the same way for all
-of them. Local answers to streaming requests are built for Chat Completions;
-streaming Responses and Messages calls are recorded and learned from, and
-always answered by the model.
+of them, and a local answer to a streaming request arrives as the event
+stream the API defines.
 """
 
 from __future__ import annotations
 
 import json
+import re
 import time
 import uuid
 from collections.abc import Iterable, Mapping, Sequence
@@ -592,15 +594,267 @@ class MessagesApi:
         return message
 
 
+_GEMINI_PATH = re.compile(r"/models/([^/:]+):(stream)?generateContent$", re.IGNORECASE)
+
+
+def _either(body: Mapping[str, Any], camel: str, snake: str) -> Any:
+    return body[camel] if camel in body else body.get(snake)
+
+
+class GeminiApi:
+    """The Gemini API (``POST .../models/<model>:generateContent``), also on Vertex AI.
+
+    The model and whether the call streams are in the URL, not the body, so
+    the transport copies them into the body ThinkLess parses and records,
+    under ``model`` and ``stream``; the body sent to Google is unchanged.
+    """
+
+    name = "gemini"
+    streams_locally = True
+
+    def matches(self, path: str) -> bool:
+        return _GEMINI_PATH.search(path.rstrip("/")) is not None
+
+    def annotate(self, body: Any, path: str) -> Any:
+        """``body`` with the model and stream flag of its URL, for parsing and the log."""
+        found = _GEMINI_PATH.search(path.rstrip("/"))
+        if found is None or not isinstance(body, Mapping):
+            return body
+        return {**body, "model": found.group(1), "stream": bool(found.group(2))}
+
+    def parse_request(self, body: Any, headers: Mapping[str, str] | None = None) -> Call | None:
+        if not isinstance(body, Mapping):
+            return None
+        raw = body.get("contents")
+        if isinstance(raw, Mapping):
+            raw = [raw]
+        if not isinstance(raw, Sequence) or isinstance(raw, str):
+            return None
+        messages: list[Message] = []
+        has_media = False
+        system = _either(body, "systemInstruction", "system_instruction")
+        if system:
+            text, other = _gemini_parts(
+                system.get("parts") if isinstance(system, Mapping) else system
+            )
+            has_media = has_media or other
+            messages.append(Message("system", text))
+        for item in raw:
+            if not isinstance(item, Mapping):
+                return None
+            parts = item.get("parts") or []
+            role = "assistant" if item.get("role") == "model" else str(item.get("role") or "user")
+            if any(
+                isinstance(p, Mapping) and _either(p, "functionResponse", "function_response")
+                for p in parts
+            ):
+                role = "tool"
+            text, other = _gemini_parts(parts)
+            has_media = has_media or other
+            messages.append(Message(role, text))
+        contract, definition, schema, name = self._contract(body)
+        config = _mapping(_either(body, "generationConfig", "generation_config"))
+        extra = ""
+        if int(_either(config, "candidateCount", "candidate_count") or 1) > 1:
+            extra = "several candidates were requested"
+        elif _either(config, "responseLogprobs", "response_logprobs"):
+            extra = "log probabilities were requested"
+        elif _either(body, "cachedContent", "cached_content"):
+            extra = "the call continues cached content that is not in the request"
+        reason = _reason(has_media, contract, extra) or ("no contents" if not messages else "")
+        return Call(
+            model=str(body.get("model") or ""),
+            messages=tuple(messages),
+            contract=contract,
+            contract_id=fingerprint([self.name, contract, definition]),
+            schema=schema,
+            schema_name=str(name) if name else None,
+            stream=bool(body.get("stream")),
+            answerable=not reason,
+            reason=reason,
+            site_name=_site_name(headers),
+            body=body,
+            api=self.name,
+        )
+
+    @staticmethod
+    def _contract(body: Mapping[str, Any]) -> tuple[str, Any, dict[str, Any] | None, str | None]:
+        declarations: list[Mapping[str, Any]] = []
+        for tool in body.get("tools") or []:
+            if isinstance(tool, Mapping):
+                found = _either(tool, "functionDeclarations", "function_declarations") or []
+                declarations += [d for d in found if isinstance(d, Mapping)]
+        tool_config = _mapping(_either(body, "toolConfig", "tool_config"))
+        calling = _mapping(_either(tool_config, "functionCallingConfig", "function_calling_config"))
+        mode = str(calling.get("mode") or "AUTO").upper()
+        allowed = list(_either(calling, "allowedFunctionNames", "allowed_function_names") or [])
+        if declarations and mode == "ANY" and (len(allowed) == 1 or len(declarations) == 1):
+            forced = str(allowed[0]) if len(allowed) == 1 else str(declarations[0].get("name"))
+            for declaration in declarations:
+                if declaration.get("name") == forced:
+                    schema = _either(declaration, "parametersJsonSchema", "parameters_json_schema")
+                    if schema is None:
+                        schema = declaration.get("parameters")
+                    return "tool", declaration, schema if isinstance(schema, dict) else None, forced
+            return "tool", {"name": forced}, None, forced
+        if declarations and mode != "NONE":
+            return "tools", {"tools": declarations, "config": calling}, None, None
+        config = _mapping(_either(body, "generationConfig", "generation_config"))
+        mime = _either(config, "responseMimeType", "response_mime_type")
+        if mime == "application/json":
+            schema = _either(config, "responseJsonSchema", "response_json_schema")
+            if schema is None:
+                schema = _either(config, "responseSchema", "response_schema")
+            definition = {"mime": mime, "schema": schema}
+            return "json_schema", definition, schema if isinstance(schema, dict) else None, None
+        if mime == "text/x.enum":
+            schema = _either(config, "responseSchema", "response_schema")
+            return "text", {"mime": mime, "schema": schema}, None, None
+        return "text", "text", None, None
+
+    def parse_response(self, call: Call, body: Any) -> Output | None:
+        if not isinstance(body, Mapping):
+            return None
+        candidates = body.get("candidates") or []
+        if not candidates or not isinstance(candidates[0], Mapping):
+            return None
+        candidate = candidates[0]
+        reason = candidate.get("finishReason") or candidate.get("finish_reason")
+        if reason not in (None, "STOP", "MAX_TOKENS", "FINISH_REASON_UNSPECIFIED"):
+            return None  # blocked by a safety filter, a recitation check or similar
+        texts: list[str] = []
+        tool_calls: list[tuple[str, Any]] = []
+        for part in _mapping(candidate.get("content")).get("parts") or []:
+            if not isinstance(part, Mapping) or part.get("thought"):
+                continue
+            call_part = _either(part, "functionCall", "function_call")
+            if isinstance(call_part, Mapping):
+                tool_calls.append((str(call_part.get("name")), call_part.get("args") or {}))
+            elif isinstance(part.get("text"), str):
+                texts.append(part["text"])
+        usage = _mapping(_either(body, "usageMetadata", "usage_metadata"))
+        return make_output(
+            call,
+            text="".join(texts),
+            tool_calls=tool_calls,
+            finish_reason=reason,
+            model=_either(body, "modelVersion", "model_version") or call.model,
+            usage=(
+                int(_either(usage, "promptTokenCount", "prompt_token_count") or 0),
+                int(_either(usage, "candidatesTokenCount", "candidates_token_count") or 0),
+                None,
+            ),
+            raw=body,
+        )
+
+    def build_response(
+        self, call: Call, fields: Mapping[str, str], template: Mapping[str, Any]
+    ) -> dict[str, Any]:
+        text, arguments = answer_payload(call, fields, template)
+        if call.contract == "tool":
+            part: dict[str, Any] = {"functionCall": {"name": call.schema_name, "args": arguments}}
+        else:
+            part = {"text": text or ""}
+        return {
+            "candidates": [
+                {
+                    "content": {"role": "model", "parts": [part]},
+                    "finishReason": "STOP",
+                    "index": 0,
+                }
+            ],
+            "usageMetadata": {
+                "promptTokenCount": 0,
+                "candidatesTokenCount": 0,
+                "totalTokenCount": 0,
+            },
+            "modelVersion": call.model,
+            "responseId": f"thinkless_{uuid.uuid4().hex[:20]}",
+        }
+
+    def build_stream(self, call: Call, response: Mapping[str, Any]) -> bytes:
+        """A streamed Gemini answer is a series of whole responses; a local one is a single one."""
+        return f"data: {json.dumps(response, ensure_ascii=False)}\r\n\r\n".encode()
+
+    def collect_stream(self, chunks: Iterable[bytes]) -> dict[str, Any] | None:
+        events = _events(chunks)
+        if not events:
+            return None
+        texts: list[str] = []
+        calls: list[dict[str, Any]] = []
+        finish = None
+        for event in events:
+            for candidate in event.get("candidates") or []:
+                if not isinstance(candidate, Mapping) or candidate.get("index", 0) != 0:
+                    continue
+                for part in _mapping(candidate.get("content")).get("parts") or []:
+                    if not isinstance(part, Mapping) or part.get("thought"):
+                        continue
+                    if _either(part, "functionCall", "function_call"):
+                        calls.append(dict(part))
+                    elif isinstance(part.get("text"), str):
+                        texts.append(part["text"])
+                finish = candidate.get("finishReason") or candidate.get("finish_reason") or finish
+        if finish is None:
+            return None  # the stream broke off or the caller stopped reading
+        parts: list[dict[str, Any]] = [{"text": "".join(texts)}] if texts else []
+        last = events[-1]
+        return {
+            "candidates": [
+                {
+                    "content": {"role": "model", "parts": parts + calls},
+                    "finishReason": finish,
+                    "index": 0,
+                }
+            ],
+            "usageMetadata": _either(last, "usageMetadata", "usage_metadata") or {},
+            "modelVersion": _either(last, "modelVersion", "model_version"),
+            "responseId": _either(last, "responseId", "response_id"),
+        }
+
+
+def _gemini_parts(parts: Any) -> tuple[str, bool]:
+    """Text of Gemini parts, and whether they held anything else (images, files, code)."""
+    if isinstance(parts, str):
+        return parts, False
+    if isinstance(parts, Mapping):
+        parts = [parts]
+    texts: list[str] = []
+    other = False
+    for part in parts or []:
+        if isinstance(part, str):
+            texts.append(part)
+            continue
+        if not isinstance(part, Mapping) or part.get("thought"):
+            continue
+        call = _either(part, "functionCall", "function_call")
+        result = _either(part, "functionResponse", "function_response")
+        if isinstance(part.get("text"), str):
+            texts.append(part["text"])
+        elif isinstance(call, Mapping):
+            texts.append(f"{call.get('name')}({json.dumps(call.get('args'), sort_keys=True)})")
+        elif isinstance(result, Mapping):
+            texts.append(json.dumps(result.get("response"), sort_keys=True, ensure_ascii=False))
+        else:
+            other = True
+    return "\n".join(texts), other
+
+
 CHAT = ChatApi()
 RESPONSES = ResponsesApi()
 MESSAGES = MessagesApi()
-APIS: dict[str, Api] = {"chat": CHAT, "responses": RESPONSES, "messages": MESSAGES}
+GEMINI = GeminiApi()
+APIS: dict[str, Api] = {
+    "chat": CHAT,
+    "responses": RESPONSES,
+    "messages": MESSAGES,
+    "gemini": GEMINI,
+}
 
 
 def api_for_path(path: str) -> Api | None:
     """The API a request path belongs to, or ``None`` for everything else."""
-    for api in (CHAT, RESPONSES, MESSAGES):
+    for api in (CHAT, RESPONSES, MESSAGES, GEMINI):
         if api.matches(path):
             return api
     return None
@@ -609,6 +863,8 @@ def api_for_path(path: str) -> Api | None:
 def api_for_record(request: Any, response: Any = None) -> Api:
     """Guess the API of a logged request and response pair from their shapes."""
     if isinstance(request, Mapping):
+        if "contents" in request and "messages" not in request:
+            return GEMINI
         if "input" in request and "messages" not in request:
             return RESPONSES
         if "max_tokens" in request and (

@@ -1266,6 +1266,229 @@ def test_anthropic_messages_api(tmp_path: Path) -> None:
     habits.close()
 
 
+def test_gemini_api_through_the_genai_sdk(tmp_path: Path) -> None:
+    """``wrap(genai.Client())``: learn from Gemini calls, then answer them, plain, streamed and async."""
+    import asyncio
+    from typing import Literal
+
+    genai = pytest.importorskip("google.genai")
+    pydantic = pytest.importorskip("pydantic")
+    from google.genai import types
+
+    from thinkless.habits.transport import transport_classes
+
+    paths: list[str] = []
+    sent: list[dict[str, Any]] = []
+
+    def reply_for(body: dict[str, Any]) -> dict[str, Any]:
+        text = body["contents"][-1]["parts"][0]["text"]
+        answer = {"intent": teacher_intent(text), "wants_human": "person" in text}
+        return {
+            "candidates": [
+                {
+                    "content": {"role": "model", "parts": [{"text": json.dumps(answer)}]},
+                    "finishReason": "STOP",
+                    "index": 0,
+                }
+            ],
+            "usageMetadata": {"promptTokenCount": 80, "candidatesTokenCount": 12},
+            "modelVersion": "gemini-test-001",
+        }
+
+    def respond(lib: Any, request: Any) -> Any:
+        paths.append(request.url.path)
+        body = json.loads(request.content)
+        sent.append(body)
+        if "streamGenerateContent" in request.url.path:
+            # Google streams the text in pieces; the last piece carries the finish reason.
+            whole = reply_for(body)
+            text = whole["candidates"][0]["content"]["parts"][0]["text"]
+            first = {
+                "candidates": [
+                    {"content": {"role": "model", "parts": [{"text": text[:5]}]}, "index": 0}
+                ]
+            }
+            rest = dict(whole)
+            rest["candidates"] = [
+                dict(
+                    whole["candidates"][0], content={"role": "model", "parts": [{"text": text[5:]}]}
+                )
+            ]
+            events = "".join(f"data: {json.dumps(e)}\r\n\r\n" for e in (first, rest))
+            return lib.Response(
+                200, content=events.encode(), headers={"content-type": "text/event-stream"}
+            )
+        return lib.Response(200, json=reply_for(body))
+
+    class Route(pydantic.BaseModel):
+        intent: Literal["refund", "order_status", "cancel", "other"]
+        wants_human: bool
+
+    habits = Habits(tmp_path, confirm_calls=0, learn_every=None, audit=0.0, seed=0)
+    client = genai.Client(api_key="test")
+    assert wrap(client, habits) is client
+    api_client = client._api_client
+    _sync, async_ = transport_classes(
+        type(api_client._httpx_client).__mro__[1].__module__.split(".")[0]
+    )
+    lib = pytest.importorskip(type(api_client._httpx_client).__mro__[1].__module__.split(".")[0])
+    transport = api_client._httpx_client._transport
+    assert type(transport).__name__ == "HabitsTransport"
+    transport.inner = lib.MockTransport(lambda r: respond(lib, r))
+    config = types.GenerateContentConfig(
+        system_instruction=SYSTEM, response_mime_type="application/json", response_schema=Route
+    )
+    rng = random.Random(16)
+
+    def ask() -> Any:
+        return client.models.generate_content(
+            model="gemini-test", contents=ticket(rng)[0], config=config
+        )
+
+    for _ in range(220):
+        ask()
+    assert paths[0].endswith("/models/gemini-test:generateContent")
+    assert "model" not in sent[0]
+    assert "stream" not in sent[0]
+    observations = list(read_calls([tmp_path / "calls"]))
+    assert observations[0].call.api == "gemini"
+    assert observations[0].call.model == "gemini-test"
+    assert observations[0].call.contract == "json_schema"
+    plan = habits.learn()
+    assert next(iter(plan["sites"].values()))["status"] == "active"
+
+    before = len(paths)
+    answers = [ask() for _ in range(20)]
+    assert len(paths) - before < 20
+    assert all(isinstance(a.parsed, Route) for a in answers)
+    assert any((a.response_id or "").startswith("thinkless_") for a in answers)
+
+    # Streamed: local answers arrive in one chunk, others in pieces, both parse.
+    before = len(paths)
+    for _ in range(10):
+        chunks = list(
+            client.models.generate_content_stream(
+                model="gemini-test", contents=ticket(rng)[0], config=config
+            )
+        )
+        Route.model_validate_json("".join(c.text or "" for c in chunks))
+    assert len(paths) - before < 10
+    stream_paths = [p for p in paths[before:] if "streamGenerateContent" in p]
+    assert len(paths) - before == len(stream_paths)
+
+    # Async goes through httpx too, not aiohttp, once wrapped: through one
+    # inner client per event loop, each wrapped as the SDK builds it.
+    outer = api_client._async_httpx_client
+    assert isinstance(outer._transport, async_)
+    use_aiohttp = getattr(api_client, "_use_aiohttp", None)
+    assert use_aiohttp is None or not use_aiohttp()
+
+    async def handler(request: Any) -> Any:
+        await request.aread()
+        return respond(lib, request)
+
+    if getattr(outer, "_per_loop", False):  # google-genai 3 and later
+        build = outer._inner_client_cls
+
+        def mocked(**kwargs: Any) -> Any:
+            made = build(**kwargs)
+            assert isinstance(made._transport, async_)
+            made._transport.inner = lib.MockTransport(handler)
+            return made
+
+        outer._inner_client_cls = mocked
+    else:
+        outer._transport.inner = lib.MockTransport(handler)
+
+    async def main() -> list[Any]:
+        return [
+            await client.aio.models.generate_content(
+                model="gemini-test", contents=ticket(rng)[0], config=config
+            )
+            for _ in range(10)
+        ]
+
+    before = len(paths)
+    replies = asyncio.run(main())
+    assert len(paths) - before < 10
+    assert all(isinstance(r.parsed, Route) for r in replies)
+    habits.close()
+
+
+def test_gemini_forced_function_calls() -> None:
+    from thinkless.habits.apis import GEMINI, api_for_path
+
+    assert api_for_path("/v1beta/models/gemini-2.5-flash:generateContent") is GEMINI
+    assert (
+        api_for_path("/v1/projects/p/locations/l/publishers/google/models/g:streamGenerateContent")
+        is GEMINI
+    )
+    body = GEMINI.annotate(
+        {
+            "contents": [{"role": "user", "parts": [{"text": "refund my order"}]}],
+            "tools": [
+                {"functionDeclarations": [{"name": "route", "parametersJsonSchema": SCHEMA}]}
+            ],
+            "toolConfig": {
+                "functionCallingConfig": {"mode": "ANY", "allowedFunctionNames": ["route"]}
+            },
+        },
+        "/v1beta/models/gemini-2.5-flash:generateContent",
+    )
+    call = GEMINI.parse_request(body)
+    assert call is not None
+    assert call.contract == "tool"
+    assert call.schema_name == "route"
+    assert call.model == "gemini-2.5-flash"
+    assert call.answerable
+    reply = {
+        "candidates": [
+            {
+                "content": {
+                    "role": "model",
+                    "parts": [
+                        {
+                            "functionCall": {
+                                "name": "route",
+                                "args": {"intent": "refund", "wants_human": False},
+                            }
+                        }
+                    ],
+                },
+                "finishReason": "STOP",
+            }
+        ]
+    }
+    output = GEMINI.parse_response(call, reply)
+    assert output is not None
+    assert output.fields["intent"] == '"refund"'
+    built = GEMINI.build_response(call, output.fields, {})
+    assert built["candidates"][0]["content"]["parts"][0]["functionCall"]["args"] == {
+        "intent": "refund",
+        "wants_human": False,
+    }
+    assert (
+        GEMINI.collect_stream([GEMINI.build_stream(call, built)])["candidates"][0]["finishReason"]
+        == "STOP"
+    )
+    # A stream that never finished teaches nothing.
+    assert (
+        GEMINI.collect_stream(
+            [b'data: {"candidates": [{"content": {"parts": [{"text": "x"}]}}]}\r\n\r\n']
+        )
+        is None
+    )
+    # Blocked answers, several candidates and free tool use are left to the model.
+    assert GEMINI.parse_response(call, {"candidates": [{"finishReason": "SAFETY"}]}) is None
+    several = GEMINI.parse_request({**body, "generationConfig": {"candidateCount": 2}})
+    assert several is not None
+    assert not several.answerable
+    free = GEMINI.parse_request({**body, "toolConfig": {"functionCallingConfig": {"mode": "AUTO"}}})
+    assert free is not None
+    assert free.contract == "tools"
+    assert not free.answerable
+
+
 def _sse_client(sdk: Any, payload: bytes) -> Any:
     lib = _library_of(sdk)
     cls = sdk.OpenAI if hasattr(sdk, "OpenAI") else sdk.Anthropic

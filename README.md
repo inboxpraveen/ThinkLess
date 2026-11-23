@@ -84,8 +84,8 @@ shape the LLM returns, so Pydantic parsing, `with_structured_output` and the
 OpenAI Agents SDK see nothing different.
 
 - **Works under** the OpenAI SDK (Chat Completions and Responses), the
-  Anthropic SDK, LangChain and LangGraph, the OpenAI Agents SDK, and any
-  OpenAI-compatible provider. `thinkless habits proxy` does the same for
+  Anthropic SDK, the Google Gen AI SDK (Gemini), LangChain and LangGraph,
+  the OpenAI Agents SDK, and any OpenAI-compatible provider. `thinkless habits proxy` does the same for
   clients in any language.
 - **Costs nothing extra.** No API, no model download, no GPU: the students
   are linear models over hashed text features, trained on a CPU in the

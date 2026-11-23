@@ -26,6 +26,15 @@ All notable changes are recorded here. The format follows
   form. Providers have a batch entry point, `answer_batch`; GLiNER, Laya,
   `HFClassifier` and `HFZeroShot` put many inputs through one forward pass.
   On an RTX 5060 this is 1.2 to 3 times the throughput of one call per input.
+- Habits speaks the Gemini API (`generateContent` and
+  `streamGenerateContent`, on Google AI and Vertex AI), and
+  `habits.wrap(genai.Client())` wraps the Google Gen AI SDK's sync and async
+  clients, including the per event loop clients google-genai 3 sends async
+  calls through, and keeps it off aiohttp. JSON schema answers and forced
+  function calls are learned and answered, plain or streamed. The model,
+  which Gemini puts in the URL, is recorded with the call; the request sent
+  to Google is unchanged. Tested against google-genai 3.6 with recorded
+  responses.
 - `thinkless habits eject SITE --out route.py` (and
   `thinkless.habits.eject.eject`) moves a proven site into code: it writes a
   module with the site's typed questions and an engine whose first provider

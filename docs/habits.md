@@ -110,6 +110,19 @@ its answers look like (`intent: 4 options`, `wants_human: yes/no`,
     client = habits.wrap(Anthropic())
     ```
 
+=== "Google Gen AI SDK"
+
+    ```python
+    from google import genai
+    from thinkless import habits
+
+    client = habits.wrap(genai.Client())   # client.models and client.aio.models
+    ```
+
+    The Gemini API and Vertex AI, plain and streamed, with JSON schema
+    output or a forced function call. Tested against google-genai 3.6 with
+    recorded responses; it has not yet been run against Google's servers.
+
 === "LangChain and LangGraph"
 
     ```python

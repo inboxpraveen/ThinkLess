@@ -108,6 +108,7 @@ dev = [
   "openai-agents>=0.22",
   "pydantic-ai-slim>=1.0",
   "langchain-openai>=0.3",
+  "google-genai>=1.40",
   "fastapi>=0.115",
   "mcp>=1.10",
 ]

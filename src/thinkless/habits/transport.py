@@ -46,6 +46,12 @@ def _body(request: Any) -> Any:
         return None
 
 
+def _annotated(api: Api, body: Any, path: str) -> Any:
+    """The body ThinkLess parses and records; what is sent upstream is unchanged."""
+    annotate = getattr(api, "annotate", None)
+    return annotate(body, path) if annotate is not None else body
+
+
 def _headers(response: Any) -> list[tuple[str, str]]:
     return [(k, v) for k, v in response.headers.items() if k.lower() not in DROPPED]
 
@@ -198,7 +204,7 @@ def transport_classes(module_name: str = "httpx") -> tuple[type, type]:
             if api is None:
                 return self.inner.handle_request(request)
             content = request.read()
-            body = _body(request)
+            body = _annotated(api, _body(request), request.url.path)
             forward = request
             rewritten = _continued(self.habits, api, body)
             if rewritten is not None:
@@ -253,7 +259,7 @@ def transport_classes(module_name: str = "httpx") -> tuple[type, type]:
             if api is None:
                 return await self.inner.handle_async_request(request)
             content = await request.aread()
-            body = _body(request)
+            body = _annotated(api, _body(request), request.url.path)
             forward = request
             rewritten = _continued(self.habits, api, body)
             if rewritten is not None:
@@ -391,11 +397,43 @@ def _wrap_http(http: Any, habits: Habits | None) -> bool:
     return True
 
 
+def _wrap_genai(client: Any, habits: Habits | None) -> bool:
+    """Wrap a ``google.genai.Client``: its sync and async httpx clients.
+
+    With aiohttp installed the SDK sends async calls through aiohttp unless
+    it was given an httpx async client, so the wrapped one is registered as
+    such.
+    """
+    api_client = getattr(client, "_api_client", None)
+    if api_client is None or not hasattr(api_client, "_httpx_client"):
+        return False
+    done = _wrap_http(api_client._httpx_client, habits)
+    async_http = getattr(api_client, "_async_httpx_client", None)
+    if async_http is not None and _wrap_http(async_http, habits):
+        options = getattr(api_client, "_http_options", None)
+        if options is not None and getattr(options, "httpx_async_client", None) is None:
+            options.httpx_async_client = async_http
+        # The SDK sends async requests through one inner client per event
+        # loop, built on demand; each is wrapped as it is built.
+        inner_cls = getattr(async_http, "_inner_client_cls", None)
+        if getattr(async_http, "_per_loop", False) and inner_cls is not None:
+
+            def per_loop(**kwargs: Any) -> Any:
+                made = inner_cls(**kwargs)
+                _wrap_http(made, habits)
+                return made
+
+            async_http._inner_client_cls = per_loop
+        done = True
+    return done
+
+
 def wrap(client: Any, habits: Habits | None = None) -> Any:
     """Put Habits under an existing client, in place, and return it.
 
     Works with ``openai.OpenAI`` and ``openai.AsyncOpenAI`` (and anything
     built on them, such as OpenRouter, Azure, Groq, vLLM or Ollama clients),
+    ``anthropic.Anthropic``, ``google.genai.Client`` (sync and ``.aio``),
     LangChain's ``ChatOpenAI``, and a bare ``httpx`` or ``httpx2`` client.
 
     Args:
@@ -405,6 +443,8 @@ def wrap(client: Any, habits: Habits | None = None) -> Any:
     Raises:
         TypeError: If the client does not expose an httpx transport.
     """
+    if _wrap_genai(client, habits):
+        return client
     wrapped = False
     for attr in ("root_client", "root_async_client"):
         inner = getattr(client, attr, None)
