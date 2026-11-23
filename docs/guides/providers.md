@@ -178,6 +178,43 @@ spacing). Invalid answers become abstentions. Its answers carry no
 probabilities, so the engine treats them as uncalibrated: accepted as the last
 word of a cascade by default.
 
+### Confidence from token log probabilities
+
+Many hosted models can return, for every token they write, the most likely
+alternatives and their log probabilities. With `logprobs=`, `LLMDecider` asks
+for them and reads a probability for every option off the reply:
+
+```python
+from thinkless.llm import OpenRouterLLM
+
+qwen = OpenRouterLLM("qwen/qwen3.7-flash", reasoning={"enabled": False})
+decider = LLMDecider(qwen, logprobs=5)
+```
+
+The option the model wrote gets the product of its tokens' probabilities;
+an alternative token that would have started another option gives that
+option its share. Choice, score and yes or no answers then carry a full
+distribution, and each extracted field a confidence. The decider counts as
+calibrated, so its answers are thresholded like any other provider's: a close
+call between two labels comes back `uncertain` instead of being trusted, and
+the decision benchmark reports its calibration error and coverage.
+
+It needs a backend that returns log probabilities: OpenAI's Chat Completions,
+vLLM, and many OpenRouter models (OpenRouter lists `logprobs` among a model's
+supported parameters). Reasoning models generally do not, and Anthropic's API
+does not. Some hosts allow fewer alternatives than OpenAI's 20; the client
+reads the limit from the error and retries once at it. A reply that comes back
+without log probabilities has no confidence, is not accepted on its own, and
+is logged once as a warning.
+
+On the [decision benchmark](../decision-benchmark/leaderboard.md), Qwen 3.7
+Flash with `logprobs=5` keeps its accuracy and gains a confidence that is
+useful where the model is sure of itself: at a 95% accuracy target it answers
+100% of jailbreak prompts, 82% of CLINC150 and 59% of MASSIVE on its own. On
+fine-grained intents (Banking77, MultiWOZ) and on scores and extraction it is
+overconfident (calibration error 0.15 to 0.35), so no threshold reaches 95%
+there. Calibrate it on your own labels before relying on its numbers.
+
 ## Writing a provider
 
 Subclass `DecisionProvider`, declare what you answer, and return a

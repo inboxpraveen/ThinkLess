@@ -53,6 +53,7 @@ class ScriptedLLM(LLM):
         max_tokens: int = 512,
         temperature: float | None = None,
         json_mode: bool = False,
+        logprobs: int | None = None,
     ) -> Completion:
         started = time.perf_counter()
         self.calls.append((list(messages), system))

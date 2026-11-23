@@ -63,6 +63,7 @@ class AnthropicLLM(LLM):
         self.model = model
         self._effort = effort
         self._fallbacks = model.startswith(FALLBACK_FAMILIES) if fallbacks is None else fallbacks
+        self._owns_client = client is None
         if client is not None:
             self._client = client
             return
@@ -85,6 +86,7 @@ class AnthropicLLM(LLM):
         max_tokens: int = 1024,
         temperature: float | None = None,
         json_mode: bool = False,
+        logprobs: int | None = None,
     ) -> Completion:
         kwargs: dict[str, Any] = {
             "model": self.model,
@@ -124,3 +126,8 @@ class AnthropicLLM(LLM):
             stop_reason=response.stop_reason,
             raw={"request_id": getattr(response, "_request_id", None)},
         )
+
+    def close(self) -> None:
+        """Close the HTTP connections of a client this object created."""
+        if self._owns_client:
+            self._client.close()

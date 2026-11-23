@@ -38,6 +38,9 @@ class Completion(BaseModel):
     stop_reason: str | None = None
     cost_usd: float | None = None
     raw: dict[str, Any] | None = None
+    logprobs: list[dict[str, Any]] | None = None
+    """Per generated token, when asked for and returned: ``{"token", "logprob",
+    "top": [[token, logprob], ...]}``."""
 
 
 class LLM(ABC):
@@ -54,6 +57,9 @@ class LLM(ABC):
             default; some hosted models reject the parameter entirely, and
             their implementations ignore it.
         json_mode: Ask the backend for a JSON object when it supports that.
+        logprobs: Ask for this many top alternatives per generated token,
+            returned in :attr:`Completion.logprobs`. Backends that cannot
+            return them leave it ``None``.
     """
 
     provider: str = "llm"
@@ -72,6 +78,7 @@ class LLM(ABC):
         max_tokens: int = 512,
         temperature: float | None = None,
         json_mode: bool = False,
+        logprobs: int | None = None,
     ) -> Completion:
         raise NotImplementedError
 

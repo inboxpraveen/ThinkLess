@@ -98,6 +98,7 @@ def build_submission_provider(
     llm: str = "local",
     device: str = "auto",
     reasoning: str | None = None,
+    logprobs: int | None = None,
 ) -> DecisionProvider:
     """A provider from a submission spec.
 
@@ -128,7 +129,7 @@ def build_submission_provider(
         return provider
     from ..intents import build_provider
 
-    return build_provider(spec, llm_spec=llm, device=device, reasoning=reasoning)
+    return build_provider(spec, llm_spec=llm, device=device, reasoning=reasoning, logprobs=logprobs)
 
 
 def _row_result(question: Question, row: dict[str, Any], engine: Engine) -> dict[str, Any]:

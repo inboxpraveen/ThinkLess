@@ -42,6 +42,10 @@ something that is not here should be.
   the hardest classes per provider on the decision benchmark.
 - A [student test page](student-test.md) that runs a Habits student in the
   browser.
+- Calibrated LLM confidence: `LLMDecider(logprobs=...)` turns token log
+  probabilities into a distribution over options, so LLM answers are
+  thresholded like every other provider's.
+- Clean shutdown across Habits, the proxy, shadow runs and model providers.
 
 ## Next
 
@@ -60,9 +64,6 @@ something that is not here should be.
   models, frontier LLMs as references, and Hugging Face classifiers.
   Version 1.0 has eight tasks and open submissions; later versions add
   multi-turn safety cases, more languages and harder out-of-scope sets.
-- **Calibrated LLM confidence.** Several hosted models expose token log
-  probabilities; an `LLMDecider` that reads them would give LLM answers a real
-  confidence, so they could be thresholded like every other provider.
 - **Jev and the direct Anthropic SDK path in the published benchmarks.** Both
   are unit tested (Jev against TypeSafe's own SDK models) but have not been
   benchmarked live.

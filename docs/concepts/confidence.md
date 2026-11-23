@@ -47,6 +47,9 @@ confidence if there is one. A prompted LLM has neither, so its decisions carry
 `confidence=None`. By default such answers are accepted as the final word of a
 cascade, since the LLM is what the agent would have used anyway; set
 `Engine(trust_uncalibrated=False)` to have them come back `uncertain` instead.
+An `LLMDecider` with `logprobs=` reads a distribution off the model's token
+probabilities and is thresholded like any other provider (see
+[providers](../guides/providers.md#confidence-from-token-log-probabilities)).
 
 ## Normalized is not calibrated
 

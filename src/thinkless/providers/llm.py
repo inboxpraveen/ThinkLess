@@ -19,6 +19,7 @@ from ..llm.base import LLM
 from ..logs import get_logger
 from ..questions import Choice, Extract, Kind, Question, Score, YesNo
 from .base import DecisionProvider, ProviderResult, State, render_state
+from .logprobs import field_confidences, literals_for, option_probabilities
 
 __all__ = ["LLMDecider", "build_prompt", "parse_reply"]
 
@@ -217,9 +218,19 @@ def parse_reply(text: str, questions: Mapping[str, Question]) -> dict[str, Answe
 class LLMDecider(DecisionProvider):
     """Answers any question kind by prompting a generative model.
 
-    Answers carry no probabilities, so the engine treats them as uncalibrated:
-    by default they are accepted as the final word of a cascade (see
+    By default answers carry no probabilities, so the engine treats them as
+    uncalibrated: they are accepted as the final word of a cascade (see
     ``Engine(trust_uncalibrated=...)``).
+
+    With ``logprobs=``, the decider asks the backend for each generated
+    token's top alternatives and turns them into a probability for every
+    option of a choice, score or yes or no question (and a confidence for
+    each extracted field). The provider is then calibrated: its answers are
+    thresholded like any other provider's, and the decision benchmark scores
+    its calibration and coverage. It needs a backend that returns token log
+    probabilities (OpenAI's Chat Completions and many OpenRouter models do;
+    reasoning models usually do not). Answers that come back without them
+    have no confidence and are not accepted on their own.
 
     Args:
         llm: The model to prompt.
@@ -229,6 +240,8 @@ class LLMDecider(DecisionProvider):
             answers are missing, retry once with three times the budget.
             Reasoning models are the usual cause: hidden reasoning tokens
             count against the limit. The retry is recorded in the trace.
+        logprobs: Top alternatives to request per token (1 to 20), or
+            ``None`` for plain answers.
     """
 
     plane: ClassVar[Plane] = Plane.LLM
@@ -243,12 +256,69 @@ class LLMDecider(DecisionProvider):
         name: str = "llm",
         max_tokens: int = 256,
         retry_on_truncation: bool = True,
+        logprobs: int | None = None,
     ) -> None:
+        if logprobs is not None and not 1 <= logprobs <= 20:
+            raise ValueError("logprobs must be between 1 and 20")
         self.llm = llm
         self.name = name
         self.price_key = llm.provider
         self._max_tokens = max_tokens
         self._retry_on_truncation = retry_on_truncation
+        self.logprobs = logprobs
+        if logprobs is not None:
+            self.calibrated = True  # type: ignore[misc]
+        self._warned_no_logprobs = False
+
+    def close(self) -> None:
+        """Close the LLM: its HTTP client, or a local model's weights."""
+        self.llm.close()
+
+    def _complete(self, messages: list[dict[str, str]], budget: int) -> Any:
+        if self.logprobs is None:
+            return self.llm.complete(
+                messages, system=SYSTEM_PROMPT, max_tokens=budget, json_mode=True
+            )
+        return self.llm.complete(
+            messages,
+            system=SYSTEM_PROMPT,
+            max_tokens=budget,
+            json_mode=True,
+            logprobs=self.logprobs,
+        )
+
+    def _with_probabilities(
+        self, completion: Any, questions: Mapping[str, Question], answers: dict[str, Answer | None]
+    ) -> dict[str, Answer | None]:
+        tokens = completion.logprobs
+        if not tokens:
+            if not self._warned_no_logprobs:
+                logger.warning(
+                    "%s returned no token log probabilities; its answers have no confidence",
+                    completion.model,
+                )
+                self._warned_no_logprobs = True
+            return answers
+        out: dict[str, Answer | None] = {}
+        for key, answer in answers.items():
+            question = questions[key]
+            if answer is None:
+                out[key] = None
+                continue
+            if isinstance(question, Extract):
+                fields = field_confidences(completion.text, tokens, key, question)
+                out[key] = answer.model_copy(update={"fields": fields})
+                continue
+            literals = literals_for(question)
+            probs = (
+                option_probabilities(completion.text, tokens, key, literals) if literals else None
+            )
+            if probs is None:
+                out[key] = answer
+                continue
+            # The parsed answer stands; the probabilities say how sure it was.
+            out[key] = answer.model_copy(update={"probabilities": probs})
+        return out
 
     def warmup(self) -> None:
         self.llm.warmup()
@@ -263,9 +333,7 @@ class LLMDecider(DecisionProvider):
         prompt = build_prompt(state, questions, context)
         budget = self._max_tokens + 48 * len(questions)
         messages = [{"role": "user", "content": prompt}]
-        completion = self.llm.complete(
-            messages, system=SYSTEM_PROMPT, max_tokens=budget, json_mode=True
-        )
+        completion = self._complete(messages, budget)
         answers = parse_reply(completion.text, questions)
         invalid = [key for key, answer in answers.items() if answer is None]
         usage = completion.usage
@@ -283,9 +351,7 @@ class LLMDecider(DecisionProvider):
             )
             if self._retry_on_truncation:
                 retried = True
-                completion = self.llm.complete(
-                    messages, system=SYSTEM_PROMPT, max_tokens=budget * 3, json_mode=True
-                )
+                completion = self._complete(messages, budget * 3)
                 answers = parse_reply(completion.text, questions)
                 invalid = [key for key, answer in answers.items() if answer is None]
                 usage = usage + completion.usage
@@ -293,6 +359,8 @@ class LLMDecider(DecisionProvider):
                     cost += completion.cost_usd
                 else:
                     cost = None
+        if self.logprobs is not None:
+            answers = self._with_probabilities(completion, questions, answers)
         return ProviderResult(
             answers=answers,
             model=completion.model,

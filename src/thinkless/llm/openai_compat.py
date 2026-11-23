@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import os
+import re
 import time
 from collections.abc import Mapping, Sequence
 from typing import Any
@@ -84,6 +85,8 @@ class OpenAICompatibleLLM(LLM):
         self._token_param = token_param or ("max_tokens" if base_url else "max_completion_tokens")
         self._json_mode = supports_json_mode
         self._extra_body = dict(extra_body or {})
+        self._top_logprobs_cap = 20
+        self._owns_client = client is None
         if client is not None:
             self._client = client
             return
@@ -110,6 +113,7 @@ class OpenAICompatibleLLM(LLM):
         max_tokens: int = 512,
         temperature: float | None = None,
         json_mode: bool = False,
+        logprobs: int | None = None,
     ) -> Completion:
         chat: list[dict[str, Any]] = []
         if system:
@@ -122,6 +126,9 @@ class OpenAICompatibleLLM(LLM):
         }
         if temperature is not None:
             kwargs["temperature"] = temperature
+        if logprobs:
+            kwargs["logprobs"] = True
+            kwargs["top_logprobs"] = min(int(logprobs), self._top_logprobs_cap)
         if self._extra_body:
             kwargs["extra_body"] = dict(self._extra_body)
         use_json = json_mode and self._json_mode
@@ -131,15 +138,23 @@ class OpenAICompatibleLLM(LLM):
         try:
             response = self._client.chat.completions.create(**kwargs)
         except Exception as exc:
-            if not (use_json and _rejects_response_format(exc)):
+            cap = _top_logprobs_limit(exc) if logprobs else None
+            if cap is not None and cap < kwargs["top_logprobs"]:
+                # Some hosts allow fewer alternatives than OpenAI's 20; use their limit.
+                logger.info("%s allows at most %d top logprobs", self.model, cap)
+                self._top_logprobs_cap = cap
+                kwargs["top_logprobs"] = cap
+                response = self._client.chat.completions.create(**kwargs)
+            elif use_json and _rejects_response_format(exc):
+                logger.warning(
+                    "%s rejected response_format; retrying without JSON mode for this client",
+                    self.model,
+                )
+                self._json_mode = False
+                kwargs.pop("response_format", None)
+                response = self._client.chat.completions.create(**kwargs)
+            else:
                 raise
-            logger.warning(
-                "%s rejected response_format; retrying without JSON mode for this client",
-                self.model,
-            )
-            self._json_mode = False
-            kwargs.pop("response_format", None)
-            response = self._client.chat.completions.create(**kwargs)
         latency = (time.perf_counter() - started) * 1000.0
         choice = response.choices[0]
         usage = response.usage
@@ -153,7 +168,39 @@ class OpenAICompatibleLLM(LLM):
             latency_ms=latency,
             stop_reason=choice.finish_reason,
             cost_usd=reported_cost(usage),
+            logprobs=_token_logprobs(choice) if logprobs else None,
         )
+
+    def close(self) -> None:
+        """Close the HTTP connections of a client this object created."""
+        if self._owns_client:
+            self._client.close()
+
+
+def _token_logprobs(choice: Any) -> list[dict[str, Any]] | None:
+    """The ``logprobs.content`` of a Chat Completions choice, in plain types."""
+    content = getattr(getattr(choice, "logprobs", None), "content", None)
+    if not content:
+        return None
+    return [
+        {
+            "token": item.token,
+            "logprob": float(item.logprob),
+            "top": [[alt.token, float(alt.logprob)] for alt in (item.top_logprobs or [])],
+        }
+        for item in content
+    ]
+
+
+def _top_logprobs_limit(exc: Exception) -> int | None:
+    """The largest ``top_logprobs`` a host accepts, when its error says so."""
+    text = str(exc)
+    if "top_logprobs" not in text:
+        return None
+    match = re.search(r"top_logprobs[^\[\d]*\[\s*0\s*,\s*(\d+)\s*\]", text) or re.search(
+        r"top_logprobs[^\d]*(?:at most|<=|maximum(?: of)?|less than or equal to)\s*(\d+)", text
+    )
+    return int(match.group(1)) if match else None
 
 
 def _rejects_response_format(exc: Exception) -> bool:

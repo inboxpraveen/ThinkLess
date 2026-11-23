@@ -8,6 +8,17 @@ All notable changes are recorded here. The format follows
 
 ### Added
 
+- Calibrated LLM confidence (#12). `LLMDecider(llm, logprobs=5)` asks the
+  backend for each token's top alternatives and turns them into a probability
+  for every option of a choice, score or yes or no question, and a confidence
+  for each extracted field. The decider is then calibrated: its answers are
+  thresholded like any other provider's. `LLM.complete` takes `logprobs=` and
+  `Completion.logprobs` carries what came back; the OpenAI-compatible client
+  adapts to hosts that allow fewer than 20 alternatives. The decision
+  benchmark takes `--logprobs` for `--provider llm`.
+- `LLMDecider.close()` closes its LLM, and the OpenAI-compatible and Anthropic
+  clients close the HTTP connections they opened.
+
 - `Engine.decide_batch(states, questions)` answers the same questions about
   many inputs, one provider level at a time, and `adecide_batch` is its async
   form. Providers have a batch entry point, `answer_batch`; GLiNER, Laya,
@@ -62,8 +73,6 @@ All notable changes are recorded here. The format follows
   instead of raising.
 - Closing a GLiNER, Laya, Hugging Face or local LLM provider waits for a call
   in progress instead of failing it, and returns cached GPU memory.
-  `LLMDecider.close()` closes its LLM, and the OpenAI-compatible and Anthropic
-  clients close the HTTP connections they opened.
 - A Habits suspension writes the plan outside the lock that request threads
   share, and a reloaded plan is published in one step, so concurrent calls
   never see it half built.

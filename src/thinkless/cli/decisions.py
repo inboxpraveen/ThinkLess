@@ -68,6 +68,15 @@ def run_command(
     reasoning: Annotated[
         str, typer.Option(help="Reasoning setting for --provider llm.")
     ] = "default",
+    logprobs: Annotated[
+        int | None,
+        typer.Option(
+            help="With --provider llm: ask for this many top token alternatives and use them "
+            "as the answer's confidence (needs a backend that returns log probabilities).",
+            min=1,
+            max=20,
+        ),
+    ] = None,
     device: Annotated[str, typer.Option(help="Device for local models.")] = "auto",
     task: Annotated[list[str] | None, typer.Option(help="Only this task. Repeatable.")] = None,
     out: Annotated[Path | None, typer.Option(help="Result file. Default: ./<name>.json")] = None,
@@ -94,12 +103,18 @@ def run_command(
     from ..bench.decisions import build_submission_provider, load_tasks, run_benchmark
 
     built = build_submission_provider(
-        provider, llm=llm, device=device, reasoning=None if reasoning == "default" else reasoning
+        provider,
+        llm=llm,
+        device=device,
+        reasoning=None if reasoning == "default" else reasoning,
+        logprobs=logprobs,
     )
     label = name or (llm if provider == "llm" else provider)
     spec = f"llm:{llm}" if provider == "llm" else provider
     if provider == "llm" and reasoning != "default":
         spec += f" --reasoning {reasoning}"
+    if provider == "llm" and logprobs:
+        spec += f" --logprobs {logprobs}"
     total = {t.name: t for t in load_tasks(task)}
     with Progress(
         TextColumn("{task.description}"),

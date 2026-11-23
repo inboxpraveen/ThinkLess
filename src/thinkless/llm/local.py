@@ -122,6 +122,7 @@ class TransformersLLM(LLM):
         max_tokens: int = 512,
         temperature: float | None = None,
         json_mode: bool = False,
+        logprobs: int | None = None,
     ) -> Completion:
         self._load()
         import torch
@@ -164,5 +165,10 @@ class TransformersLLM(LLM):
         )
 
     def close(self) -> None:
-        self._model = None
-        self._tokenizer = None
+        """Drop the model, after any generation in progress."""
+        from .._hub import release_memory
+
+        with self._lock:
+            self._model = None
+            self._tokenizer = None
+        release_memory()

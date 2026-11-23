@@ -11,6 +11,7 @@ Each task's main metric on its test rows, in percent: accuracy for choice questi
 | Laya | verified | 40.2 (0) | 48.4 (0) | 19.4 (0) | 32.8 (0) | 99.8 (100) | 77.0 (51) | 64.8 (1) | n/a |
 | Majority class | verified | 2.2 (0) | 18.8 (0) | 9.4 (0) | 17.8 (0) | 50.0 (0) | 50.0 (0) | 65.8 (0) | 0.0 (0) |
 | Qwen 3.7 Flash (reasoning off) | verified | 75.2 | 87.4 | 73.4 | 72.2 | 96.4 | 77.2 | 61.2 | 55.3 |
+| Qwen 3.7 Flash (reasoning off, logprobs) | verified | 75.0 (0) | 86.6 (82) | 74.0 (59) | 71.2 (0) | 97.1 (100) | 77.4 (25) | 62.8 (0) | 53.8 (0) |
 | Qwen3-1.7B (local, reasoning off) | verified | 53.0 | 57.8 | 52.2 | 51.8 | 82.2 | 66.8 | 53.4 | 37.4 |
 
 ## banking77
@@ -21,6 +22,7 @@ Banking77: fine-grained banking support intents. 77 intents. Test rows from the 
 |---|---:|---:|---:|---:|---:|---:|---:|---:|
 | GLiNER 2.5 base | 75.8 (71.9 to 79.3) | macro-F1 73.1 | 0.099 | 35.0 | 94.9 | 0.090 | 41 ms | $0 |
 | Qwen 3.7 Flash (reasoning off) | 75.2 (71.2 to 78.8) | macro-F1 72.4 | n/a | n/a | n/a | n/a | 569 ms | $0.020 |
+| Qwen 3.7 Flash (reasoning off, logprobs) | 75.0 (71.0 to 78.6) | macro-F1 71.9 | 0.151 | 0.0 | n/a | 0.098 | 639 ms | $0.020 |
 | DeBERTa v3 base zero-shot v2.0 (NLI) | 68.4 (64.2 to 72.3) | macro-F1 65.3 | 0.071 | 3.0 | 100.0 | 0.133 | 98 ms | $0 |
 | Qwen3-1.7B (local, reasoning off) | 53.0 (48.6 to 57.3) | macro-F1 50.0 | n/a | n/a | n/a | n/a | 548 ms | $0 |
 | Laya | 40.2 (36.0 to 44.6) | macro-F1 36.8 | 0.197 | 0.0 | n/a | 0.466 | 88 ms | $0 |
@@ -34,6 +36,7 @@ Hardest classes: the 5 with the lowest F1 for each provider, in percent.
 | GLiNER 2.5 base | get physical card 0; getting spare card 0; top up by bank transfer charge 25; transfer not received by recipient 25; fiat currency support 35 |
 | Laya | balance not updated after cheque or cash deposit 0; card about to expire 0; card delivery estimate 0; card payment not recognised 0; card payment wrong exchange rate 0 |
 | Qwen 3.7 Flash (reasoning off) | get physical card 0; order physical card 0; cash withdrawal not recognised 22; receiving money 25; top up by bank transfer charge 25 |
+| Qwen 3.7 Flash (reasoning off, logprobs) | get physical card 0; order physical card 0; fiat currency support 18; cash withdrawal not recognised 22; receiving money 25 |
 | Qwen3-1.7B (local, reasoning off) | card arrival 0; card swallowed 0; compromised card 0; exchange via app 0; get physical card 0 |
 
 ## clinc150
@@ -43,6 +46,7 @@ CLINC150 plus: 150 intents across 10 domains, and out of scope. The 'out of scop
 | Provider | Accuracy (95% CI) | Task metric | ECE | Coverage at 95% | Accuracy there | AURC | p50 | Cost per 1k |
 |---|---:|---:|---:|---:|---:|---:|---:|---:|
 | Qwen 3.7 Flash (reasoning off) | 87.4 (84.2 to 90.0) | macro-F1 86.9 | n/a | n/a | n/a | n/a | 556 ms | $0.027 |
+| Qwen 3.7 Flash (reasoning off, logprobs) | 86.6 (83.3 to 89.3) | macro-F1 86.1 | 0.070 | 82.2 | 93.2 | 0.032 | 619 ms | $0.027 |
 | GLiNER 2.5 base | 58.8 (54.4 to 63.0) | macro-F1 64.0 | 0.078 | 3.2 | 87.5 | 0.211 | 57 ms | $0 |
 | Qwen3-1.7B (local, reasoning off) | 57.8 (53.4 to 62.1) | macro-F1 62.4 | n/a | n/a | n/a | n/a | 610 ms | $0 |
 | DeBERTa v3 base zero-shot v2.0 (NLI) | 53.8 (49.4 to 58.1) | macro-F1 59.7 | 0.102 | 24.6 | 91.9 | 0.218 | 203 ms | $0 |
@@ -57,6 +61,7 @@ Hardest classes: the 5 with the lowest F1 for each provider, in percent.
 | GLiNER 2.5 base | balance 0; calendar update 0; change ai name 0; change speed 0; change volume 0 |
 | Laya | account blocked 0; are you a bot 0; balance 0; bill balance 0; bill due 0 |
 | Qwen 3.7 Flash (reasoning off) | accept reservations 0; distance 0; income 0; maybe 0; reminder update 0 |
+| Qwen 3.7 Flash (reasoning off, logprobs) | accept reservations 0; distance 0; income 0; maybe 0; reminder update 0 |
 | Qwen3-1.7B (local, reasoning off) | accept reservations 0; calendar update 0; change ai name 0; change speed 0; goodbye 0 |
 
 ## massive
@@ -65,6 +70,7 @@ MASSIVE: 60 assistant intents in five languages. 100 test rows each from en-US, 
 
 | Provider | Accuracy (95% CI) | Task metric | ECE | Coverage at 95% | Accuracy there | AURC | p50 | Cost per 1k |
 |---|---:|---:|---:|---:|---:|---:|---:|---:|
+| Qwen 3.7 Flash (reasoning off, logprobs) | 74.0 (70.0 to 77.7) | macro-F1 74.5 | 0.146 | 59.4 | 90.9 | 0.087 | 583 ms | $0.014 |
 | Qwen 3.7 Flash (reasoning off) | 73.4 (69.4 to 77.1) | macro-F1 73.4 | n/a | n/a | n/a | n/a | 534 ms | $0.014 |
 | Qwen3-1.7B (local, reasoning off) | 52.2 (47.8 to 56.5) | macro-F1 50.6 | n/a | n/a | n/a | n/a | 389 ms | $0 |
 | DeBERTa v3 base zero-shot v2.0 (NLI) | 47.2 (42.9 to 51.6) | macro-F1 38.6 | 0.073 | 7.8 | 100.0 | 0.276 | 71 ms | $0 |
@@ -81,6 +87,7 @@ Accuracy by language:
 | Laya | 13.0 | 37.0 | 20.0 | 7.0 | 20.0 |
 | Majority class | 5.0 | 11.0 | 10.0 | 11.0 | 10.0 |
 | Qwen 3.7 Flash (reasoning off) | 73.0 | 74.0 | 77.0 | 70.0 | 73.0 |
+| Qwen 3.7 Flash (reasoning off, logprobs) | 73.0 | 74.0 | 78.0 | 71.0 | 74.0 |
 | Qwen3-1.7B (local, reasoning off) | 54.0 | 55.0 | 56.0 | 46.0 | 50.0 |
 
 Hardest classes: the 5 with the lowest F1 for each provider, in percent.
@@ -91,6 +98,7 @@ Hardest classes: the 5 with the lowest F1 for each provider, in percent.
 | GLiNER 2.5 base | audio volume down 0; audio volume other 0; datetime convert 0; email querycontact 0; general greet 0 |
 | Laya | alarm remove 0; audio volume down 0; audio volume mute 0; audio volume other 0; audio volume up 0 |
 | Qwen 3.7 Flash (reasoning off) | audio volume other 0; iot hue lightup 29; general quirky 33; general greet 33; recommendation events 36 |
+| Qwen 3.7 Flash (reasoning off, logprobs) | audio volume other 0; general greet 22; audio volume up 29; iot hue lightup 29; general quirky 36 |
 | Qwen3-1.7B (local, reasoning off) | audio volume other 0; general greet 0; iot coffee 0; iot hue lightdim 0; iot hue lightup 0 |
 
 ## multiwoz
@@ -100,6 +108,7 @@ MultiWOZ 2.2: the user's intent at a turn of a conversation. The input is the co
 | Provider | Accuracy (95% CI) | Task metric | ECE | Coverage at 95% | Accuracy there | AURC | p50 | Cost per 1k |
 |---|---:|---:|---:|---:|---:|---:|---:|---:|
 | Qwen 3.7 Flash (reasoning off) | 72.2 (68.1 to 75.9) | macro-F1 64.1 | n/a | n/a | n/a | n/a | 585 ms | $0.012 |
+| Qwen 3.7 Flash (reasoning off, logprobs) | 71.2 (67.1 to 75.0) | macro-F1 64.0 | 0.159 | 0.0 | n/a | 0.135 | 620 ms | $0.012 |
 | Qwen3-1.7B (local, reasoning off) | 51.8 (47.4 to 56.1) | macro-F1 44.4 | n/a | n/a | n/a | n/a | 391 ms | $0 |
 | GLiNER 2.5 base | 40.6 (36.4 to 45.0) | macro-F1 34.7 | 0.116 | 2.6 | 100.0 | 0.433 | 29 ms | $0 |
 | Laya | 32.8 (28.8 to 37.0) | macro-F1 29.1 | 0.379 | 0.0 | n/a | 0.546 | 82 ms | $0 |
@@ -114,6 +123,7 @@ Hardest classes: the 5 with the lowest F1 for each provider, in percent.
 | GLiNER 2.5 base | find police 0; none 2; find taxi 30; find train 32; book hotel 39 |
 | Laya | find police 0; none 6; find train 22; find attraction 32; find taxi 32 |
 | Qwen 3.7 Flash (reasoning off) | find police 0; none 52; book train 61; find taxi 62; find train 63 |
+| Qwen 3.7 Flash (reasoning off, logprobs) | find police 0; none 52; book train 59; find train 60; book hotel 67 |
 | Qwen3-1.7B (local, reasoning off) | find police 0; none 6; book hotel 27; find train 37; book train 45 |
 
 ## jailbreak
@@ -123,6 +133,7 @@ Jailbreak classification: prompts that try to override an assistant's rules. The
 | Provider | Accuracy (95% CI) | Task metric | ECE | Coverage at 95% | Accuracy there | AURC | p50 | Cost per 1k |
 |---|---:|---:|---:|---:|---:|---:|---:|---:|
 | Laya | 99.7 (98.6 to 100.0) | balanced 99.8 | 0.003 | 100.0 | 99.7 | 0.000 | 72 ms | $0 |
+| Qwen 3.7 Flash (reasoning off, logprobs) | 98.0 (96.1 to 99.0) | balanced 97.1 | 0.018 | 100.0 | 98.0 | 0.003 | 624 ms | $0.012 |
 | Qwen 3.7 Flash (reasoning off) | 97.5 (95.4 to 98.6) | balanced 96.4 | n/a | n/a | n/a | n/a | 589 ms | $0.012 |
 | Qwen3-1.7B (local, reasoning off) | 86.7 (83.0 to 89.7) | balanced 82.2 | n/a | n/a | n/a | n/a | 314 ms | $0 |
 | DeBERTa v3 base zero-shot v2.0 (NLI) | 65.2 (60.4 to 69.7) | balanced 50.5 | 0.327 | 0.0 | n/a | 0.237 | 18 ms | $0 |
@@ -136,6 +147,7 @@ Civil Comments: toxic comments. Toxic means a toxicity score of 0.5 or more. Sam
 
 | Provider | Accuracy (95% CI) | Task metric | ECE | Coverage at 95% | Accuracy there | AURC | p50 | Cost per 1k |
 |---|---:|---:|---:|---:|---:|---:|---:|---:|
+| Qwen 3.7 Flash (reasoning off, logprobs) | 77.4 (73.5 to 80.8) | balanced 77.4 | 0.088 | 24.6 | 96.7 | 0.093 | 597 ms | $0.006 |
 | Qwen 3.7 Flash (reasoning off) | 77.2 (73.3 to 80.7) | balanced 77.2 | n/a | n/a | n/a | n/a | 572 ms | $0.006 |
 | Laya | 77.0 (73.1 to 80.5) | balanced 77.0 | 0.394 | 51.2 | 94.5 | 0.080 | 48 ms | $0 |
 | Qwen3-1.7B (local, reasoning off) | 66.8 (62.6 to 70.8) | balanced 66.8 | n/a | n/a | n/a | n/a | 310 ms | $0 |
@@ -150,6 +162,7 @@ HelpSteer2: how helpful an assistant's reply is. Human helpfulness ratings 0 to 
 
 | Provider | Accuracy (95% CI) | Task metric | ECE | Coverage at 95% | Accuracy there | AURC | p50 | Cost per 1k |
 |---|---:|---:|---:|---:|---:|---:|---:|---:|
+| Qwen 3.7 Flash (reasoning off, logprobs) | 30.6 (26.7 to 34.8) | MAE 1.27, within one 62.8 | 0.355 | 0.0 | n/a | 0.582 | 670 ms | $0.020 |
 | Qwen 3.7 Flash (reasoning off) | 30.6 (26.7 to 34.8) | MAE 1.28, within one 61.2 | n/a | n/a | n/a | n/a | 633 ms | $0.020 |
 | Laya | 26.0 (22.3 to 30.0) | MAE 1.34, within one 64.8 | 0.099 | 0.8 | 75.0 | 0.665 | 80 ms | $0 |
 | Qwen3-1.7B (local, reasoning off) | 25.4 (21.8 to 29.4) | MAE 1.56, within one 53.4 | n/a | n/a | n/a | n/a | 491 ms | $0 |
@@ -164,6 +177,7 @@ WNUT 2017: emerging entities in social media text. Rows with at most one entity 
 | Provider | Accuracy (95% CI) | Task metric | ECE | Coverage at 95% | Accuracy there | AURC | p50 | Cost per 1k |
 |---|---:|---:|---:|---:|---:|---:|---:|---:|
 | Qwen 3.7 Flash (reasoning off) | 48.8 (44.4 to 53.2) | field F1 55.3 | n/a | n/a | n/a | n/a | 1010 ms | $0.015 |
+| Qwen 3.7 Flash (reasoning off, logprobs) | 45.8 (41.5 to 50.2) | field F1 53.8 | 0.347 | 0.0 | n/a | 0.474 | 979 ms | $0.015 |
 | Qwen3-1.7B (local, reasoning off) | 35.0 (30.9 to 39.3) | field F1 37.4 | n/a | n/a | n/a | n/a | 1502 ms | $0 |
 | Majority class | 20.0 (16.7 to 23.7) | field F1 0.0 | 0.003 | 0.0 | n/a | 0.829 | 0 ms | $0 |
 | GLiNER 2.5 base | 16.2 (13.2 to 19.7) | field F1 22.7 | 0.442 | 0.0 | n/a | 0.770 | 43 ms | $0 |
@@ -179,4 +193,5 @@ Not answered (question kind unsupported): DeBERTa v3 base zero-shot v2.0 (NLI), 
 | Laya | `laya` | laya-rl-agent | NVIDIA GeForce RTX 5060 Laptop GPU | 0.3.0 | 2026-09-25 | convaiinnovations/laya at default settings (label budget of 256 tokens) on an RTX 5060 laptop GPU. Training data not published; overlap with these sources unknown. |
 | Majority class | `majority` | majority-class | NVIDIA GeForce RTX 5060 Laptop GPU | 0.6.0 | 2026-11-23 | Answers every row with the most common label of the task's calibration rows and never reads the input: the no-skill floor. |
 | Qwen 3.7 Flash (reasoning off) | `llm:openrouter:qwen/qwen3.7-flash --reasoning off` | qwen/qwen3.7-flash | NVIDIA GeForce RTX 5060 Laptop GPU | 0.3.0 | 2026-09-25 | Through OpenRouter with reasoning off, 4 requests in parallel, rate-limited rows retried; cost is what OpenRouter billed. |
+| Qwen 3.7 Flash (reasoning off, logprobs) | `llm:openrouter:qwen/qwen3.7-flash --reasoning off --logprobs 5` | qwen/qwen3.7-flash | NVIDIA GeForce RTX 5060 Laptop GPU | 0.6.0 | 2026-11-23 | qwen/qwen3.7-flash through OpenRouter (served by Alibaba), reasoning off, LLMDecider with logprobs=5: option probabilities from the top 5 alternatives of each generated token. |
 | Qwen3-1.7B (local, reasoning off) | `llm:local:Qwen/Qwen3-1.7B --reasoning off` | Qwen/Qwen3-1.7B | NVIDIA GeForce RTX 5060 Laptop GPU | 0.3.0 | 2026-09-25 | Qwen/Qwen3-1.7B through transformers with thinking off, on an RTX 5060 laptop GPU. Training data not published; overlap with these sources unknown. |

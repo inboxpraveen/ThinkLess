@@ -109,7 +109,12 @@ def load_dataset_rows(name: str) -> list[dict[str, str]]:
 
 
 def build_provider(
-    name: str, *, llm_spec: str = "local", device: str = "auto", reasoning: str | None = None
+    name: str,
+    *,
+    llm_spec: str = "local",
+    device: str = "auto",
+    reasoning: str | None = None,
+    logprobs: int | None = None,
 ) -> DecisionProvider:
     """A provider by short name: ``gliner``, ``laya``, ``llm`` or ``jev``."""
     if name == "gliner":
@@ -124,7 +129,9 @@ def build_provider(
         from ..llm import from_spec
         from ..providers import LLMDecider
 
-        return LLMDecider(from_spec(llm_spec, device=device, reasoning=reasoning))
+        return LLMDecider(
+            from_spec(llm_spec, device=device, reasoning=reasoning), logprobs=logprobs
+        )
     if name == "jev":
         from ..providers import SystemOne
 
