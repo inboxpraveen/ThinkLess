@@ -1200,6 +1200,7 @@ def test_local_answers_are_logged_compactly(tmp_path: Path) -> None:
 
 def test_one_learning_run_at_a_time(tmp_path: Path) -> None:
     import os
+    import socket
     import subprocess
     import sys
 
@@ -1207,8 +1208,9 @@ def test_one_learning_run_at_a_time(tmp_path: Path) -> None:
 
     tmp_path.mkdir(exist_ok=True)
     lock = tmp_path / ".learning.lock"
+    host = socket.gethostname()
     # Held by a live process (this one): learning waits its turn.
-    lock.write_text(str(os.getpid()), encoding="utf-8")
+    lock.write_text(f"{os.getpid()} {host}", encoding="utf-8")
     with pytest.raises(LearningInProgressError):
         learn(tmp_path)
     # A lock older than the stale age goes, whoever wrote it.
@@ -1220,9 +1222,14 @@ def test_one_learning_run_at_a_time(tmp_path: Path) -> None:
     # A fresh lock left by a process that has exited goes at once.
     child = subprocess.Popen([sys.executable, "-c", "pass"])
     child.wait()
-    lock.write_text(str(child.pid), encoding="utf-8")
+    lock.write_text(f"{child.pid} {host}", encoding="utf-8")
     assert learn(tmp_path)["sites"] == {}
     assert not lock.exists()
+    # The same id from another host (a shared volume) is not this host's to judge.
+    lock.write_text(f"{child.pid} some-other-pod", encoding="utf-8")
+    with pytest.raises(LearningInProgressError):
+        learn(tmp_path)
+    lock.unlink()
 
 
 def test_close_stops_learning_between_sites(tmp_path: Path) -> None:

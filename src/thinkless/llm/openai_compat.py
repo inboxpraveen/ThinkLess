@@ -97,13 +97,14 @@ class OpenAICompatibleLLM(LLM):
                 'OpenAICompatibleLLM needs the openai extra: pip install "thinkless[openai]"'
             ) from exc
         key = api_key or os.environ.get("OPENAI_API_KEY") or ("unused" if base_url else None)
-        self._client = OpenAI(
+        self._new_client = lambda: OpenAI(
             base_url=base_url,
             api_key=key,
             timeout=timeout,
             max_retries=max_retries,
             default_headers=dict(default_headers) if default_headers else None,
         )
+        self._client = self._new_client()
 
     def complete(
         self,
@@ -172,9 +173,14 @@ class OpenAICompatibleLLM(LLM):
         )
 
     def close(self) -> None:
-        """Close the HTTP connections of a client this object created."""
+        """Close the HTTP connections of a client this object created.
+
+        The object stays usable: the next call opens new connections, so an
+        LLM shared by several engines keeps working when one of them closes.
+        """
         if self._owns_client:
-            self._client.close()
+            old, self._client = self._client, self._new_client()
+            old.close()
 
 
 def _token_logprobs(choice: Any) -> list[dict[str, Any]] | None:

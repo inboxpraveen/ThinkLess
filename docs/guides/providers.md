@@ -208,8 +208,11 @@ without log probabilities has no confidence, is not accepted on its own, and
 is logged once as a warning.
 
 On the [decision benchmark](../decision-benchmark/leaderboard.md), Qwen 3.7
-Flash with `logprobs=5` keeps its accuracy and gains a confidence that is
-useful where the model is sure of itself: at a 95% accuracy target it answers
+Flash with `logprobs=5` gives the same answers as without it (accuracy within
+a point on the classification tasks, which is run-to-run noise for a hosted
+model; extraction moved from 48.8% to 45.8% between two runs months apart).
+What it gains is a confidence that is useful where the model is sure of
+itself: at a 95% accuracy target it answers
 100% of jailbreak prompts, 82% of CLINC150 and 59% of MASSIVE on its own. On
 fine-grained intents (Banking77, MultiWOZ) and on scores and extraction it is
 overconfident (calibration error 0.15 to 0.35), so no threshold reaches 95%

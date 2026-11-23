@@ -235,6 +235,7 @@ def test_stop_fails_calls_still_queued() -> None:
 
 
 def test_server_batches_local_providers_and_restores_them() -> None:
+    pytest.importorskip("fastapi")
     from fastapi.testclient import TestClient
 
     from thinkless.server.app import create_app
@@ -255,3 +256,36 @@ def test_server_batches_local_providers_and_restores_them() -> None:
     unbatched = create_app(engine, [INTENT], batching=False)
     with TestClient(unbatched):
         assert engine.providers[1] is local
+
+
+@pytest.mark.parametrize(
+    ("factory", "attribute"),
+    [
+        ("thinkless.providers.gliner:GLiNER", "_model"),
+        ("thinkless.providers.laya:Laya", "_agent"),
+        ("thinkless.providers.hf:HFClassifier", "_pipeline"),
+        ("thinkless.providers.hf:HFZeroShot", "_pipeline"),
+        ("thinkless.llm.local:TransformersLLM", "_model"),
+    ],
+)
+def test_close_waits_for_a_call_in_progress(factory: str, attribute: str) -> None:
+    import importlib
+    import threading
+    import time
+
+    module, name = factory.split(":")
+    cls = getattr(importlib.import_module(module), name)
+    kwargs = {"answers": {"q": {"yes": "Y"}}} if name == "HFClassifier" else {}
+    provider = cls("org/model", **kwargs) if name != "GLiNER" else cls()
+    provider.close()  # nothing loaded yet: a no-op
+    setattr(provider, attribute, object())
+    closed = threading.Event()
+    with provider._lock:  # a call holding the model
+        thread = threading.Thread(target=lambda: (provider.close(), closed.set()))
+        thread.start()
+        time.sleep(0.05)
+        assert not closed.is_set()
+        assert getattr(provider, attribute) is not None
+    thread.join(5)
+    assert closed.is_set()
+    assert getattr(provider, attribute) is None

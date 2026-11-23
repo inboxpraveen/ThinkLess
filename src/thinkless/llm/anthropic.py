@@ -76,7 +76,8 @@ class AnthropicLLM(LLM):
         kwargs: dict[str, Any] = {"timeout": timeout, "max_retries": max_retries}
         if api_key:
             kwargs["api_key"] = api_key
-        self._client = anthropic.Anthropic(**kwargs)
+        self._new_client = lambda: anthropic.Anthropic(**kwargs)
+        self._client = self._new_client()
 
     def complete(
         self,
@@ -128,6 +129,11 @@ class AnthropicLLM(LLM):
         )
 
     def close(self) -> None:
-        """Close the HTTP connections of a client this object created."""
+        """Close the HTTP connections of a client this object created.
+
+        The object stays usable: the next call opens new connections, so an
+        LLM shared by several engines keeps working when one of them closes.
+        """
         if self._owns_client:
-            self._client.close()
+            old, self._client = self._client, self._new_client()
+            old.close()

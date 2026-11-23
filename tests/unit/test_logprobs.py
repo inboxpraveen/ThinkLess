@@ -201,3 +201,16 @@ def test_client_retries_at_the_hosts_top_logprobs_limit() -> None:
     plain = llm.complete([{"role": "user", "content": "x"}])
     assert "logprobs" not in sent[-1]
     assert plain.logprobs is None
+
+
+def test_closing_a_hosted_llm_keeps_it_usable() -> None:
+    pytest.importorskip("openai")
+    from thinkless.llm.openai_compat import OpenAICompatibleLLM
+
+    llm = OpenAICompatibleLLM("m", base_url="http://127.0.0.1:9/v1", api_key="test")
+    first = llm._client
+    llm.close()
+    assert first.is_closed()
+    assert llm._client is not first
+    assert not llm._client.is_closed()
+    llm.close()  # twice is fine

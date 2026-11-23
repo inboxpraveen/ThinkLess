@@ -17,7 +17,9 @@ All notable changes are recorded here. The format follows
   adapts to hosts that allow fewer than 20 alternatives. The decision
   benchmark takes `--logprobs` for `--provider llm`.
 - `LLMDecider.close()` closes its LLM, and the OpenAI-compatible and Anthropic
-  clients close the HTTP connections they opened.
+  clients close the HTTP connections they opened. A closed client opens new
+  connections on its next call, so an LLM shared by several engines keeps
+  working when one of them closes.
 
 - `Engine.decide_batch(states, questions)` answers the same questions about
   many inputs, one provider level at a time, and `adecide_batch` is its async
@@ -58,8 +60,9 @@ All notable changes are recorded here. The format follows
 
 - A process that exited while Habits was learning (an app ending, a killed
   container) left its learning lock behind, and learning stayed off for 30
-  minutes. A lock whose process is gone is now cleared at once, with a
-  warning, and a skipped round is logged as a warning instead of at debug.
+  minutes. The lock now records the process id and host name, and a lock
+  whose process is gone from this host is cleared at once, with a warning
+  (a lock from another host sharing the directory still waits out its age), and a skipped round is logged as a warning instead of at debug.
 - `Habits.close()` stops a learning run between sites instead of waiting for
   it to finish, takes a `timeout` (30 seconds by default) and also runs at
   interpreter exit. A stopped run writes no plan. The Habits proxy now exits

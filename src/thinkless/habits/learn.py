@@ -102,20 +102,32 @@ def _lock_is_stale(lock: Path) -> bool:
     """A lock left by a process that is gone, or older than :data:`LOCK_STALE_S`.
 
     A process that exits while learning (a daemon thread at interpreter exit,
-    a killed container) never removes its lock; the process id written in it
-    shows that no one holds it any more.
+    a killed container) never removes its lock. The lock holds the owner's
+    process id and host name; when the owner ran on this host and that
+    process is gone, no one holds it any more. A lock from another host (a
+    shared volume) can only be judged by its age: process ids mean nothing
+    across machines or containers.
     """
     try:
         age = time.time() - lock.stat().st_mtime
-        text = lock.read_text(encoding="ascii").strip()
+        text = lock.read_text(encoding="utf-8", errors="replace").strip()
     except OSError:
         return True
     if age > LOCK_STALE_S:
         return True
-    if not text.isdigit():
+    pid, _, host = text.partition(" ")
+    if not pid.isdigit():
         # Just created; the owner has not written its id yet.
         return age > 60.0
-    return not _pid_alive(int(text))
+    if host != _host():
+        return False
+    return not _pid_alive(int(pid))
+
+
+def _host() -> str:
+    import socket
+
+    return socket.gethostname()
 
 
 @contextmanager
@@ -139,7 +151,7 @@ def _learning_lock(directory: Path) -> Iterator[None]:
     else:
         raise LearningInProgressError(f"could not take the learning lock in {directory}")
     try:
-        os.write(handle, str(os.getpid()).encode())
+        os.write(handle, f"{os.getpid()} {_host()}".encode())
         yield
     finally:
         os.close(handle)
