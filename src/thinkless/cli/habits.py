@@ -362,7 +362,15 @@ def proxy(
         f"Habits proxy on http://{host}:{port}/v1 in front of {upstream} ({mode} mode).\n"
         f"Point clients at it: OPENAI_BASE_URL=http://{host}:{port}/v1"
     )
-    uvicorn.run(create_proxy(upstream, habits), host=host, port=port, log_level="warning")
+    # Ctrl+C or SIGTERM: running requests get 10 s to finish (an upstream call
+    # can otherwise hold shutdown for its whole timeout), then learning stops.
+    uvicorn.run(
+        create_proxy(upstream, habits),
+        host=host,
+        port=port,
+        log_level="warning",
+        timeout_graceful_shutdown=10,
+    )
 
 
 @habits_app.command("reset")

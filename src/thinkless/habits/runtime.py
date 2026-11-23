@@ -17,11 +17,14 @@ or on demand with :meth:`Habits.learn` and ``thinkless habits learn``.
 
 from __future__ import annotations
 
+import atexit
+import contextlib
 import json
 import os
 import random
 import threading
 import time
+import weakref
 from collections import OrderedDict, deque
 from collections.abc import Mapping
 from dataclasses import dataclass, field
@@ -33,7 +36,14 @@ from ..logs import get_logger
 from .apis import APIS, CHAT, RESPONSES, Api
 from .calls import CallLog
 from .gate import binomial_upper_bound
-from .learn import LearningInProgressError, LearnOptions, learn, load_plan, save_plan
+from .learn import (
+    LearningCancelledError,
+    LearningInProgressError,
+    LearnOptions,
+    learn,
+    load_plan,
+    save_plan,
+)
 from .sites import base_key, call_lines, variable_text
 from .student import SiteModel
 from .wire import Call, agrees
@@ -47,6 +57,7 @@ AUDIT_WINDOW = 200
 MIN_AUDITS = 20
 PLAN_CHECK_S = 2.0
 CHAINS_KEPT = 2048
+CHAIN_BYTES_KEPT = 64 * 1024 * 1024
 
 
 def _now() -> str:
@@ -80,6 +91,13 @@ class Ticket:
     @property
     def answered_locally(self) -> bool:
         return self.response is not None
+
+
+def _close_at_exit(ref: weakref.ref[Habits]) -> None:
+    habits = ref()
+    if habits is not None:
+        with contextlib.suppress(Exception):  # interpreter shutdown: best effort
+            habits.close(timeout=5.0)
 
 
 class Habits:
@@ -142,6 +160,10 @@ class Habits:
         self._last_learn: float | None = None
         self._rng = random.Random(seed)
         self._log = CallLog(self.directory / "calls")
+        self._cancel = threading.Event()
+        # A daemon learning thread is killed at interpreter exit; stop it
+        # between sites first so it releases its lock and leaves no half run.
+        atexit.register(_close_at_exit, weakref.ref(self))
         self._lock = threading.RLock()
         self._plan: dict[str, Any] | None = None
         self._plan_mtime: float | None = None
@@ -152,7 +174,9 @@ class Habits:
         self._suspended: dict[str, str] = {}
         self._suspended_student: dict[str, Any] = {}
         self._serving: dict[str, Any] = {}
-        self._chains: OrderedDict[str, list[Any]] = OrderedDict()
+        # Response id -> (history, its size in bytes), oldest first.
+        self._chains: OrderedDict[str, tuple[list[Any], int]] = OrderedDict()
+        self._chain_bytes = 0
         self._since_learn = 0
         self._learning: threading.Thread | None = None
         self.counts: dict[str, int] = {"local": 0, "llm": 0, "audit": 0, "passthrough": 0}
@@ -177,13 +201,19 @@ class Habits:
         if not force and mtime == self._plan_mtime:
             return
         plan = load_plan(self.directory)
+        # Built aside and published in one assignment: request threads read
+        # it without the lock and must never see it half filled.
+        by_base: dict[str, list[dict[str, Any]]] = {}
+        for entry in (plan or {}).get("sites", {}).values():
+            by_base.setdefault(entry["base"], []).append(entry)
         with self._lock:
+            if not force and self._plan_mtime is not None and mtime < self._plan_mtime:
+                return  # another thread already published a newer plan
             self._plan = plan
             self._plan_mtime = mtime
             self._models = {}
-            self._by_base = {}
+            self._by_base = by_base
             for entry in (plan or {}).get("sites", {}).values():
-                self._by_base.setdefault(entry["base"], []).append(entry)
                 # Audits measure one student; a new one starts a new window.
                 if self._serving.get(entry["id"]) != entry.get("student"):
                     self._audits.pop(entry["id"], None)
@@ -352,9 +382,19 @@ class Habits:
             for item in ticket.response.get("output") or []
             if isinstance(item, Mapping)
         ]
-        self._chains[str(ticket.response["id"])] = [*list(items or []), *output]
-        while len(self._chains) > CHAINS_KEPT:
-            self._chains.popitem(last=False)
+        history = [*list(items or []), *output]
+        size = len(json.dumps(history, ensure_ascii=False, default=str))
+        key = str(ticket.response["id"])
+        if key in self._chains:
+            self._chain_bytes -= self._chains.pop(key)[1]
+        self._chains[key] = (history, size)
+        self._chain_bytes += size
+        # Bounded by count and by size: one long conversation repeats its
+        # whole history in every link of its chain.
+        while self._chains and (
+            len(self._chains) > CHAINS_KEPT or self._chain_bytes > CHAIN_BYTES_KEPT
+        ):
+            self._chain_bytes -= self._chains.popitem(last=False)[1][1]
 
     def continue_chain(self, body: Any) -> dict[str, Any] | None:
         """Rewrite a Responses call that continues a response ThinkLess answered.
@@ -370,7 +410,8 @@ class Habits:
         if not isinstance(previous, str):
             return None
         with self._lock:
-            earlier = self._chains.get(previous)
+            kept = self._chains.get(previous)
+        earlier = None if kept is None else kept[0]
         if earlier is None:
             if previous.startswith("resp_thinkless_"):
                 logger.warning(
@@ -398,13 +439,15 @@ class Habits:
             upper = binomial_upper_bound(k, n, self.options.confidence)
             if upper >= self.options.target:
                 return
-            self._suspend(site_id, n, k, upper)
+            # In memory first, under the lock: from here on the site goes to the LLM.
+            stamp = _now()
+            self._suspended[site_id] = stamp
+            self._suspended_student[site_id] = self._serving.get(site_id)
+            self._audits.pop(site_id, None)
+        # The files after, outside it, so other requests do not wait on disk.
+        self._suspend(site_id, stamp, n, k, upper)
 
-    def _suspend(self, site_id: str, audits: int, agreed: int, upper: float) -> None:
-        stamp = _now()
-        self._suspended[site_id] = stamp
-        self._suspended_student[site_id] = self._serving.get(site_id)
-        self._audits.pop(site_id, None)
+    def _suspend(self, site_id: str, stamp: str, audits: int, agreed: int, upper: float) -> None:
         logger.warning(
             "suspended site %s: %d of %d audits agreed with the LLM "
             "(upper bound %.1f%%, target %.1f%%)",
@@ -463,8 +506,12 @@ class Habits:
     def _learn_safely(self) -> None:
         try:
             self.learn()
+        except LearningCancelledError:
+            logger.info("learning in %s stopped for shutdown", self.directory)
         except LearningInProgressError:
-            logger.debug("another process is learning in %s; skipped", self.directory)
+            logger.warning(
+                "another process is learning in %s; this round is skipped", self.directory
+            )
         except Exception:  # pragma: no cover - logged, never raised into the request path
             logger.exception("background learning failed")
 
@@ -472,7 +519,7 @@ class Habits:
         """Learn from every recorded call now, and switch to the new plan."""
         before = self.plan or {}
         started = _now()
-        plan = learn(self.directory, options=self.options)
+        plan = learn(self.directory, options=self.options, cancel=self._cancel)
         with self._lock:
             # A suspension that happened while learning ran wins over the new plan.
             changed = False
@@ -520,8 +567,18 @@ class Habits:
         if thread is not None:
             thread.join(timeout)
 
-    def close(self) -> None:
-        self.wait()
+    def close(self, timeout: float | None = 30.0) -> None:
+        """Stop background learning and close the call log.
+
+        A learning run in progress stops before its next site and writes no
+        plan; ``timeout`` bounds the wait for it. Calls are recorded as they
+        happen, so nothing recorded is lost. Also runs at interpreter exit.
+        """
+        self._cancel.set()
+        self.wait(timeout)
+        thread = self._learning
+        if thread is not None and thread.is_alive():
+            logger.warning("background learning did not stop within %s s", timeout)
         self._log.close()
 
     def __repr__(self) -> str:

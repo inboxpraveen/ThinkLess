@@ -17,6 +17,7 @@ Needs ``pip install "thinkless[server]"``.
 
 from __future__ import annotations
 
+import asyncio
 from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
 from typing import Any
@@ -80,7 +81,8 @@ def create_proxy(
     async def lifespan(app: FastAPI) -> AsyncIterator[None]:
         yield
         await client.aclose()
-        habits.close()
+        # Off the event loop, and bounded: a learning run stops between sites.
+        await asyncio.to_thread(habits.close, 10.0)
 
     app = FastAPI(title="ThinkLess Habits proxy", version=__version__, lifespan=lifespan)
 

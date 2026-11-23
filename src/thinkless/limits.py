@@ -30,8 +30,10 @@ class SpendLimit:
             hourly budget. ``None`` counts everything since the limit was
             created.
 
-    The check happens before each paid call, so the last call before the
-    limit can overshoot it by the cost of one call.
+    The check happens before each paid call and the cost is added when the
+    call returns, so the limit can be overshot by the calls already running
+    when it is reached: one call for a single caller, and up to one per
+    concurrent request in a server. Leave that much headroom.
 
     Example:
         >>> engine = Engine(providers, spend_limit=SpendLimit(20.0, window_s=86400))

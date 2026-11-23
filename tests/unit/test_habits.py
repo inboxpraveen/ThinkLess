@@ -1199,19 +1199,46 @@ def test_local_answers_are_logged_compactly(tmp_path: Path) -> None:
 
 
 def test_one_learning_run_at_a_time(tmp_path: Path) -> None:
+    import os
+    import subprocess
+    import sys
+
     from thinkless.habits.learn import LearningInProgressError
 
     tmp_path.mkdir(exist_ok=True)
-    (tmp_path / ".learning.lock").write_text("123", encoding="utf-8")
+    lock = tmp_path / ".learning.lock"
+    # Held by a live process (this one): learning waits its turn.
+    lock.write_text(str(os.getpid()), encoding="utf-8")
     with pytest.raises(LearningInProgressError):
         learn(tmp_path)
-    # A lock left by a crashed process goes stale.
-    import os
-
+    # A lock older than the stale age goes, whoever wrote it.
     old = 1_000_000_000
-    os.utime(tmp_path / ".learning.lock", (old, old))
+    os.utime(lock, (old, old))
     plan = learn(tmp_path)
     assert plan["sites"] == {}
+    assert not lock.exists()
+    # A fresh lock left by a process that has exited goes at once.
+    child = subprocess.Popen([sys.executable, "-c", "pass"])
+    child.wait()
+    lock.write_text(str(child.pid), encoding="utf-8")
+    assert learn(tmp_path)["sites"] == {}
+    assert not lock.exists()
+
+
+def test_close_stops_learning_between_sites(tmp_path: Path) -> None:
+    import threading
+
+    from thinkless.habits.learn import LearningCancelledError
+
+    llm = FakeLLM()
+    habits = Habits(tmp_path, confirm_calls=0, learn_every=None)
+    _run(client_for(habits, llm), random.Random(23), 150)
+    habits.close()
+    stop = threading.Event()
+    stop.set()
+    with pytest.raises(LearningCancelledError):
+        learn(tmp_path, cancel=stop)
+    assert not (tmp_path / "plan.json").exists()
     assert not (tmp_path / ".learning.lock").exists()
 
 
@@ -1494,7 +1521,8 @@ def test_a_site_retrained_elsewhere_is_served_again(tmp_path: Path) -> None:
     plan = habits.learn()
     site_id, entry = next(iter(plan["sites"].items()))
     assert entry["status"] == "active"
-    habits._suspend(site_id, 40, 30, 0.8)
+    for _ in range(40):
+        habits._record_audit(site_id, False)
     assert site_id in habits._suspended
     # Another process retrains the site and its new student passes.
     retrained = load_plan(tmp_path)

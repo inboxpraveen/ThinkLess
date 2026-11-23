@@ -19,6 +19,7 @@ import json
 import os
 import random
 import tempfile
+import threading
 import time
 from collections import Counter
 from collections.abc import Iterable, Iterator, Mapping, Sequence
@@ -30,6 +31,7 @@ from typing import Any
 
 from .._version import __version__
 from ..errors import ThinkLessError
+from ..logs import get_logger
 from .calls import Observation, iter_files, read_calls
 from .features import featurize
 from .gate import (
@@ -46,12 +48,15 @@ from .wire import agrees
 __all__ = [
     "PLAN_SCHEMA",
     "LearnOptions",
+    "LearningCancelledError",
     "LearningInProgressError",
     "learn",
     "learn_sites",
     "load_plan",
     "save_plan",
 ]
+
+logger = get_logger("habits.learn")
 
 PLAN_SCHEMA = "thinkless-habits-plan/1"
 LOCK_STALE_S = 1800.0
@@ -60,6 +65,57 @@ PLAN_REPLACE_TRIES = 40
 
 class LearningInProgressError(ThinkLessError):
     """Another process is learning in the same Habits directory."""
+
+
+class LearningCancelledError(ThinkLessError):
+    """A learning run was stopped before it finished; the plan was not changed."""
+
+
+def _pid_alive(pid: int) -> bool:
+    """Whether a process with this id is running on this machine."""
+    if pid <= 0:
+        return False
+    if os.name == "nt":
+        import ctypes
+
+        kernel32 = getattr(ctypes, "windll").kernel32  # noqa: B009 - absent from POSIX stubs
+        handle = kernel32.OpenProcess(0x1000, False, pid)  # PROCESS_QUERY_LIMITED_INFORMATION
+        if not handle:
+            return bool(kernel32.GetLastError() == 5)  # access denied: it exists
+        try:
+            code = ctypes.c_ulong()
+            if not kernel32.GetExitCodeProcess(handle, ctypes.byref(code)):
+                return True
+            return bool(code.value == 259)  # STILL_ACTIVE
+        finally:
+            kernel32.CloseHandle(handle)
+    try:
+        os.kill(pid, 0)
+    except ProcessLookupError:
+        return False
+    except PermissionError:
+        return True
+    return True
+
+
+def _lock_is_stale(lock: Path) -> bool:
+    """A lock left by a process that is gone, or older than :data:`LOCK_STALE_S`.
+
+    A process that exits while learning (a daemon thread at interpreter exit,
+    a killed container) never removes its lock; the process id written in it
+    shows that no one holds it any more.
+    """
+    try:
+        age = time.time() - lock.stat().st_mtime
+        text = lock.read_text(encoding="ascii").strip()
+    except OSError:
+        return True
+    if age > LOCK_STALE_S:
+        return True
+    if not text.isdigit():
+        # Just created; the owner has not written its id yet.
+        return age > 60.0
+    return not _pid_alive(int(text))
 
 
 @contextmanager
@@ -72,10 +128,9 @@ def _learning_lock(directory: Path) -> Iterator[None]:
             handle = os.open(lock, os.O_CREAT | os.O_EXCL | os.O_WRONLY)
             break
         except FileExistsError:
-            try:
-                stale = time.time() - lock.stat().st_mtime > LOCK_STALE_S
-            except OSError:
-                stale = True
+            stale = _lock_is_stale(lock)
+            if stale:
+                logger.warning("removing a stale learning lock in %s", directory)
             if not stale:
                 raise LearningInProgressError(
                     f"another process is learning in {directory}"
@@ -388,13 +443,20 @@ def learn_sites(
     directory: str | Path,
     options: LearnOptions | None = None,
     previous: Mapping[str, Any] | None = None,
+    cancel: threading.Event | None = None,
 ) -> dict[str, Any]:
-    """Train and gate every decision site, save the students, return the plan."""
+    """Train and gate every decision site, save the students, return the plan.
+
+    ``cancel`` is checked before each site; once it is set, the run stops with
+    :class:`LearningCancelledError` and no plan is written.
+    """
     options = options or LearnOptions()
     root = Path(directory)
     entries: dict[str, Any] = {}
     earlier = (previous or {}).get("sites", {})
     for site in sites:
+        if cancel is not None and cancel.is_set():
+            raise LearningCancelledError("learning was stopped")
         entry = _entry(site)
         entries[site.id] = entry
         entry.update(status="llm", threshold=None, evidence={"calls": 0})
@@ -526,6 +588,7 @@ def learn(
     *,
     calls: Iterable[str | Path] | None = None,
     options: LearnOptions | None = None,
+    cancel: threading.Event | None = None,
 ) -> dict[str, Any]:
     """Learn from recorded calls and write the plan.
 
@@ -534,6 +597,9 @@ def learn(
         calls: Log files or directories to learn from. Defaults to
             ``<directory>/calls``.
         options: Gate and training settings.
+        cancel: Set it to stop the run between sites, for a prompt shutdown.
+            A stopped run writes no plan and raises
+            :class:`LearningCancelledError`.
     """
     root = Path(directory)
     options = options or LearnOptions()
@@ -549,8 +615,12 @@ def learn(
             if len(observations) >= options.max_observations:
                 break
         observations = observations[-options.max_observations :]
+        if cancel is not None and cancel.is_set():
+            raise LearningCancelledError("learning was stopped")
         started = datetime.now(timezone.utc).isoformat(timespec="milliseconds")
-        plan = learn_sites(discover(observations), root, options, previous=load_plan(root))
+        plan = learn_sites(
+            discover(observations), root, options, previous=load_plan(root), cancel=cancel
+        )
         _keep_suspensions(plan, load_plan(root), started)
         save_plan(plan, root)
     return plan

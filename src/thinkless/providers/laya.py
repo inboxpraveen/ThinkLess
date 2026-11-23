@@ -146,4 +146,9 @@ class Laya(DecisionProvider):
         )
 
     def close(self) -> None:
-        self._agent = None
+        """Drop the model, after any call in progress; the next call loads it again."""
+        from .._hub import release_memory
+
+        with self._lock:
+            self._agent = None
+        release_memory()

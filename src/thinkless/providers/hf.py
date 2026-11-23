@@ -185,7 +185,12 @@ class HFClassifier(DecisionProvider):
         return None
 
     def close(self) -> None:
-        self._pipeline = None
+        """Drop the model, after any call in progress; the next call loads it again."""
+        from .._hub import release_memory
+
+        with self._lock:
+            self._pipeline = None
+        release_memory()
 
 
 class HFZeroShot(DecisionProvider):
@@ -380,4 +385,9 @@ class HFZeroShot(DecisionProvider):
         return answers
 
     def close(self) -> None:
-        self._pipeline = None
+        """Drop the model, after any call in progress; the next call loads it again."""
+        from .._hub import release_memory
+
+        with self._lock:
+            self._pipeline = None
+        release_memory()

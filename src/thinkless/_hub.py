@@ -82,3 +82,23 @@ def cached_checkpoints() -> dict[str, float | None]:
         if repo.repo_id in sizes and repo.repo_type == "model":
             sizes[repo.repo_id] = round(repo.size_on_disk / 1e9, 2)
     return sizes
+
+
+def release_memory() -> None:
+    """Free what a dropped model held: Python objects now, and cached GPU memory.
+
+    Called after a provider lets go of its model, so a long-lived process that
+    closes one engine and builds another does not keep both on the GPU.
+    """
+    import gc
+    import sys
+
+    gc.collect()
+    torch = sys.modules.get("torch")
+    if torch is None:
+        return
+    try:
+        if torch.cuda.is_available():
+            torch.cuda.empty_cache()
+    except Exception:  # pragma: no cover - a broken CUDA setup must not break close()
+        pass

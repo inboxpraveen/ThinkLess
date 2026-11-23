@@ -11,6 +11,7 @@ import logging
 import random
 import threading
 import time
+import weakref
 from collections.abc import Awaitable, Callable
 from concurrent.futures import Future, ThreadPoolExecutor
 from concurrent.futures import wait as wait_futures
@@ -61,6 +62,26 @@ class ShadowStats(BaseModel):
     spent_usd: float = 0.0
 
 
+def _cancel_at_exit(shadow: Shadow) -> None:
+    """Cancel a shadow's queued runs before ``concurrent.futures`` drains them at exit."""
+    ref = weakref.ref(shadow)
+
+    def hook() -> None:
+        target = ref()
+        if target is not None:
+            target._cancel_pending()
+
+    register = getattr(threading, "_register_atexit", None)
+    try:
+        if register is None:
+            raise RuntimeError
+        register(hook)
+    except RuntimeError:  # no hook API, or the interpreter is already exiting
+        import atexit
+
+        atexit.register(hook)
+
+
 class ShadowLog:
     """Appends shadow records to a JSONL file, one per line, safe across threads."""
 
@@ -73,6 +94,8 @@ class ShadowLog:
     def write(self, record: dict[str, Any]) -> None:
         line = json.dumps(record, ensure_ascii=False, separators=(",", ":"))
         with self._lock:
+            if self._file.closed:
+                return  # a run that finished after close(timeout) gave up on it
             self._file.write(line + "\n")
             self._file.flush()
 
@@ -205,11 +228,14 @@ class Shadow:
         self._stats = ShadowStats()
         self._pending: set[Future[None]] = set()
         self._warned_drop = False
+        self._closed = False
         self._executor = (
             ThreadPoolExecutor(max_workers=workers, thread_name_prefix="thinkless-shadow")
             if background
             else None
         )
+        if self._executor is not None:
+            _cancel_at_exit(self)
 
     # ------------------------------------------------------------ entry points
 
@@ -376,11 +402,27 @@ class Shadow:
             wait_futures(pending, timeout=timeout)
 
     def close(self, timeout: float | None = None) -> None:
-        """Finish queued runs, stop the workers and close the log."""
+        """Finish queued runs, stop the workers and close the log.
+
+        With a ``timeout``, runs still queued when it passes are cancelled and
+        runs in progress are left to finish on their own without being
+        recorded. Calls made after ``close`` are counted as dropped.
+        """
+        with self._lock:
+            self._closed = True
         self.flush(timeout)
         if self._executor is not None:
-            self._executor.shutdown(wait=True)
+            self._executor.shutdown(wait=timeout is None, cancel_futures=True)
         self.log.close()
+
+    def _cancel_pending(self) -> None:
+        """Interpreter exit: cancel queued runs so exit does not wait for them."""
+        with self._lock:
+            self._closed = True
+            pending = list(self._pending)
+        cancelled = sum(future.cancel() for future in pending)
+        if cancelled:
+            logger.info("shadow exiting: %d queued runs were not run", cancelled)
 
     def __enter__(self) -> Shadow:
         return self
@@ -434,6 +476,9 @@ class Shadow:
         warn = False
         with self._lock:
             self._stats.seen += 1
+            if self._closed:
+                self._stats.dropped += 1
+                return
             if self.sample < 1.0 and self._random.random() >= self.sample:
                 self._stats.skipped += 1
                 return

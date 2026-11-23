@@ -165,7 +165,10 @@ exception never reaches your code. Shadow runs are separate traces marked
 `shadow=True`, so they never add to the cost of the request they shadow.
 
 Call `shadow.close()` at shutdown (or use it as a context manager) to finish
-queued runs.
+queued runs. `shadow.close(timeout=5)` waits at most 5 seconds and cancels
+what is still queued. If the process exits without either, queued runs are
+cancelled rather than run, so shutdown never waits for a backlog of paid
+calls.
 
 ## Audit a live engine
 

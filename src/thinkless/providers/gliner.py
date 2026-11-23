@@ -241,4 +241,9 @@ class GLiNER(DecisionProvider):
         return Answer(value=values, fields=confidences, raw={"record": dict(record)})
 
     def close(self) -> None:
-        self._model = None
+        """Drop the model, after any call in progress; the next call loads it again."""
+        from .._hub import release_memory
+
+        with self._lock:
+            self._model = None
+        release_memory()

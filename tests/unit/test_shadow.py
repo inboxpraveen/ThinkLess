@@ -166,6 +166,31 @@ def test_sampling_spend_cap_and_backpressure(tmp_path) -> None:
     assert busy.stats.recorded == 2
 
 
+def test_close_with_a_timeout_cancels_queued_runs(tmp_path) -> None:
+    import time
+
+    gate = threading.Event()
+
+    def slow(state, question):
+        gate.wait(5)
+        return choice_answer("refund", {"refund": 0.98, "status": 0.01, "other": 0.01})
+
+    engine = Engine([FakeProvider("slow", {"intent": slow})], tracer=Tracer())
+    shadow = Shadow(engine, log=tmp_path / "s.jsonl", workers=1, max_pending=50)
+    for _ in range(10):
+        shadow.observe("x", INTENT, "refund")
+    started = time.perf_counter()
+    shadow.close(timeout=0.2)
+    assert time.perf_counter() - started < 2.0
+    # Calls after close are dropped, never raised into the caller.
+    shadow.observe("x", INTENT, "refund")
+    assert shadow.stats.dropped == 1
+    gate.set()
+    time.sleep(0.2)
+    # The run in progress finished after close and was not written.
+    assert _records(tmp_path / "s.jsonl") == []
+
+
 def test_candidate_errors_are_logged_not_raised(tmp_path) -> None:
     engine = Engine(
         [FakeProvider("bad", error=RuntimeError("down"))], tracer=Tracer(), on_error="raise"

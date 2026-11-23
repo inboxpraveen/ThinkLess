@@ -43,6 +43,34 @@ All notable changes are recorded here. The format follows
   benchmark (`--provider zeroshot[:<model>]`) it scores 68.4 percent on
   Banking77 without having seen the task.
 
+### Fixed
+
+- A process that exited while Habits was learning (an app ending, a killed
+  container) left its learning lock behind, and learning stayed off for 30
+  minutes. A lock whose process is gone is now cleared at once, with a
+  warning, and a skipped round is logged as a warning instead of at debug.
+- `Habits.close()` stops a learning run between sites instead of waiting for
+  it to finish, takes a `timeout` (30 seconds by default) and also runs at
+  interpreter exit. A stopped run writes no plan. The Habits proxy now exits
+  in under a second during learning (it took 7 to 9 seconds at 20,000 to
+  40,000 calls), closes Habits off the event loop, and gives requests waiting
+  on the upstream 10 seconds to finish instead of the 600 second upstream
+  timeout.
+- `Shadow.close(timeout=...)` honours its timeout and cancels runs still
+  queued. At interpreter exit queued shadow runs are cancelled instead of all
+  being run first, and `observe` or `compare` after `close()` drop the call
+  instead of raising.
+- Closing a GLiNER, Laya, Hugging Face or local LLM provider waits for a call
+  in progress instead of failing it, and returns cached GPU memory.
+  `LLMDecider.close()` closes its LLM, and the OpenAI-compatible and Anthropic
+  clients close the HTTP connections they opened.
+- A Habits suspension writes the plan outside the lock that request threads
+  share, and a reloaded plan is published in one step, so concurrent calls
+  never see it half built.
+- The Responses chain cache is bounded by size (64 MB) as well as by count.
+- The `SpendLimit` documentation says how far concurrent requests can
+  overshoot it.
+
 ## 0.6.0 - 2026-11-22
 
 A review of the whole package. Habits gets fixes for streams cut short,
