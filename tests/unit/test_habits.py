@@ -727,6 +727,96 @@ def test_async_transport_reads_files_off_the_event_loop(
     habits.close()
 
 
+def test_eject_reproduces_what_the_site_served(tmp_path: Path) -> None:
+    import importlib.util
+
+    from thinkless import Status
+    from thinkless.habits.eject import eject
+
+    llm = FakeLLM()
+    habits = Habits(tmp_path / "h", confirm_calls=0, learn_every=None, audit=0.0, seed=0)
+    client = client_for(habits, llm)
+    _run(client, random.Random(3), 250)
+    plan = habits.learn()
+    (entry,) = plan["sites"].values()
+    assert entry["status"] == "active"
+
+    module_path = eject(tmp_path / "h", entry["id"], tmp_path / "out" / "router.py")
+    assert (tmp_path / "out" / "router_student.npz").exists()
+    spec = importlib.util.spec_from_file_location("router", module_path)
+    assert spec is not None
+    assert spec.loader is not None
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    assert set(module.QUESTIONS) == {"intent", "wants_human"}
+    assert entry["threshold"] == module.THRESHOLD
+    engine = module.build_engine()
+
+    rng = random.Random(77)
+    served = 0
+    for _ in range(60):
+        text, _ = ticket(rng)
+        found = habits.begin(request_body(text))
+        assert found is not None
+        assert found.local is not None
+        labels, score = found.local
+        decisions = engine.decide_many(text, module.QUESTIONS)
+        accepted = all(d.status is Status.ACCEPTED for d in decisions.values())
+        # Accepted exactly when Habits would have answered, with its answer.
+        assert accepted == bool(found.confident)
+        assert decisions["intent"].confidence == pytest.approx(score)
+        if accepted:
+            served += 1
+            assert decisions["intent"].value == json.loads(labels["intent"])
+            assert decisions["wants_human"].value is json.loads(labels["wants_human"])
+    assert served > 30
+    habits.close()
+
+
+def test_eject_refuses_unproven_sites(tmp_path: Path) -> None:
+    from thinkless.habits.eject import eject
+
+    llm = FakeLLM()
+    habits = Habits(tmp_path, learn_every=None, seed=0)  # new students start on probation
+    _run(client_for(habits, llm), random.Random(3), 250)
+    plan = habits.learn()
+    (entry,) = plan["sites"].values()
+    assert entry["status"] == "probation"
+    with pytest.raises(ValueError, match="not active"):
+        eject(tmp_path, entry["id"], tmp_path / "x.py")
+    assert eject(tmp_path, entry["id"], tmp_path / "x.py", allow_unproven=True).exists()
+    with pytest.raises(KeyError, match="no site"):
+        eject(tmp_path, "nope", tmp_path / "y.py")
+    habits.close()
+
+    from typer.testing import CliRunner
+
+    from thinkless.cli.main import app
+
+    runner = CliRunner()
+    refused = runner.invoke(
+        app,
+        ["habits", "eject", entry["id"], "--out", str(tmp_path / "z.py"), "--dir", str(tmp_path)],
+    )
+    assert refused.exit_code == 1
+    assert "not active" in refused.output
+    done = runner.invoke(
+        app,
+        [
+            "habits",
+            "eject",
+            entry["name"],
+            "--out",
+            str(tmp_path / "z.py"),
+            "--dir",
+            str(tmp_path),
+            "--unproven",
+        ],
+    )
+    assert done.exit_code == 0, done.output
+    assert (tmp_path / "z_student.json").exists()
+
+
 def test_site_header_names_a_site_and_is_not_forwarded(tmp_path: Path) -> None:
     llm = FakeLLM()
     habits = Habits(tmp_path, confirm_calls=0, learn_every=None)

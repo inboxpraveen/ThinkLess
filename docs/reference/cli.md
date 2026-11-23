@@ -109,6 +109,7 @@ Finds the decisions in recorded LLM calls, learns them, and reports what
 | `habits learn` | Train a student per decision site, run the gate and write `plan.json`. `--target` (default `0.97`), `--confidence` (default `0.95`), `--min-calls` (default `100`), `--confirm-calls` (probation size, default `394` at the default target; `0` skips probation), `--calls PATHS` to learn from other logs |
 | `habits status` | Per site: status, calls answered locally, audits that agreed, the evidence behind each activation, and the LLM cost saved. `--price`, `--json` |
 | `habits proxy` | An OpenAI-compatible endpoint with Habits in front of `--upstream` (default `https://api.openai.com/v1`). `--host`, `--port` (default `8787`), `--mode`, `--audit`, `--learn-every`, `--confirm-calls`. Needs the `server` extra |
+| `habits eject SITE --out FILE` | Write a Python module with the site's typed questions and `build_engine(*fallback)`, an engine whose first provider is the site's student (copied next to the module) at the gate's threshold. `--unproven` ejects a site that has not passed its gate |
 | `habits reset` | Delete the plan and the students; `--calls` deletes the recorded calls too |
 
 ## `thinkless serve ENGINE`

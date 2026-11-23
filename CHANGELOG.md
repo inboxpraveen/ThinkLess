@@ -26,6 +26,12 @@ All notable changes are recorded here. The format follows
   form. Providers have a batch entry point, `answer_batch`; GLiNER, Laya,
   `HFClassifier` and `HFZeroShot` put many inputs through one forward pass.
   On an RTX 5060 this is 1.2 to 3 times the throughput of one call per input.
+- `thinkless habits eject SITE --out route.py` (and
+  `thinkless.habits.eject.eject`) moves a proven site into code: it writes a
+  module with the site's typed questions and an engine whose first provider
+  is the site's student, `SiteStudent`, at the gate's threshold. The engine
+  accepts exactly the answers Habits would have served; the LLM or any other
+  provider can follow it in the cascade.
 - Habits answers streamed Responses and Anthropic Messages calls locally, as
   it already did for Chat Completions. The local answer is sent as the event
   stream each API defines, text or tool call, and tests read it back through

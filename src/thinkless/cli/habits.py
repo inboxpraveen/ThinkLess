@@ -373,6 +373,29 @@ def proxy(
     )
 
 
+@habits_app.command("eject")
+def eject_command(
+    site: Annotated[str, typer.Argument(help="The site's id or name, as `status` shows it.")],
+    out: Annotated[Path, typer.Option("--out", help="The Python module to write.")],
+    directory: DirOption = DEFAULT_DIR,
+    unproven: Annotated[
+        bool, typer.Option("--unproven", help="Eject a site that has not passed its gate.")
+    ] = False,
+) -> None:
+    """Write a site's decisions as typed questions and an Engine its student answers."""
+    from ..habits.eject import eject
+
+    try:
+        written = eject(directory, site, out, allow_unproven=unproven)
+    except (KeyError, ValueError) as exc:
+        err.print(f"[red]{exc.args[0] if exc.args else exc}[/red]")
+        raise typer.Exit(1) from None
+    console.print(
+        f"Wrote {written} and its student, {written.stem}_student.json and .npz. "
+        f"Call build_engine(fallback) and decide_many(text, QUESTIONS) from your code."
+    )
+
+
 @habits_app.command("reset")
 def reset(
     directory: DirOption = DEFAULT_DIR,

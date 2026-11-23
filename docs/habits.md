@@ -426,12 +426,31 @@ OpenRouter.
 
 ## Moving a proven site into your code
 
-Each site's entry in `plan.json` lists the typed ThinkLess questions its
-answers correspond to (a `Choice` with the options seen, a `YesNo`, an
-`Extract`). When you want rules, GLiNER, Laya or a hosted decision model in
-the loop as well, copy those questions into an
-[engine](concepts/cascade.md) and replace the call with
-`engine.decide(...)`.
+Once a site is active, its decision can live in your code instead of inside
+an LLM call. `thinkless habits eject` writes a module with the site's typed
+questions (a `Choice` with the options seen, a `YesNo`, a `Score`, an
+`Extract`) and an [engine](concepts/cascade.md) whose first provider is the
+site's student, copied next to the module:
+
+```bash
+thinkless habits eject route_ticket --out app/route.py
+```
+
+```python
+from app.route import QUESTIONS, build_engine
+from thinkless.providers import LLMDecider
+
+engine = build_engine(LLMDecider(llm))  # the LLM answers what the student is unsure of
+decisions = engine.decide_many(message, QUESTIONS)
+```
+
+Pass the text the LLM was given as the user message. The student gives every
+question the site's joint score as its confidence, and the engine's
+threshold is the gate's, so it accepts exactly the answers Habits would have
+served; a test checks this call by call. From there, add rules, GLiNER,
+Laya or a hosted decision model to the cascade like any other engine.
+`--unproven` ejects a site still on probation. Sites whose decision is which
+tools to call cannot be ejected.
 
 ## Compared with a cache, and prior work
 

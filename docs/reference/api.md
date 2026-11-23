@@ -64,6 +64,10 @@ change.
 
 ::: thinkless.habits.proxy.create_proxy
 
+::: thinkless.habits.eject.eject
+
+::: thinkless.habits.eject.SiteStudent
+
 ## Shadow mode
 
 ::: thinkless.shadow.Shadow
