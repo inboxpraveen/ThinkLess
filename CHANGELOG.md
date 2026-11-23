@@ -4,6 +4,20 @@ All notable changes are recorded here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the project uses
 [semantic versioning](https://semver.org/).
 
+## 0.6.1 - 2026-11-23
+
+A fix for the line the README leads with.
+
+### Fixed
+
+- `habits.wrap(OpenAI())` raised `TypeError` since Habits was added, and so
+  did `wrap` on the Anthropic SDK's and LangChain's `ChatOpenAI` default
+  clients: each SDK subclasses the httpx client in its own module, and `wrap`
+  only recognized httpx's own classes. Clients built with an explicit
+  `http_client=thinkless.habits.http_client()`, and `thinkless habits proxy`,
+  were not affected. `wrap` now finds httpx or httpx2 anywhere in the client's
+  class hierarchy, and tests wrap each SDK's default sync and async client.
+
 ## 0.6.0 - 2026-11-22
 
 A review of the whole package. Habits gets fixes for streams cut short,
