@@ -685,6 +685,85 @@ def test_wrap_openai_sdk(tmp_path: Path) -> None:
     habits.close()
 
 
+@pytest.mark.parametrize("asynchronous", [False, True])
+def test_wrap_the_default_openai_client(tmp_path: Path, asynchronous: bool) -> None:
+    """``habits.wrap(OpenAI())`` with the SDK's own HTTP client, as in the README.
+
+    The SDK subclasses the httpx client in its own module, so the library has
+    to be found in the class hierarchy.
+    """
+    import asyncio
+
+    openai = pytest.importorskip("openai")
+    from thinkless.habits.transport import sdk_http_library, transport_classes
+
+    library = sdk_http_library()
+    lib = pytest.importorskip(library)
+    sync, async_ = transport_classes(library)
+    llm = FakeLLM()
+
+    def handler(request: Any) -> Any:
+        response = llm(httpx.Request(request.method, str(request.url), content=request.content))
+        return lib.Response(
+            response.status_code, headers=dict(response.headers), content=response.content
+        )
+
+    habits = Habits(tmp_path, confirm_calls=0, learn_every=None, audit=0.0, seed=0)
+    messages = [{"role": "system", "content": SYSTEM}, {"role": "user", "content": "refund it"}]
+    if asynchronous:
+        aclient = openai.AsyncOpenAI(api_key="test")
+        assert wrap(aclient, habits) is aclient
+        transport = aclient._client._transport
+        assert isinstance(transport, async_)
+
+        async def ahandler(request: Any) -> Any:
+            await request.aread()
+            return handler(request)
+
+        transport.inner = lib.MockTransport(ahandler)
+        reply = asyncio.run(aclient.chat.completions.create(model="gpt-test", messages=messages))
+    else:
+        client = openai.OpenAI(api_key="test")
+        assert wrap(client, habits) is client
+        transport = client._client._transport
+        assert isinstance(transport, sync)
+        transport.inner = lib.MockTransport(handler)
+        reply = client.chat.completions.create(model="gpt-test", messages=messages)
+    assert reply.choices[0].message.content
+    assert habits.counts["llm"] == 1
+    habits.close()
+
+
+@pytest.mark.parametrize(
+    ("module", "make", "http"),
+    [
+        ("anthropic", lambda m: m.Anthropic(api_key="x"), lambda c: c._client),
+        ("anthropic", lambda m: m.AsyncAnthropic(api_key="x"), lambda c: c._client),
+        (
+            "langchain_openai",
+            lambda m: m.ChatOpenAI(api_key="x", model="m"),
+            lambda c: c.root_client._client,
+        ),
+    ],
+)
+def test_wrap_other_sdks_default_clients(tmp_path: Path, module: str, make: Any, http: Any) -> None:
+    """The Anthropic SDK and LangChain subclass the httpx client too."""
+    from thinkless.habits.transport import transport_classes
+
+    sdk = pytest.importorskip(module)
+    client = make(sdk)
+    habits = Habits(tmp_path, learn_every=None)
+    assert wrap(client, habits) is client
+    inner = http(client)
+    library = next(
+        c.__module__.split(".")[0]
+        for c in type(inner).__mro__
+        if c.__module__.split(".")[0] in ("httpx", "httpx2")
+    )
+    assert isinstance(inner._transport, transport_classes(library))
+    habits.close()
+
+
 def test_wrap_rejects_unknown_clients() -> None:
     with pytest.raises(TypeError, match="proxy"):
         wrap(object())

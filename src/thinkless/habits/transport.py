@@ -340,9 +340,22 @@ def async_http_client(
     return lib.AsyncClient(transport=asynchronous(habits, inner=transport), **kwargs)
 
 
+def _http_library(http: Any) -> str | None:
+    """``httpx`` or ``httpx2`` when ``http`` is a client of either, or a subclass of one.
+
+    SDKs subclass the client (OpenAI's ``SyncHttpxClientWrapper``), so the
+    library is found in the class hierarchy, not in the class's own module.
+    """
+    for cls in type(http).__mro__:
+        root = cls.__module__.split(".")[0]
+        if root in ("httpx", "httpx2"):
+            return root
+    return None
+
+
 def _wrap_http(http: Any, habits: Habits | None) -> bool:
-    module = type(http).__module__.split(".")[0]
-    if module not in ("httpx", "httpx2") or not hasattr(http, "_transport"):
+    module = _http_library(http)
+    if module is None or not hasattr(http, "_transport"):
         return False
     lib = importlib.import_module(module)
     sync, asynchronous = transport_classes(module)
