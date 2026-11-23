@@ -678,6 +678,55 @@ def test_async_transport(tmp_path: Path) -> None:
     habits.close()
 
 
+def test_async_transport_reads_files_off_the_event_loop(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    import asyncio
+    import threading
+
+    import thinkless.habits.runtime as runtime
+    from thinkless.habits.student import SiteModel as Model
+
+    llm = FakeLLM()
+    habits = Habits(tmp_path, confirm_calls=0, learn_every=None, audit=0.0, seed=0)
+    client = client_for(habits, llm)
+    _run(client, random.Random(9), 220)
+    learn(tmp_path, options=habits.options)  # as another process would: on disk only
+    reads: list[str] = []
+    load_plan_before, load_model_before = runtime.load_plan, Model.load
+
+    def load_plan(directory: Path) -> Any:
+        reads.append(threading.current_thread().name)
+        return load_plan_before(directory)
+
+    def load_model(path: Path) -> Any:
+        reads.append(threading.current_thread().name)
+        return load_model_before(path)
+
+    monkeypatch.setattr(runtime, "load_plan", load_plan)
+    monkeypatch.setattr(Model, "load", staticmethod(load_model))
+    habits._plan_checked = 0.0
+    _, asynchronous = transport_classes("httpx")
+
+    async def main() -> tuple[str, list[httpx.Response]]:
+        async with httpx.AsyncClient(
+            base_url="https://api.example.com/v1",
+            transport=asynchronous(habits, inner=httpx.MockTransport(llm)),
+        ) as aclient:
+            rng = random.Random(10)
+            responses = [
+                await aclient.post("/chat/completions", json=request_body(ticket(rng)[0]))
+                for _ in range(20)
+            ]
+            return threading.current_thread().name, responses
+
+    loop_thread, responses = asyncio.run(main())
+    assert any(r.headers.get("x-thinkless-habit") == "local" for r in responses)
+    assert reads
+    assert loop_thread not in reads
+    habits.close()
+
+
 def test_site_header_names_a_site_and_is_not_forwarded(tmp_path: Path) -> None:
     llm = FakeLLM()
     habits = Habits(tmp_path, confirm_calls=0, learn_every=None)

@@ -92,6 +92,12 @@ All notable changes are recorded here. The format follows
   calls peaked 126 MB above the process's baseline instead of 313 MB, and
   2,000 calls of about 2,600 characters 270 MB instead of 553 MB, in less
   time. The students trained are identical to before.
+- The Habits proxy and other async clients no longer read files on the
+  event loop. A changed plan and its students are loaded in a worker thread
+  before the request that would have loaded them, and an audit that can
+  suspend a site is recorded in one too. Students that did not change are
+  kept across plan reloads instead of being read again. The rest of the
+  per-call work stays inline: it takes about 0.2 ms.
 - `Habits.close()` also stops learning inside a site, between folds and
   training epochs, so a large site no longer keeps a closing process busy.
 - `Engine.close()` and `Tracer.flush()` flush an `OTelSink`'s provider, so

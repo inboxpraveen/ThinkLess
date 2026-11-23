@@ -59,6 +59,20 @@ def _begin(habits: Habits, request: Any, api: Api, body: Any) -> Ticket | None:
         return None
 
 
+def _refresh(habits: Habits) -> None:
+    try:
+        habits.refresh()
+    except Exception:
+        logger.exception("ThinkLess could not reload its plan")
+
+
+async def _off_loop(fn: Callable[..., None], *args: Any) -> None:
+    """Run ``fn`` in a worker thread, under asyncio or trio alike."""
+    import anyio.to_thread
+
+    await anyio.to_thread.run_sync(fn, *args)
+
+
 def _continued(habits: Habits, api: Api, body: Any) -> Any:
     """A Responses call that continues a local answer, rewritten; otherwise ``None``."""
     if api is not RESPONSES:
@@ -246,6 +260,9 @@ def transport_classes(module_name: str = "httpx") -> tuple[type, type]:
                 body = rewritten
                 content = json.dumps(rewritten, ensure_ascii=False).encode("utf-8")
                 forward = upstream(request, content)
+            if self.habits.refresh_due():
+                # A changed plan means file reads; do them off the event loop.
+                await _off_loop(_refresh, self.habits)
             ticket = _begin(self.habits, request, api, body)
             if ticket is None:
                 return await self.inner.handle_async_request(forward)
@@ -270,7 +287,11 @@ def transport_classes(module_name: str = "httpx") -> tuple[type, type]:
                     parsed = json.loads(data)
                 except ValueError:
                     parsed = None
-            _finish(self.habits, ticket, parsed, response.status_code)
+            if ticket.audit:
+                # A failed audit can suspend the site, which rewrites the plan.
+                await _off_loop(_finish, self.habits, ticket, parsed, response.status_code)
+            else:
+                _finish(self.habits, ticket, parsed, response.status_code)
             return lib.Response(
                 response.status_code,
                 headers=_headers(response),

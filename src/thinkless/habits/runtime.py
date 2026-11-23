@@ -56,6 +56,8 @@ MODES = ("auto", "shadow", "record", "off")
 AUDIT_WINDOW = 200
 MIN_AUDITS = 20
 PLAN_CHECK_S = 2.0
+# Site statuses whose student scores every call.
+SCORED = ("active", "probation", "learning", "suspended")
 CHAINS_KEPT = 2048
 CHAIN_BYTES_KEPT = 64 * 1024 * 1024
 
@@ -206,12 +208,22 @@ class Habits:
         by_base: dict[str, list[dict[str, Any]]] = {}
         for entry in (plan or {}).get("sites", {}).values():
             by_base.setdefault(entry["base"], []).append(entry)
+        # Students are loaded here, with the plan, so a request never waits on
+        # a file read; one already loaded is kept, since a stem names a single
+        # trained student.
+        with self._lock:
+            loaded = dict(self._models)
+        models: dict[str, SiteModel | None] = {}
+        for entry in (plan or {}).get("sites", {}).values():
+            stem = entry.get("student")
+            if stem and entry.get("status") in SCORED and stem not in models:
+                models[stem] = loaded[stem] if stem in loaded else self._load_model(str(stem))
         with self._lock:
             if not force and self._plan_mtime is not None and mtime < self._plan_mtime:
                 return  # another thread already published a newer plan
             self._plan = plan
             self._plan_mtime = mtime
-            self._models = {}
+            self._models = models
             self._by_base = by_base
             for entry in (plan or {}).get("sites", {}).values():
                 # Audits measure one student; a new one starts a new window.
@@ -228,19 +240,35 @@ class Habits:
                     self._suspended.pop(entry["id"], None)
                     self._suspended_student.pop(entry["id"], None)
 
+    def _load_model(self, stem: str) -> SiteModel | None:
+        try:
+            return SiteModel.load(self.directory / "models" / stem)
+        except (OSError, ValueError, KeyError) as exc:
+            logger.warning("could not load the student %s: %s", stem, exc)
+            return None
+
     def _model(self, entry: Mapping[str, Any]) -> SiteModel | None:
         stem = entry.get("student")
         if not stem:
             return None
         with self._lock:
             if stem not in self._models:
-                path = self.directory / "models" / str(stem)
-                try:
-                    self._models[stem] = SiteModel.load(path)
-                except (OSError, ValueError, KeyError) as exc:
-                    logger.warning("could not load the student %s: %s", stem, exc)
-                    self._models[stem] = None
+                self._models[stem] = self._load_model(str(stem))
             return self._models[stem]
+
+    def refresh_due(self) -> bool:
+        """Whether the next request would check ``plan.json`` for changes.
+
+        An async caller can run :meth:`refresh` in a worker thread first, so
+        the file reads a changed plan needs stay off its event loop.
+        """
+        if self.mode in ("off", "record"):
+            return False
+        return time.monotonic() - self._plan_checked >= PLAN_CHECK_S
+
+    def refresh(self) -> None:
+        """Reload ``plan.json`` and its students if the file changed."""
+        self._refresh_plan()
 
     def _match(self, call: Call) -> dict[str, Any] | None:
         candidates = self._by_base.get(base_key(call))
@@ -284,8 +312,7 @@ class Habits:
         if entry is None:
             return ticket
         ticket.site = entry["id"]
-        scored = ("active", "probation", "learning", "suspended")
-        if entry.get("status") not in scored or not call.answerable:
+        if entry.get("status") not in SCORED or not call.answerable:
             return ticket
         model = self._model(entry)
         if model is None:
