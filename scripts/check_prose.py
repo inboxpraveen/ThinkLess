@@ -7,8 +7,8 @@ locally before opening a pull request:
     python scripts/check_prose.py
 
 It runs in CI on every push. Benchmark results, the decision benchmark's
-task rows and results, and the Habits replays' recorded answers and
-results are skipped: they hold model output and dataset text, not writing
+task rows and results, the Habits replays' recorded answers and results,
+and the student test page's data are skipped: they hold model output and dataset text, not writing
 from this project. The task NOTICE is checked.
 """
 
@@ -43,6 +43,7 @@ DATA_DIRS = (
     "benchmarks/decisions/results/",
     "benchmarks/habits/cache/",
     "benchmarks/habits/results/",
+    "docs/assets/student/",
 )
 
 DASHES = {chr(0x2014): "em dash", chr(0x2013): "en dash"}

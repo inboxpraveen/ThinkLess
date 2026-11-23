@@ -1,3 +1,5 @@
 # Benchmark task files are hashed; keep their bytes exactly as built.
 benchmarks/decisions/tasks/** -text
 src/thinkless/bench/decisions/tasks.json -text
+# The student test page's weights are read byte for byte in the browser.
+*.bin binary

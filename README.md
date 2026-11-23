@@ -53,7 +53,9 @@ The output, shortened (timings depend on the machine):
 The demo's LLM is a stand-in that always answers the same way, so agreement
 is perfect. On real traffic it is lower, and the
 [measured results](https://inboxpraveen.github.io/ThinkLess/habits/#results)
-say by how much.
+say by how much. To see a student trained on a real LLM's answers decide in
+your browser, with nothing to install, open the
+[student test page](https://inboxpraveen.github.io/ThinkLess/student-test/).
 
 <p align="center">
   <img src="https://raw.githubusercontent.com/inboxpraveen/ThinkLess/main/docs/assets/architecture.svg" alt="How ThinkLess works. Habits: habits.wrap(client) answers a call locally in about 4 ms when its call site is a proven habit, and otherwise sends it to your LLM unchanged and records it; in the background ThinkLess finds decision sites, trains a student per site on the LLM's answers, and makes it a habit only after 97% agreement on past calls and again on new calls, with 5% audits after. Typed decisions: a question goes through rules, GLiNER 2.5, Laya, System One models and an LLM decider, cheapest first, and comes back as a typed decision. Everything is traced to JSONL, OpenTelemetry and an HTML viewer." width="100%">

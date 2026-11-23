@@ -13,6 +13,11 @@ test of agreement with your LLM, twice. A site that passes becomes a habit.
 Audits keep checking it, and a habit that stops agreeing goes back to the LLM
 on its own.
 
+!!! tip "See a student decide"
+    The [student test page](student-test.md) runs a student trained on Qwen
+    3.7 Flash's answers in your browser: type a banking question and see
+    whether it would be answered locally or sent to the LLM.
+
 ```python
 from openai import OpenAI
 from thinkless import habits

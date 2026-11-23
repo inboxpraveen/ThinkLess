@@ -1,0 +1,473 @@
+{
+ "task": "banking77",
+ "teacher": "qwen/qwen3.7-flash (OpenRouter, reasoning off, temperature 0)",
+ "labels": [
+  "Refund not showing up",
+  "activate my card",
+  "age limit",
+  "apple pay or google pay",
+  "atm support",
+  "automatic top up",
+  "balance not updated after bank transfer",
+  "balance not updated after cheque or cash deposit",
+  "beneficiary not allowed",
+  "cancel transfer",
+  "card about to expire",
+  "card acceptance",
+  "card arrival",
+  "card delivery estimate",
+  "card linking",
+  "card not working",
+  "card payment fee charged",
+  "card payment not recognised",
+  "card payment wrong exchange rate",
+  "card swallowed",
+  "cash withdrawal charge",
+  "cash withdrawal not recognised",
+  "change pin",
+  "compromised card",
+  "contactless not working",
+  "country support",
+  "declined card payment",
+  "declined cash withdrawal",
+  "declined transfer",
+  "direct debit payment not recognised",
+  "disposable card limits",
+  "edit personal details",
+  "exchange charge",
+  "exchange rate",
+  "exchange via app",
+  "extra charge on statement",
+  "failed transfer",
+  "fiat currency support",
+  "get disposable virtual card",
+  "get physical card",
+  "getting spare card",
+  "lost or stolen card",
+  "lost or stolen phone",
+  "order physical card",
+  "passcode forgotten",
+  "pending card payment",
+  "pending cash withdrawal",
+  "pending top up",
+  "pending transfer",
+  "pin blocked",
+  "receiving money",
+  "request refund",
+  "reverted card payment?",
+  "supported cards and currencies",
+  "terminate account",
+  "top up by bank transfer charge",
+  "top up by card charge",
+  "top up by cash or cheque",
+  "top up failed",
+  "top up limits",
+  "top up reverted",
+  "topping up by card",
+  "transaction charged twice",
+  "transfer fee charged",
+  "transfer into account",
+  "transfer not received by recipient",
+  "transfer timing",
+  "unable to verify identity",
+  "verify my identity",
+  "verify source of funds",
+  "verify top up",
+  "virtual card not working",
+  "visa or mastercard",
+  "why verify identity",
+  "wrong amount of cash received",
+  "wrong exchange rate for cash withdrawal"
+ ],
+ "threshold": 0.9403838534912786,
+ "target": 0.97,
+ "confidence": 0.95,
+ "calls": {
+  "train": 8000,
+  "gate": 2500,
+  "test": 2583
+ },
+ "train_seconds": 4.6,
+ "gate": {
+  "accepted": 1247,
+  "agreed": 1223,
+  "calls": 2500,
+  "lower_bound": 0.9730391590280635
+ },
+ "test": {
+  "local": 1250,
+  "agreed_local": 1229,
+  "teacher_cost_usd": 0.019166448,
+  "saved_cost_usd": 0.00921764,
+  "teacher_accuracy": 0.7359659310878823
+ },
+ "compact": {
+  "features": 14215,
+  "full_features": 14215,
+  "same_label": 0.9988385598141696,
+  "same_route": 0.9988385598141696
+ },
+ "weights": "banking77.bin",
+ "samples": [
+  {
+   "text": "Does it cost to top up my card?",
+   "teacher": "top up by card charge",
+   "label": "top up by card charge",
+   "cost_usd": 7.536e-06
+  },
+  {
+   "text": "Can you tell me the countries you provide support for.",
+   "teacher": "country support",
+   "label": "country support",
+   "cost_usd": 7.206e-06
+  },
+  {
+   "text": "Why was the exchange wrong for the item I purchased?",
+   "teacher": "wrong exchange rate for cash withdrawal",
+   "label": "card payment wrong exchange rate",
+   "cost_usd": 7.726e-06
+  },
+  {
+   "text": "It seems I was overcharged when I used an ATM while on vacation. If I knew about your fees in advance I sure would have gone somewhere else.",
+   "teacher": "cash withdrawal charge",
+   "label": "wrong exchange rate for cash withdrawal",
+   "cost_usd": 7.936e-06
+  },
+  {
+   "text": "How long is a delivery to the US?",
+   "teacher": "card delivery estimate",
+   "label": "card delivery estimate",
+   "cost_usd": 7.276e-06
+  },
+  {
+   "text": "I was doing a transfer and received a \"decline\" message.",
+   "teacher": "declined transfer",
+   "label": "declined transfer",
+   "cost_usd": 7.426e-06
+  },
+  {
+   "text": "Do you have any idea on when I will receive my refund? I got my statement and it was not there.",
+   "teacher": "Refund not showing up",
+   "label": "Refund not showing up",
+   "cost_usd": 7.956e-06
+  },
+  {
+   "text": "Can I choose what card I can use",
+   "teacher": "card acceptance",
+   "label": "visa or mastercard",
+   "cost_usd": 7.116e-06
+  },
+  {
+   "text": "I'm not familiar with a card payment.",
+   "teacher": "card payment not recognised",
+   "label": "card payment not recognised",
+   "cost_usd": 7.406e-06
+  },
+  {
+   "text": "Hi, I have withdrawn cash from the ATM on holiday and i guess withdrawal amount has been overcharged. I did it as i was not aware of these charges.",
+   "teacher": "cash withdrawal charge",
+   "label": "wrong exchange rate for cash withdrawal",
+   "cost_usd": 7.996e-06
+  },
+  {
+   "text": "I just topped off my card will I be charged for it?",
+   "teacher": "top up by card charge",
+   "label": "top up by card charge",
+   "cost_usd": 7.656e-06
+  },
+  {
+   "text": "Why can't I make multiple payments with my virtual card?",
+   "teacher": "virtual card not working",
+   "label": "virtual card not working",
+   "cost_usd": 7.496e-06
+  },
+  {
+   "text": "Are you going to charge me to top up my card?",
+   "teacher": "top up by card charge",
+   "label": "top up by card charge",
+   "cost_usd": 7.626e-06
+  },
+  {
+   "text": "I am confused why there is cash I did not accept in my account",
+   "teacher": "receiving money",
+   "label": "cash withdrawal not recognised",
+   "cost_usd": 7.426e-06
+  },
+  {
+   "text": "Can I use a transfer to receive my transfer?",
+   "teacher": "receiving money",
+   "label": "receiving money",
+   "cost_usd": 7.306e-06
+  },
+  {
+   "text": "This stupid system is not letting me prove my identity.",
+   "teacher": "unable to verify identity",
+   "label": "unable to verify identity",
+   "cost_usd": 7.466e-06
+  },
+  {
+   "text": "I relocated and need to change my personal details.",
+   "teacher": "edit personal details",
+   "label": "edit personal details",
+   "cost_usd": 7.306e-06
+  },
+  {
+   "text": "When will my top up be applied?",
+   "teacher": "pending top up",
+   "label": "pending top up",
+   "cost_usd": 7.246e-06
+  },
+  {
+   "text": "It has been forever ago that I made an order online. The product simply is not coming. Just give me back my money because I'm not paying these people.",
+   "teacher": "request refund",
+   "label": "request refund",
+   "cost_usd": 7.866e-06
+  },
+  {
+   "text": "How do I get refills to my card when I'm traveling?",
+   "teacher": "topping up by card",
+   "label": "automatic top up",
+   "cost_usd": 7.686e-06
+  },
+  {
+   "text": "I'm being charged for using my card!",
+   "teacher": "card payment fee charged",
+   "label": "card payment fee charged",
+   "cost_usd": 7.406e-06
+  },
+  {
+   "text": "are multiple currencies acceptable?",
+   "teacher": "fiat currency support",
+   "label": "fiat currency support",
+   "cost_usd": 7.286e-06
+  },
+  {
+   "text": "When can I expect the transfer to be complete?",
+   "teacher": "transfer timing",
+   "label": "transfer timing",
+   "cost_usd": 7.176e-06
+  },
+  {
+   "text": "What is the significance of verifying the top-up?",
+   "teacher": "verify top up",
+   "label": "verify top up",
+   "cost_usd": 7.306e-06
+  },
+  {
+   "text": "For the first time I got a fee on my account. How do I know when you charge these fees?",
+   "teacher": "extra charge on statement",
+   "label": "card payment fee charged",
+   "cost_usd": 7.796e-06
+  },
+  {
+   "text": "What's taking my top-up so long?",
+   "teacher": "pending top up",
+   "label": "pending top up",
+   "cost_usd": 7.276e-06
+  },
+  {
+   "text": "How many payments can I make using a virtual card?",
+   "teacher": "disposable card limits",
+   "label": "disposable card limits",
+   "cost_usd": 7.466e-06
+  },
+  {
+   "text": "A wrong amount of cash we sent to me.",
+   "teacher": "wrong amount of cash received",
+   "label": "wrong amount of cash received",
+   "cost_usd": 7.566e-06
+  },
+  {
+   "text": "I was charged two times for the same thing.",
+   "teacher": "transaction charged twice",
+   "label": "transaction charged twice",
+   "cost_usd": 7.306e-06
+  },
+  {
+   "text": "When can I expect delivery?",
+   "teacher": "card delivery estimate",
+   "label": "card delivery estimate",
+   "cost_usd": 7.186e-06
+  },
+  {
+   "text": "I tried to withdraw cash, but got declined!",
+   "teacher": "declined cash withdrawal",
+   "label": "declined cash withdrawal",
+   "cost_usd": 7.436e-06
+  },
+  {
+   "text": "I couldn't complete card activation.",
+   "teacher": "activate my card",
+   "label": "activate my card",
+   "cost_usd": 7.216e-06
+  },
+  {
+   "text": "Will I need to order a new card since mine expires next month?",
+   "teacher": "card about to expire",
+   "label": "card about to expire",
+   "cost_usd": 7.556e-06
+  },
+  {
+   "text": "I selected to withdrawal 30 pounds but only received 10. I'm still standing in front of the ATM. The app shows i took out 30 pounds also. How do i fix this?",
+   "teacher": "wrong amount of cash received",
+   "label": "wrong amount of cash received",
+   "cost_usd": 8.556e-06
+  },
+  {
+   "text": "The ATM machine ate my card.",
+   "teacher": "card swallowed",
+   "label": "card swallowed",
+   "cost_usd": 7.086e-06
+  },
+  {
+   "text": "Where did this fee come from?",
+   "teacher": "extra charge on statement",
+   "label": "extra charge on statement",
+   "cost_usd": 7.346e-06
+  },
+  {
+   "text": "Which ATMs accept this placard ?",
+   "teacher": "atm support",
+   "label": "atm support",
+   "cost_usd": 7.246e-06
+  },
+  {
+   "text": "I don't live in the UK. Can I still get a card?",
+   "teacher": "card delivery estimate",
+   "label": "country support",
+   "cost_usd": 7.456e-06
+  },
+  {
+   "text": "I made a mistake when sending a payment, sending it to the wrong account number (with a typo) - can you please cancel the transaction?",
+   "teacher": "cancel transfer",
+   "label": "cancel transfer",
+   "cost_usd": 7.746e-06
+  },
+  {
+   "text": "Could google pay and top up be together?",
+   "teacher": "apple pay or google pay",
+   "label": "apple pay or google pay",
+   "cost_usd": 7.536e-06
+  },
+  {
+   "text": "Has my top up been reverted?",
+   "teacher": "top up reverted",
+   "label": "top up reverted",
+   "cost_usd": 7.216e-06
+  },
+  {
+   "text": "I topped up about half an hour ago and the charge is still pending. I'm a new customer and today is my first time doing this. Can you fix it? It doesn't seem to be working.",
+   "teacher": "pending top up",
+   "label": "pending top up",
+   "cost_usd": 8.266e-06
+  },
+  {
+   "text": "the exchange rate at which my card payment is at is wrong",
+   "teacher": "card payment wrong exchange rate",
+   "label": "card payment wrong exchange rate",
+   "cost_usd": 7.626e-06
+  },
+  {
+   "text": "How do i find my top-up card's verification code?",
+   "teacher": "verify top up",
+   "label": "verify top up",
+   "cost_usd": 7.366e-06
+  },
+  {
+   "text": "Some of my card payments look different than where I purchased products from. Why is that?",
+   "teacher": "card payment not recognised",
+   "label": "card payment not recognised",
+   "cost_usd": 7.676e-06
+  },
+  {
+   "text": "Where do I go to terminate my account?",
+   "teacher": "terminate account",
+   "label": "terminate account",
+   "cost_usd": 7.146e-06
+  },
+  {
+   "text": "Why was there a fee for paying by card?",
+   "teacher": "card payment fee charged",
+   "label": "card payment fee charged",
+   "cost_usd": 7.436e-06
+  },
+  {
+   "text": "I made a deposit a couple of days back it's, as of yet, not gone in! It would be ideal if you assist me with this",
+   "teacher": "balance not updated after bank transfer",
+   "label": "balance not updated after cheque or cash deposit",
+   "cost_usd": 8.296e-06
+  },
+  {
+   "text": "I used the ATM machine to get money out for Holiday shopping and saw the outrageous charges. Why is that? I would not have used the ATM if I had known!",
+   "teacher": "cash withdrawal charge",
+   "label": "wrong exchange rate for cash withdrawal",
+   "cost_usd": 8.026e-06
+  },
+  {
+   "text": "I logged in wrong and am blocked, how do I log in?",
+   "teacher": "passcode forgotten",
+   "label": "pin blocked",
+   "cost_usd": 7.426e-06
+  },
+  {
+   "text": "I checked the app and saw an extra cash withdrawal that I didn't authorize",
+   "teacher": "extra charge on statement",
+   "label": "cash withdrawal not recognised",
+   "cost_usd": 7.586e-06
+  },
+  {
+   "text": "Can you explain the various transaction times shown on my statement?",
+   "teacher": "transaction charged twice",
+   "label": "transaction charged twice",
+   "cost_usd": 7.366e-06
+  },
+  {
+   "text": "I goofed up and used the wrong account.  Please help.",
+   "teacher": "cancel transfer",
+   "label": "cancel transfer",
+   "cost_usd": 7.296e-06
+  },
+  {
+   "text": "Why has my card been charged an extra pound?",
+   "teacher": "extra charge on statement",
+   "label": "extra charge on statement",
+   "cost_usd": 7.436e-06
+  },
+  {
+   "text": "I bought some stuff this morning but the payment shows as pending",
+   "teacher": "pending card payment",
+   "label": "pending card payment",
+   "cost_usd": 7.366e-06
+  },
+  {
+   "text": "What major card payments are accepted?",
+   "teacher": "card acceptance",
+   "label": "visa or mastercard",
+   "cost_usd": 7.086e-06
+  },
+  {
+   "text": "Please delete the duplicate payment that was made to my account. One payment is still pending and I do not want to pay twice.",
+   "teacher": "pending card payment",
+   "label": "transaction charged twice",
+   "cost_usd": 7.786e-06
+  },
+  {
+   "text": "There is a payment in the app I did not make",
+   "teacher": "card payment not recognised",
+   "label": "card payment not recognised",
+   "cost_usd": 7.466e-06
+  },
+  {
+   "text": "A transaction shows duplicate times.",
+   "teacher": "transaction charged twice",
+   "label": "transaction charged twice",
+   "cost_usd": 7.186e-06
+  },
+  {
+   "text": "What systems do you have in place for my security when using my card for everyday purchases?",
+   "teacher": "card acceptance",
+   "label": "get disposable virtual card",
+   "cost_usd": 7.416e-06
+  }
+ ]
+}

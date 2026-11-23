@@ -8,6 +8,14 @@ All notable changes are recorded here. The format follows
 
 ### Added
 
+- A [student test page](https://inboxpraveen.github.io/ThinkLess/student-test/)
+  on the docs site: a Habits student trained on 8,000 of Qwen 3.7 Flash's
+  answers to Banking77 messages runs in the browser, answers what the visitor
+  types or sends it to the LLM by the gate's threshold, and replays held-out
+  calls against the LLM's real answers. On 2,583 test calls it answered 48
+  percent locally at 98.3 percent agreement. A test checks the JavaScript
+  features and predictions against Python's.
+
 - A majority-class baseline on the decision benchmark
   (`thinkless bench decisions run --provider majority`), and a verified
   result for it on the leaderboard, so every table shows the no-skill floor.
