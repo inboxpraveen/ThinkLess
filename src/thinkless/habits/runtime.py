@@ -167,6 +167,7 @@ class Habits:
         # between sites first so it releases its lock and leaves no half run.
         atexit.register(_close_at_exit, weakref.ref(self))
         self._lock = threading.RLock()
+        self._plan_write = threading.Lock()
         self._plan: dict[str, Any] | None = None
         self._plan_mtime: float | None = None
         self._plan_checked = 0.0
@@ -212,7 +213,8 @@ class Habits:
         # a file read; one already loaded is kept, since a stem names a single
         # trained student.
         with self._lock:
-            loaded = dict(self._models)
+            # A failed load (None) is not kept: the next plan tries again.
+            loaded = {stem: m for stem, m in self._models.items() if m is not None}
         models: dict[str, SiteModel | None] = {}
         for entry in (plan or {}).get("sites", {}).values():
             stem = entry.get("student")
@@ -493,16 +495,19 @@ class Habits:
                 "upper_bound": round(upper, 4),
             }
         )
-        plan = load_plan(self.directory)
-        if plan and site_id in plan.get("sites", {}):
-            entry = plan["sites"][site_id]
-            entry["status"] = "suspended"
-            entry["suspended_at"] = stamp
-            entry["reason"] = (
-                f"audits fell below the target: {agreed} of {audits} agreed with the LLM"
-            )
-            save_plan(plan, self.directory)
-            self._refresh_plan(force=True)
+        # Its own lock: request threads never wait on this file I/O, but two
+        # suspensions never overwrite each other's change to the plan.
+        with self._plan_write:
+            plan = load_plan(self.directory)
+            if plan and site_id in plan.get("sites", {}):
+                entry = plan["sites"][site_id]
+                entry["status"] = "suspended"
+                entry["suspended_at"] = stamp
+                entry["reason"] = (
+                    f"audits fell below the target: {agreed} of {audits} agreed with the LLM"
+                )
+                save_plan(plan, self.directory)
+        self._refresh_plan(force=True)
 
     def _event(self, event: Mapping[str, Any]) -> None:
         path = self.directory / "events.jsonl"

@@ -24,9 +24,8 @@ from typing import Any, ClassVar
 from ..decision import Answer, Plane
 from ..providers.base import DecisionProvider, ProviderResult, State
 from ..questions import Choice, Extract, Kind, Question, Score, YesNo
-from .calls import read_calls
-from .learn import load_plan
-from .sites import discover, variable_text
+from .learn import LearnOptions, load_plan, read_window
+from .sites import base_key, call_lines, variable_text
 from .student import SiteModel
 from .wire import MISSING, ROOT_FIELD, TEXT_FIELD, TOOLS_FIELD, value_of
 
@@ -93,9 +92,7 @@ class SiteStudent(DecisionProvider):
             if isinstance(question, Extract):
                 values = {f: _value(labels.get(f)) for f in question.fields}
                 answers[key] = Answer(
-                    value=values,
-                    fields={f: score for f, v in values.items() if v is not None},
-                    confidence=score,
+                    value=values, fields=dict.fromkeys(values, score), confidence=score
                 )
                 continue
             field = self._field(question)
@@ -202,12 +199,12 @@ def eject(
 
     target = Path(out)
     if target.suffix != ".py":
-        target = target.with_suffix(".py")
+        target = target.with_name(target.name + ".py")
     student = target.with_name(f"{target.stem}_student")
     target.parent.mkdir(parents=True, exist_ok=True)
     for suffix in (".json", ".npz"):
         shutil.copyfile(
-            (root / "models" / str(stem)).with_suffix(suffix), student.with_suffix(suffix)
+            (root / "models" / f"{stem}{suffix}"), student.with_name(student.name + suffix)
         )
     target.write_text(_source(entry, questions, student.name, float(threshold)), encoding="utf-8")
     return target
@@ -224,21 +221,28 @@ def _input_mismatch(root: Path, entry: Mapping[str, Any]) -> str | None:
     The two are the same for a fixed prompt around one user message; few-shot
     turns or template lines inside the user message make them differ.
     """
-    calls = root / "calls"
-    if not calls.exists():
-        return None
     template = frozenset(entry.get("template") or [])
-    for site in discover(read_calls([calls])):
-        if site.id != entry["id"]:
+    checked = 0
+    for observation in reversed(read_window(root, LearnOptions())):
+        call = observation.call
+        if base_key(call) != entry.get("base"):
             continue
-        for observation in site.observations[-CHECKED_CALLS:]:
-            call = observation.call
-            users = [m.text for m in call.messages if m.role == "user"]
-            if not users:
-                return "a call with no user message"
-            expected = variable_text(call, template)
-            if _input_text(users[-1]) != expected:
-                return expected[:80]
+        if not template <= {line_id for line_id, _, _ in call_lines(call)}:
+            continue
+        users = [m.text for m in call.messages if m.role == "user"]
+        if not users:
+            return "a call with no user message"
+        expected = variable_text(call, template)
+        if _input_text(users[-1]) != expected:
+            return expected[:80]
+        checked += 1
+        if checked >= CHECKED_CALLS:
+            break
+    if not checked:
+        raise ValueError(
+            f"no recorded calls of site {entry['id']} in the last 30 days to check its "
+            "input against; eject needs the calls the student was trained on"
+        )
     return None
 
 

@@ -770,7 +770,49 @@ def test_eject_reproduces_what_the_site_served(tmp_path: Path) -> None:
             assert decisions["intent"].value == json.loads(labels["intent"])
             assert decisions["wants_human"].value is json.loads(labels["wants_human"])
     assert served > 30
+    # A dotted name keeps its dots: nothing else in the folder is overwritten.
+    dotted = eject(tmp_path / "h", entry["id"], tmp_path / "out" / "my.rules")
+    assert dotted.name == "my.rules.py"
+    assert (tmp_path / "out" / "my.rules_student.json").exists()
+    assert not (tmp_path / "out" / "my.json").exists()
+    spec = importlib.util.spec_from_file_location("my_rules", dotted)
+    assert spec is not None
+    assert spec.loader is not None
+    again = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(again)
+    assert again.build_engine().decide_many("I want my money back", again.QUESTIONS)
     habits.close()
+
+
+def test_a_student_that_failed_to_load_is_tried_again(tmp_path: Path) -> None:
+    from thinkless.habits import runtime as runtime_module
+    from thinkless.habits.learn import load_plan, save_plan
+
+    learner = Habits(tmp_path, confirm_calls=0, learn_every=None, audit=0.0, seed=0)
+    _run(client_for(learner, FakeLLM()), random.Random(3), 250)
+    learner.learn()
+    learner.close()
+    real = runtime_module.SiteModel.load
+    failing = [True]
+
+    def flaky(path: Any) -> Any:
+        if failing[0]:
+            raise OSError("the file is in use")
+        return real(path)
+
+    runtime_module.SiteModel.load = flaky  # type: ignore[method-assign]
+    habits = Habits(tmp_path, confirm_calls=0, learn_every=None, audit=0.0, seed=0)
+    try:
+        assert habits.begin(request_body("refund my order please")).local is None
+        failing[0] = False
+        # The plan changes but the student keeps its name (another process
+        # rewrote it, say): the student is loaded again.
+        save_plan(load_plan(tmp_path), tmp_path)
+        habits._refresh_plan(force=True)
+        assert habits.begin(request_body("refund my order please")).local is not None
+    finally:
+        runtime_module.SiteModel.load = real  # type: ignore[method-assign]
+        habits.close()
 
 
 def test_eject_refuses_unproven_sites(tmp_path: Path) -> None:
@@ -1517,6 +1559,34 @@ def test_bedrock_converse_through_boto3(tmp_path: Path) -> None:
     habits.close()
 
 
+def test_gemini_json_array_streams_are_learned_but_not_built() -> None:
+    from thinkless.habits.apis import GEMINI
+
+    body = {
+        "contents": [{"role": "user", "parts": [{"text": "refund my order"}]}],
+        "generationConfig": {"responseMimeType": "application/json", "responseJsonSchema": SCHEMA},
+    }
+    path = "/v1beta/models/gemini-2.5-flash:streamGenerateContent"
+    sse = GEMINI.parse_request(GEMINI.annotate(body, path, "alt=sse"))
+    array = GEMINI.parse_request(GEMINI.annotate(body, path, ""))
+    assert sse is not None
+    assert array is not None
+    assert sse.answerable
+    # Without alt=sse the answer is a JSON array, which ThinkLess does not build.
+    assert not array.answerable
+    assert "JSON array" in (array.reason or "")
+    parts = ['{"intent": ', '"refund"}']
+    events = [
+        {"candidates": [{"content": {"role": "model", "parts": [{"text": t}]}}]} for t in parts
+    ]
+    events[-1]["candidates"][0]["finishReason"] = "STOP"
+    whole = json.dumps(events).encode()
+    chunks = [whole[:40], whole[40:]]  # split mid-object, as a network read would
+    collected = GEMINI.collect_stream(chunks)
+    assert collected is not None
+    assert collected["candidates"][0]["finishReason"] == "STOP"
+
+
 def test_gemini_forced_function_calls() -> None:
     from thinkless.habits.apis import GEMINI, api_for_path
 
@@ -1934,10 +2004,21 @@ def test_one_learning_run_at_a_time(tmp_path: Path) -> None:
     tmp_path.mkdir(exist_ok=True)
     lock = tmp_path / ".learning.lock"
     host = socket.gethostname()
-    # Held by a live process (this one): learning waits its turn.
+    # Held by a live process: learning waits its turn.
+    holder = subprocess.Popen([sys.executable, "-c", "import time; time.sleep(60)"])
+    try:
+        lock.write_text(f"{holder.pid} {host}", encoding="utf-8")
+        with pytest.raises(LearningInProgressError):
+            learn(tmp_path)
+    finally:
+        holder.kill()
+        holder.wait()
+    # This process's own id, in a lock it does not hold, was left by an
+    # earlier process that had the same id (a restarted container): stale.
     lock.write_text(f"{os.getpid()} {host}", encoding="utf-8")
-    with pytest.raises(LearningInProgressError):
-        learn(tmp_path)
+    assert learn(tmp_path)["sites"] == {}
+    assert not lock.exists()
+    lock.write_text(f"{os.getpid()} {host}", encoding="utf-8")
     # A lock older than the stale age goes, whoever wrote it.
     old = 1_000_000_000
     os.utime(lock, (old, old))
@@ -1982,10 +2063,11 @@ def test_learning_reads_the_most_recent_calls(tmp_path: Path) -> None:
     plan = learn(tmp_path, options=LearnOptions(max_observations=60))
     (site,) = plan["sites"].values()
     assert site["calls"] == 60
-    # A text budget keeps the newest calls whose inputs fit in it.
+    # A text budget keeps the newest calls whose inputs fit in it, but never
+    # fewer than the gate needs.
     plan = learn(tmp_path, options=LearnOptions(max_text_chars=1))
     (site,) = plan["sites"].values()
-    assert site["evidence"] == {"calls": 1}
+    assert site["evidence"]["calls"] == 100
     with pytest.raises(ValueError, match="max_text_chars"):
         LearnOptions(max_text_chars=0)
 

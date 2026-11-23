@@ -208,6 +208,22 @@ def test_extract_confidence_rules(make_engine) -> None:
     assert escalated.attempts[0].confidence == 0.0
 
 
+def test_an_empty_extraction_is_only_as_sure_as_its_provider(make_engine) -> None:
+    fields = Extract(fields={"order_id": "order number", "email": "email"}, name="order")
+    nothing = {"order_id": None, "email": None}
+    # Unsure that nothing is there: not accepted at 1.0 by default.
+    unsure = Answer(value=nothing, fields={"order_id": 0.3, "email": 0.3}, confidence=0.3)
+    decision = make_engine([FakeProvider("p", {"order": unsure})], threshold=0.9).decide(
+        "x", fields
+    )
+    assert decision.status is not Status.ACCEPTED
+    assert decision.confidence == pytest.approx(0.3)
+    # No field confidences: the answer's own confidence decides.
+    bare = Answer(value=nothing, confidence=0.4)
+    decision = make_engine([FakeProvider("p", {"order": bare})], threshold=0.9).decide("x", fields)
+    assert decision.confidence == pytest.approx(0.4)
+
+
 def test_extract_shorthand(make_engine) -> None:
     answer = Answer(value={"order_id": "123"}, fields={"order_id": 0.99})
     engine = make_engine([FakeProvider("p", {"order": answer})])

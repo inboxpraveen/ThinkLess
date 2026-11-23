@@ -604,7 +604,16 @@ class Engine:
             found = [answer.fields.get(f) for f, v in values.items() if v is not None]
             if any(c is None for c in found):
                 return None
-            return min((float(c) for c in found if c is not None), default=1.0)
+            if found:
+                return min(float(c) for c in found if c is not None)
+            # Nothing extracted: how sure the provider is that the fields are
+            # empty, if it says; an empty answer is not certain by itself.
+            empty = [float(c) for c in answer.fields.values() if c is not None]
+            if empty:
+                return min(empty)
+            if answer.confidence is not None:
+                return max(0.0, min(1.0, float(answer.confidence)))
+            return 1.0
         if answer.confidence is not None:
             return max(0.0, min(1.0, float(answer.confidence)))
         return None

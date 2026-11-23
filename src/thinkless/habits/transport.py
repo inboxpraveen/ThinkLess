@@ -46,10 +46,13 @@ def _body(request: Any) -> Any:
         return None
 
 
-def _annotated(api: Api, body: Any, path: str) -> Any:
+def _annotated(api: Api, body: Any, url: Any) -> Any:
     """The body ThinkLess parses and records; what is sent upstream is unchanged."""
     annotate = getattr(api, "annotate", None)
-    return annotate(body, path) if annotate is not None else body
+    if annotate is None:
+        return body
+    query = url.query.decode("ascii", "replace") if isinstance(url.query, bytes) else str(url.query)
+    return annotate(body, url.path, query)
 
 
 def _headers(response: Any) -> list[tuple[str, str]]:
@@ -204,7 +207,7 @@ def transport_classes(module_name: str = "httpx") -> tuple[type, type]:
             if api is None:
                 return self.inner.handle_request(request)
             content = request.read()
-            body = _annotated(api, _body(request), request.url.path)
+            body = _annotated(api, _body(request), request.url)
             forward = request
             rewritten = _continued(self.habits, api, body)
             if rewritten is not None:
@@ -259,7 +262,7 @@ def transport_classes(module_name: str = "httpx") -> tuple[type, type]:
             if api is None:
                 return await self.inner.handle_async_request(request)
             content = await request.aread()
-            body = _annotated(api, _body(request), request.url.path)
+            body = _annotated(api, _body(request), request.url)
             forward = request
             rewritten = _continued(self.habits, api, body)
             if rewritten is not None:

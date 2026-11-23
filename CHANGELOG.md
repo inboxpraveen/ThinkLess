@@ -118,7 +118,9 @@ All notable changes are recorded here. The format follows
   held once, and features are kept in packed arrays. Learning 40,000 short
   calls peaked 126 MB above the process's baseline instead of 313 MB, and
   2,000 calls of about 2,600 characters 270 MB instead of 553 MB, in less
-  time. The students trained are identical to before. A new
+  time. The students trained are identical to before. `read_calls` now
+  drops each call's raw request and response, which learning never reads;
+  pass `keep_raw=True` to keep them. A new
   `LearnOptions.max_text_chars` (6 million by default) bounds the input text
   a site trains on, newest calls first, so a site of long inputs no longer
   needs a gigabyte: on 10,000 calls of 2,600 characters, learning peaked at
@@ -138,6 +140,26 @@ All notable changes are recorded here. The format follows
   and each run's `summary()` counted the other's decisions and cost. A run
   now collects only its own spans, and `summarize` finds the root of a run
   that has a parent.
+- An extraction that found nothing was accepted at confidence 1.0, whatever
+  the provider said. The engine now takes the lowest confidence given for the
+  empty fields, or the answer's own confidence, so an unsure "nothing here"
+  goes on to the next provider.
+- Habits: a student that failed to load once (a file locked by a virus scan,
+  say) stayed off until the process restarted; it is now tried again when the
+  plan changes. Two audit failures at the same moment could each save the
+  plan over the other's suspension; plan writes now take turns.
+- A learning lock carrying this process's own id was taken as held, so a
+  restarted container that got its old process id back (often 1) waited 30
+  minutes to learn. Such a lock is now stale unless this process holds it.
+- A Gemini `streamGenerateContent` call without `alt=sse` streams a JSON
+  array. Habits now records and learns from it, and always forwards it,
+  rather than answering it as server-sent events.
+- `thinkless habits eject --out app/my.rules` writes `my.rules.py` and
+  `my.rules_student.*`; it used to drop part of a dotted name and could
+  overwrite `app/my.json`. Eject now checks the site's input against the
+  calls learning read, and says so when it finds none to check.
+- `LocalLLM.close()` during a generation that had just loaded the model
+  could fail that generation; loading and generating now share one lock.
 
 ## 0.6.1 - 2026-11-23
 

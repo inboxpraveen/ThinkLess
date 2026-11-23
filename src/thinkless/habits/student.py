@@ -448,11 +448,11 @@ class SiteModel:
             prefix = f"f{i}"
             arrays.update(model.arrays(prefix))
             meta[name] = {"prefix": prefix, **model.meta()}
-        npz = target.with_suffix(".npz")
+        npz = target.with_name(target.name + ".npz")
         tmp_npz = npz.with_suffix(".tmp.npz")
         np.savez_compressed(tmp_npz, **arrays)
         tmp_npz.replace(npz)
-        meta_path = target.with_suffix(".json")
+        meta_path = target.with_name(target.name + ".json")
         tmp_meta = meta_path.with_suffix(".tmp")
         tmp_meta.write_text(json.dumps({"fields": meta}, ensure_ascii=False), encoding="utf-8")
         tmp_meta.replace(meta_path)
@@ -460,8 +460,8 @@ class SiteModel:
     @classmethod
     def load(cls, path: str | Path) -> SiteModel:
         target = Path(path)
-        meta = json.loads(target.with_suffix(".json").read_text(encoding="utf-8"))
-        with np.load(target.with_suffix(".npz"), allow_pickle=False) as data:
+        meta = json.loads(target.with_name(target.name + ".json").read_text(encoding="utf-8"))
+        with np.load(target.with_name(target.name + ".npz"), allow_pickle=False) as data:
             arrays = {key: data[key] for key in data.files}
         fields: dict[str, FieldModel] = {}
         for name, spec in meta["fields"].items():

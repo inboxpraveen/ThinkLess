@@ -33,6 +33,7 @@ from .._version import __version__
 from ..errors import ThinkLessError
 from ..logs import get_logger
 from .calls import Observation, iter_files, read_calls
+from .features import MAX_CHARS as FEATURE_CHARS
 from .features import featurize, pack
 from .gate import (
     GateResult,
@@ -98,6 +99,11 @@ def _pid_alive(pid: int) -> bool:
     return True
 
 
+# Learning locks this process holds, so its own process id in a lock file
+# tells this process's lock from one left by an earlier process with that id.
+_HELD: set[str] = set()
+
+
 def _lock_is_stale(lock: Path) -> bool:
     """A lock left by a process that is gone, or older than :data:`LOCK_STALE_S`.
 
@@ -121,6 +127,9 @@ def _lock_is_stale(lock: Path) -> bool:
         return age > 60.0
     if host != _host():
         return False
+    if int(pid) == os.getpid():
+        # A restarted container often gets its old process id back (1, say).
+        return str(lock) not in _HELD
     return not _pid_alive(int(pid))
 
 
@@ -150,12 +159,14 @@ def _learning_lock(directory: Path) -> Iterator[None]:
             lock.unlink(missing_ok=True)
     else:
         raise LearningInProgressError(f"could not take the learning lock in {directory}")
+    _HELD.add(str(lock))
     try:
         os.write(handle, f"{os.getpid()} {_host()}".encode())
         yield
     finally:
         os.close(handle)
         lock.unlink(missing_ok=True)
+        _HELD.discard(str(lock))
 
 
 @dataclass(frozen=True)
@@ -325,15 +336,22 @@ def _next_model(site_id: str, before: Mapping[str, Any]) -> str:
     return f"{site_id}-{version}"
 
 
-def _newest_within(site: SiteProfile, options: LearnOptions) -> tuple[list[Observation], list[str]]:
-    """The newest answered calls, and their texts, within the call and text budgets."""
+def _newest_within(
+    site: SiteProfile, options: LearnOptions, needed: int
+) -> tuple[list[Observation], list[str]]:
+    """The newest answered calls, and their texts, within the call and text budgets.
+
+    The text budget counts what the features read (the first and last
+    characters of a long input), and never leaves fewer calls than the gate
+    needs.
+    """
     chosen: list[Observation] = []
     texts: list[str] = []
     used = 0
     for observation in reversed(site.answered[-options.max_calls :]):
         text = _text(site, observation)
-        used += len(text)
-        if chosen and used > options.max_text_chars:
+        used += min(len(text), FEATURE_CHARS)
+        if len(chosen) >= needed and used > options.max_text_chars:
             break
         chosen.append(observation)
         texts.append(text)
@@ -351,9 +369,9 @@ def _train_and_gate(
     cancel: threading.Event | None = None,
 ) -> None:
     """Train a new student for a decision site and fill in its plan entry."""
-    answered, texts = _newest_within(site, options)
-    suspended_at = before.get("suspended_at")
     needed = max(options.min_calls, min_evidence(options.target, options.confidence))
+    answered, texts = _newest_within(site, options, needed)
+    suspended_at = before.get("suspended_at")
     if len(answered) < needed:
         entry["status"] = "suspended" if suspended_at else "learning"
         entry["reason"] = f"{len(answered)} of {needed} answered calls needed"
@@ -628,6 +646,23 @@ def _recent_files(directory: Path, window_days: int | None) -> list[Path]:
     return [f for f in files if f.name[:10] >= cutoff]
 
 
+def read_window(
+    root: Path, options: LearnOptions, calls: Iterable[str | Path] | None = None
+) -> list[Observation]:
+    """The calls a learning run reads: the newest, within the window and the cap."""
+    if calls is not None:
+        sources: list[Path] = [Path(c) for c in calls]
+    else:
+        sources = _recent_files(root / "calls", options.window_days)
+    observations: list[Observation] = []
+    # Newest files first, until enough calls are read; then back in time order.
+    for path in reversed(list(iter_files(sources))):
+        observations[:0] = list(read_calls([path]))
+        if len(observations) >= options.max_observations:
+            break
+    return observations[-options.max_observations :]
+
+
 def learn(
     directory: str | Path = ".thinkless/habits",
     *,
@@ -648,18 +683,8 @@ def learn(
     """
     root = Path(directory)
     options = options or LearnOptions()
-    if calls is not None:
-        sources: list[Path] = [Path(c) for c in calls]
-    else:
-        sources = _recent_files(root / "calls", options.window_days)
     with _learning_lock(root):
-        observations: list[Observation] = []
-        # Newest files first, until enough calls are read; then back in time order.
-        for path in reversed(list(iter_files(sources))):
-            observations[:0] = list(read_calls([path]))
-            if len(observations) >= options.max_observations:
-                break
-        observations = observations[-options.max_observations :]
+        observations = read_window(root, options, calls)
         if cancel is not None and cancel.is_set():
             raise LearningCancelledError("learning was stopped")
         started = datetime.now(timezone.utc).isoformat(timespec="milliseconds")

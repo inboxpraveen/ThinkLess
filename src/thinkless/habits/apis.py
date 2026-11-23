@@ -617,12 +617,20 @@ class GeminiApi:
     def matches(self, path: str) -> bool:
         return _GEMINI_PATH.search(path.rstrip("/")) is not None
 
-    def annotate(self, body: Any, path: str) -> Any:
-        """``body`` with the model and stream flag of its URL, for parsing and the log."""
+    def annotate(self, body: Any, path: str, query: str = "") -> Any:
+        """``body`` with the model and stream flag of its URL, for parsing and the log.
+
+        A stream is sent as server-sent events only with ``alt=sse``; without
+        it Gemini streams one JSON array, which ThinkLess records but does
+        not build, so such calls are always answered by the model.
+        """
         found = _GEMINI_PATH.search(path.rstrip("/"))
         if found is None or not isinstance(body, Mapping):
             return body
-        return {**body, "model": found.group(1), "stream": bool(found.group(2))}
+        annotated = {**body, "model": found.group(1), "stream": bool(found.group(2))}
+        if found.group(2) and "alt=sse" not in query:
+            annotated["stream_format"] = "json"
+        return annotated
 
     def parse_request(self, body: Any, headers: Mapping[str, str] | None = None) -> Call | None:
         if not isinstance(body, Mapping):
@@ -663,6 +671,8 @@ class GeminiApi:
             extra = "log probabilities were requested"
         elif _either(body, "cachedContent", "cached_content"):
             extra = "the call continues cached content that is not in the request"
+        elif body.get("stream_format") == "json":
+            extra = "the answer is streamed as a JSON array, which ThinkLess does not build"
         reason = _reason(has_media, contract, extra) or ("no contents" if not messages else "")
         return Call(
             model=str(body.get("model") or ""),
@@ -779,9 +789,17 @@ class GeminiApi:
         return f"data: {json.dumps(response, ensure_ascii=False)}\r\n\r\n".encode()
 
     def collect_stream(self, chunks: Iterable[bytes]) -> dict[str, Any] | None:
+        chunks = list(chunks)
         events = _events(chunks)
         if not events:
-            return None
+            # Without alt=sse, the stream is one JSON array of responses.
+            try:
+                whole = json.loads(b"".join(chunks) or b"null")
+            except ValueError:
+                return None
+            events = [e for e in whole if isinstance(e, dict)] if isinstance(whole, list) else []
+            if not events:
+                return None
         texts: list[str] = []
         calls: list[dict[str, Any]] = []
         finish = None

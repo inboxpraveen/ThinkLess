@@ -148,6 +148,8 @@ def _slim(
     examples (every message but the last) and the answer's JSON schema repeat
     across a site's calls, so one copy of each is kept for the whole read.
     """
+    if shared is None:
+        return call, output
     messages = call.messages
     schema = call.schema
     if shared is not None:
@@ -242,7 +244,8 @@ def observation_from(record: Any, shared: dict[Any, Any] | None = None) -> Obser
     """Read one log line in any supported format. ``None`` if it is not a chat call.
 
     ``shared`` holds one copy of each repeated message text across a read;
-    :func:`read_calls` passes one.
+    :func:`read_calls` passes one. Given it, the raw request and response are
+    dropped; without it, the observation keeps them.
     """
     if not isinstance(record, Mapping):
         return None
@@ -283,13 +286,20 @@ def iter_files(paths: Iterable[str | Path]) -> Iterator[Path]:
             yield target
 
 
-def read_calls(paths: Iterable[str | Path]) -> Iterator[Observation]:
+def read_calls(paths: Iterable[str | Path], *, keep_raw: bool = False) -> Iterator[Observation]:
     """Every chat call in the given files and directories.
 
     Lines that are not JSON, or not a chat call, are skipped and counted in
     the debug log.
+
+    Args:
+        paths: Files and directories to read.
+        keep_raw: Keep each call's raw request body (``call.body``) and
+            response (``output.message``). By default they are dropped, and
+            repeated system prompts and schemas are shared, which is all
+            learning needs and takes about half the memory.
     """
-    shared: dict[Any, Any] = {}
+    shared: dict[Any, Any] | None = None if keep_raw else {}
     for path in iter_files(paths):
         skipped = 0
         with path.open(encoding="utf-8") as handle:

@@ -55,7 +55,7 @@ class TransformersLLM(LLM):
         self._device_request = device
         self._dtype_request = dtype
         self._enable_thinking = enable_thinking
-        self._lock = threading.Lock()
+        self._lock = threading.RLock()
         self._tokenizer: Any = None
         self._model: Any = None
         self.device: str | None = None
@@ -124,7 +124,6 @@ class TransformersLLM(LLM):
         json_mode: bool = False,
         logprobs: int | None = None,
     ) -> Completion:
-        self._load()
         import torch
 
         chat: list[Message] = []
@@ -133,6 +132,9 @@ class TransformersLLM(LLM):
         chat.extend(messages)
         started = time.perf_counter()
         with self._lock:
+            # Loaded under the lock that close() takes, so it cannot drop the
+            # model between loading and generating.
+            self._load()
             inputs = self._tokenizer.apply_chat_template(
                 chat,
                 add_generation_prompt=True,
