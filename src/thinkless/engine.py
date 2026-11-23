@@ -3,10 +3,12 @@
 from __future__ import annotations
 
 import asyncio
+import contextvars
 import threading
 import time
 from collections import defaultdict
 from collections.abc import Iterator, Mapping, Sequence
+from concurrent.futures import ThreadPoolExecutor
 from contextlib import contextmanager
 from typing import Any, Literal
 
@@ -317,6 +319,7 @@ class Engine:
         *,
         label: str | None = None,
         deadline_ms: float | None = None,
+        concurrency: int = 1,
     ) -> list[dict[str, Decision]]:
         """Answer the same questions about many states, sharing each provider's calls.
 
@@ -338,10 +341,21 @@ class Engine:
             label: Span name. Defaults to the joined question names.
             deadline_ms: Time budget for the whole batch. Defaults to the
                 engine's ``deadline_ms``.
+            concurrency: How many states a provider that does not batch (an
+                LLM API, a hosted model) is asked about at once. ``1`` asks
+                one after another. Higher values cut the wall time of hosted
+                calls roughly by that factor; the provider must be safe to
+                call from several threads, which the bundled ones are. Spend
+                limits are checked before each provider level, so concurrent
+                calls can pass a limit by up to ``concurrency`` calls' cost,
+                and with ``on_error="raise"`` calls already in flight finish
+                before the first error is raised.
 
         Returns:
             One mapping of decisions per state, in the order of ``states``.
         """
+        if concurrency < 1:
+            raise ValueError("concurrency must be at least 1")
         states = list(states)
         if not states:
             return []
@@ -355,7 +369,7 @@ class Engine:
                     for k, q in batch.items()
                 },
             )
-            results = self._cascade_items(states, batch, deadline)
+            results = self._cascade_items(states, batch, deadline, concurrency)
             summaries = []
             for index, decisions in enumerate(results):
                 for decision in decisions.values():
@@ -371,9 +385,15 @@ class Engine:
         *,
         label: str | None = None,
         deadline_ms: float | None = None,
+        concurrency: int = 1,
     ) -> list[dict[str, Decision]]:
         return await asyncio.to_thread(
-            self.decide_batch, states, questions, label=label, deadline_ms=deadline_ms
+            self.decide_batch,
+            states,
+            questions,
+            label=label,
+            deadline_ms=deadline_ms,
+            concurrency=concurrency,
         )
 
     def extract(
@@ -660,7 +680,11 @@ class Engine:
         return self._cascade_items([state], batch, deadline_ms)[0]
 
     def _cascade_items(
-        self, states: Sequence[State], batch: dict[str, Question], deadline_ms: float | None = None
+        self,
+        states: Sequence[State],
+        batch: dict[str, Question],
+        deadline_ms: float | None = None,
+        concurrency: int = 1,
     ) -> list[dict[str, Decision]]:
         """Run the cascade for every state at once, one provider level at a time.
 
@@ -713,7 +737,11 @@ class Engine:
                 **extra,
             ) as span:
                 calls = self._ask(
-                    provider, [(item, asked) for _, item, asked in active], batch, span
+                    provider,
+                    [(item, asked) for _, item, asked in active],
+                    batch,
+                    span,
+                    concurrency,
                 )
                 failures = [error for _, error, _ in calls if error is not None]
                 if failures:
@@ -863,17 +891,24 @@ class Engine:
         active: Sequence[tuple[_Item, dict[str, Question]]],
         batch: Mapping[str, Question],
         span: Span,
+        concurrency: int = 1,
     ) -> list[tuple[ProviderResult | None, Exception | None, float]]:
         """Ask one provider for every active item: a result or an error, and the wall time."""
         calls: list[tuple[ProviderResult | None, Exception | None, float]] = [
             (None, None, 0.0)
         ] * len(active)
         shared: list[int] = []
-        for position, (item, asked) in enumerate(active):
+        single: list[int] = []
+        for position, (item, _) in enumerate(active):
             context = bool(self.escalation_context and provider.accepts_context and item.resolved)
             if len(active) > 1 and provider.batches and not context:
                 shared.append(position)
-                continue
+            else:
+                single.append(position)
+
+        def one(position: int) -> tuple[ProviderResult | None, Exception | None, float]:
+            item, asked = active[position]
+            context = bool(self.escalation_context and provider.accepts_context and item.resolved)
             started = time.perf_counter()
             try:
                 if context:
@@ -883,10 +918,26 @@ class Engine:
                     result = provider.answer(item.state, asked, context=settled)  # type: ignore[call-arg]
                 else:
                     result = provider.answer(item.state, asked)
-                calls[position] = (result, None, (time.perf_counter() - started) * 1000.0)
+                return result, None, (time.perf_counter() - started) * 1000.0
             except Exception as exc:
-                calls[position] = (None, exc, (time.perf_counter() - started) * 1000.0)
-                if self.on_error == "raise":
+                return None, exc, (time.perf_counter() - started) * 1000.0
+
+        if concurrency > 1 and len(single) > 1:
+            # Each call runs in a copy of this context, so spans it opens nest
+            # under this attempt and run-scoped limits still apply.
+            with ThreadPoolExecutor(
+                max_workers=min(concurrency, len(single)), thread_name_prefix="thinkless-decide"
+            ) as pool:
+                futures = {
+                    position: pool.submit(contextvars.copy_context().run, one, position)
+                    for position in single
+                }
+                for position, future in futures.items():
+                    calls[position] = future.result()
+        else:
+            for position in single:
+                calls[position] = one(position)
+                if calls[position][1] is not None and self.on_error == "raise":
                     break
         if shared:
             requests: list[BatchItem] = [(active[p][0].state, active[p][1]) for p in shared]

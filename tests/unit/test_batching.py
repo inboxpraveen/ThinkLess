@@ -93,6 +93,55 @@ def test_decide_batch_matches_one_by_one() -> None:
     assert got[1]["intent"].provider == "llm"
 
 
+def test_decide_batch_asks_a_hosted_provider_concurrently() -> None:
+    from thinkless.tracing.span import current_span
+
+    seen: list[str | None] = []
+    running = 0
+    most = 0
+    lock = threading.Lock()
+
+    def slow(state, question):
+        nonlocal running, most
+        with lock:
+            running += 1
+            most = max(most, running)
+        span = current_span()
+        seen.append(span.kind if span is not None else None)
+        time.sleep(0.15)
+        with lock:
+            running -= 1
+        return Answer(value="other")
+
+    states = [f"ticket {i}" for i in range(8)]
+    serial = _engine(FakeProvider("local", {}), FakeProvider("llm", {"intent": slow}))
+    expected = [_comparable(d) for d in serial.decide_batch(states, [INTENT])]
+    assert most == 1
+    most = 0
+    seen.clear()
+    engine = _engine(FakeProvider("local", {}), FakeProvider("llm", {"intent": slow}))
+    started = time.perf_counter()
+    got = engine.decide_batch(states, [INTENT], concurrency=4)
+    assert time.perf_counter() - started < 0.15 * 8 / 2
+    assert most == 4
+    assert [_comparable(d) for d in got] == expected
+    # Every call ran inside the attempt span, as it does one at a time.
+    assert seen == ["attempt"] * 8
+    with pytest.raises(ValueError, match="concurrency"):
+        engine.decide_batch(states, [INTENT], concurrency=0)
+
+
+def test_concurrent_decide_batch_raises_the_first_error() -> None:
+    def broken(state, question):
+        raise RuntimeError("upstream down")
+
+    engine = _engine(
+        FakeProvider("local", {}), FakeProvider("llm", {"intent": broken}), on_error="raise"
+    )
+    with pytest.raises(RuntimeError, match="upstream down"):
+        engine.decide_batch(["a", "b", "c"], [INTENT], concurrency=3)
+
+
 def test_decide_batch_traces_every_decision_once() -> None:
     tracer = Tracer()
     engine = Engine(

@@ -26,6 +26,10 @@ All notable changes are recorded here. The format follows
   form. Providers have a batch entry point, `answer_batch`; GLiNER, Laya,
   `HFClassifier` and `HFZeroShot` put many inputs through one forward pass.
   On an RTX 5060 this is 1.2 to 3 times the throughput of one call per input.
+- `decide_batch(..., concurrency=n)` asks providers that do not batch, such
+  as a hosted LLM, about up to `n` inputs at once. Calls run in copies of the
+  caller's context, so their spans nest as before. The default, 1, keeps the
+  old behaviour.
 - The decision server batches across concurrent requests: local models that
   batch are wrapped in the new `Batched` provider while it runs, so requests
   that arrive while a model is busy share its next pass. A lone request is

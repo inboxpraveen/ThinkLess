@@ -68,9 +68,10 @@ provider level at a time across all of them, and local models that batch
 answer every input still open at their level in one call: 2 to 3 times the
 throughput of a loop over `decide_many` on a GPU, with the same answers apart
 from rare close calls (see [serving](serving.md#running-it) for measurements).
-Hosted providers are still asked once per input, one input at a time: when
-most inputs reach a hosted LLM, run `adecide_many` concurrently (for example
-with `asyncio.gather` behind a semaphore) instead.
+Hosted providers are asked once per input. Pass `concurrency=8` (or what
+your rate limit allows) to ask them about several inputs at once; spend
+limits are checked before each provider level, so concurrent calls can pass
+a limit by up to that many calls' cost.
 
 **Serve one engine to many agents.** `thinkless serve` puts an engine behind
 HTTP, with a System One compatible endpoint, and `thinkless mcp` exposes its
@@ -119,7 +120,9 @@ prompts, completions, extracted values and tool arguments. The OpenTelemetry
 sink drops content by default regardless.
 
 **Export to your tracing backend.** `OTelSink` maps spans onto OpenTelemetry
-with GenAI semantic convention attributes. Alert on the numbers that drift:
+with GenAI semantic convention attributes. Call `engine.close()` on shutdown:
+it flushes the provider, so spans a batch processor still holds are
+exported. Alert on the numbers that drift:
 escalation rate per question, share of decisions reaching the LLM, and
 uncertain decisions per hour.
 
