@@ -1982,6 +1982,12 @@ def test_learning_reads_the_most_recent_calls(tmp_path: Path) -> None:
     plan = learn(tmp_path, options=LearnOptions(max_observations=60))
     (site,) = plan["sites"].values()
     assert site["calls"] == 60
+    # A text budget keeps the newest calls whose inputs fit in it.
+    plan = learn(tmp_path, options=LearnOptions(max_text_chars=1))
+    (site,) = plan["sites"].values()
+    assert site["evidence"] == {"calls": 1}
+    with pytest.raises(ValueError, match="max_text_chars"):
+        LearnOptions(max_text_chars=0)
 
 
 def test_a_serving_student_stays_until_a_newer_one_passes(

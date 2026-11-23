@@ -118,7 +118,11 @@ All notable changes are recorded here. The format follows
   held once, and features are kept in packed arrays. Learning 40,000 short
   calls peaked 126 MB above the process's baseline instead of 313 MB, and
   2,000 calls of about 2,600 characters 270 MB instead of 553 MB, in less
-  time. The students trained are identical to before.
+  time. The students trained are identical to before. A new
+  `LearnOptions.max_text_chars` (6 million by default) bounds the input text
+  a site trains on, newest calls first, so a site of long inputs no longer
+  needs a gigabyte: on 10,000 calls of 2,600 characters, learning peaked at
+  332 MB above baseline in 89 seconds, instead of 1,041 MB in 415.
 - The Habits proxy and other async clients no longer read files on the
   event loop. A changed plan and its students are loaded in a worker thread
   before the request that would have loaded them, and an audit that can

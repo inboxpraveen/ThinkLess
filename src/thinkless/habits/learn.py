@@ -168,6 +168,10 @@ class LearnOptions:
         folds: Cross-fitting folds used to measure the students.
         min_calls: Answered calls a site needs before it is trained.
         max_calls: Most recent answered calls used per site.
+        max_text_chars: Most characters of input text used per site, newest
+            calls first. Memory while learning grows with the text, so a site
+            of long inputs trains on fewer of its calls: at about 2,600
+            characters a call, 2,300 of them.
         window_days: Only the daily call files Habits wrote in the last
             this many days are read. ``None`` reads them all.
         max_observations: At most this many of the most recent calls are
@@ -184,6 +188,7 @@ class LearnOptions:
     folds: int = 5
     min_calls: int = 100
     max_calls: int = 10000
+    max_text_chars: int = 6_000_000
     window_days: int | None = 30
     max_observations: int = 50000
     confirm_calls: int | None = None
@@ -194,6 +199,8 @@ class LearnOptions:
             raise ValueError("target must be between 0 and 1, for example 0.97")
         if not 0.0 < self.confidence < 1.0:
             raise ValueError("confidence must be between 0 and 1, for example 0.95")
+        if self.max_text_chars < 1:
+            raise ValueError("max_text_chars must be positive")
         if self.folds < 2:
             raise ValueError("folds must be at least 2")
 
@@ -318,6 +325,23 @@ def _next_model(site_id: str, before: Mapping[str, Any]) -> str:
     return f"{site_id}-{version}"
 
 
+def _newest_within(site: SiteProfile, options: LearnOptions) -> tuple[list[Observation], list[str]]:
+    """The newest answered calls, and their texts, within the call and text budgets."""
+    chosen: list[Observation] = []
+    texts: list[str] = []
+    used = 0
+    for observation in reversed(site.answered[-options.max_calls :]):
+        text = _text(site, observation)
+        used += len(text)
+        if chosen and used > options.max_text_chars:
+            break
+        chosen.append(observation)
+        texts.append(text)
+    chosen.reverse()
+    texts.reverse()
+    return chosen, texts
+
+
 def _train_and_gate(
     site: SiteProfile,
     entry: dict[str, Any],
@@ -327,7 +351,7 @@ def _train_and_gate(
     cancel: threading.Event | None = None,
 ) -> None:
     """Train a new student for a decision site and fill in its plan entry."""
-    answered = site.answered[-options.max_calls :]
+    answered, texts = _newest_within(site, options)
     suspended_at = before.get("suspended_at")
     needed = max(options.min_calls, min_evidence(options.target, options.confidence))
     if len(answered) < needed:
@@ -337,7 +361,6 @@ def _train_and_gate(
         if suspended_at:
             entry["suspended_at"] = suspended_at
         return
-    texts = [_text(site, o) for o in answered]
     labels = {
         name: [o.output.fields.get(name, "~missing") for o in answered if o.output is not None]
         for name in site.fields
