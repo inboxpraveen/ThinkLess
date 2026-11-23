@@ -133,6 +133,7 @@ class AnthropicLLM(LLM):
 
         The object stays usable: the next call opens new connections, so an
         LLM shared by several engines keeps working when one of them closes.
+        A call still running on the old connections when it closes may fail.
         """
         if self._owns_client:
             old, self._client = self._client, self._new_client()

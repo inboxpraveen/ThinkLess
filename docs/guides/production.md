@@ -68,7 +68,9 @@ provider level at a time across all of them, and local models that batch
 answer every input still open at their level in one call: 2 to 3 times the
 throughput of a loop over `decide_many` on a GPU, with the same answers apart
 from rare close calls (see [serving](serving.md#running-it) for measurements).
-Hosted providers are still asked once per input.
+Hosted providers are still asked once per input, one input at a time: when
+most inputs reach a hosted LLM, run `adecide_many` concurrently (for example
+with `asyncio.gather` behind a semaphore) instead.
 
 **Serve one engine to many agents.** `thinkless serve` puts an engine behind
 HTTP, with a System One compatible endpoint, and `thinkless mcp` exposes its

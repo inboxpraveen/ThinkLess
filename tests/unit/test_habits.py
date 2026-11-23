@@ -734,6 +734,36 @@ def test_wrap_the_default_openai_client(tmp_path: Path, asynchronous: bool) -> N
     habits.close()
 
 
+@pytest.mark.parametrize(
+    ("module", "make", "http"),
+    [
+        ("anthropic", lambda m: m.Anthropic(api_key="x"), lambda c: c._client),
+        ("anthropic", lambda m: m.AsyncAnthropic(api_key="x"), lambda c: c._client),
+        (
+            "langchain_openai",
+            lambda m: m.ChatOpenAI(api_key="x", model="m"),
+            lambda c: c.root_client._client,
+        ),
+    ],
+)
+def test_wrap_other_sdks_default_clients(tmp_path: Path, module: str, make: Any, http: Any) -> None:
+    """The Anthropic SDK and LangChain subclass the httpx client too."""
+    from thinkless.habits.transport import transport_classes
+
+    sdk = pytest.importorskip(module)
+    client = make(sdk)
+    habits = Habits(tmp_path, learn_every=None)
+    assert wrap(client, habits) is client
+    inner = http(client)
+    library = next(
+        c.__module__.split(".")[0]
+        for c in type(inner).__mro__
+        if c.__module__.split(".")[0] in ("httpx", "httpx2")
+    )
+    assert isinstance(inner._transport, transport_classes(library))
+    habits.close()
+
+
 def test_wrap_rejects_unknown_clients() -> None:
     with pytest.raises(TypeError, match="proxy"):
         wrap(object())
