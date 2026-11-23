@@ -177,7 +177,7 @@ def eject(
     if entry.get("status") != "active" and not allow_unproven:
         raise ValueError(
             f"site {entry['id']} is {entry.get('status')!r}, not active: it has not passed "
-            "its gate (pass allow_unproven to eject it anyway)"
+            "its gate (allow_unproven=True, or --unproven on the command line, ejects it anyway)"
         )
     mismatch = _input_mismatch(root, entry)
     if mismatch is not None:
