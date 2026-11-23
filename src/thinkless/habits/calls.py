@@ -18,14 +18,14 @@ import json
 import os
 import threading
 from collections.abc import Iterable, Iterator, Mapping
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
 from ..logs import get_logger
 from .apis import APIS, CHAT, api_for_record
-from .wire import Call, Output, output_from_message
+from .wire import Call, Message, Output, output_from_message
 
 __all__ = ["CALL_SCHEMA", "CallLog", "Observation", "iter_files", "local_answers", "read_calls"]
 
@@ -138,7 +138,35 @@ class CallLog:
                 self._handle = None
 
 
-def _from_record(record: Mapping[str, Any]) -> Observation | None:
+def _slim(
+    call: Call, output: Output | None, shared: dict[Any, Any] | None
+) -> tuple[Call, Output | None]:
+    """Drop what learning never reads, and share what repeats across calls.
+
+    A parsed call keeps the raw request and the raw response for building
+    live answers; read back from a log, neither is needed. Instructions and
+    examples (every message but the last) and the answer's JSON schema repeat
+    across a site's calls, so one copy of each is kept for the whole read.
+    """
+    messages = call.messages
+    schema = call.schema
+    if shared is not None:
+        if len(messages) > 1:
+            messages = (
+                tuple(Message(m.role, shared.setdefault(m.text, m.text)) for m in messages[:-1])
+                + messages[-1:]
+            )
+        if schema is not None:
+            schema = shared.setdefault(("schema", call.contract_id), schema)
+    call = replace(call, body={}, messages=messages, schema=schema)
+    if output is not None:
+        output = replace(output, message={})
+    return call, output
+
+
+def _from_record(
+    record: Mapping[str, Any], shared: dict[Any, Any] | None = None
+) -> Observation | None:
     name = record.get("site_name")
     api = APIS.get(str(record.get("api") or "chat"), CHAT)
     call = api.parse_request(record.get("request"), {"x-thinkless-site": name} if name else {})
@@ -147,6 +175,7 @@ def _from_record(record: Mapping[str, Any]) -> Observation | None:
     site = record.get("site")
     response = record.get("response")
     output = api.parse_response(call, response) if isinstance(response, Mapping) else None
+    call, output = _slim(call, output, shared)
     cost = None
     if output is not None:
         cost = output.cost_usd
@@ -166,7 +195,9 @@ def _from_record(record: Mapping[str, Any]) -> Observation | None:
     )
 
 
-def _from_finetune(record: Mapping[str, Any]) -> Observation | None:
+def _from_finetune(
+    record: Mapping[str, Any], shared: dict[Any, Any] | None = None
+) -> Observation | None:
     messages = list(record.get("messages") or [])
     if len(messages) < 2 or not isinstance(messages[-1], Mapping):
         return None
@@ -179,10 +210,13 @@ def _from_finetune(record: Mapping[str, Any]) -> Observation | None:
     if call is None:
         return None
     output = output_from_message(call, reply, model=record.get("model"))
+    call, output = _slim(call, output, shared)
     return Observation(call=call, output=output, ts=record.get("ts"))
 
 
-def _from_pair(record: Mapping[str, Any]) -> Observation | None:
+def _from_pair(
+    record: Mapping[str, Any], shared: dict[Any, Any] | None = None
+) -> Observation | None:
     request = record.get("request")
     if isinstance(request, Mapping) and isinstance(request.get("body"), Mapping):
         request = request["body"]
@@ -194,6 +228,7 @@ def _from_pair(record: Mapping[str, Any]) -> Observation | None:
     if call is None:
         return None
     output = api.parse_response(call, response)
+    call, output = _slim(call, output, shared)
     return Observation(
         call=call,
         output=output,
@@ -203,16 +238,20 @@ def _from_pair(record: Mapping[str, Any]) -> Observation | None:
     )
 
 
-def observation_from(record: Any) -> Observation | None:
-    """Read one log line in any supported format. ``None`` if it is not a chat call."""
+def observation_from(record: Any, shared: dict[Any, Any] | None = None) -> Observation | None:
+    """Read one log line in any supported format. ``None`` if it is not a chat call.
+
+    ``shared`` holds one copy of each repeated message text across a read;
+    :func:`read_calls` passes one.
+    """
     if not isinstance(record, Mapping):
         return None
     if record.get("schema") == CALL_SCHEMA:
-        return _from_record(record)
+        return _from_record(record, shared)
     if "messages" in record:
-        return _from_finetune(record)
+        return _from_finetune(record, shared)
     if "request" in record:
-        return _from_pair(record)
+        return _from_pair(record, shared)
     return None
 
 
@@ -250,6 +289,7 @@ def read_calls(paths: Iterable[str | Path]) -> Iterator[Observation]:
     Lines that are not JSON, or not a chat call, are skipped and counted in
     the debug log.
     """
+    shared: dict[Any, Any] = {}
     for path in iter_files(paths):
         skipped = 0
         with path.open(encoding="utf-8") as handle:
@@ -258,7 +298,7 @@ def read_calls(paths: Iterable[str | Path]) -> Iterator[Observation]:
                 if not line:
                     continue
                 try:
-                    observation = observation_from(json.loads(line))
+                    observation = observation_from(json.loads(line), shared)
                 except (json.JSONDecodeError, TypeError, ValueError, KeyError):
                     observation = None
                 if observation is None:

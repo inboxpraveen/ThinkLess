@@ -20,18 +20,84 @@ from __future__ import annotations
 import json
 import re
 from collections import Counter
-from collections.abc import Mapping, Sequence
+from collections.abc import Callable, Mapping, Sequence
 from pathlib import Path
 from typing import Any
 
 import numpy as np
 
-from .features import BIAS, featurize
+from .features import BIAS, PackedFeatures, featurize
 from .wire import MISSING, label_of, value_of
 
 __all__ = ["ConstantModel", "LinearModel", "ShapeExtractor", "SiteModel"]
 
 Features = Mapping[int, float]
+
+
+class TrainingStopped(Exception):  # noqa: N818 - a signal, not an error
+    """Raised inside training when its ``stop`` callback says to stop."""
+
+
+def _arrays(example: Features) -> tuple[np.ndarray, np.ndarray]:
+    """Feature ids and weights of one example, in its own order."""
+    if isinstance(example, PackedFeatures):
+        return example.arrays()
+    keys = np.fromiter(example.keys(), dtype=np.int64, count=len(example))
+    values = np.fromiter(example.values(), dtype=np.float32, count=len(example))
+    return keys, values
+
+
+FREQUENCY_CHUNK = 512
+
+
+def _frequencies(
+    keys: Sequence[tuple[np.ndarray, np.ndarray]],
+) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
+    """Each feature id, where it first appears, and in how many examples.
+
+    Counted a chunk of examples at a time, so a site of long inputs never
+    holds every occurrence of every feature in one array.
+    """
+    parts_unique: list[np.ndarray] = []
+    parts_first: list[np.ndarray] = []
+    parts_count: list[np.ndarray] = []
+    offset = 0
+    for start in range(0, len(keys), FREQUENCY_CHUNK):
+        chunk = [k for k, _ in keys[start : start + FREQUENCY_CHUNK]]
+        joined = np.concatenate(chunk).astype(np.int64, copy=False)
+        unique, first, counts = np.unique(joined, return_index=True, return_counts=True)
+        parts_unique.append(unique)
+        parts_first.append(first + offset)
+        parts_count.append(counts)
+        offset += len(joined)
+    if not parts_unique:
+        empty = np.zeros(0, np.int64)
+        return empty, empty, empty
+    merged = np.concatenate(parts_unique)
+    unique, inverse = np.unique(merged, return_inverse=True)
+    counts = np.bincount(inverse, weights=np.concatenate(parts_count)).astype(np.int64)
+    first = np.full(len(unique), np.iinfo(np.int64).max, dtype=np.int64)
+    np.minimum.at(first, inverse, np.concatenate(parts_first))
+    return unique, first, counts
+
+
+class _Lookup:
+    """Feature id to weight row, for whole arrays of ids at once."""
+
+    def __init__(self, vocab: Mapping[int, int]) -> None:
+        ids = np.fromiter(vocab.keys(), dtype=np.int64, count=len(vocab))
+        rows = np.fromiter(vocab.values(), dtype=np.int64, count=len(vocab))
+        order = np.argsort(ids)
+        self._ids = ids[order]
+        self._rows = rows[order]
+
+    def rows(self, keys: np.ndarray) -> tuple[np.ndarray, np.ndarray]:
+        """Rows of the ids in the vocabulary, and which of ``keys`` those are."""
+        if not len(self._ids):
+            return np.zeros(0, np.int64), np.zeros(len(keys), bool)
+        at = np.searchsorted(self._ids, keys).clip(max=len(self._ids) - 1)
+        mask = self._ids[at] == keys
+        return self._rows[at[mask]].astype(np.int32), mask
 
 
 class LinearModel:
@@ -51,6 +117,7 @@ class LinearModel:
         self.labels = list(labels)
         self.vocab = dict(vocab)
         self.weights = weights
+        self._lookup: _Lookup | None = None
 
     @classmethod
     def fit(
@@ -65,29 +132,34 @@ class LinearModel:
         max_features: int = 1 << 16,
         min_count: int = 2,
         seed: int = 0,
+        stop: Callable[[], bool] | None = None,
     ) -> LinearModel:
         classes = sorted(set(labels))
         column = {label: i for i, label in enumerate(classes)}
-        frequency: Counter[int] = Counter()
-        for example in examples:
-            frequency.update(example.keys())
+        keys = [_arrays(example) for example in examples]
         # Features seen in a single call cannot generalize; dropping them keeps
-        # the weights small enough to stay in cache while training.
-        kept = [f for f, count in frequency.most_common(max_features) if count >= min_count]
+        # the weights small enough to stay in cache while training. Ranked by
+        # count, ties in the order first seen.
+        unique, first, counts = _frequencies(keys)
+        ranked = np.lexsort((first, -counts))[:max_features]
+        kept = [int(f) for f in unique[ranked][counts[ranked] >= min_count]]
         if BIAS not in kept:
             kept.append(BIAS)
         vocab = {feature: row for row, feature in enumerate(kept)}
+        lookup = _Lookup(vocab)
         rows: list[np.ndarray] = []
         values: list[np.ndarray] = []
-        for example in examples:
-            pairs = [(vocab[f], v) for f, v in example.items() if f in vocab]
-            rows.append(np.fromiter((p[0] for p in pairs), dtype=np.int64, count=len(pairs)))
-            values.append(np.fromiter((p[1] for p in pairs), dtype=np.float32, count=len(pairs)))
+        for example_keys, example_values in keys:
+            row, mask = lookup.rows(example_keys)
+            rows.append(row)
+            values.append(example_values[mask])
         target = np.array([column[label] for label in labels], dtype=np.int64)
         weights = np.zeros((len(kept), len(classes)), dtype=np.float32)
         history = np.full_like(weights, 1e-6)
         rng = np.random.default_rng(seed)
         for _ in range(epochs):
+            if stop is not None and stop():
+                raise TrainingStopped
             order = rng.permutation(len(examples))
             for start in range(0, len(order), batch):
                 members = order[start : start + batch]
@@ -115,11 +187,18 @@ class LinearModel:
         return cls(classes, vocab, weights)
 
     def proba(self, example: Features) -> np.ndarray:
-        pairs = [(self.vocab[f], v) for f, v in example.items() if f in self.vocab]
-        if not pairs:
+        if isinstance(example, PackedFeatures):
+            if self._lookup is None:
+                self._lookup = _Lookup(self.vocab)
+            keys, packed = example.arrays()
+            index, mask = self._lookup.rows(keys)
+            value = packed[mask]
+        else:
+            pairs = [(self.vocab[f], v) for f, v in example.items() if f in self.vocab]
+            index = np.array([p[0] for p in pairs], dtype=np.int64)
+            value = np.array([p[1] for p in pairs], dtype=np.float32)
+        if not len(index):
             return np.full(len(self.labels), 1.0 / len(self.labels))
-        index = np.array([p[0] for p in pairs])
-        value = np.array([p[1] for p in pairs], dtype=np.float32)
         logits = (self.weights[index] * value[:, None]).sum(axis=0).astype(np.float64)
         logits -= logits.max()
         probs = np.exp(logits)
@@ -318,6 +397,7 @@ class SiteModel:
         *,
         features: Sequence[Features] | None = None,
         seed: int = 0,
+        stop: Callable[[], bool] | None = None,
     ) -> SiteModel | None:
         """Train one student per field. ``None`` if some field cannot be learned.
 
@@ -342,7 +422,7 @@ class SiteModel:
                     label, seen = distinct.most_common(1)[0]
                     models[name] = ConstantModel(label, seen)
                 else:
-                    models[name] = LinearModel.fit(examples, field_labels, seed=seed)
+                    models[name] = LinearModel.fit(examples, field_labels, seed=seed, stop=stop)
             else:
                 return None
         return cls(models)

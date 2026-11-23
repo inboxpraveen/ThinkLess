@@ -22,7 +22,7 @@ import tempfile
 import threading
 import time
 from collections import Counter
-from collections.abc import Iterable, Iterator, Mapping, Sequence
+from collections.abc import Callable, Iterable, Iterator, Mapping, Sequence
 from contextlib import contextmanager
 from dataclasses import dataclass
 from datetime import datetime, timedelta, timezone
@@ -33,7 +33,7 @@ from .._version import __version__
 from ..errors import ThinkLessError
 from ..logs import get_logger
 from .calls import Observation, iter_files, read_calls
-from .features import featurize
+from .features import featurize, pack
 from .gate import (
     GateResult,
     binomial_lower_bound,
@@ -42,7 +42,7 @@ from .gate import (
     select_threshold,
 )
 from .sites import SiteProfile, discover
-from .student import SiteModel
+from .student import SiteModel, TrainingStopped
 from .wire import agrees
 
 __all__ = [
@@ -210,6 +210,7 @@ def _cross_fit(
     *,
     folds: int,
     seed: int,
+    stop: Callable[[], bool] | None = None,
 ) -> tuple[list[float], list[bool]] | None:
     """Joint confidence and agreement for every call, each from a student that never saw it."""
     order = list(range(len(texts)))
@@ -226,6 +227,7 @@ def _cross_fit(
             kinds,
             features=[features[i] for i in train],
             seed=seed,
+            stop=stop,
         )
         if model is None:
             return None
@@ -322,6 +324,7 @@ def _train_and_gate(
     before: Mapping[str, Any],
     root: Path,
     options: LearnOptions,
+    cancel: threading.Event | None = None,
 ) -> None:
     """Train a new student for a decision site and fill in its plan entry."""
     answered = site.answered[-options.max_calls :]
@@ -340,9 +343,16 @@ def _train_and_gate(
         for name in site.fields
     }
     kinds = {name: profile.kind for name, profile in site.fields.items()}
-    features = [featurize(t) for t in texts]
-    measured = _cross_fit(texts, labels, kinds, features, folds=options.folds, seed=options.seed)
-    model = SiteModel.fit(texts, labels, kinds, features=features, seed=options.seed)
+    # Packed: a site's features are held for every fold of training.
+    features = [pack(featurize(t)) for t in texts]
+    stop = cancel.is_set if cancel is not None else None
+    try:
+        measured = _cross_fit(
+            texts, labels, kinds, features, folds=options.folds, seed=options.seed, stop=stop
+        )
+        model = SiteModel.fit(texts, labels, kinds, features=features, seed=options.seed, stop=stop)
+    except TrainingStopped:
+        raise LearningCancelledError("learning was stopped") from None
     if measured is None or model is None:
         entry["status"] = "learning"
         entry["reason"] = "a field could not be learned from its answers"
@@ -486,7 +496,7 @@ def learn_sites(
         on_probation = before.get("status") == "probation" and before.get("student")
         if on_probation and _confirm(site, entry, before, options):
             continue
-        _train_and_gate(site, entry, before, root, options)
+        _train_and_gate(site, entry, before, root, options, cancel)
         if entry["status"] == "active" and not _serving(before) and _confirm_size(options):
             # Passing on past calls earns a trial, not the site: the student is
             # scored in shadow on new calls, still answered by the LLM, and

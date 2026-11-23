@@ -441,6 +441,68 @@ def test_linear_model_handles_unknown_features() -> None:
     assert probs.sum() == pytest.approx(1.0)
 
 
+def test_packed_features_match_the_dict_they_pack() -> None:
+    import numpy as np
+
+    from thinkless.habits.features import PackedFeatures, pack
+    from thinkless.habits.student import TrainingStopped, _frequencies
+
+    rng = random.Random(4)
+    rows = [ticket(rng) for _ in range(200)]
+    texts = [t for t, _ in rows]
+    labels = [label_of(i) for _, i in rows]
+    plain = [featurize(t) for t in texts]
+    packed = [pack(f) for f in plain]
+    assert isinstance(packed[0], PackedFeatures)
+    assert dict(packed[0].items()) == pytest.approx(plain[0])
+    assert packed[0][next(iter(plain[0]))] == pytest.approx(next(iter(plain[0].values())))
+    assert 0 not in packed[0] or 0 in plain[0]
+    # Training from either form gives the same weights, and the same predictions.
+    a = LinearModel.fit(plain, labels, seed=0)
+    b = LinearModel.fit(packed, labels, seed=0)
+    assert a.vocab == b.vocab
+    assert np.array_equal(a.weights, b.weights)
+    for f, q in zip(plain[:20], packed[:20], strict=True):
+        assert np.allclose(a.proba(f), a.proba(q))
+    # Counting in chunks finds the same ids, counts and first positions.
+    keys = [q.arrays() for q in packed]
+    everything = np.concatenate([k for k, _ in keys])
+    unique, first, counts = np.unique(everything, return_index=True, return_counts=True)
+    got = _frequencies(keys)
+    for want, have in zip((unique, first, counts), got, strict=True):
+        assert np.array_equal(want, have)
+    with pytest.raises(TrainingStopped):
+        LinearModel.fit(packed, labels, stop=lambda: True)
+
+
+def test_read_calls_keeps_only_what_learning_needs(tmp_path: Path) -> None:
+    from thinkless.habits.calls import CallLog
+
+    log = CallLog(tmp_path / "calls")
+    rng = random.Random(6)
+    for _ in range(5):
+        text, intent = ticket(rng)
+        body = request_body(text)
+        log.write(
+            body,
+            completion(json.dumps({"intent": intent})),
+            answered_by="llm",
+            site=None,
+            latency_ms=1,
+            host="x",
+        )
+    log.close()
+    observed = list(read_calls([tmp_path / "calls"]))
+    assert len(observed) == 5
+    first, second = observed[0], observed[1]
+    assert first.call.body == {}
+    assert first.output is not None
+    assert first.output.message == {}
+    # The system prompt repeats in every call, so every call shares one copy.
+    assert first.call.messages[0].text is second.call.messages[0].text
+    assert first.call.messages[-1].text != second.call.messages[-1].text
+
+
 # Runtime, end to end
 
 
