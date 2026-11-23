@@ -101,15 +101,21 @@ def build_submission_provider(
 ) -> DecisionProvider:
     """A provider from a submission spec.
 
-    Specs: ``majority`` (the no-skill baseline), ``gliner``, ``laya``, ``llm``
-    (with ``llm=`` as the model spec), ``jev``, ``systemone:<base url>`` for
-    any System One server, or ``module:attribute`` for your own provider (an
+    Specs: ``majority`` (the no-skill baseline), ``gliner``, ``laya``,
+    ``zeroshot`` or ``zeroshot:<model id>`` (an NLI model), ``llm`` (with
+    ``llm=`` as the model spec), ``jev``, ``systemone:<base url>`` for any
+    System One server, or ``module:attribute`` for your own provider (an
     instance or a factory).
     """
     if spec == "majority":
         from .baseline import Majority
 
         return Majority()
+    if spec == "zeroshot" or spec.startswith("zeroshot:"):
+        from ...providers.hf import HFZeroShot
+
+        model = spec.removeprefix("zeroshot").removeprefix(":") or HFZeroShot.DEFAULT_MODEL
+        return HFZeroShot(model, device=device)
     if spec.startswith("systemone:"):
         from ...providers import SystemOne
 

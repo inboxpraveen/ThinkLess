@@ -14,6 +14,12 @@ All notable changes are recorded here. The format follows
 - The leaderboard lists, under each choice task, the five classes each
   provider gets wrong most often, computed from the predictions in the result
   files.
+- `HFZeroShot`: any Hugging Face zero-shot NLI model as a provider for
+  choice and yes or no questions, with no training (default
+  `MoritzLaurer/deberta-v3-base-zeroshot-v2.0`). Hypotheses come from option
+  descriptions or `yes_means` and can be set per question. On the decision
+  benchmark (`--provider zeroshot[:<model>]`) it scores 68.4 percent on
+  Banking77 without having seen the task.
 
 ## 0.6.0 - 2026-11-22
 

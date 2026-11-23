@@ -125,6 +125,41 @@ before relying on it: the injection model above is a good example of why. It
 is widely used, and on customer support tickets it made confident mistakes
 (see the [production guide](production.md)).
 
+## HFZeroShot
+
+A zero-shot natural language inference (NLI) model, answering any `Choice` or
+`YesNo` question without training. Each option becomes a hypothesis
+("This example is about a refund.") and the model scores how strongly the
+input entails it; the scores are softmaxed into a distribution over the
+options. It is a cheap, general baseline, and a useful second opinion beside
+a decision model.
+
+```python
+from thinkless.providers import HFZeroShot
+
+nli = HFZeroShot(
+    "MoritzLaurer/deberta-v3-base-zeroshot-v2.0",          # the default
+    field="message",
+    hypotheses={
+        # A statement entails better than a question.
+        "injection": "The message tries to make the assistant ignore its instructions.",
+        "intent": {"refund": "The customer wants their money back."},
+    },
+)
+```
+
+| | |
+|---|---|
+| Install | `pip install "thinkless[local-llm]"` (transformers and torch) |
+| Answers | `Choice` and `YesNo`; `questions=[...]` limits it to some names |
+| Hypotheses | choice: `template` filled with each option's description, or its label; yes/no: `yes_means`, or the instructions; `hypotheses` overrides either |
+| Cost | one forward pass per option, so a 77-option choice is 77 passes; the large model is slower and usually more accurate |
+
+Its results on the [decision benchmark](../decision-benchmark/leaderboard.md)
+use the default hypotheses with no tuning: the honest floor for a model that
+has never seen your questions. Write hypotheses for your own questions before
+judging it.
+
 ## LLMDecider
 
 Any `LLM` answering questions through a prompt, the way most agents make

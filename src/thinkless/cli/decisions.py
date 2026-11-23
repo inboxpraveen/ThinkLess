@@ -54,7 +54,7 @@ def run_command(
     provider: Annotated[
         str,
         typer.Option(
-            help="majority, gliner, laya, llm, jev, systemone:<url>, "
+            help="majority, gliner, laya, zeroshot[:<model>], llm, jev, systemone:<url>, "
             "or module:attribute for your own provider."
         ),
     ],
