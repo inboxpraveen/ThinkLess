@@ -164,3 +164,40 @@ def test_shadow_report_with_nothing_compared() -> None:
     }
     report = build_report([record], min_calls=0)
     assert report is not None
+
+
+def test_side_by_side_runs_under_one_span_count_only_their_own_spans() -> None:
+    import threading
+
+    from thinkless import Engine, Tracer, YesNo
+
+    gate = threading.Barrier(2)
+
+    def slow(state, question):
+        gate.wait(5)  # both runs are open at once
+        return None  # noqa: RET501 - the provider abstains
+
+    engine = Engine([FakeProvider("fast", {"urgent": slow})], tracer=Tracer())
+    question = YesNo("Urgent?", name="urgent")
+    summaries: dict[str, object] = {}
+
+    def work(name: str) -> None:
+        with engine.run(name) as run:
+            engine.decide(name, question)
+        summaries[name] = run.summary()
+
+    with engine.tracer.span("request", "outer"):
+        import contextvars
+
+        threads = [
+            threading.Thread(target=contextvars.copy_context().run, args=(work, name))
+            for name in ("a", "b")
+        ]
+        for thread in threads:
+            thread.start()
+        for thread in threads:
+            thread.join(5)
+    for name in ("a", "b"):
+        summary = summaries[name]
+        assert summary.name == name
+        assert summary.decisions == 1

@@ -79,6 +79,7 @@ class OTelSink:
             ) from exc
         self._trace = trace
         provider = tracer_provider or trace.get_tracer_provider()
+        self._provider = provider
         self._tracer = provider.get_tracer("thinkless")
         self._include_content = include_content
         self._open: dict[str, Any] = {}
@@ -95,6 +96,20 @@ class OTelSink:
         )
         with self._lock:
             self._open[span.span_id] = otel_span
+
+    def flush(self, timeout_millis: int = 5000) -> None:
+        """Export the spans the provider has buffered.
+
+        Called by ``Engine.close()`` and ``Tracer.flush()``. The provider is
+        the application's, so it is flushed but never shut down.
+        """
+        force_flush = getattr(self._provider, "force_flush", None)
+        if force_flush is not None:
+            force_flush(timeout_millis)
+
+    def close(self) -> None:
+        """Flush; the provider itself stays open for the application."""
+        self.flush()
 
     def on_end(self, span: Span) -> None:
         with self._lock:

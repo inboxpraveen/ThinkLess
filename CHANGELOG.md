@@ -82,6 +82,21 @@ All notable changes are recorded here. The format follows
 - The Responses chain cache is bounded by size (64 MB) as well as by count.
 - The `SpendLimit` documentation says how far concurrent requests can
   overshoot it.
+- Habits learning uses half the memory. Calls are read without their raw
+  request and response, a system prompt or schema repeated across calls is
+  held once, and features are kept in packed arrays. Learning 40,000 short
+  calls peaked 126 MB above the process's baseline instead of 313 MB, and
+  2,000 calls of about 2,600 characters 270 MB instead of 553 MB, in less
+  time. The students trained are identical to before.
+- `Habits.close()` also stops learning inside a site, between folds and
+  training epochs, so a large site no longer keeps a closing process busy.
+- `Engine.close()` and `Tracer.flush()` flush an `OTelSink`'s provider, so
+  spans buffered by a `BatchSpanProcessor` are exported before exit. The
+  provider is the application's and is not shut down.
+- Two `engine.run` blocks open at once under one outer span shared a trace,
+  and each run's `summary()` counted the other's decisions and cost. A run
+  now collects only its own spans, and `summarize` finds the root of a run
+  that has a parent.
 
 ## 0.6.1 - 2026-11-23
 

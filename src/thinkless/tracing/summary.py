@@ -80,9 +80,11 @@ def summarize(spans: Iterable[Mapping[str, Any]]) -> TraceSummary:
     spans = list(spans)
     if not spans:
         raise ValueError("cannot summarize an empty trace")
-    root = next((s for s in spans if s.get("parent_id") is None), None)
-    if root is None:
-        root = min(spans, key=lambda s: s.get("start_ms") or 0.0)
+    # The root is the span whose parent is not among them: a run opened
+    # inside another span has a parent, just not one in its own spans.
+    ids = {s.get("span_id") for s in spans}
+    tops = [s for s in spans if s.get("parent_id") is None or s.get("parent_id") not in ids]
+    root = min(tops or spans, key=lambda s: s.get("start_ms") or 0.0)
 
     by_plane: Counter[str] = Counter()
     time_by_plane: defaultdict[str, float] = defaultdict(float)

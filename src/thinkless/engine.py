@@ -35,16 +35,31 @@ WARMUP_STATE = {
 
 
 class _RunCollector:
-    """Sink that keeps the spans of one trace while a run is open."""
+    """Sink that keeps the spans of one run while it is open.
+
+    It keeps the run's root span and its descendants, not every span of the
+    trace: two runs opened side by side under one outer span share a trace,
+    and each must count only its own work.
+    """
 
     def __init__(self) -> None:
-        self.trace_id: str | None = None
         self.spans: list[dict[str, Any]] = []
+        self._ids: set[str] = set()
         self._lock = threading.Lock()
 
+    def adopt(self, span: Span) -> None:
+        """Make ``span`` the run's root."""
+        with self._lock:
+            self._ids.add(span.span_id)
+
+    def on_start(self, span: Span) -> None:
+        with self._lock:
+            if span.parent_id in self._ids:
+                self._ids.add(span.span_id)
+
     def on_end(self, span: Span) -> None:
-        if span.trace_id == self.trace_id:
-            with self._lock:
+        with self._lock:
+            if span.span_id in self._ids:
                 self.spans.append(span.to_dict())
 
 
@@ -212,7 +227,7 @@ class Engine:
         token = _run_limit.set(limits)
         try:
             with self.tracer.span("run", name, **attributes) as span:
-                collector.trace_id = span.trace_id
+                collector.adopt(span)
                 if input is not None:
                     span.set(input=self.tracer.content(input))
                 if max_cost_usd is not None:

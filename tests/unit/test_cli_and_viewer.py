@@ -128,3 +128,27 @@ def test_otel_sink_exports_spans() -> None:
     )
     assert "thinkless.input" not in run.attributes
     assert attempt.attributes["gen_ai.provider.name"] == "fast"
+
+
+def test_engine_close_flushes_a_batching_otel_provider() -> None:
+    pytest.importorskip("opentelemetry.sdk")
+    from opentelemetry.sdk.trace import TracerProvider
+    from opentelemetry.sdk.trace.export import BatchSpanProcessor
+    from opentelemetry.sdk.trace.export.in_memory_span_exporter import InMemorySpanExporter
+
+    from thinkless.tracing.otel import OTelSink
+
+    exporter = InMemorySpanExporter()
+    provider = TracerProvider()
+    # A long delay: without a flush, nothing would be exported during the test.
+    provider.add_span_processor(BatchSpanProcessor(exporter, schedule_delay_millis=60_000))
+    engine = Engine([FakeProvider("fast", {"urgent": None})], tracer=Tracer([OTelSink(provider)]))
+    engine.decide("text", YesNo("Urgent?", name="urgent"))
+    assert exporter.get_finished_spans() == ()
+    engine.close()
+    assert len(exporter.get_finished_spans()) == 2
+    # The provider belongs to the application: it is flushed, never shut down.
+    engine.decide("again", YesNo("Urgent?", name="urgent"))
+    engine.close()
+    assert len(exporter.get_finished_spans()) == 4
+    provider.shutdown()
