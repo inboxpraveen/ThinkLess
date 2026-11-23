@@ -58,6 +58,12 @@ All notable changes are recorded here. The format follows
 
 ### Fixed
 
+- `habits.wrap(OpenAI())`, the one line in the README, raised `TypeError`
+  with the OpenAI SDK's default HTTP client: the SDK subclasses the httpx
+  client in its own module, and `wrap` only recognized httpx's own classes.
+  Clients built with an explicit `http_client=` were not affected. `wrap` now
+  finds httpx or httpx2 anywhere in the client's class hierarchy, and a test
+  wraps the default sync and async clients.
 - A process that exited while Habits was learning (an app ending, a killed
   container) left its learning lock behind, and learning stayed off for 30
   minutes. The lock now records the process id and host name, and a lock
