@@ -75,7 +75,7 @@ gliner = [
 ]
 # Laya releases after 0.4.22 need transformers 5 (through vegaml), so with the
 # shared bound pip resolves to 0.4.22 until GLiNER2 supports transformers 5.
-laya = ["laya>=0.4.17,<0.5", "transformers>=4.48,<5"]
+laya = ["laya>=0.4.17,<0.6", "transformers>=4.48,<5"]
 local-llm = ["transformers>=4.48,<5", "accelerate>=1.0", "torch>=2.1"]
 local = ["thinkless[gliner,laya,local-llm]"]
 # Hosted reasoning backends.
